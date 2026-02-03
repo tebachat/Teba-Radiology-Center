@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>مركز طيبة للأشعة - المنصورة</title>
+
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #5a0028, #8b0040);
+      color: #222;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 680px;
+      background: #ffffff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+    }
+    .header {
+      text-align: center;
+      padding: 45px 25px 25px;
+      background: linear-gradient(to bottom, #fffaf5, #fff);
+    }
+    .logo { font-size: 4rem; margin-bottom: 15px; }
+    .header h1 {
+      color: #8b0040;
+      font-size: 2.3rem;
+      margin-bottom: 12px;
+    }
+    .welcome-text { color: #444; line-height: 1.7; font-size: 1.1rem; }
+    .hours { margin-top: 12px; font-weight: bold; color: #8b0040; font-size: 1.05rem; }
+
+    .doctors-section { background: #fdfdfd; padding: 30px 25px; }
+    .category-header {
+      background: #8b0040;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      padding: 15px;
+      border-radius: 14px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      font-size: 1.4rem;
+    }
+    .team-member {
+      display: flex;
+      align-items: center;
+      background: white;
+      padding: 18px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: all 0.25s ease;
+    }
+    .team-member:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    .avatar {
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 1.7rem;
+      margin-left: 18px;
+      flex-shrink: 0;
+    }
+    .avatar-1 { background: linear-gradient(135deg, #667eea, #5a67d8); }
+    .avatar-2 { background: linear-gradient(135deg, #f56565, #e53e3e); }
+    .avatar-3 { background: linear-gradient(135deg, #48bb78, #38a169); }
+    .avatar-4 { background: linear-gradient(135deg, #4299e1, #3182ce); }
+    .avatar-5 { background: linear-gradient(135deg, #ed8936, #dd6b20); }
+    .avatar-6 { background: linear-gradient(135deg, #9f7aea, #7f58af); }
+    .avatar-7 { background: linear-gradient(135deg, #f6ad55, #ed8936); }
+
+    .member-info { flex: 1; }
+    .member-name { font-weight: bold; font-size: 1.2rem; margin-bottom: 5px; }
+    .member-role { font-size: 0.98rem; color: #555; }
+
+    .status-indicator {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-right: 15px;
+      flex-shrink: 0;
+    }
+
+    .action-buttons {
+      padding: 30px 25px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .action-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      padding: 20px;
+      border-radius: 18px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
+      transition: all 0.25s;
+    }
+    .action-btn:hover { transform: scale(1.04); opacity: 0.95; }
+    .whatsapp-btn { background: linear-gradient(135deg, #25D366, #128C7E); }
+    .complaint-btn { background: linear-gradient(135deg, #ef4444, #dc2626); }
+
+    .footer {
+      text-align: center;
+      padding: 25px;
+      color: #8b0040;
+      font-size: 1rem;
+      border-top: 1px solid #eee;
+      background: #fff;
+    }
+    .footer a { color: #8b0040; text-decoration: underline; font-weight: bold; }
+
+    @media (max-width: 520px) {
+      .header { padding: 35px 20px 20px; }
+      .logo { font-size: 3.2rem; }
+      .header h1 { font-size: 2rem; }
+      .doctors-section, .action-buttons { padding: 25px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">🏥</div>
+    <h1>مركز طيبة للأشعة</h1>
+    <p class="welcome-text">مرحباً بكم في مركز طيبة للأشعة – المنصورة<br>نخبة من أساتذة الأشعة بجامعة المنصورة</p>
+    <p class="hours">من 9 صباحاً حتى 10 مساءً (متاح يوم الجمعة من 2 إلى 8 مساءً)</p>
+  </div>
+
+  <div class="doctors-section">
+    <div class="category-header">فريق الأطباء 👨‍⚕️</div>
+    <div id="doctorsList"></div>
+  </div>
+
+  <div class="action-buttons">
+    <a href="https://wa.me/201002529452" 
+       class="action-btn whatsapp-btn" 
+       target="_blank" 
+       rel="noopener">
+       💬 تواصل مع الاستقبال (واتساب)
+    </a>
+
+    <a href="https://wa.me/201114490029" 
+       class="action-btn complaint-btn" 
+       target="_blank" 
+       rel="noopener">
+       📝 الشكاوى والمقترحات
+    </a>
+  </div>
+
+  <div class="footer">
+    برج الأندلس – ميدان مشعل – الدور الأول<br>
+    بجوار مستشفى مصر التخصصي – المنصورة<br>
+    ☎ 0502236286 | 01002529452 | 01114490029<br>
+    <a href="https://www.facebook.com/TebaRC" target="_blank">تابعنا على فيسبوك</a> 🌟 نعتز بثقتكم
+  </div>
+
+</div>
+
+<script>
+  const doctors = [
+    { name: 'أ.د طلال عامر', role: 'استشاري الأشعة التشخيصية – رئيس قسم الأشعة جامعة المنصورة – رئيس مجلس إدارة المركز', avatar: 'ط', colorClass: 'avatar-1', online: true },
+    { name: 'أ.د محمد أبو العطا', role: 'استشاري الأشعة التشخيصية', avatar: 'م', colorClass: 'avatar-2', online: true },
+    { name: 'أ.د أحمد قنديل', role: 'استشاري الأشعة', avatar: 'أ', colorClass: 'avatar-3', online: false },
+    { name: 'أ.د أسامة شيحة', role: 'استشاري الأشعة', avatar: 'س', colorClass: 'avatar-4', online: true },
+    { name: 'أ.د أشرف عبد الرحمن', role: 'استشاري الأشعة', avatar: 'ش', colorClass: 'avatar-5', online: true },
+    { name: 'أ.د ناهد عبد الجابر', role: 'استشارية الأشعة', avatar: 'ن', colorClass: 'avatar-6', online: false },
+    { name: 'أ.د ايهاب العراقي', role: 'استشاري الأشعة', avatar: 'ي', colorClass: 'avatar-7', online: true },
+  ];
+
+  document.getElementById('doctorsList').innerHTML = doctors.map(d => `
+    <div class="team-member">
+      <div class="avatar \( {d.colorClass}"> \){d.avatar}</div>
+      <div class="member-info">
+        <div class="member-name">${d.name}</div>
+        <div class="member-role">${d.role}</div>
+      </div>
+      <div class="status-indicator" style="background: ${d.online ? '#22c55e' : '#9ca3af'};"></div>
+    </div>
+  `).join('');
+</script>
+
+</body>
+</html>
