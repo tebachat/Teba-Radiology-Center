@@ -1,0 +1,10 @@
+<picture>
+  <!-- رابط Drive (Web-safe embed) -->
+  <source srcset="https://drive.google.com/uc?export=view&id=1nysIk9incWMVHbuEum2wK1qhe3S2yn-g" type="image/png">
+  <!-- صورة محلية كنسخة احتياطية -->
+  <img src="./images/trc-logo.png"
+       alt="شعار TRC الدائري — Teba Radiology Center"
+       class="responsive"
+       loading="lazy"
+       width="600" height="600">
+</picture>
