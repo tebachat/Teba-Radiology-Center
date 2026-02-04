@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز طيبة للأشعة - المنصورة</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Segoe UI',Tahoma;
+  background:linear-gradient(135deg,#5a0028,#8b0040);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+.container{
+  width:100%;
+  max-width:680px;
+  background:#fff;
+  border-radius:24px;
+  box-shadow:0 15px 45px rgba(0,0,0,.25);
+  position:relative;
+  overflow:hidden;
+}
+
+.container::before{
+  content:"TRC";
+  position:absolute;
+  inset:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:18rem;
+  font-weight:900;
+  color:rgba(139,0,64,.12);
+  transform:rotate(-20deg);
+  z-index:0;
+  pointer-events:none;
+}
+
+.container>*{position:relative; z-index:1;}
+
+.header{
+  text-align:center;
+  padding:40px 25px 25px;
+  background:#fffaf5;
+}
+
+.header h1{color:#8b0040; font-size:2.3rem; margin-bottom:10px;}
+
+.welcome-text{font-size:1.1rem; line-height:1.7;}
+.hours{margin-top:10px; font-weight:bold; color:#8b0040;}
+
+.doctors-section{padding:30px 25px;}
+.category-header{
+  background:#8b0040;
+  color:#fff;
+  padding:14px;
+  text-align:center;
+  border-radius:14px;
+  margin-bottom:25px;
+  font-size:1.4rem;
+}
+
+#doctorsList{display:grid; grid-template-columns:repeat(2,1fr); gap:15px;}
+
+.team-member{
+  display:flex;
+  align-items:center;
+  background:#fff;
+  padding:16px;
+  border-radius:16px;
+  box-shadow:0 3px 10px rgba(0,0,0,.1);
+}
+
+.team-member.centered{
+  justify-content:center;
+  text-align:center;
+  grid-column: span 2;
+}
+
+.avatar{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:700;
+  font-size:0.65rem;
+  margin-left:12px;
+  text-align:center;
+  padding:8px;
+  line-height:1.3;
+}
+
+.schedule-badge{
+  background:#fff;
+  border:2px solid #8b0040;
+  border-radius:12px;
+  padding:8px 10px;
+  margin-left:12px;
+  min-width:85px;
+  text-align:center;
+}
+
+.calendar-icon{
+  width:50px;
+  height:50px;
+  background:#8b0040;
+  border-radius:8px;
+  margin:0 auto 6px;
+  overflow:hidden;
+  box-shadow:0 2px 8px rgba(139,0,64,.2);
+}
+
+.calendar-month{
+  background:#fff;
+  color:#8b0040;
+  font-size:0.5rem;
+  font-weight:800;
+  padding:2px 0;
+  text-transform:uppercase;
+}
+
+.calendar-day{
+  background:#8b0040;
+  color:#fff;
+  font-size:1.4rem;
+  font-weight:900;
+  padding:4px 0;
+  line-height:1;
+}
+
+.schedule-text{
+  font-size:0.68rem;
+  color:#8b0040;
+  font-weight:700;
+  line-height:1.3;
+  margin-top:4px;
+}
+
+.current-date{
+  position:absolute;
+  top:15px;
+  left:20px;
+  background:#8b0040;
+  color:#fff;
+  padding:8px 16px;
+  border-radius:12px;
+  font-size:0.9rem;
+  font-weight:bold;
+  box-shadow:0 2px 8px rgba(139,0,64,.3);
+  z-index:10;
+}
+
+.avatar-1{background:#667eea}
+.avatar-2{background:#f56565}
+.avatar-3{background:#48bb78}
+.avatar-4{background:#4299e1}
+.avatar-5{background:#ed8936}
+.avatar-6{background:#9f7aea}
+.avatar-7{background:#f6ad55}
+
+.member-info{flex:1}
+.member-name{font-weight:bold;font-size:1.05rem}
+.member-role{font-size:.9rem;color:#555}
+
+.status-indicator{width:14px; height:14px; border-radius:50%;}
+
+.action-buttons{
+  padding:30px 25px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+.action-btn{
+  padding:18px;
+  border-radius:18px;
+  font-size:1.2rem;
+  font-weight:bold;
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+}
+
+.whatsapp-btn{background:#25D366}
+.complaint-btn{background:#0ea5e9}
+
+.footer{
+  text-align:center;
+  padding:25px;
+  border-top:1px solid #eee;
+  color:#8b0040;
+  font-size:1rem;
+}
+
+.footer a{
+  display:block;
+  margin-top:8px;
+  color:#8b0040;
+  font-weight:bold;
+  text-decoration:underline;
+}
+
+.copyright { font-size:0.85rem; color:#8b0040; margin-top:10px; text-align:center; }
+.disclaimer { font-size:0.75rem; color:#555; margin-top:5px; text-align:center; }
+
+.services-section{padding:30px 25px; background:#f9fafb;}
+.services-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-top:20px;}
+
+.service-card{
+  background:#fff;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  transition:transform .3s, box-shadow .3s;
+  border-right:5px solid #8b0040;
+}
+
+.service-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 8px 20px rgba(139,0,64,.15);
+}
+
+.service-icon-text{
+  width:70px;
+  height:70px;
+  margin:0 auto 15px;
+  background:linear-gradient(135deg,#8b0040,#b8005a);
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:900;
+  font-size:2.2rem;
+  box-shadow:0 4px 12px rgba(139,0,64,.25);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.service-icon-text:hover {
+  transform: scale(1.1);
+}
+
+.service-title{
+  font-size:1.3rem;
+  font-weight:bold;
+  color:#8b0040;
+  margin-bottom:12px;
+}
+
+.service-description{
+  color:#555;
+  line-height:1.6;
+  font-size:0.95rem;
+}
+
+.service-list{
+  list-style:none;
+  margin-top:12px;
+  padding:0;
+}
+
+.service-list li{
+  padding:6px 0;
+  padding-right:20px;
+  position:relative;
+  color:#444;
+  font-size:0.9rem;
+}
+
+.service-list li::before{
+  content:"✓";
+  position:absolute;
+  right:0;
+  color:#22c55e;
+  font-weight:bold;
+}
+
+@media(max-width:600px){
+  #doctorsList{grid-template-columns:1fr}
+  .team-member.centered { grid-column: 1 / -1; }
+  .services-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="current-date" id="currentDate"></div>
+
+  <div class="header">
+    <h1>مركز طيبة للأشعة</h1>
+    <p class="welcome-text">
+      مرحباً بكم في مركز طيبة للأشعة – المنصورة<br>
+      نخبة من أساتذة الأشعة بجامعة المنصورة
+    </p>
+    <p class="hours">من 9 صباحاً حتى 10 مساءً (الجمعة من 2 إلى 8 مساءً)</p>
+  </div>
+
+  <div class="doctors-section">
+    <div class="category-header">فريق الأطباء 👨‍⚕️</div>
+    <div id="doctorsList"></div>
+  </div>
+
+  <div class="services-section">
+    <div class="category-header">خدماتنا المتميزة 🏥</div>
+    <div class="services-grid">
+      
+      <div class="service-card">
+        <div class="service-icon-text">🩻</div>
+        <h3 class="service-title">الأشعة العادية والسونار</h3>
+        <p class="service-description"><strong>الأشعة العادية (X-Ray):</strong></p>
+        <ul class="service-list">
+          <li>لا تحتاج إلى صيام</li>
+          <li>إزالة المتعلقات المعدنية (ساعات - سلاسل - مفاتيح)</li>
+          <li>الإلتزام بتعليمات الفني وعدم الحركة</li>
+          <li>الفحص سريع ولا يستغرق وقت</li>
+        </ul>
+        <p class="service-description" style="margin-top:15px"><strong>الموجات فوق الصوتية (السونار):</strong></p>
+        <ul class="service-list">
+          <li>سونار البطن: صيام من 6 إلى 8 ساعات</li>
+          <li>سونار الحوض: شرب كمية من الماء وعدم التبول</li>
+          <li>الفحص آمن تماماً ولا يستخدم إشعاع</li>
+          <li>مناسب للأطفال والحوامل</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon-text">🦴</div>
+        <h3 class="service-title">الأشعة المقطعية</h3>
+        <p class="service-description">في حالة الفحص المقطعي بالصبغة:</p>
+        <ul class="service-list">
+          <li>صيام من 4 إلى 6 ساعات قبل الفحص</li>
+          <li>إحضار تحليل وظائف كلى (كرياتينين) حديث</li>
+          <li>إبلاغ الفريق بوجود حساسية سابقة من الصبغة</li>
+          <li>قد يشعر المريض بسخونة أو طعم معدني بالحلق (إحساس طبيعي)</li>
+        </ul>
+        <p class="service-description" style="margin-top:10px; font-weight:bold; color:#d97706;">⚠️ الإكثار من شرب السوائل بعد الفحص</p>
+        <p class="service-description" style="margin-top:5px; font-weight:bold; color:#d97706;">⚠️ مرضى السكر يرجى إبلاغ المركز بالأدوية المستخدمة</p>
+        <p class="service-description" style="margin-top:10px; font-weight:bold; color:#dc2626;">⚠️ الفحص غير آمن للحوامل (برجاء استشارة طبيب النسا المختص أو عمل اختبار حمل في حالة انقطاع الدورة لمدة شهر أو أكثر)</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon-text">🧲</div>
+        <h3 class="service-title">الرنين المغناطيسي</h3>
+        <p class="service-description">(رنين مغناطيسي مغلق 1.5 تسلا)<br>أقصى وزن يتحمله الجهاز 125 كيلو</p>
+        <ul class="service-list">
+          <li>إزالة جميع المعادن قبل الدخول لغرفة الفحص</li>
+          <li>إبلاغ الفريق في حالة وجود: منظم ضربات القلب، دعامات، شرائح، مسامير أو أي أجسام معدنية</li>
+          <li>الفحص آمن ولا يستخدم إشعاع</li>
+          <li>الإلتزام بالثبات التام أثناء الفحص للحصول على نتائج دقيقة</li>
+          <li>في حالة الخوف من الأماكن المغلقة يرجى إبلاغ الفني مسبقاً</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon-text">🧬</div>
+        <h3 class="service-title">الرنين المغناطيسي على الأمعاء (Enterography)</h3>
+        <p class="service-description"><strong>تحضير قبل الفحص:</strong></p>
+        <p class="service-description" style="font-size:0.85rem; margin-top:8px;">
+          يتناول المريض خلال هذه الفترة أكل منخفض المحتوى في الألياف مثل: الأرز الأبيض، عيش فينو، عيش أبيض شامي بدون ردة، كميات بسيطة من اللحوم، بطاطس، كوسة، شوربة، جبنة بيضاء، عصير برتقال أو تفاح مصفى، شاي، مياه
+        </p>
+        <p class="service-description" style="margin-top:10px; font-weight:bold; color:#8b0040;">يتناول شربة زيت بعد العشاء بنصف ساعة</p>
+        <p class="service-description" style="font-size:0.85rem; margin-top:5px;">(يوجد شربة زيت برافين بالصيدليات لمن لا يتحمل شربة زيت الخروع)</p>
+        
+        <p class="service-description" style="margin-top:15px; font-weight:bold; color:#8b0040;">⏰ يوم عمل الفحص:</p>
+        <ul class="service-list">
+          <li>شراء زجاجة ماء لتر ونصف + زجاجة مانيتول 20% من أي صيدلية</li>
+          <li>أمبول باسكوبان</li>
+          <li>الحضور إلى المركز بعد أخذ ميعاد مسبق وذلك بالاتصال على أي رقم من الأرقام الموجودة بالأسفل</li>
+          <li>يتم شرب الماء بعد إضافة المانيتول (بمعرفة المركز) خلال فترة من (45 دقيقة - 60 دقيقة)</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon-text">📄</div>
+        <h3 class="service-title">استلام النتيجة</h3>
+        <ul class="service-list">
+          <li>يتم استلام النتيجة في الموعد المحدد من الاستقبال</li>
+          <li>يمكن طلب الأفلام أو إرسال التقارير عبر واتس المركز</li>
+          <li>رقم واتس آب: 01002529452</li>
+          <li>يرجى الانتظار لحين الانتهاء من كتابة التقرير لضمان الدقة</li>
+          <li>عند الانتهاء من الفحص اسأل عن موعد استلام نتيجة الأشعة</li>
+          <li>بعض الفحوصات مثل فحص المقطعية على الشرايين أو غيرها من الفحوصات الخاصة يتم كتابتها حسب جدول زمني معين</li>
+        </ul>
+      </div>
+
+      <div class="service-card">
+        <a href="https://www.equran.org/" target="_blank" style="text-decoration:none; color:inherit;">
+          <div class="service-icon-text">📖</div>
+          <h3 class="service-title">القرآن الكريم</h3>
+        </a>
+        <p class="service-description" style="text-align:center; font-size:1.1rem; color:#8b0040; margin:20px 0;">
+          ﷽
+        </p>
+        <p class="service-description">
+          يمكنك قراءة القرآن الكريم أثناء انتظار نتيجة الفحص أو أثناء تواجدك في المركز.
+        </p>
+        <ul class="service-list" style="margin-top:15px;">
+          <li>تذكير بأجر قراءة القرآن في أوقات الانتظار</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="services-section" style="background:#fffaf5; padding:25px;">
+    <div class="category-header">💡 نصائح عامة قبل الحضور</div>
+    <div style="background:#fff; padding:20px; border-radius:16px; margin-top:20px; box-shadow:0 3px 10px rgba(0,0,0,.1);">
+      <ul class="service-list" style="margin:0;">
+        <li>اتصل بالمركز قبل الحضور لتأكيد التحضيرات المطلوبة للفحص</li>
+        <li>أحضر الإحالة الطبية والفحوصات أو الأشعة السابقة إن وجدت</li>
+        <li>احتفظ بالرقم التعريفي (Patient ID) الخاص بك في المركز حيث أنه مرتبط برقم الهاتف المحمول الذي تم إضافته أثناء التسجيل</li>
+        <li>يفضل أن يكون رقم الهاتف مرتبط بالواتساب لإرسال التقارير عليه عند الطلب</li>
+        <li>ارتدِ ملابس مريحة وفضفاضة بدون معادن أو إكسسوارات</li>
+        <li>أخبر الطبيب والفني بكل الأدوية التي تتناولها حالياً</li>
+        <li>في حالة الحمل أو احتمال الحمل يجب إبلاغ المركز قبل أي فحص</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="action-buttons">
+    <a class="action-btn whatsapp-btn" href="https://wa.me/201002529452" target="_blank">
+      💬 تواصل مع الاستقبال (واتساب)
+    </a>
+    <a class="action-btn complaint-btn" href="https://wa.me/201114490029" target="_blank">
+      📝 الشكاوى والمقترحات
+    </a>
+  </div>
+
+  <div class="footer">
+    برج الأندلس – ميدان مشعل – الدور الأول<br>
+    بجوار مستشفى مصر التخصصي – المنصورة<br>
+    ☎ 0502236286 | 01002529452 | 01114490029
+    <a href="https://www.facebook.com/TebaRC" target="_blank">تابعنا على فيسبوك</a>
+    <a href="https://maps.google.com/?q=مركز+طيبة+للأشعة+المنصورة" target="_blank">
+      📍 موقعنا على خرائط جوجل
+    </a>
+  </div>
+
+  <div class="copyright">
+    © 2026 Teba Radiology Imaging Center. All rights reserved.
+  </div>
+  <div class="disclaimer">
+    لا يوجد لدينا أى فروع أخرى سواء داخل أو خارج المنصورة
+  </div>
+
+</div>
+
+<script>
+// عرض التاريخ الحالي
+const today = new Date();
+const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+document.getElementById('currentDate').textContent = today.toLocaleDateString('ar-EG', options);
+
+const monthNames = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+const doctors=[
+ {name:'أ.د طلال عامر',role:'أستاذ الأشعة التشخيصية – رئيس مجلس الإدارة',colorClass:'avatar-1',online:true,schedule:'الثلاثاء<br>الخميس<br>صباحاً'},
+ {name:'أ.د محمد أبو العطا',role:'أستاذ الأشعة التشخيصية',colorClass:'avatar-2',online:true,schedule:'الثلاثاء'},
+ {name:'أ.د أحمد قنديل',role:'أستاذ الأشعة التشخيصية',colorClass:'avatar-3',online:false,schedule:''},
+ {name:'أ.د ناهد عبد الجابر',role:'أستاذة الأشعة التشخيصية',colorClass:'avatar-6',online:true,schedule:'الاثنين'},
+ {name:'أ.د أشرف عبد الرحمن',role:'أستاذ الأشعة التشخيصية',colorClass:'avatar-5',online:true,schedule:'السبت<br>الأحد<br>الاثنين<br>الأربعاء'},
+ {name:'أ.د أسامة شيحة',role:'أستاذ الأشعة التشخيصية',colorClass:'avatar-4',online:false,schedule:''},
+ {name:'د/ إيهاب العراقي',role:'استشاري الأشعة',colorClass:'avatar-7',online:true,centered:true,schedule:'السبت<br>الثلاثاء<br>الخميس<br>الجمعة'}
+];
+
+document.getElementById('doctorsList').innerHTML=
+doctors.map(d=>{
+  const centeredClass = d.centered?' centered':'';
+  const scheduleDisplay = d.schedule ? `
+    <div class="schedule-badge">
+      <div class="calendar-icon">
+        <div class="calendar-month">${monthNames[today.getMonth()]}</div>
+        <div class="calendar-day">${today.getDate()}</div>
+      </div>
+      <div class="schedule-text">${d.schedule}</div>
+    </div>
+  ` : `
+    <div class="schedule-badge">
+      <div class="calendar-icon">
+        <div class="calendar-month">${monthNames[today.getMonth()]}</div>
+        <div class="calendar-day">${today.getDate()}</div>
+      </div>
+      <div class="schedule-text">غير محدد</div>
+    </div>`;
+  
+  return `
+<div class="team-member${centeredClass}">
+  ${scheduleDisplay}
+  <div class="member-info">
+    <div class="member-name">${d.name}</div>
+    <div class="member-role">${d.role}</div>
+  </div>
+  <div class="status-indicator" style="background:${d.online?'#22c55e':'#9ca3af'}"></div>
+</div>
+  `;
+}).join('');
+</script>
+
+</body>
+</html>
