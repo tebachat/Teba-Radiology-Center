@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الصفحة غير موجودة – مركز طيبة للأشعة</title>
+<link rel="icon" type="image/png" href="https://res.cloudinary.com/dc92vfs7v/image/upload/w_64,h_64,c_fit/v1771690910/file_0000000006a8720a9b1ce95bcdaac567_c3j5qe.png">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: #0d0005;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(139,0,64,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 70%, rgba(90,0,40,0.2) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+  }
+  .logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 24px;
+    opacity: 0.9;
+  }
+  .code {
+    font-size: 7rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #8b0040, #cc0055);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+  .title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #f0e6f6;
+    margin-bottom: 10px;
+  }
+  .desc {
+    font-size: .9rem;
+    color: rgba(255,255,255,.5);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: .9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all .2s;
+    font-family: inherit;
+  }
+  .btn-main {
+    background: linear-gradient(135deg, #8b0040, #cc0055);
+    color: #fff;
+    border: none;
+  }
+  .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(139,0,64,.4); }
+  .btn-wa {
+    background: rgba(37,211,102,.15);
+    color: #86efac;
+    border: 1px solid rgba(37,211,102,.3);
+  }
+  .btn-wa:hover { background: rgba(37,211,102,.25); }
+  .icon { font-size: 3rem; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <img class="logo" src="https://res.cloudinary.com/dc92vfs7v/image/upload/v1771690910/file_0000000006a8720a9b1ce95bcdaac567_c3j5qe.png" alt="مركز طيبة للأشعة">
+  <div class="code">404</div>
+  <div class="icon">🩻</div>
+  <div class="title">الصفحة غير موجودة</div>
+  <div class="desc">
+    عذراً، الصفحة التي تبحث عنها غير متاحة<br>
+    ربما تم نقلها أو حذفها
+  </div>
+  <div class="btns">
+    <a href="/" class="btn btn-main">🏠 الرئيسية</a>
+    <a href="https://wa.me/201002529452" target="_blank" class="btn btn-wa">💬 تواصل معنا</a>
+  </div>
+</div>
+</body>
+</html>
