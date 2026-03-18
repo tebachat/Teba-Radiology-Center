@@ -1,0 +1,2928 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>دليل الأطباء - المنصورة</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0d7377 0%, #14b8a6 100%);
+  padding: 20px 15px;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.specialty-section {
+  margin-bottom: 30px;
+}
+
+.specialty-title {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 12px 15px;
+  border-radius: 10px 10px 0 0;
+  font-size: 1.3rem;
+  color: #0d7377;
+  font-weight: bold;
+  border-bottom: 3px solid #0d7377;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 10px 10px;
+}
+
+.doctor-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+  min-height: 132px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: visible;
+}
+
+.doctor-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.doctor-name-btn {
+  background: linear-gradient(135deg, #0d7377 0%, #14b8a6 100%);
+  color: white;
+  border: none;
+  padding: 6px 8px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: all 0.3s;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.doctor-name-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.doctor-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* مربع التحديد */
+.doctor-checkbox {
+  width: 12px;
+  height: 12px;
+  border: 2px solid white;
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+  background: transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.doctor-checkbox.checked {
+  background: white;
+}
+
+.doctor-checkbox.checked::after {
+  content: '✓';
+  position: absolute;
+  top: -3px;
+  left: 1px;
+  color: #0d7377;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* أيقونة المشاركة */
+.share-icon {
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.share-icon:hover {
+  transform: scale(1.2);
+}
+
+.doctor-name-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 3px 10px rgba(13, 115, 119, 0.4);
+}
+
+.doctor-specialty {
+  background: #f0f4ff;
+  padding: 6px;
+  border-radius: 4px;
+  font-size: 0.55rem;
+  color: #555;
+  line-height: 1.3;
+  display: none;
+  max-height: 45px;
+  overflow-y: auto;
+  margin: 3px 0;
+}
+
+.doctor-specialty.show {
+  display: block;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 45px;
+  }
+}
+
+.contact-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  margin: 3px 0;
+}
+
+.contact-btn {
+  flex: 1;
+  min-width: 50px;
+  padding: 4px 6px;
+  border: 1px solid rgba(13, 115, 119, 0.3);
+  border-radius: 4px;
+  font-size: 0.55rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-decoration: none;
+  color: #333;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.contact-btn:hover {
+  background: rgba(13, 115, 119, 0.2);
+  border-color: rgba(13, 115, 119, 0.5);
+}
+
+.location-btn {
+  background: rgba(255, 255, 255, 0.2);
+  color: #333;
+  border: 1px solid rgba(13, 115, 119, 0.3);
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.2s;
+  position: relative;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: ellipsis;
+}
+
+.location-btn:hover {
+  background: rgba(13, 115, 119, 0.2);
+  border-color: rgba(13, 115, 119, 0.5);
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px;
+  position: absolute;
+  z-index: 1000;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size: 0.65rem;
+  white-space: normal;
+  line-height: 1.3;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.doctor-specialty::-webkit-scrollbar {
+  width: 3px;
+}
+
+.doctor-specialty::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.doctor-specialty::-webkit-scrollbar-thumb {
+  background: #0d7377;
+  border-radius: 2px;
+}
+
+.doctor-specialty::-webkit-scrollbar-thumb:hover {
+  background: #14b8a6;
+}
+
+.doctor-specialty {
+  background: #f0f4ff;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.62rem;
+  color: #333;
+  line-height: 1.4;
+  display: none;
+  max-height: none;
+  overflow-y: visible;
+  margin: 3px 0;
+  border: 1px solid rgba(13, 115, 119, 0.2);
+}
+
+.doctor-specialty.show {
+  display: block;
+  animation: slideDown 0.3s ease-out;
+}
+
+.specialty-info {
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  border-bottom: 1px dashed rgba(13, 115, 119, 0.15);
+}
+
+.specialty-info:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-weight: bold;
+  color: #0d7377;
+  display: inline;
+  margin-right: 4px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* دائرة الحالة */
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 8px;
+  position: relative;
+  top: -1px;
+  animation: pulse 2s infinite;
+}
+
+.status-online {
+  background-color: #10b981;
+  box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+}
+
+.status-offline {
+  background-color: #6b7280;
+  animation: none;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* التوقيع */
+.signature {
+  text-align: center;
+  margin-top: 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+}
+
+.signature-text {
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+.signature-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #fff;
+}
+
+/* زر PDF */
+.pdf-button {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+  transition: all 0.3s;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pdf-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.6);
+}
+
+.pdf-button:active {
+  transform: translateY(-1px);
+}
+
+/* زر المشاركة الجماعية */
+.share-selected-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  transition: all 0.3s;
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.share-selected-button.active {
+  display: flex;
+}
+
+.share-selected-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.6);
+}
+
+.share-selected-button:active {
+  transform: translateY(-1px);
+}
+
+.selected-count {
+  background: white;
+  color: #2563eb;
+  padding: 2px 8px;
+  border-radius: 15px;
+  font-size: 0.85rem;
+}
+
+@media print {
+  body {
+    background: white;
+    padding: 10px;
+  }
+  
+  .pdf-button {
+    display: none !important;
+  }
+  
+  .share-selected-button {
+    display: none !important;
+  }
+  
+  .search-box, .filters {
+    display: none !important;
+  }
+  
+  .doctor-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .doctors-grid {
+    gap: 10px;
+  }
+  
+  .doctor-specialty {
+    display: block !important;
+  }
+  
+  .doctor-name-btn {
+    background: linear-gradient(135deg, #0d7377 0%, #14b8a6 100%) !important;
+  }
+  
+  .doctor-checkbox, .share-icon {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .doctors-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .specialty-title {
+    font-size: 1.1rem;
+  }
+  
+  .pdf-button {
+    bottom: 15px;
+    left: 15px;
+    padding: 12px 20px;
+    font-size: 0.85rem;
+  }
+  
+  .share-selected-button {
+    bottom: 15px;
+    right: 15px;
+    padding: 12px 20px;
+    font-size: 0.85rem;
+  }
+}
+
+/* ===== search & filters ===== */
+.search-box{max-width:500px;margin:0 auto 15px}
+#searchInput{width:100%;padding:12px;border-radius:10px;border:none;font-size:.9rem}
+
+.filters{
+ display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:25px
+}
+.filter-btn,select{
+ padding:8px 14px;border-radius:20px;border:none;font-size:.7rem;font-weight:bold;cursor:pointer
+}
+.filter-btn.active{
+ background:linear-gradient(135deg,#0d7377,#14b8a6);color:#fff
+}
+.reset-btn{background:#ef4444;color:#fff}
+
+</style>
+<style>
+body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
+.whatsapp-btn{background:#25D366!important;color:white!important}
+.facebook-btn{background:#1877F2!important;color:white!important}
+.land-btn{background:#64748b!important;color:white!important}
+</style>
+</head>
+<body>
+<button class="pdf-button" onclick="toggleAllDetails()" id="pdfButton">📄 عرض الكل للطباعة</button>
+<button class="share-selected-button" id="shareSelectedButton" onclick="shareSelected()">📤 مشاركة المحدد <span class="selected-count" id="selectedCount">0</span></button>
+<div class="container">
+  <h1>🩺 دليل الأطباء - المنصورة 🩺</h1>
+  <div style="text-align:center;color:#fff;margin-bottom:20px;font-family:Arial,sans-serif">
+    <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;margin-bottom:3px;text-shadow:2px 2px 4px rgba(0,0,0,.3)">Teba Radiology Center</div>
+    <div style="font-size:.95rem;font-weight:400;letter-spacing:.5px;opacity:.95">Teba IT Department</div>
+  </div>
+<div style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:20px;direction:rtl">
+  <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;text-align:center;border:1px solid rgba(255,255,255,.2)">
+    <div style="color:white;font-size:1.5rem;font-weight:800">72</div>
+    <div style="color:rgba(255,255,255,.85);font-size:.75rem">👨‍⚕️ عدد الأطباء</div>
+  </div>
+  <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;text-align:center;border:1px solid rgba(255,255,255,.2)">
+    <div style="color:white;font-size:1.5rem;font-weight:800">71</div>
+    <div style="color:rgba(255,255,255,.85);font-size:.75rem">🔬 التخصصات</div>
+  </div>
+  <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;text-align:center;border:1px solid rgba(255,255,255,.2)">
+    <div style="color:white;font-size:1.5rem;font-weight:800">15</div>
+    <div style="color:rgba(255,255,255,.85);font-size:.75rem">📂 الأقسام</div>
+  </div>
+</div>
+<div class="search-box"><input id="searchInput" placeholder="🔍 ابحث باسم الدكتور أو التخصص أو العنوان" onkeyup="applyFilters()"></div>
+<div class="filters">
+  <button class="filter-btn active" onclick="setSpecialty('all',this)">الكل</button>
+  <button class="filter-btn" onclick="setSpecialty('نساء',this)">نساء</button>
+  <button class="filter-btn" onclick="setSpecialty('أطفال',this)">أطفال</button>
+  <button class="filter-btn" onclick="setSpecialty('عيون',this)">عيون</button>
+  <button class="filter-btn" onclick="setSpecialty('مخ',this)">مخ وأعصاب</button>
+  <button class="filter-btn" onclick="setSpecialty('جراحة',this)">جراحة</button>
+  <button class="filter-btn" onclick="setSpecialty('روماتيزم',this)">الروماتيزم والمناعة</button>
+  <select id="locationFilter" onchange="applyFilters()">
+    <option value="all">كل المناطق</option>
+    <option value="المنصورة">المنصورة</option>
+    <option value="طلخا">طلخا</option>
+    <option value="شربين">شربين</option>
+    <option value="ميت بدر">ميت بدر</option>
+    <option value="دمياط">دمياط</option>
+    <option value="نبروه">نبروه</option>
+  </select>
+</div>
+
+  <div class="specialty-section" id="section-pediatrics">
+    <div class="specialty-title">👶 أطباء الأطفال وحديثي الولادة</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. عبد المنعم محمد أبو شحاتة</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري طب الأطفال وحديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01015672751</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة  السكة الجديدة- برج المارينا - الدور السادس</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01015672751" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عبد المنعم محمد أبو شحاتة','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%85%D8%A7%D8%B1%D9%8A%D9%86%D8%A7%20%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عبد المنعم محمد أبو شحاتة','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة  السكة الجديدة- برج المارينا - الدور السادس</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. خالد فتحي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتور ومدرس طب الأطفال وحديثي الولادة - استشاري المخ وأعصاب الأطفال - مستشفى الأطفال الجامعي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01554048502 | موبايل: 01002732864 | أرضى : 0502315015</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ش ميدان محطة القطار برج البرنسيسات - بجوار مسجد سيدي سعد</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01554048502" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. خالد فتحي','موبايل')">موبايل</a>
+          <a href="tel:01002732864" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. خالد فتحي','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D9%82%D8%B7%D8%A7%D8%B1%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A8%D8%B1%D9%86%D8%B3%D9%8A%D8%B3%D8%A7%D8%AA%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D8%B3%D8%AC%D8%AF%20%D8%B3%D9%8A%D8%AF%D9%8A%20%D8%B3%D8%B9%D8%AF" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. خالد فتحي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ش ميدان محطة القطار برج البرنسيسات - بجوار مسجد سيدي سعد</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د أحمد محمود الرفاعي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال - جامعة المنصورة - دكتوراه طب الأطفال وحديثي الولادة - زميل الجمعية الدولية الأمريكية لأمراض كلى الأطفال وزراعتها</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> واتس: 01284308181 | أرضي: 0502164409</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - حي الجامعة خلف القرية الأولمبية - برج زينة الدور 2</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> اتصل تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="https://wa.me/20201284308181" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('أ.د أحمد محمود الرفاعي','واتس')">واتس</a>
+          <a href="tel:0502164409" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د أحمد محمود الرفاعي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9%D8%A9%20%D8%AE%D9%84%D9%81%20%D8%A7%D9%84%D9%82%D8%B1%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%85%D8%A8%D9%8A%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%B2%D9%8A%D9%86%D8%A9%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%202" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د أحمد محمود الرفاعي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - حي الجامعة خلف القرية الأولمبية - برج زينة الدور 2</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. تامر أشرف</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ م جراحة الأطفال وحديثي الولادة - زميل كلية الجراحين الملكية بإنجلترا - استشاري جراحة الأطفال والمناظير</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> المنصورة: 01016077676  | القاهرة: 01001139993</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة: ميدان المحطة - برج الكوثر 
+ القاهرة: التجمع الخامس  كايرو ميديكال سنتر CMC عيادة 411
+بورسعيد : مستشفى عطاء</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01016077676" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. تامر أشرف','المنصورة')">المنصورة</a>
+          <a href="tel:01001139993" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. تامر أشرف','القاهرة')">القاهرة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9:%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%83%D9%88%D8%AB%D8%B1%20%0A%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9:%20%D8%A7%D9%84%D8%AA%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D8%AE%D8%A7%D9%85%D8%B3%20%20%D9%83%D8%A7%D9%8A%D8%B1%D9%88%20%D9%85%D9%8A%D8%AF%D9%8A%D9%83%D8%A7%D9%84%20%D8%B3%D9%86%D8%AA%D8%B1%20CMC%20%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20411%0A%D8%A8%D9%88%D8%B1%D8%B3%D8%B9%D9%8A%D8%AF%20:%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%B9%D8%B7%D8%A7%D8%A1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. تامر أشرف','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة: ميدان المحطة - برج الكوثر 
+ القاهرة: التجمع الخامس  كايرو ميديكال سنتر CMC عيادة 411
+بورسعيد : مستشفى عطاء</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. هشام عبد الهادي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال وحديثي الولادة طب المنصورة - عضو الجمعية الأوروبية لطب الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502330035</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الجيش - برج المحافظة - أعلى بنك أبو ظبي الوطني</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502330035" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. هشام عبد الهادي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%8A%D8%B4%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%85%D8%AD%D8%A7%D9%81%D8%B8%D8%A9%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%A8%D9%86%D9%83%20%D8%A3%D8%A8%D9%88%20%D8%B8%D8%A8%D9%8A%20%D8%A7%D9%84%D9%88%D8%B7%D9%86%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. هشام عبد الهادي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الجيش - برج المحافظة - أعلى بنك أبو ظبي الوطني</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. ياسر محمد المليجي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> ماجستير ودكتوراه طب الأطفال وحديثي الولادة - رئيس قسم الأطفال والعناية المركزة بمستشفى المنصورة لتأمين الصحى</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> المنصورة: 01066828974 - 01028561265 | نبروه: 01063528477 - 010973886028</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - برج الكوثر - السكة الجديدة | نبروه  - شارع الجمهورية</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الاستفسار تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01066828974" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. ياسر محمد المليجي','موبايل المنصورة')">موبايل المنصورة</a>
+          <a href="tel:01063528477" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. ياسر محمد المليجي','موبايل نبروه')">موبايل نبروه</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%83%D9%88%D8%AB%D8%B1%20-%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%0A%D9%86%D8%A8%D8%B1%D9%88%D9%87%20%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. ياسر محمد المليجي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - برج الكوثر - السكة الجديدة | نبروه  - شارع الجمهورية</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د محمود السيد نبيه</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائي الأطفال و حديثي الولادة
+الزمالة المصرية لطب الأطفال
+مستشفى المنصورة للتأمين الصحي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> العيادة -0502602822 موبايل 01000267714</div>
+
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01000267714" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د محمود السيد نبيه','موبايل')">موبايل</a>
+          <a href="tel:0502602822" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د محمود السيد نبيه','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د محمود السيد نبيه','موقع')">
+          📍 الموقع<span class="tooltiptext"></span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د أشرف عبدالمنعم الشرقاوي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال - استشاري الغدد الصماء والسكر - مستشفى الأطفال الجامعي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01063473605 | أرضي: (050)2377079</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - المنصورة - ش العباسي برج الهدى والنور- الدور الاول علوى امام الفيومى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01063473605" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د أشرف عبدالمنعم الشرقاوي','موبايل')">موبايل</a>
+          <a href="tel:0502377079" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د أشرف عبدالمنعم الشرقاوي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%20%D8%A7%D9%84%D8%B9%D8%A8%D8%A7%D8%B3%D9%8A%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%87%D8%AF%D9%89%20%D9%88%D8%A7%D9%84%D9%86%D9%88%D8%B1-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%20%D8%B9%D9%84%D9%88%D9%89%20%D8%A7%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D9%81%D9%8A%D9%88%D9%85%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د أشرف عبدالمنعم الشرقاوي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - المنصورة - ش العباسي برج الهدى والنور- الدور الاول علوى امام الفيومى</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د جيهان عطية السواح</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال وحديثي الولادة - استشاري امراض قلب الأطفال والجنين وقسطرة القلب كلية الطب مستشفى الاطفال طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01140191976 | أرضي: 0502237588</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - السكة الجديدة - برج الصفوة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01140191976" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د جيهان عطية السواح','موبايل')">موبايل</a>
+          <a href="tel:0502237588" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د جيهان عطية السواح','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د جيهان عطية السواح','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - السكة الجديدة - برج الصفوة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. حازم فتحى الطيار</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> طب الأطفال وحديثي الولادة - عضو الجمعية المصرية لرعاية حديثي الولادة المبتسرين 
+الدبلومة الدولية لتغذية حديث الولادة المبتسرين</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01001951969 | أرضي: 01064060330 ( للطوارىء بعد موعد العيادة )</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة -  شارع الجمهورية - برج قصر النيل بجوار بنك مصر الدور الثامن 
+لحالات الطوارىء 
+مركز شمس لطب الاطفال برج الصفوة اخر حى الجامعة ( أعلى الفا ماركت )</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> حسب الحجز المسبق</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01001951969" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. حازم فتحى الطيار','موبايل')">موبايل</a>
+          <a href="tel:01064060330" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. حازم فتحى الطيار','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D9%86%D9%8A%D9%84%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%85%D9%86%20%0A%D9%84%D8%AD%D8%A7%D9%84%D8%A7%D8%AA%20%D8%A7%D9%84%D8%B7%D9%88%D8%A7%D8%B1%D9%89%D8%A1%20%0A%D9%85%D8%B1%D9%83%D8%B2%20%D8%B4%D9%85%D8%B3%20%D9%84%D8%B7%D8%A8%20%D8%A7%D9%84%D8%A7%D8%B7%D9%81%D8%A7%D9%84%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9%20%D8%A7%D8%AE%D8%B1%20%D8%AD%D9%89%20%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9%D8%A9%20(%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D9%81%D8%A7%20%D9%85%D8%A7%D8%B1%D9%83%D8%AA%20)" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. حازم فتحى الطيار','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة -  شارع الجمهورية - برج قصر النيل بجوار بنك مصر الدور الثامن 
+لحالات الطوارىء 
+مركز شمس لطب الاطفال برج الصفوة اخر حى الجامعة ( أعلى الفا ماركت )</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. عمرو الحفناوي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائي الأطفال وحديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل : 01009679991</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع قناة السويس اعلى مطعم التوارجى الجديد الدور الرابع</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01009679991" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عمرو الحفناوي','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%82%D9%86%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20%D8%A7%D8%B9%D9%84%D9%89%20%D9%85%D8%B7%D8%B9%D9%85%20%D8%A7%D9%84%D8%AA%D9%88%D8%A7%D8%B1%D8%AC%D9%89%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عمرو الحفناوي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع قناة السويس اعلى مطعم التوارجى الجديد الدور الرابع</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. إيمان عاطف</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> مدرس طب الأطفال - استشاري أعصاب أطفال
+دكتوراة طب الأطفال جامعة المنصورة
+مستشفي الأطفال الجامعي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01017416943 /  01554438781</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - السكة الجديدة - برج الدهب الدور الثاني علوى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01017416943" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. إيمان عاطف','موبايل')">موبايل</a>
+          <a href="tel:01554438781" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. إيمان عاطف','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%AF%D9%87%D8%A8%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A%20%D8%B9%D9%84%D9%88%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. إيمان عاطف','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - السكة الجديدة - برج الدهب الدور الثاني علوى</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د. أيمن حماد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ كلي الأطفال
+رئيس وحدة كلي الأطفال - مستشفي الأطفال الجامعي
+رئيس قسم طب الأطفال - كلية طب المنصورة
+عضو الجمعية المصرية لطب وزراعة الكلي في
+الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502373704</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - 46 شارع حسين بك - برج السلكاوي</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا ( الاستشارة خلال عشر ايام من تاريخ الكشف )</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502373704" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د. أيمن حماد','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%2046%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%83%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B3%D9%84%D9%83%D8%A7%D9%88%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د. أيمن حماد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - 46 شارع حسين بك - برج السلكاوي</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد عوض شقير</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري طب الأطفال وحديثي الولادة - دكتوراه جامعة عين شمس</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01151082081 |  أرضى 0502506180 | أرضي مركز النور : 0502200007</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ش قناة السويس برج بدر - بجوار صيدلية العجمى
+مركز النور - أمام كلية الطب</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف والإستشارة بموعد سابق الإستشارة فى خلال أسبوع</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01151082081" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد عوض شقير','موبايل')">موبايل</a>
+          <a href="tel:0502200007" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عوض شقير','مركز النور')">مركز النور</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D8%B4%20%D9%82%D9%86%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20%D8%A8%D8%B1%D8%AC%20%D8%A8%D8%AF%D8%B1%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B9%D8%AC%D9%85%D9%89%0A%D9%85%D8%B1%D9%83%D8%B2%20%D8%A7%D9%84%D9%86%D9%88%D8%B1%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%83%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد عوض شقير','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ش قناة السويس برج بدر - بجوار صيدلية العجمى
+مركز النور - أمام كلية الطب</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. نهى ثروت</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استاذ طب الأطفال كلية الطب جامعة المنصورة 
+ مستشفى الأطفال الجامعي وحدة الأعصاب 
+ زميل الكلية الملكيةالبريطانية لطب الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01002664009</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ش حسين بيك - برج أبو الحسن - فوق العشري لقطع غيار السيارات الدور السابع</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> المواعيد : من الساعة  4 ظهرا إلى الساعة 8 مساعا ما عدا الاثنين والخميس الكشف بميعاد سابق</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01002664009" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. نهى ثروت','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D8%B4%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%8A%D9%83%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A3%D8%A8%D9%88%20%D8%A7%D9%84%D8%AD%D8%B3%D9%86%20-%20%D9%81%D9%88%D9%82%20%D8%A7%D9%84%D8%B9%D8%B4%D8%B1%D9%8A%20%D9%84%D9%82%D8%B7%D8%B9%20%D8%BA%D9%8A%D8%A7%D8%B1%20%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B1%D8%A7%D8%AA%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B3%D8%A7%D8%A8%D8%B9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. نهى ثروت','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ش حسين بيك - برج أبو الحسن - فوق العشري لقطع غيار السيارات الدور السابع</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. عمار محمد خشبة</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري طب الأطفال وحديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> ش بنك مصر : 01004547134 | طيبة: 01555252252 | م.الخير : 01145025466 | م.النور : 0502200007</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة :  2 شارع بنك مصر
+مركز النور لطب الأطفال : أمام كلية الطب
+مستشفى الخير شارع قناة السويس 
+مستشفى طيبة الجديدة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف والإستشارة بميعاد مسبق</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01004547134" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عمار محمد خشبة','ش بنك مصر')">ش بنك مصر</a>
+          <a href="tel:01555252252" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عمار محمد خشبة','طيبة')">طيبة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%202%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1%0A%D9%85%D8%B1%D9%83%D8%B2%20%D8%A7%D9%84%D9%86%D9%88%D8%B1%20%D9%84%D8%B7%D8%A8%20%D8%A7%D9%84%D8%A3%D8%B7%D9%81%D8%A7%D9%84%20:%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%83%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%0A%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%82%D9%86%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20%0A%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%B7%D9%8A%D8%A8%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عمار محمد خشبة','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة :  2 شارع بنك مصر
+مركز النور لطب الأطفال : أمام كلية الطب
+مستشفى الخير شارع قناة السويس 
+مستشفى طيبة الجديدة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أشرف عبد الباسط</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال - كلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502331275</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - برج نور الرحمن - خلف عمر أفندي أمام قصر الثقافة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502331275" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أشرف عبد الباسط','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D9%86%D9%88%D8%B1%20%D8%A7%D9%84%D8%B1%D8%AD%D9%85%D9%86%20-%20%D8%AE%D9%84%D9%81%20%D8%B9%D9%85%D8%B1%20%D8%A3%D9%81%D9%86%D8%AF%D9%8A%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D8%AB%D9%82%D8%A7%D9%81%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أشرف عبد الباسط','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - برج نور الرحمن - خلف عمر أفندي أمام قصر الثقافة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. طارق الدسوقي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال
+استشارى الحساسية وأمراض الصدر في الأطفال
+مستشفى الأطفال الجامعي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01010790875| أرضي: 0502232849</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - السكة الجديدة - برج المنصور</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> من ٢ : ٦ يوميا ماعدا الخميس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01010790875" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. طارق الدسوقي','موبايل')">موبايل</a>
+          <a href="tel:0502232849" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. طارق الدسوقي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. طارق الدسوقي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - السكة الجديدة - برج المنصور</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. هديل محمد أبو العنين</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه وأستاذ طب الأطفال
+كلية الطب - جامعة المنصورة   
+  إستشاري غدد صماء وسكر اطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01144265870</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع البحر برج الأتربي بجوار موقف عدن</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا والاستشارة خلال شهر من موعد الكشف</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01144265870" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. هديل محمد أبو العنين','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A3%D8%AA%D8%B1%D8%A8%D9%8A%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D9%88%D9%82%D9%81%20%D8%B9%D8%AF%D9%86" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. هديل محمد أبو العنين','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع البحر برج الأتربي بجوار موقف عدن</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. مجدي أبو الخير</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال - جامعة المنصورة
+إستشاري أمراض قلب الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> المنصورة: 01092777634 | 0502208123 دمياط: 01092777523| 0572226338</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - مركز الخيرية أمام مستشفى السلاب
+دمياط :شارع الشاعر الأسمر - بجوار المدخل الرئيسي لاستاذ دمياط</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> مواعيد العمل  دمياط : السبت والثلاثاء من (۱۲) ظهراً إلى 4 مساءاً  المنصورة مواعيد العمل : الأحد والإثنين والأربعاء من 1) ظهراً إلى ٥ مساءاً(</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01092777634" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مجدي أبو الخير','المنصورة')">المنصورة</a>
+          <a href="tel:01092777523" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مجدي أبو الخير','دمياط')">دمياط</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D8%B1%D9%83%D8%B2%20%D8%A7%D9%84%D8%AE%D9%8A%D8%B1%D9%8A%D8%A9%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D8%A8%0A%D8%AF%D9%85%D9%8A%D8%A7%D8%B7%20:%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%B4%D8%A7%D8%B9%D8%B1%20%D8%A7%D9%84%D8%A3%D8%B3%D9%85%D8%B1%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A7%D9%84%D9%85%D8%AF%D8%AE%D9%84%20%D8%A7%D9%84%D8%B1%D8%A6%D9%8A%D8%B3%D9%8A%20%D9%84%D8%A7%D8%B3%D8%AA%D8%A7%D8%B0%20%D8%AF%D9%85%D9%8A%D8%A7%D8%B7" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. مجدي أبو الخير','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - مركز الخيرية أمام مستشفى السلاب
+دمياط :شارع الشاعر الأسمر - بجوار المدخل الرئيسي لاستاذ دمياط</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ كمال عبد الإله على</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة الأطفال
+وحديثي الولادة - كلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل 01222447637 أرضى : 0502506699  واتس 01152919191</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> شارع قناة السويس بجوار مصنع الالبان  بجوار صيدلية العجمى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01222447637" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('كمال عبد الإله على','موبايل')">موبايل</a>
+          <a href="tel:0502506699" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('كمال عبد الإله على','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%82%D9%86%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D8%B5%D9%86%D8%B9%20%D8%A7%D9%84%D8%A7%D9%84%D8%A8%D8%A7%D9%86%20%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B9%D8%AC%D9%85%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('كمال عبد الإله على','موقع')">
+          📍 الموقع<span class="tooltiptext">شارع قناة السويس بجوار مصنع الالبان  بجوار صيدلية العجمى</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد عز</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب الأطفال
+ رئيس وحدة الجهاز الهضمى والكبد
+مستشفى الأطفال الجامعي 
+كلية الطب - جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل : 01210070502 / 01099021055  أرضى: 0502307676</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> العيادة : المنصورة - ميدان المحطة
+برج الأطباء فوق صيدلية سالى الدور الثاني</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01099021055" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد عز','موبايل')">موبايل</a>
+          <a href="tel:0502307676" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عز','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20:%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%0A%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A3%D8%B7%D8%A8%D8%A7%D8%A1%20%D9%81%D9%88%D9%82%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%B3%D8%A7%D9%84%D9%89%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد عز','موقع')">
+          📍 الموقع<span class="tooltiptext">العيادة : المنصورة - ميدان المحطة
+برج الأطباء فوق صيدلية سالى الدور الثاني</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد سعيد الشربينى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> اسناد جراحة الأطفال - طب المنصورة
+دكتوراه في جراحات الأطفال والتشوهات الخلقية والتجميلية
+استاذ جراحات الأطفال وحديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> المنصورة موبايل : 01227522960 أرضى : 0502322855 بلقاس أرضى : 0502792009</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ميدان المحطة -- برج المندوه - أعلي صيدلية الألفي
+بلقاس : ميدان أولاد عمر - برج الجوهري - أعلي فودافون</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف والاستشارة بحجز مسبق</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01227522960" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد سعيد الشربينى','المنصورة')">المنصورة</a>
+          <a href="tel:0502792009" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد سعيد الشربينى','بلقاس')">بلقاس</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20--%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%85%D9%86%D8%AF%D9%88%D9%87%20-%20%D8%A3%D8%B9%D9%84%D9%8A%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A3%D9%84%D9%81%D9%8A%0A%D8%A8%D9%84%D9%82%D8%A7%D8%B3%20:%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A3%D9%88%D9%84%D8%A7%D8%AF%20%D8%B9%D9%85%D8%B1%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%AC%D9%88%D9%87%D8%B1%D9%8A%20-%20%D8%A3%D8%B9%D9%84%D9%8A%20%D9%81%D9%88%D8%AF%D8%A7%D9%81%D9%88%D9%86" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد سعيد الشربينى','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ميدان المحطة -- برج المندوه - أعلي صيدلية الألفي
+بلقاس : ميدان أولاد عمر - برج الجوهري - أعلي فودافون</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. الهام السيد العشرى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشارى أول طب الأطفال وحديثي الولادة
+ماجستير طب الأطفال وحديثي الولادة
+الزمالة المصرية لطب الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل : 01060571533   أرضى : 0502183888</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> البرامون - شارع السوق - أمام مسجد آل درویش</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا ( الاستشارة خلال أسبوع )</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01060571533" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. الهام السيد العشرى','موبايل')">موبايل</a>
+          <a href="tel:0502183888" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. الهام السيد العشرى','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D8%A8%D8%B1%D8%A7%D9%85%D9%88%D9%86%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%B3%D9%88%D9%82%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A2%D9%84%20%D8%AF%D8%B1%D9%88%DB%8C%D8%B4" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. الهام السيد العشرى','موقع')">
+          📍 الموقع<span class="tooltiptext">البرامون - شارع السوق - أمام مسجد آل درویش</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. رامى مرعى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائي طب الأطفال وحديثي الولادة
+و حساسية صدر الأطفال
+دبلومة أمراض سوء التغذية جامعة بوسطن الولايات المتحدة الأمريكية
+عضو الجمعية المصرية لطب الأطفال حديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01028088670</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> بسنديلة - بجوار المطافي 
+بلقاس - ترعة السعرانة - أعلى صيداية المعداوي</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01028088670" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. رامى مرعى','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A8%D8%B3%D9%86%D8%AF%D9%8A%D9%84%D8%A9%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A7%D9%84%D9%85%D8%B7%D8%A7%D9%81%D9%8A%20%0A%D8%A8%D9%84%D9%82%D8%A7%D8%B3%20-%20%D8%AA%D8%B1%D8%B9%D8%A9%20%D8%A7%D9%84%D8%B3%D8%B9%D8%B1%D8%A7%D9%86%D8%A9%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D8%A7%D9%8A%D8%A9%20%D8%A7%D9%84%D9%85%D8%B9%D8%AF%D8%A7%D9%88%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. رامى مرعى','موقع')">
+          📍 الموقع<span class="tooltiptext">بسنديلة - بجوار المطافي 
+بلقاس - ترعة السعرانة - أعلى صيداية المعداوي</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. غاده أحمد عنان</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> مدرس طب الاطفال كلية الطب - جامعة المنصورة
+دكتوراه واستشاري مخ وأعصاب الأطفال
+مستشفي الاطفال الجامعي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01044509606</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة  ميدان الطميهي - برج الحجاز الدور الرابع علوي</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="https://wa.me/20201044509606" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د. غاده أحمد عنان','واتساب')">واتساب</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D8%B7%D9%85%D9%8A%D9%87%D9%8A%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%AD%D8%AC%D8%A7%D8%B2%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9%20%D8%B9%D9%84%D9%88%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. غاده أحمد عنان','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة  ميدان الطميهي - برج الحجاز الدور الرابع علوي</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-surgery">
+    <div class="specialty-title">🔪 الجراحة العامة</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. طلعت عبدالله الشهاوي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة الجهاز الهضمي والكبد والمناظير - كلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01036083029 | أرضي: 0502320071</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ميدان المحطة - برج الأطباء فوق صيدلية سالى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> يومياً ماعدا الاثنين والخميس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01036083029" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. طلعت عبدالله الشهاوي','موبايل')">موبايل</a>
+          <a href="tel:0502320710" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. طلعت عبدالله الشهاوي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A3%D8%B7%D8%A8%D8%A7%D8%A1%20%D9%81%D9%88%D9%82%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%B3%D8%A7%D9%84%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. طلعت عبدالله الشهاوي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ميدان المحطة - برج الأطباء فوق صيدلية سالى</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد عبد المنعم الحصري</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> مدرس الجراحة العامة وجراحة الأطفال والمناظير - كلية الطب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01015190719 واتس  | أرضي: 0502333644 | 01066669454</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الأوتوبيس القديمم - عمارة الأوقاف عيادات صفوة الطب الدور الاول
+برق العز : مستشفى بيت مال المسلمين - الكوبرى القديم</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01066669454" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد عبد المنعم الحصري','موبايل')">موبايل</a>
+          <a href="tel:0502333644" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عبد المنعم الحصري','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%A3%D9%88%D8%AA%D9%88%D8%A8%D9%8A%D8%B3%20%D8%A7%D9%84%D9%82%D8%AF%D9%8A%D9%85%D9%85%20-%20%D8%B9%D9%85%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%A3%D9%88%D9%82%D8%A7%D9%81%20%D8%B9%D9%8A%D8%A7%D8%AF%D8%A7%D8%AA%20%D8%B5%D9%81%D9%88%D8%A9%20%D8%A7%D9%84%D8%B7%D8%A8%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%A7%D9%88%D9%84%0A%D8%A8%D8%B1%D9%82%20%D8%A7%D9%84%D8%B9%D8%B2%20:%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A8%D9%8A%D8%AA%20%D9%85%D8%A7%D9%84%20%D8%A7%D9%84%D9%85%D8%B3%D9%84%D9%85%D9%8A%D9%86%20-%20%D8%A7%D9%84%D9%83%D9%88%D8%A8%D8%B1%D9%89%20%D8%A7%D9%84%D9%82%D8%AF%D9%8A%D9%85" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد عبد المنعم الحصري','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الأوتوبيس القديمم - عمارة الأوقاف عيادات صفوة الطب الدور الاول
+برق العز : مستشفى بيت مال المسلمين - الكوبرى القديم</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. عبد العظيم الجنش</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ الجراحة بطب المنصورة
+ جهاز هضمى - أورام - غدد صماء - جراحة المناظير
+جراحات الشرج والقولون</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502234490| موبايل: 01140810810</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ميدان مشعل</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01140810810" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عبد العظيم الجنش','موبايل')">موبايل</a>
+          <a href="tel:0502234490" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. عبد العظيم الجنش','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D9%85%D8%B4%D8%B9%D9%84" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عبد العظيم الجنش','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ميدان مشعل</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد الخطيب</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري جراحات السمنة والمناظير</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل 1:  المنصورة 01220986080| موبايل 2:  طناح 01204678723</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع قناة السويس  برج البدر ناصية شارع الملك الكامل بجوار صيدلية العجمى
+طناح شارع مدرسة عمر بن الخطاب أمام محل
+العراقي للزجاج</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01220986080" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد الخطيب','المنصورة')">المنصورة</a>
+          <a href="tel:01204678723" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد الخطيب','موبايل 2')">موبايل 2</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%82%D9%86%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A8%D8%AF%D8%B1%20%D9%86%D8%A7%D8%B5%D9%8A%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D9%85%D9%84%D9%83%20%D8%A7%D9%84%D9%83%D8%A7%D9%85%D9%84%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B9%D8%AC%D9%85%D9%89%0A%D8%B7%D9%86%D8%A7%D8%AD%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%85%D8%AF%D8%B1%D8%B3%D8%A9%20%D8%B9%D9%85%D8%B1%20%D8%A8%D9%86%20%D8%A7%D9%84%D8%AE%D8%B7%D8%A7%D8%A8%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%AD%D9%84%0A%D8%A7%D9%84%D8%B9%D8%B1%D8%A7%D9%82%D9%8A%20%D9%84%D9%84%D8%B2%D8%AC%D8%A7%D8%AC" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد الخطيب','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع قناة السويس  برج البدر ناصية شارع الملك الكامل بجوار صيدلية العجمى
+طناح شارع مدرسة عمر بن الخطاب أمام محل
+العراقي للزجاج</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. وليد ثابت</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه الجراحة العامة والغدد الصماء والأورام
+إستشاري جراحات القولون والشرج
+عضو الجمعية الأوروبية لجراحي القولون والشرج
+أستاذ الجراحة - كلية الطب - جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01002599712 | موبايل 2: 01011515190</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ش السكة الجديدة برج الصفوة الدور الرابع 
+المنصورة  أول شارع بورسعيد بجوار ميدان مشعل  برج سلمى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01011515190" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. وليد ثابت','موبايل 1')">موبايل 1</a>
+          <a href="tel:01002599762" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. وليد ثابت','موبايل 2')">موبايل 2</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B1%D8%A7%D8%A8%D8%B9%20%0A%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%20%D8%A3%D9%88%D9%84%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A8%D9%88%D8%B1%D8%B3%D8%B9%D9%8A%D8%AF%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D9%85%D8%B4%D8%B9%D9%84%20%20%D8%A8%D8%B1%D8%AC%20%D8%B3%D9%84%D9%85%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. وليد ثابت','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ش السكة الجديدة برج الصفوة الدور الرابع 
+المنصورة  أول شارع بورسعيد بجوار ميدان مشعل  برج سلمى</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-neurology">
+    <div class="specialty-title">🧠 طب المخ والأعصاب</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د هداية محمد هندام</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري جراحة المخ والأعصاب والعمود الفقري - دكتوراه جراحة المخ والأعصاب - جامعة عين شمس - أستاذ بكلية طب الأزهر دمياط</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01221159584 | أرضي: 01008432952</div>
+
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> حسب الحجز المسبق</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01221159584" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د هداية محمد هندام','موبايل')">موبايل</a>
+          <a href="tel:01008432952" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د هداية محمد هندام','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د هداية محمد هندام','موقع')">
+          📍 الموقع<span class="tooltiptext"></span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. يارا محسن</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> ماجستير طب المخ والأعصاب جامعة المنصورة - زميل البورد الأوروبي لطب الأعصاب
+عضو الاكاديمية الاوروبية لطب الاعصاب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01029712010 | واتساب: 01143622770  | 0502269676</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الترعة - ميدان الأديب - أعلى كافيه ميرامار</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> السبت-الخميس: 4 مساءً - 8 مساءً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01029712010" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. يارا محسن','موبايل')">موبايل</a>
+          <a href="tel:0502269676" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. يارا محسن','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B1%D8%B9%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D8%A3%D8%AF%D9%8A%D8%A8%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D9%83%D8%A7%D9%81%D9%8A%D9%87%20%D9%85%D9%8A%D8%B1%D8%A7%D9%85%D8%A7%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. يارا محسن','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الترعة - ميدان الأديب - أعلى كافيه ميرامار</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. سامر حامد سلامة</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> مدرس واستشاري طب المخ والأعصاب - كلية الطب جامعة المنصورة - البورد الأوروبي لطب المخ والأعصاب - عضو الجمعية الامريكية لطب المخ والاعصاب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01120134673</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ميدان المحطة - أعلى صيدلية سالي - الدور الخامس</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> اتصل تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01120134673" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. سامر حامد سلامة','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%B3%D8%A7%D9%84%D9%8A%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AE%D8%A7%D9%85%D8%B3" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. سامر حامد سلامة','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ميدان المحطة - أعلى صيدلية سالي - الدور الخامس</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أحمد زاهر</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة المخ والأعصاب وجراحة العمود الفقري
+استشارى جراحات مناظير المخ ومناظير العمود الفقرى 
+كلية الطب جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502233135 المنصورة  | أرضي: 0502797360 بلقاس</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ش حسين بك - أمام مدرسة عمر بن الخطاب
+بلقاس ك شارع الجمهورية امام الادارة التعليمية القديمة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502233135" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أحمد زاهر','اتصال')">اتصال</a>
+          <a href="tel:0502797360" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أحمد زاهر','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%83%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%AF%D8%B1%D8%B3%D8%A9%20%D8%B9%D9%85%D8%B1%20%D8%A8%D9%86%20%D8%A7%D9%84%D8%AE%D8%B7%D8%A7%D8%A8%0A%D8%A8%D9%84%D9%82%D8%A7%D8%B3%20%D9%83%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20%D8%A7%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D8%A7%D8%AF%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%AA%D8%B9%D9%84%D9%8A%D9%85%D9%8A%D8%A9%20%D8%A7%D9%84%D9%82%D8%AF%D9%8A%D9%85%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد زاهر','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ش حسين بك - أمام مدرسة عمر بن الخطاب
+بلقاس ك شارع الجمهورية امام الادارة التعليمية القديمة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. مادح محمد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري طب المخ والأعصاب والعمود الفقري
+الزمالى المصرية للامراض العصبية</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01096907111  المنصورة - 01096907444  بلقاس - 01006761235 ديسط - واتساب 01096907444</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : مشعل - سكة بسندوب أمام مطعم العنانى 
+بلقاس : برج الدكتور طلعت مطاوع بجوار المزلقان بنك قطر 
+ديسط : امام الكوبرى الصغيرطريق طلخا شربين</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01096907111" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مادح محمد','موبايل')">موبايل</a>
+          <a href="tel:01096907444" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مادح محمد','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%85%D8%B4%D8%B9%D9%84%20-%20%D8%B3%D9%83%D8%A9%20%D8%A8%D8%B3%D9%86%D8%AF%D9%88%D8%A8%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B7%D8%B9%D9%85%20%D8%A7%D9%84%D8%B9%D9%86%D8%A7%D9%86%D9%89%20%0A%D8%A8%D9%84%D9%82%D8%A7%D8%B3%20:%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%AF%D9%83%D8%AA%D9%88%D8%B1%20%D8%B7%D9%84%D8%B9%D8%AA%20%D9%85%D8%B7%D8%A7%D9%88%D8%B9%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A7%D9%84%D9%85%D8%B2%D9%84%D9%82%D8%A7%D9%86%20%D8%A8%D9%86%D9%83%20%D9%82%D8%B7%D8%B1%20%0A%D8%AF%D9%8A%D8%B3%D8%B7%20:%20%D8%A7%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D9%83%D9%88%D8%A8%D8%B1%D9%89%20%D8%A7%D9%84%D8%B5%D8%BA%D9%8A%D8%B1%D8%B7%D8%B1%D9%8A%D9%82%20%D8%B7%D9%84%D8%AE%D8%A7%20%D8%B4%D8%B1%D8%A8%D9%8A%D9%86" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. مادح محمد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : مشعل - سكة بسندوب أمام مطعم العنانى 
+بلقاس : برج الدكتور طلعت مطاوع بجوار المزلقان بنك قطر 
+ديسط : امام الكوبرى الصغيرطريق طلخا شربين</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د. محمد سعد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ ورئيس أقسام طب المخ والأعصاب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502226622</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع بورسعيد</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف بميعاد سابق عدا الخميس والجمعة والسبت</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502266633" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د. محمد سعد','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A8%D9%88%D8%B1%D8%B3%D8%B9%D9%8A%D8%AF" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د. محمد سعد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع بورسعيد</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد جلال الخطيب</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه الأمراض العصبية 
+ أستاذ أمراض ا المخ والأعصاب
+ كلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01018254481 / 0502249933</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة شارع السكة الجديدة برج الصفوة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01018254481" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد جلال الخطيب','موبايل')">موبايل</a>
+          <a href="tel:0502249933" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد جلال الخطيب','أرضي')">أرضي</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد جلال الخطيب','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة شارع السكة الجديدة برج الصفوة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد عبدالحليم الطنطاوى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> محمد عبد الحليم
+ استشاري و مدرس طب المخ والأعصاب 
+  وقسطرة المخ التداخلية م بكلية الطب 
+ عضو الجمعية الأمريكية لأمراض المخ والأعصاب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> العيادة : موبايل 01033079093 أرضى 0502319104  المركز : موبايل 01067193193 أرضى 0502100323</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> العيادة : المنصورة شارع البحر أمام قصر الثقافة 
+المركز :  المنصورة شارع البحر أمام قصر الثقافة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> العيادة : الكشف بميعاد سابق ( العطلة الاسبوعية الخميس والجمعة ) المركز : استقبال حالات جلطات ونزيف المخ وحالات الأعصاب الحرجة  24 ساعة يوميا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01033079093" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد عبدالحليم الطنطاوى','موبايل العيادة')">موبايل العيادة</a>
+          <a href="tel:0502319104" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عبدالحليم الطنطاوى','أرضى العيادة')">أرضى العيادة</a>
+          <a href="tel:01067193193" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد عبدالحليم الطنطاوى','موبايل المركز')">موبايل المركز</a>
+          <a href="tel:0502100323" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عبدالحليم الطنطاوى','أرضي المركز')">أرضي المركز</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20:%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D8%AB%D9%82%D8%A7%D9%81%D8%A9%20%0A%D8%A7%D9%84%D9%85%D8%B1%D9%83%D8%B2%20:%20%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D8%AB%D9%82%D8%A7%D9%81%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد عبدالحليم الطنطاوى','موقع')">
+          📍 الموقع<span class="tooltiptext">العيادة : المنصورة شارع البحر أمام قصر الثقافة 
+المركز :  المنصورة شارع البحر أمام قصر الثقافة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. باسم ابراهيم عوض</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه جراحة المخ والأعصاب
+أستاذ مساعد بكلية الطب
+زمالة جراحات العمود الفقري
+كليفلاند - أمريكا</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> ت : العيادة  0502223101 /  01111321070  القاهرة ت: 19448</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة شارع الجمهورية برج قصر النيل - بجوار بنك مصر
+
+القاهرة : المستشفى الجوى التخصصی</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> المواعيد : من 2-6مساءاً عدا الخميس والجمعة - الكشف بميعاد سابق  القاهرة يوم الخميس من 1-3</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01111321070" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. باسم ابراهيم عوض','موبايل العيادة')">موبايل العيادة</a>
+          <a href="tel:0502223101" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. باسم ابراهيم عوض','أرضي العيادة')">أرضي العيادة</a>
+          <a href="tel:19448" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. باسم ابراهيم عوض','القاهرة')">القاهرة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D9%82%D8%B5%D8%B1%20%D8%A7%D9%84%D9%86%D9%8A%D9%84%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1%0A%0A%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9%20:%20%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%AC%D9%88%D9%89%20%D8%A7%D9%84%D8%AA%D8%AE%D8%B5%D8%B5%DB%8C" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. باسم ابراهيم عوض','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة شارع الجمهورية برج قصر النيل - بجوار بنك مصر
+
+القاهرة : المستشفى الجوى التخصصی</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. تامر محمد بلال</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه طب المخ والأعصاب 
+أستاذ بكلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> م: 01148816464  / ت:   0502533300</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> طلخا  ش صلاح سالم برج السمنودى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> يوميا ماعدا الخمس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01148816464" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. تامر محمد بلال','موبايل')">موبايل</a>
+          <a href="tel:0502533300" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. تامر محمد بلال','أرضي')">أرضي</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B7%D9%84%D8%AE%D8%A7%20%20%D8%B4%20%D8%B5%D9%84%D8%A7%D8%AD%20%D8%B3%D8%A7%D9%84%D9%85%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B3%D9%85%D9%86%D9%88%D8%AF%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. تامر محمد بلال','موقع')">
+          📍 الموقع<span class="tooltiptext">طلخا  ش صلاح سالم برج السمنودى</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د.ادم سعد عبد الحميد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب وجراحة المخ والاعصاب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 0122667769</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ١٩ شارع احمد غازى . عبد السلام عارف بجوار سنترال حى غرب</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:+201226637769" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د.ادم سعد عبد الحميد','اتصال')">اتصال</a>
+          <a href="https://wa.me/201226637769" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د.ادم سعد عبد الحميد','واتساب')">واتساب</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D9%A1%D9%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D8%AD%D9%85%D8%AF%20%D8%BA%D8%A7%D8%B2%D9%89%20.%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D8%A7%D8%B1%D9%81%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B3%D9%86%D8%AA%D8%B1%D8%A7%D9%84%20%D8%AD%D9%89%20%D8%BA%D8%B1%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د.ادم سعد عبد الحميد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ١٩ شارع احمد غازى . عبد السلام عارف بجوار سنترال حى غرب</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-rheumatology">
+    <div class="specialty-title">🦴 الروماتيزم والمناعة</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد العدروسي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> ماجستير أمراض المفاصل والعمود الفقري - عضو الجمعية الأوروبية لامراض الروماتيزم والمناعة 
+ماجستير علاج الالم</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01098007392 | موبايل: 01067822577</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : الأوتوبيس الجديد - أمام موقف الزقازيق 
+المنصورة : ميدان مشعل اعلى اسواق الرحمة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> اتصل تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01098007392" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد العدروسي','موبايل')">موبايل</a>
+          <a href="tel:01067822577" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد العدروسي','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D8%A7%D9%84%D8%A3%D9%88%D8%AA%D9%88%D8%A8%D9%8A%D8%B3%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D9%88%D9%82%D9%81%20%D8%A7%D9%84%D8%B2%D9%82%D8%A7%D8%B2%D9%8A%D9%82%20%0A%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D9%85%D8%B4%D8%B9%D9%84%20%D8%A7%D8%B9%D9%84%D9%89%20%D8%A7%D8%B3%D9%88%D8%A7%D9%82%20%D8%A7%D9%84%D8%B1%D8%AD%D9%85%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد العدروسي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : الأوتوبيس الجديد - أمام موقف الزقازيق 
+المنصورة : ميدان مشعل اعلى اسواق الرحمة</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-eyes">
+    <div class="specialty-title">👁️ أطباء العيون</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أحمد مجاهد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه طب وجراحة العيون - زميل كلية جراحة العيون الملكية (انجلترا) - استشاري جراحة الشبكية والليزك والمياه البيضاء 
+دكتوراه فى جراحة الحول</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> المنصورة: وطن - ابصار  01023766566 | بلقاس: 01000649830 - 0502782656 - 01119100121</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> بلقاس - شارع ابو رجيلة أمام مجمع المحاكم
+المنصورة : مركز وطن للعيون</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01023766566" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد مجاهد','موبايل')">موبايل</a>
+          <a href="tel:01000649830" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد مجاهد','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A8%D9%84%D9%82%D8%A7%D8%B3%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D8%A8%D9%88%20%D8%B1%D8%AC%D9%8A%D9%84%D8%A9%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%AC%D9%85%D8%B9%20%D8%A7%D9%84%D9%85%D8%AD%D8%A7%D9%83%D9%85%0A%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%85%D8%B1%D9%83%D8%B2%20%D9%88%D8%B7%D9%86%20%D9%84%D9%84%D8%B9%D9%8A%D9%88%D9%86" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد مجاهد','موقع')">
+          📍 الموقع<span class="tooltiptext">بلقاس - شارع ابو رجيلة أمام مجمع المحاكم
+المنصورة : مركز وطن للعيون</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-internal">
+    <div class="specialty-title">🩺 الباطنة العامة</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أسامة السيد دويدار</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري الأمراض الباطنة والقلب والسكر - بمستشفى الطوارئ جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01128232106 - أرضى 0502256778 | واتس الطبيب : 01227248024</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - 35 شارع المجيرة - من شارع عطا الله خلف سوق الجملة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01128232106" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أسامة السيد دويدار','موبايل')">موبايل</a>
+          <a href="tel:0502256778" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أسامة السيد دويدار','أرضى')">أرضى</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%2035%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D9%85%D8%AC%D9%8A%D8%B1%D8%A9%20-%20%D9%85%D9%86%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%B9%D8%B7%D8%A7%20%D8%A7%D9%84%D9%84%D9%87%20%D8%AE%D9%84%D9%81%20%D8%B3%D9%88%D9%82%20%D8%A7%D9%84%D8%AC%D9%85%D9%84%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أسامة السيد دويدار','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - 35 شارع المجيرة - من شارع عطا الله خلف سوق الجملة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. شهيرة علي الأتربي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استاذ الباطنة العامة - جامعة المنصورة
+إستشاري الجهاز الهضمي والكبد والمناظير
+عضو الجمعية الأوربية لأمراض الكبد</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> واتس: 01100045047</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ميدان الطميهي - برج المدينة المنورة - الدور السادس ٧</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> مواعبد العمل : السبت و الاثنين و الأربعاء من ٢ الي ٦ الاحد من ع الى 7  الكشف والاستشارة بميعاد سابق</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="https://wa.me/20201100045047" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د. شهيرة علي الأتربي','واتس')">واتس</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D8%B7%D9%85%D9%8A%D9%87%D9%8A%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9%20%D8%A7%D9%84%D9%85%D9%86%D9%88%D8%B1%D8%A9%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3%20%D9%A7" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. شهيرة علي الأتربي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ميدان الطميهي - برج المدينة المنورة - الدور السادس ٧</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد الغزالي والى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> مركز الغزالي
+للجراحة العامة وجراحات الأطفال وحديثي الولادة
+دكتور محمد الغزالى والى
+أستاذ الجراحة العامة وجراحة الأطفال
+رئيس قسم جراحة الأطفال - جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضى 2254884</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة امتداد ش جیهان حي الجامعة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502254884" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد الغزالي والى','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A7%D9%85%D8%AA%D8%AF%D8%A7%D8%AF%20%D8%B4%20%D8%AC%DB%8C%D9%87%D8%A7%D9%86%20%D8%AD%D9%8A%20%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد الغزالي والى','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة امتداد ش جیهان حي الجامعة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. هاني شبانة</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه الأمراض الباطنية 
+أستاذ الكبد والجهاز الهضمى
+عضو الجمعية الاوروبية لدراسة امراض الكبد ومناظير الجهاز الهضمى</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> المنصورة: 01012452264  أجا : 01230456389</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة :  السكة القديمة - أمام مسجد السنجق  
+أجا :  الموقف الجديد - برج المهندس خلف مجلس المدينة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> المنصورة:السبت و  الاثنين والأربعاء  من 3-9 مساءا | أجا: الأحد  والثلاثاء والخميس من 4-10 مساءا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01012452264" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. هاني شبانة','المنصورة')">المنصورة</a>
+          <a href="tel:01230456389" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. هاني شبانة','أجا')">أجا</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D9%82%D8%AF%D9%8A%D9%85%D8%A9%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A7%D9%84%D8%B3%D9%86%D8%AC%D9%82%20%20%0A%D8%A3%D8%AC%D8%A7%20:%20%20%D8%A7%D9%84%D9%85%D9%88%D9%82%D9%81%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%85%D9%87%D9%86%D8%AF%D8%B3%20%D8%AE%D9%84%D9%81%20%D9%85%D8%AC%D9%84%D8%B3%20%D8%A7%D9%84%D9%85%D8%AF%D9%8A%D9%86%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. هاني شبانة','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة :  السكة القديمة - أمام مسجد السنجق  
+أجا :  الموقف الجديد - برج المهندس خلف مجلس المدينة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أحمد إبراهيم حماد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> طبيب أمراض الباطنة والقلب والسكر</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01007390666</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> العنوان: الحواوشة - منزل أ إبراهيم حماد</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="https://wa.me/20201007390666" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د. أحمد إبراهيم حماد','واتس اب')">واتس اب</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D8%B9%D9%86%D9%88%D8%A7%D9%86:%20%D8%A7%D9%84%D8%AD%D9%88%D8%A7%D9%88%D8%B4%D8%A9%20-%20%D9%85%D9%86%D8%B2%D9%84%20%D8%A3%20%D8%A5%D8%A8%D8%B1%D8%A7%D9%87%D9%8A%D9%85%20%D8%AD%D9%85%D8%A7%D8%AF" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد إبراهيم حماد','موقع')">
+          📍 الموقع<span class="tooltiptext">العنوان: الحواوشة - منزل أ إبراهيم حماد</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-auto-6">
+    <div class="specialty-title">🦴 العظام والمفاصل</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد عباس جعفر</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري جراحة العظام والروماتيزم
+عضو جمعية جراحة العظام المصرية</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> م: 01018400710 / ت1 : 0502478181 / ت 2 : 0502478719</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - توريل الجديدة - ش الإمام محمد عبده - بجوار محطة غاز تك</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> مواعيد العمل من 1-4 ظهرا ومن 7- 10مساءا   ما عدا الخميس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01018400710" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد عباس جعفر','اتصال')">اتصال</a>
+          <a href="tel:0502478181" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عباس جعفر','أرضي')">أرضي</a>
+          <a href="tel:0502478719" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد عباس جعفر','أرضي')">أرضي</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%AA%D9%88%D8%B1%D9%8A%D9%84%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%20%D8%B4%20%D8%A7%D9%84%D8%A5%D9%85%D8%A7%D9%85%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B9%D8%A8%D8%AF%D9%87%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D8%AD%D8%B7%D8%A9%20%D8%BA%D8%A7%D8%B2%20%D8%AA%D9%83" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد عباس جعفر','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - توريل الجديدة - ش الإمام محمد عبده - بجوار محطة غاز تك</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمود عبد الهادي السروجي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري الروماتيزم والمفاصل</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01020103645| موبايل 2: 01114790042</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ميدان الطميهي - أعلى صيدلية مروان - الدور السادس</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01020103645" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمود عبد الهادي السروجي','موبايل - واتس')">موبايل - واتس</a>
+          <a href="https://wa.me/20201114790042" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د. محمود عبد الهادي السروجي','موبايل - واتس')">موبايل - واتس</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D8%B7%D9%85%D9%8A%D9%87%D9%8A%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D9%85%D8%B1%D9%88%D8%A7%D9%86%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%B3%D8%A7%D8%AF%D8%B3" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمود عبد الهادي السروجي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ميدان الطميهي - أعلى صيدلية مروان - الدور السادس</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. خالد عبد الرحمن</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> إستشاري جراحة العظام والمفاصل
+إستشارى مناظير الركبة
+مستشفى المنصورة الدولي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502365588 -| موبايل: 01094905432</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ش بورسعيد - برج غنيم أمام مدرسة جاد الحق</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01094905432" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. خالد عبد الرحمن','موبايل')">موبايل</a>
+          <a href="tel:0502365588" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. خالد عبد الرحمن','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D8%B4%20%D8%A8%D9%88%D8%B1%D8%B3%D8%B9%D9%8A%D8%AF%20-%20%D8%A8%D8%B1%D8%AC%20%D8%BA%D9%86%D9%8A%D9%85%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%AF%D8%B1%D8%B3%D8%A9%20%D8%AC%D8%A7%D8%AF%20%D8%A7%D9%84%D8%AD%D9%82" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. خالد عبد الرحمن','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ش بورسعيد - برج غنيم أمام مدرسة جاد الحق</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. مجدي فاروق الحديدي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري جراحة العظام
+و الكسور و مناظير الركبة
+وتشوهات عظام الاطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01026325264 | 01090962118 | 01275714838 أرضي: 0502377985</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الجلاء
+برج خطاب بجوار مسجد القاضي</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01026325264" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مجدي فاروق الحديدي','موبايل')">موبايل</a>
+          <a href="tel:0502377985" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. مجدي فاروق الحديدي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%84%D8%A7%D8%A1%0A%D8%A8%D8%B1%D8%AC%20%D8%AE%D8%B7%D8%A7%D8%A8%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A7%D9%84%D9%82%D8%A7%D8%B6%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. مجدي فاروق الحديدي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الجلاء
+برج خطاب بجوار مسجد القاضي</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-auto-7">
+    <div class="specialty-title">🫀 الكبد والجهاز الهضمي</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د. محمد القصاص</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ واستشارى الجهاز الهضمى والكبد
+رئيس قسم الأمراض المتوطنة بكلية الطب
+استشارى الفحص بالموجات فوق الصوتية والمناظير
+دبلوم أبحاث الكبد الإكلينيكية - جامعة ليفربول
+زميل المستشفى الجامعي - كيوتو - اليابان
+رئيس الجمعية المصرية للأبحاث والتدريب
+في طب الكبد والجهاز الهضمي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01099332220 | أرضي: 25682827</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> 30 شارع مراد - الجيزة  (برج الأهلى الطبى ) أعلى فودافون عيادة 205</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف والإستشارة بموعد سابق  الإستشارة مره واحده خلال ١٤ يوم من تاريخ الكشف</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01099332220" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د. محمد القصاص','موبايل')">موبايل</a>
+          <a href="tel:05025682827" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د. محمد القصاص','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=30%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%85%D8%B1%D8%A7%D8%AF%20-%20%D8%A7%D9%84%D8%AC%D9%8A%D8%B2%D8%A9%20%20(%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A3%D9%87%D9%84%D9%89%20%D8%A7%D9%84%D8%B7%D8%A8%D9%89%20)%20%D8%A3%D8%B9%D9%84%D9%89%20%D9%81%D9%88%D8%AF%D8%A7%D9%81%D9%88%D9%86%20%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%20205" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د. محمد القصاص','موقع')">
+          📍 الموقع<span class="tooltiptext">30 شارع مراد - الجيزة  (برج الأهلى الطبى ) أعلى فودافون عيادة 205</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. دينا شاهين</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ الباطنة والروماتيزم والمناعة 
+بكلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 0502396060| موبايل 2: 01006357753</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - مشعل - بجانب بيت الرياضة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف بموعد سابق والإعادة خلال أسبوعين</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01006357753" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. دينا شاهين','موبايل')">موبايل</a>
+          <a href="tel:0502396060" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. دينا شاهين','موبايل 2')">موبايل 2</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D8%B4%D8%B9%D9%84%20-%20%D8%A8%D8%AC%D8%A7%D9%86%D8%A8%20%D8%A8%D9%8A%D8%AA%20%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. دينا شاهين','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - مشعل - بجانب بيت الرياضة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د. إيهاب عبد الخالق</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ أمراض الكبد والجهاز الهضمي - استشاري زراعة الكبد - مركز جراحة أجهزة الهضمي - كلية الطب جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 050/2220100</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - أول ميت عدر تقاطع ش بنك مصر والبسكة الجديدة</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502220100" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د. إيهاب عبد الخالق','عيادة')">عيادة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A3%D9%88%D9%84%20%D9%85%D9%8A%D8%AA%20%D8%B9%D8%AF%D8%B1%20%D8%AA%D9%82%D8%A7%D8%B7%D8%B9%20%D8%B4%20%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1%20%D9%88%D8%A7%D9%84%D8%A8%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د. إيهاب عبد الخالق','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - أول ميت عدر تقاطع ش بنك مصر والبسكة الجديدة</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. مجدى حامد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه الأمراض الباطنة والسكر
+أستاذ الكبد والجهاز الهضمى كلية طب المنصورة
+عضو الإتحاد الدولي للسكر 
+عضو الجمعية البريطانيه للجهاز الهضمی 
+عضو الاتحاد الأوربي لدراسة امراض الكبد</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 0502521811</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> طلخا ٣٥ شارع صلاح سالم - بجوار محلات مكسيم</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> الكشف والاستشارة بميعاد سابق الراحة الإسبوعية يومي الخميس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502521811" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. مجدى حامد','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B7%D9%84%D8%AE%D8%A7%20%D9%A3%D9%A5%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%B5%D9%84%D8%A7%D8%AD%20%D8%B3%D8%A7%D9%84%D9%85%20-%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D8%AD%D9%84%D8%A7%D8%AA%20%D9%85%D9%83%D8%B3%D9%8A%D9%85" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. مجدى حامد','موقع')">
+          📍 الموقع<span class="tooltiptext">طلخا ٣٥ شارع صلاح سالم - بجوار محلات مكسيم</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أسامة البرادعى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائي أمراض الكبد
+ومناظير الجهاز الهضمى والموجات الصوتية</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضى : 0502258050</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة  السكة الجديدة -شارع الثورة أمام صيدلية الطرشوبی</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> من 1- 4 مساءا ومن 8-10 مساءا والاستشارة خلال اسبوعين من الكشف ماعدا الخميس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502258050" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أسامة البرادعى','أرضي')">أرضي</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AB%D9%88%D8%B1%D8%A9%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B7%D8%B1%D8%B4%D9%88%D8%A8%DB%8C" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أسامة البرادعى','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة  السكة الجديدة -شارع الثورة أمام صيدلية الطرشوبی</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أمجد فؤاد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة الجهاز الهضمى
+رئيس أقسام الجراحة
+كلية الطب - جامعة المنصورة
+زميل جامعة بيتسبرج الامريكية في جراحات الكبد</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 0502387080</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة : ٥ شارع بور سعيد - عمارة سعد الجوجرى - أمام صيدلية بورسعيد</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502387080" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أمجد فؤاد','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20:%20%D9%A5%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A8%D9%88%D8%B1%20%D8%B3%D8%B9%D9%8A%D8%AF%20-%20%D8%B9%D9%85%D8%A7%D8%B1%D8%A9%20%D8%B3%D8%B9%D8%AF%20%D8%A7%D9%84%D8%AC%D9%88%D8%AC%D8%B1%D9%89%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A8%D9%88%D8%B1%D8%B3%D8%B9%D9%8A%D8%AF" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أمجد فؤاد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة : ٥ شارع بور سعيد - عمارة سعد الجوجرى - أمام صيدلية بورسعيد</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. حاتم عبد الوهاب الألفى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري أمراض الكبد والجهاز الهضمي والمناظير
+بكلية الطب - جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> بورسعيد : 0663258812/01093026720  المنصورة : 0502247174/01272434781</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> بورسعيد : ش أوجينا بجوار مسجد التوفيق 
+المنصورة: ش هنداوى من امام بوابة الجهاز الهضمى برج النخيل</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> المواعيد بورسعيد :  السبت الثلاثاء الأربعاء من 11ص 3م ومن 7م 10م المنصورة : من 5م 9م</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01093026720" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. حاتم عبد الوهاب الألفى','م: بورسعيد')">م: بورسعيد</a>
+          <a href="tel:0663258812" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. حاتم عبد الوهاب الألفى','أرضي : بورسعيد')">أرضي : بورسعيد</a>
+          <a href="tel:01272434781" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. حاتم عبد الوهاب الألفى','م: المنصورة')">م: المنصورة</a>
+          <a href="tel:0502247174" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. حاتم عبد الوهاب الألفى','أرضي : المنصورة')">أرضي : المنصورة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9:%20%D8%B4%20%D9%87%D9%86%D8%AF%D8%A7%D9%88%D9%89%20%D9%85%D9%86%20%D8%A7%D9%85%D8%A7%D9%85%20%D8%A8%D9%88%D8%A7%D8%A8%D8%A9%20%D8%A7%D9%84%D8%AC%D9%87%D8%A7%D8%B2%20%D8%A7%D9%84%D9%87%D8%B6%D9%85%D9%89%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%86%D8%AE%D9%8A%D9%84" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. حاتم عبد الوهاب الألفى','موقع')">
+          📍 الموقع<span class="tooltiptext">بورسعيد : ش أوجينا بجوار مسجد التوفيق 
+المنصورة: ش هنداوى من امام بوابة الجهاز الهضمى برج النخيل</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. حسام حامد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري جراحات الجهاز الهضمي والسمنة
+  أستاذ الجراحة بكلية الطب
+  مركز جراحة الجهاز الهضمي - جامعة المنصورة
+ عضو الإتحاد الدولى لجراحات السمنة IFSO</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01026477466</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة, شارع  أحمد ماهر -برج الزهراء الدور الأول بجوار عمارة المقاولين العرب</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01026477466" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. حسام حامد','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9,%20%D8%B4%D8%A7%D8%B1%D8%B9%20%20%D8%A3%D8%AD%D9%85%D8%AF%20%D9%85%D8%A7%D9%87%D8%B1%20-%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B2%D9%87%D8%B1%D8%A7%D8%A1%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%A3%D9%88%D9%84%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B9%D9%85%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D9%82%D8%A7%D9%88%D9%84%D9%8A%D9%86%20%D8%A7%D9%84%D8%B9%D8%B1%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. حسام حامد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة, شارع  أحمد ماهر -برج الزهراء الدور الأول بجوار عمارة المقاولين العرب</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-auto-8">
+    <div class="specialty-title">🍬 السكر والغدد الصماء</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د. فادي عزمي كريلس</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ السكر والغدد الصماء - كلية الطب جامعة المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> م: 01065603101 - : 050/2388866 واتس اب 01283812826</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة السكة القديمة - خلف بنك مصر - برج الأطباء - الدور الثاني</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا   (الكشف والإستشارة بميعاد مسبق)</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01065603101" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د. فادي عزمي كريلس','موبايل')">موبايل</a>
+          <a href="tel:0502388866" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د. فادي عزمي كريلس','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D9%82%D8%AF%D9%8A%D9%85%D8%A9%20-%20%D8%AE%D9%84%D9%81%20%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A3%D8%B7%D8%A8%D8%A7%D8%A1%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د. فادي عزمي كريلس','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة السكة القديمة - خلف بنك مصر - برج الأطباء - الدور الثاني</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-auto-9">
+    <div class="specialty-title">👶 النساء والتوليد</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. نرمين ناصر</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائية النساء والتوليد -   الحقن المجهرى وجراحات المناظير  المتقدمة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> عيادة 1: أرضى 0502386979-  موبايل أو واتس 01034599666- 0155445562  | عيادة 2: 0502475557</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> عيادة 1: شارع الترعة - ميدان الأديب 
+عيادة 2: آخر قناة السويس - معسكر جديلة 
+ أمام خزان جديلة جديلة -  برج الأطباء</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502386979" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. نرمين ناصر','عيادة 1')">عيادة 1</a>
+          <a href="tel:0502475557" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. نرمين ناصر','عيادة 2')">عيادة 2</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%201:%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B1%D8%B9%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D8%A3%D8%AF%D9%8A%D8%A8%20%0A%D8%B9%D9%8A%D8%A7%D8%AF%D8%A9%202:%20%D8%A2%D8%AE%D8%B1%20%D9%82%D9%86%D8%A7%D8%A9%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20-%20%D9%85%D8%B9%D8%B3%D9%83%D8%B1%20%D8%AC%D8%AF%D9%8A%D9%84%D8%A9%20%0A%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%AE%D8%B2%D8%A7%D9%86%20%D8%AC%D8%AF%D9%8A%D9%84%D8%A9%20%D8%AC%D8%AF%D9%8A%D9%84%D8%A9%20-%20%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A3%D8%B7%D8%A8%D8%A7%D8%A1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. نرمين ناصر','موقع')">
+          📍 الموقع<span class="tooltiptext">عيادة 1: شارع الترعة - ميدان الأديب 
+عيادة 2: آخر قناة السويس - معسكر جديلة 
+ أمام خزان جديلة جديلة -  برج الأطباء</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد فاروق العجمي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه النساء والتوليد والعقم - عضو الجمعية البريطانية بالخصوبة - استشاري النساء والتوليد والحقن المجهري والطب التجميلي - أستاذ م النساء والتوليد (جامعة الملك خالد) سابقاً</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01227291976 | محمول: 01004000192 - 01277040180 | عيادة: 050/2221122 - 050/2222920 - 050/2221118</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الجمهورية - ناصية محمد شعبي - برج السويس بلازا الدور الثاني العلوي - أعلى صيدلية الإسحاقي</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01227291976" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد فاروق العجمي','موبايل')">موبايل</a>
+          <a href="tel:0502221122" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد فاروق العجمي','عيادة')">عيادة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20-%20%D9%86%D8%A7%D8%B5%D9%8A%D8%A9%20%D9%85%D8%AD%D9%85%D8%AF%20%D8%B4%D8%B9%D8%A8%D9%8A%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B3%D9%88%D9%8A%D8%B3%20%D8%A8%D9%84%D8%A7%D8%B2%D8%A7%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A%20%D8%A7%D9%84%D8%B9%D9%84%D9%88%D9%8A%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A5%D8%B3%D8%AD%D8%A7%D9%82%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد فاروق العجمي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الجمهورية - ناصية محمد شعبي - برج السويس بلازا الدور الثاني العلوي - أعلى صيدلية الإسحاقي</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. السعيد عبد الهادي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> زميل الكلية الملكية للنساء والتوليد بلندن - دكتوراه أمراض النساء من جامعة مانشستر - إنجلترا - أستاذ النساء والتوليد والحقن بطب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> عيادة 1: 22677775 - 01223454222 | عيادة 2: 22926550</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ش أبو السود - الدور الثاني</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:05022677775" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. السعيد عبد الهادي','عيادة 1')">عيادة 1</a>
+          <a href="tel:05022926550" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. السعيد عبد الهادي','عيادة 2')">عيادة 2</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%20%D8%A3%D8%A8%D9%88%20%D8%A7%D9%84%D8%B3%D9%88%D8%AF%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. السعيد عبد الهادي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ش أبو السود - الدور الثاني</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. عبدالناصر البحيرى</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري التوليد ومراجعة أمراض النساء وتأخر الحمل</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01002818248</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - عمارة المنصورة - شارع الجيش بجوار بنك القاهرة والناصريين الشرقيين مقابل المحطة الدولية</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01002818248" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عبدالناصر البحيرى','موبايل')">موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B9%D9%85%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%8A%D8%B4%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A8%D9%86%D9%83%20%D8%A7%D9%84%D9%82%D8%A7%D9%87%D8%B1%D8%A9%20%D9%88%D8%A7%D9%84%D9%86%D8%A7%D8%B5%D8%B1%D9%8A%D9%8A%D9%86%20%D8%A7%D9%84%D8%B4%D8%B1%D9%82%D9%8A%D9%8A%D9%86%20%D9%85%D9%82%D8%A7%D8%A8%D9%84%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%AF%D9%88%D9%84%D9%8A%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عبدالناصر البحيرى','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - عمارة المنصورة - شارع الجيش بجوار بنك القاهرة والناصريين الشرقيين مقابل المحطة الدولية</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-auto-10">
+    <div class="specialty-title">💧 المسالك البولية</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. أحمد الحفناوي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ مناظير وجراحة الكلي والمسالك البولية والتناسلية
+بكلية الطب ومركز الكلى جامعة المنصورة
+دراسات ديناميكية التبول جامعة فيرجينيا الأمركية
+عضو الجمعية الأوربية لجراحات المسالك البولية
+عضو الجمعية الدولية للتحكم البولي
+استشاري علاج التبول اللا إرادى للسيدات والأطفال
+واضطرابات تبـول الرجال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502383544</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الترعة - أعلى صيدلية إسلام صبحى ومسجد أيمن الحفناوى
+مائة متر من مستشفى الصدر</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502383544" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. أحمد الحفناوي','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B1%D8%B9%D8%A9%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A5%D8%B3%D9%84%D8%A7%D9%85%20%D8%B5%D8%A8%D8%AD%D9%89%20%D9%88%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A3%D9%8A%D9%85%D9%86%20%D8%A7%D9%84%D8%AD%D9%81%D9%86%D8%A7%D9%88%D9%89%0A%D9%85%D8%A7%D8%A6%D8%A9%20%D9%85%D8%AA%D8%B1%20%D9%85%D9%86%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B5%D8%AF%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد الحفناوي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الترعة - أعلى صيدلية إسلام صبحى ومسجد أيمن الحفناوى
+مائة متر من مستشفى الصدر</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-ent">
+    <div class="specialty-title">👂 أطباء الأذن والأنف والحنجرة</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد يحيى القطب</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه الأذن والأنف والحنجرة - أستاذ ورئيس قسم الأذن والأنف والحنجرة بكلية الطب 
+استشارى جراحات الأذن</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01001031328 | أرضي: 0502265761</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - 46 ش حسين بك (برج السلكاوى) 
+امام مدرسة عمر ابن الخطاب</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> من 1-3 ظهرا ومن 8- 10 مساءا ماعد الخميس والجمعة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01001031328" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد يحيى القطب','موبايل')">موبايل</a>
+          <a href="tel:0502265761" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد يحيى القطب','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%2046%20%D8%B4%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%83%20(%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B3%D9%84%D9%83%D8%A7%D9%88%D9%89)%20%D8%A7%D9%85%D8%A7%D9%85%20%D9%85%D8%AF%D8%B1%D8%B3%D8%A9%20%D8%B9%D9%85%D8%B1%20%D8%A7%D8%A8%D9%86%20%D8%A7%D9%84%D8%AE%D8%B7%D8%A7%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد يحيى القطب','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - 46 ش حسين بك (برج السلكاوى) 
+امام مدرسة عمر ابن الخطاب</span>
+        </a>
+      </div>
+
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. محمد رشاد غنيم</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه الأذن والأنف والحنجرة - أستاذ بكلية طب المنصورة
+عضو الجمعية الاسبانية للجراحات الدقيقة
+عضو الاكاديمية الامريكية للاذن والانف والحنجرة وجراحة الرأس والرقبة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502263603 | أرضي: 0502210219</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - أول شارع العباسي - مركز غنيم بجوار بنك الاسكندرية برج الاطباء أعلى صيدلية الطرشوبى</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> العطلة : الخميس - الجمعة  والحجز تليفونيا</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502263603" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد رشاد غنيم','اتصال')">اتصال</a>
+          <a href="tel:0502210219" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. محمد رشاد غنيم','اتصال')">اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A3%D9%88%D9%84%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%B9%D8%A8%D8%A7%D8%B3%D9%8A%20-%20%D9%85%D8%B1%D9%83%D8%B2%20%D8%BA%D9%86%D9%8A%D9%85%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%A8%D9%86%D9%83%20%D8%A7%D9%84%D8%A7%D8%B3%D9%83%D9%86%D8%AF%D8%B1%D9%8A%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%A7%D8%B7%D8%A8%D8%A7%D8%A1%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B7%D8%B1%D8%B4%D9%88%D8%A8%D9%89" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد رشاد غنيم','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - أول شارع العباسي - مركز غنيم بجوار بنك الاسكندرية برج الاطباء أعلى صيدلية الطرشوبى</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-oncology">
+    <div class="specialty-title">🎗️ علاج الأورام</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ أ.د. خالد أبو الخير</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> تخصص طب الأورام - الكلية الملكية بإنجلترا - دكتوراه علاج الأورام (كيماوي - إشعاعي) - أستاذ م علاج الأورام - طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01555351752 - 01024058766 | عيادة: 050/2320008</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ميدان الهابى لاند - برج طيبة - الدور الخامس</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01555351752" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د. خالد أبو الخير','موبايل')">موبايل</a>
+          <a href="tel:0502320008" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('أ.د. خالد أبو الخير','عيادة')">عيادة</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%87%D8%A7%D8%A8%D9%89%20%D9%84%D8%A7%D9%86%D8%AF%20-%20%D8%A8%D8%B1%D8%AC%20%D8%B7%D9%8A%D8%A8%D8%A9%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AE%D8%A7%D9%85%D8%B3" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د. خالد أبو الخير','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ميدان الهابى لاند - برج طيبة - الدور الخامس</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-1771509728754">
+    <div class="specialty-title">أمراض القلب والأوعية الدموية</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. شريف صقر</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه أمراض القلب والأوعية الدموية 
+إستشاري قسطرة القلب التشخيصية والعلاجية 
+ أستاذ القلب والباطنة- طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> م: 01006410303 / ت: 0502352229</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - منتصف شارع بور سعيد  أمام صيدلية الطرشوبي</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01006410303" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. شريف صقر','اتصال')">اتصال</a>
+          <a href="https://wa.me/20201006410303" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د. شريف صقر','واتساب')">واتساب</a>
+          <a href="tel:0502352229" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. شريف صقر','أرضي')">أرضي</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D9%85%D9%86%D8%AA%D8%B5%D9%81%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A8%D9%88%D8%B1%20%D8%B3%D8%B9%D9%8A%D8%AF%20%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B7%D8%B1%D8%B4%D9%88%D8%A8%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. شريف صقر','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - منتصف شارع بور سعيد  أمام صيدلية الطرشوبي</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-1771537705672">
+    <div class="specialty-title">الأوعية الدموية</div>
+    <div class="doctors-grid">
+      <div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">👨‍⚕️ د. مسعد سليمان</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ ورئيس قسم جراحة الأوعية الدموية والجراحة العامة كلية طب المنصورة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 01090026644</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة أول السكة الجديدة  أمام صيدلية قنديل</div>
+          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01090026644" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مسعد سليمان','اتصال')">اتصال</a>
+          <a href="https://wa.me/201090026644" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د. مسعد سليمان','واتساب')">واتساب</a>
+          <a href="tel:2240444" class="contact-btn land-btn" target="_self" onclick="trackDoctorClick('د. مسعد سليمان','أرضي')">أرضي</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A3%D9%88%D9%84%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D9%82%D9%86%D8%AF%D9%8A%D9%84" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. مسعد سليمان','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة أول السكة الجديدة  أمام صيدلية قنديل</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+<div class="signature">
+  <div class="signature-text">تم إعداد هذا الدليل بعناية لتسهيل الوصول إلى أفضل الأطباء في المنصورة</div>
+  <div class="signature-name">🩺 دليل أطباء المنصورة 🩺</div>
+</div>
+</div>
+<script>
+function toggleSpecialty(btn) {
+  const specialty = btn.nextElementSibling;
+  const card = btn.closest('.doctor-card');
+  const nameText = btn.querySelector('.doctor-name-text');
+  const doctorName = nameText ? nameText.textContent : 'Unknown';
+  
+  specialty.classList.toggle('show');
+  
+  if (specialty.classList.contains('show')) {
+    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+    if (card) card.classList.add('details-shown');
+    
+    // تتبع فتح التفاصيل
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'view_details', {
+        'event_category': 'Doctor Interaction',
+        'event_label': doctorName
+      });
+    }
+  } else {
+    btn.style.background = 'linear-gradient(135deg, #0d7377 0%, #14b8a6 100%)';
+    if (card) card.classList.remove('details-shown');
+  }
+}
+
+// دالة لتحديد حالة online/offline
+function updateOnlineStatus() {
+  const now = new Date();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+  const day = now.getDay();
+  const currentTime = hour * 60 + minute; // الوقت بالدقائق
+  
+  document.querySelectorAll('.status-indicator').forEach(indicator => {
+    const card = indicator.closest('.doctor-card');
+    const workingHoursElement = card.querySelector('.specialty-info:nth-child(4)');
+    
+    if (!workingHoursElement) {
+      // المواعيد الافتراضية
+      const isWorkingDay = day >= 6 || day <= 4;
+      const isWorkingHours = hour >= 9 && hour < 21;
+      const isOnline = isWorkingDay && isWorkingHours;
+      
+      if (isOnline) {
+        indicator.classList.remove('status-offline');
+        indicator.classList.add('status-online');
+      } else {
+        indicator.classList.remove('status-online');
+        indicator.classList.add('status-offline');
+      }
+      return;
+    }
+    
+    const workingHoursText = workingHoursElement.textContent;
+    let isOnline = false;
+    
+    // تحليل أوقات العمل من النص
+    // نمط: "السبت-الخميس: 9 صباحاً - 9 مساءً"
+    // نمط: "يومياً من 3 مساءً إلى 7 مساءً"
+    // نمط: "السبت-الثلاثاء: 3 مساءً - 7 مساءً"
+    
+    const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const currentDayName = dayNames[day];
+    
+    // تحقق من "يومياً" أو إذا كان اليوم الحالي مذكور
+    const worksToday = workingHoursText.includes('يومياً') || 
+                      workingHoursText.includes(currentDayName) ||
+                      (workingHoursText.includes('السبت') && workingHoursText.includes('الخميس') && day >= 6 || day <= 4) ||
+                      (workingHoursText.includes('السبت') && workingHoursText.includes('الثلاثاء') && (day === 6 || day === 0 || day === 1 || day === 2));
+    
+    if (!worksToday) {
+      indicator.classList.remove('status-online');
+      indicator.classList.add('status-offline');
+      return;
+    }
+    
+    // استخراج الساعات
+    const timePattern = /(\d+):?(\d+)?\s*(صباحاً|مساءً|ص|م)/g;
+    const times = [];
+    let match;
+    
+    while ((match = timePattern.exec(workingHoursText)) !== null) {
+      let h = parseInt(match[1]);
+      const m = match[2] ? parseInt(match[2]) : 0;
+      const period = match[3];
+      
+      if (period.includes('مساء') || period === 'م') {
+        if (h !== 12) h += 12;
+      } else if ((period.includes('صباح') || period === 'ص') && h === 12) {
+        h = 0;
+      }
+      
+      times.push(h * 60 + m);
+    }
+    
+    // التحقق من الوقت الحالي
+    if (times.length >= 2) {
+      for (let i = 0; i < times.length; i += 2) {
+        if (currentTime >= times[i] && currentTime < times[i + 1]) {
+          isOnline = true;
+          break;
+        }
+      }
+    }
+    
+    if (isOnline) {
+      indicator.classList.remove('status-offline');
+      indicator.classList.add('status-online');
+    } else {
+      indicator.classList.remove('status-online');
+      indicator.classList.add('status-offline');
+    }
+  });
+}
+
+// إضافة دوائر الحالة
+function addStatusIndicators() {
+  updateOnlineStatus();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  addStatusIndicators();
+  setInterval(updateOnlineStatus, 60000);
+  updateSelectedCount();
+});
+
+// مصفوفة الأطباء المحددين
+let selectedDoctors = [];
+
+// دالة تتبع النقرات على الأطباء
+function trackDoctorClick(doctorName, action) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', action, {
+      'event_category': 'Doctor Interaction',
+      'event_label': doctorName,
+      'value': 1
+    });
+  }
+}
+
+// دالة تبديل التحديد
+function toggleCheckbox(checkbox) {
+  checkbox.classList.toggle('checked');
+  updateSelectedCount();
+}
+
+// تحديث عداد المحددين
+function updateSelectedCount() {
+  const checkedBoxes = document.querySelectorAll('.doctor-checkbox.checked');
+  const count = checkedBoxes.length;
+  const button = document.getElementById('shareSelectedButton');
+  const countSpan = document.getElementById('selectedCount');
+  
+  countSpan.textContent = count;
+  
+  if (count > 0) {
+    button.classList.add('active');
+  } else {
+    button.classList.remove('active');
+  }
+}
+
+// مشاركة طبيب واحد
+function shareDoctor(shareIcon) {
+  const card = shareIcon.closest('.doctor-card');
+  const nameBtn = card.querySelector('.doctor-name-btn');
+  const nameText = nameBtn.querySelector('.doctor-name-text').textContent;
+  const specialty = card.querySelector('.doctor-specialty');
+  
+  // استخراج المعلومات
+  const specialtyInfo = specialty.querySelectorAll('.specialty-info');
+  let doctorInfo = `🏥 *${nameText}*\n\n`;
+  
+  specialtyInfo.forEach(info => {
+    doctorInfo += info.textContent.trim() + '\n';
+  });
+  
+  doctorInfo += '\n📱 دليل أطباء المنصورة';
+  
+  // تتبع المشاركة
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'share_doctor', {
+      'event_category': 'Social',
+      'event_label': nameText,
+      'method': 'single'
+    });
+  }
+  
+  // المشاركة
+  if (navigator.share) {
+    navigator.share({
+      title: `د. ${nameText}`,
+      text: doctorInfo
+    }).catch(err => console.log('خطأ في المشاركة:', err));
+  } else {
+    // نسخ للحافظة
+    navigator.clipboard.writeText(doctorInfo).then(() => {
+      alert('✅ تم نسخ معلومات الطبيب!');
+    });
+  }
+}
+
+// مشاركة المحددين
+function shareSelected() {
+  const checkedBoxes = document.querySelectorAll('.doctor-checkbox.checked');
+  
+  if (checkedBoxes.length === 0) {
+    alert('⚠️ الرجاء تحديد طبيب واحد على الأقل');
+    return;
+  }
+  
+  // تتبع المشاركة الجماعية
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'share_multiple', {
+      'event_category': 'Social',
+      'event_label': `${checkedBoxes.length} doctors`,
+      'value': checkedBoxes.length
+    });
+  }
+  
+  let allDoctorsInfo = '🏥 *دليل أطباء المنصورة*\n\n';
+  
+  checkedBoxes.forEach((checkbox, index) => {
+    const card = checkbox.closest('.doctor-card');
+    const nameBtn = card.querySelector('.doctor-name-btn');
+    const nameText = nameBtn.querySelector('.doctor-name-text').textContent;
+    const specialty = card.querySelector('.doctor-specialty');
+    const specialtyInfo = specialty.querySelectorAll('.specialty-info');
+    
+    allDoctorsInfo += `${index + 1}. *${nameText}*\n`;
+    
+    specialtyInfo.forEach(info => {
+      allDoctorsInfo += '   ' + info.textContent.trim() + '\n';
+    });
+    
+    allDoctorsInfo += '\n';
+  });
+  
+  allDoctorsInfo += '📱 دليل أطباء المنصورة';
+  
+  // المشاركة
+  if (navigator.share) {
+    navigator.share({
+      title: 'دليل أطباء المنصورة',
+      text: allDoctorsInfo
+    }).catch(err => console.log('خطأ في المشاركة:', err));
+  } else {
+    // نسخ للحافظة
+    navigator.clipboard.writeText(allDoctorsInfo).then(() => {
+      alert(`✅ تم نسخ معلومات ${checkedBoxes.length} طبيب!`);
+    });
+  }
+}
+
+// دالة لعرض/إخفاء جميع التفاصيل
+let allDetailsShown = false;
+
+function toggleAllDetails() {
+  const button = document.getElementById('pdfButton');
+  const allCards = document.querySelectorAll('.doctor-card');
+  
+  allDetailsShown = !allDetailsShown;
+  
+  allCards.forEach(card => {
+    const btn = card.querySelector('.doctor-name-btn');
+    const specialty = card.querySelector('.doctor-specialty');
+    
+    if (allDetailsShown) {
+      // إظهار الكل
+      specialty.classList.add('show');
+      btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+      card.classList.add('details-shown');
+    } else {
+      // إخفاء الكل
+      specialty.classList.remove('show');
+      btn.style.background = 'linear-gradient(135deg, #0d7377 0%, #14b8a6 100%)';
+      card.classList.remove('details-shown');
+    }
+  });
+  
+  // تحديث نص الزر
+  if (allDetailsShown) {
+    button.innerHTML = '🖨️ طباعة PDF';
+    button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+    // تمرير للأعلى
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    button.innerHTML = '📄 عرض الكل للطباعة';
+    button.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+  }
+  
+  // إذا كانت التفاصيل ظاهرة، جعل الزر يطبع
+  if (allDetailsShown) {
+    button.onclick = function() {
+      window.print();
+      return false;
+    };
+  } else {
+    button.onclick = toggleAllDetails;
+  }
+}
+
+let activeSpecialty="all";
+
+function setSpecialty(val,btn){
+ activeSpecialty=val.toLowerCase();
+ document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ 
+ // إخفاء/إظهار أقسام التخصصات
+ if(activeSpecialty === "all") {
+   // إظهار جميع الأقسام
+   document.querySelectorAll(".specialty-section").forEach(section => {
+     section.style.display = "block";
+   });
+   window.scrollTo({ top: 0, behavior: 'smooth' });
+ } else {
+   // إخفاء جميع الأقسام أولاً
+   document.querySelectorAll(".specialty-section").forEach(section => {
+     section.style.display = "none";
+   });
+   
+   // إظهار القسم المطلوب فقط
+   let targetSection = null;
+   document.querySelectorAll(".specialty-section").forEach(section => {
+     const title = section.querySelector(".specialty-title").innerText.toLowerCase();
+     if(title.includes(activeSpecialty)) {
+       section.style.display = "block";
+       if (!targetSection) targetSection = section;
+     }
+   });
+   
+   // التمرير للقسم المحدد
+   if (targetSection) {
+     setTimeout(() => {
+       targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       window.scrollBy(0, -100);
+     }, 100);
+   }
+   
+   // تتبع في Analytics
+   if (typeof gtag !== 'undefined') {
+     gtag('event', 'filter_specialty', {
+       'event_category': 'Navigation',
+       'event_label': activeSpecialty
+     });
+   }
+ }
+ 
+ applyFilters();
+}
+
+function applyFilters(){
+ const text=document.getElementById("searchInput").value.toLowerCase();
+ const loc=document.getElementById("locationFilter").value.toLowerCase();
+
+ document.querySelectorAll(".doctor-card").forEach(card=>{
+  const content=card.innerText.toLowerCase();
+  const okText=content.includes(text);
+  const okSpec=activeSpecialty==="all"||content.includes(activeSpecialty);
+  const okLoc=loc==="all"||content.includes(loc);
+  card.style.display=(okText&&okSpec&&okLoc)?"flex":"none";
+ });
+}
+
+function resetFilters(){
+ document.getElementById("searchInput").value="";
+ document.getElementById("locationFilter").value="all";
+ activeSpecialty="all";
+ document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
+ document.querySelector(".filter-btn").classList.add("active");
+ 
+ // إظهار جميع الأقسام والتمرير للأعلى
+ document.querySelectorAll(".specialty-section").forEach(section => {
+   section.style.display = "block";
+ });
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+ 
+ applyFilters();
+}
+
+</script>
+</body>
+</html>
