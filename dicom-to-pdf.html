@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DICOM → PDF | Sa3d Abdo</title>
+
+<!-- Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1c2535;
+    --border: #1f2d42;
+    --accent: #00d4ff;
+    --accent2: #0088cc;
+    --success: #00e5a0;
+    --warn: #ff9500;
+    --danger: #ff4466;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --radius: 12px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated grid background */
+  body::before {
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(rgba(0,212,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .container { max-width:900px; margin:0 auto; padding:24px 16px 90px; position:relative; z-index:1; }
+
+  /* Header */
+  header {
+    text-align:center;
+    padding: 40px 0 32px;
+    position:relative;
+  }
+  .logo {
+    display:inline-flex; align-items:center; gap:12px;
+    background: linear-gradient(135deg, var(--surface), var(--surface2));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 12px 28px;
+    margin-bottom: 20px;
+  }
+  .logo-icon {
+    width:40px; height:40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px;
+  }
+  .logo-text { font-size:1.1rem; font-weight:700; letter-spacing:0.5px; }
+  .logo-text span { color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+
+  h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  h1 em { color: var(--accent); font-style:normal; }
+  .copyright { color:var(--muted); font-size:0.78rem; margin-top:6px; opacity:.7; }
+  .copyright span { color: var(--accent); }
+
+  /* Upload row */
+  .upload-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0 0;
+  }
+  .upload-btn-wrap { display:flex; }
+  .upload-btn {
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:6px; padding:20px 12px;
+    border-radius: var(--radius);
+    border: 2px solid transparent;
+    cursor:pointer; font-family:inherit;
+    transition: all .25s;
+  }
+  .files-btn {
+    background: linear-gradient(135deg, rgba(0,212,255,.1), rgba(0,136,204,.08));
+    border-color: rgba(0,212,255,.35);
+    color: var(--accent);
+  }
+  .files-btn:hover, .files-btn:active {
+    background: linear-gradient(135deg, rgba(0,212,255,.2), rgba(0,136,204,.15));
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,212,255,.2);
+  }
+  .folder-btn {
+    background: linear-gradient(135deg, rgba(0,229,160,.1), rgba(0,180,120,.08));
+    border-color: rgba(0,229,160,.35);
+    color: var(--success);
+  }
+  .folder-btn:hover, .folder-btn:active {
+    background: linear-gradient(135deg, rgba(0,229,160,.2), rgba(0,180,120,.15));
+    border-color: var(--success);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,229,160,.2);
+  }
+  .upload-btn-icon { font-size: 2rem; }
+  .upload-btn-title { font-size: 1rem; font-weight: 700; }
+  .upload-btn-sub { font-size: 0.75rem; opacity:.7; }
+
+  /* Drop Zone */
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    text-align: center;
+    cursor: default;
+    transition: all .3s;
+    background: var(--surface);
+    position:relative;
+    overflow:hidden;
+    margin: 10px 0 20px;
+  }
+  .drop-zone::before {
+    content:'';
+    position:absolute; inset:0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,.08) 0%, transparent 70%);
+    opacity:0;
+    transition: opacity .3s;
+  }
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0,212,255,.12);
+  }
+  .drop-zone:hover::before, .drop-zone.drag-over::before { opacity:1; }
+
+  .drop-icon { font-size:3rem; margin-bottom:12px; display:block; }
+  .drop-title { font-size:1.2rem; font-weight:600; margin-bottom:6px; }
+  .drop-sub { color:var(--muted); font-size:0.88rem; }
+  .drop-badge {
+    display:inline-block; margin-top:16px;
+    background: rgba(0,212,255,.1);
+    border: 1px solid rgba(0,212,255,.3);
+    color: var(--accent);
+    border-radius:20px;
+    padding: 4px 14px;
+    font-size:0.8rem;
+    font-family:'JetBrains Mono', monospace;
+  }
+
+  input[type=file] { display:none; }
+
+  /* Options */
+  .options-bar {
+    display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap:12px; margin-bottom:20px;
+  }
+  .opt-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding:14px 16px;
+  }
+  .opt-label { font-size:0.78rem; color:var(--muted); margin-bottom:8px; font-weight:600; letter-spacing:.5px; }
+  select, input[type=number] {
+    width:100%; background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius:8px;
+    padding:8px 10px;
+    font-family:inherit; font-size:0.9rem;
+    outline:none;
+    transition: border-color .2s;
+  }
+  select:focus, input[type=number]:focus { border-color: var(--accent); }
+
+  /* File list */
+  #file-list { margin-bottom:20px; }
+  .file-card {
+    display:flex; align-items:center; gap:12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:10px;
+    padding:12px 16px;
+    margin-bottom:8px;
+    animation: slideIn .25s ease;
+    transition: all .2s;
+  }
+  @keyframes slideIn { from { opacity:0; transform:translateY(-8px); } }
+  .file-card:hover { border-color: var(--accent2); }
+  .file-card.done { border-color: var(--success); }
+  .file-card.error { border-color: var(--danger); }
+  .file-card.processing { border-color: var(--warn); }
+
+  .file-thumb {
+    width:48px; height:48px;
+    background: var(--surface2);
+    border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.4rem; flex-shrink:0;
+    overflow:hidden;
+  }
+  .file-thumb img { width:100%; height:100%; object-fit:cover; border-radius:8px; }
+  .file-info { flex:1; min-width:0; }
+  .file-name {
+    font-size:0.88rem; font-weight:600;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    direction:ltr; text-align:right;
+  }
+  .file-meta { font-size:0.76rem; color:var(--muted); margin-top:3px; }
+  .file-status {
+    font-size:0.78rem; font-family:'JetBrains Mono',monospace;
+    padding: 3px 10px; border-radius:20px;
+    white-space:nowrap;
+  }
+  .file-status.pending { background:rgba(100,116,139,.15); color:var(--muted); }
+  .file-status.processing { background:rgba(255,149,0,.15); color:var(--warn); }
+  .file-status.done { background:rgba(0,229,160,.12); color:var(--success); }
+  .file-status.error { background:rgba(255,68,102,.12); color:var(--danger); }
+
+  .remove-btn {
+    background:none; border:none; color:var(--muted);
+    cursor:pointer; font-size:1.1rem; padding:4px;
+    border-radius:6px; transition:.2s;
+  }
+  .remove-btn:hover { color:var(--danger); background:rgba(255,68,102,.1); }
+
+  /* Progress bar */
+  .prog-wrap {
+    background: var(--surface2); border-radius:20px;
+    height:6px; overflow:hidden; margin-bottom:20px;
+    display:none;
+  }
+  .prog-bar {
+    height:100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius:20px;
+    transition: width .3s ease;
+    width:0%;
+  }
+
+  /* Buttons */
+  .btn-row {
+    display:flex; gap:12px; flex-wrap:wrap;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    padding: 12px 16px;
+    background: linear-gradient(to top, var(--bg) 80%, transparent);
+    z-index: 100;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .btn {
+    flex:1; min-width:140px;
+    padding:14px 20px;
+    border:none; border-radius:var(--radius);
+    font-family:inherit; font-size:0.95rem; font-weight:600;
+    cursor:pointer; transition:all .2s;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color:#000;
+    box-shadow: 0 4px 20px rgba(0,212,255,.25);
+  }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,212,255,.35); }
+  .btn-primary:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+  .btn-ghost {
+    background:transparent;
+    border: 1px solid var(--border);
+    color:var(--text);
+  }
+  .btn-ghost:hover { border-color:var(--accent); color:var(--accent); }
+
+  /* Stats row */
+  .stats {
+    display:flex; gap:12px; flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .stat {
+    flex:1; min-width:100px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:10px;
+    padding:14px 16px;
+    text-align:center;
+  }
+  .stat-num { font-size:1.6rem; font-weight:700; font-family:'JetBrains Mono',monospace; }
+  .stat-label { font-size:0.75rem; color:var(--muted); margin-top:2px; }
+
+  /* Preview modal */
+  #preview-modal {
+    display:none;
+    position:fixed; inset:0; z-index:1000;
+    background: rgba(0,0,0,.85);
+    backdrop-filter: blur(8px);
+    align-items:center; justify-content:center;
+    padding:20px;
+  }
+  #preview-modal.open { display:flex; }
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    max-width:600px; width:100%;
+    max-height:90vh; overflow-y:auto;
+  }
+  .modal-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px;
+  }
+  .modal-title { font-weight:700; font-size:1rem; }
+  .close-btn {
+    background:none; border:none; color:var(--muted);
+    cursor:pointer; font-size:1.4rem; line-height:1;
+  }
+  #preview-canvas { width:100%; border-radius:10px; background:#000; }
+
+  /* Tag info */
+  .tag-table {
+    width:100%; border-collapse:collapse; margin-top:16px; font-size:0.82rem;
+  }
+  .tag-table th {
+    background:var(--surface2); padding:8px 12px; text-align:right;
+    font-weight:600; color:var(--muted); font-size:0.75rem;
+    border-bottom:1px solid var(--border);
+  }
+  .tag-table td { padding:7px 12px; border-bottom:1px solid var(--border); }
+  .tag-table tr:last-child td { border:none; }
+  .tag-key { color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:0.78rem; }
+
+  /* Toast */
+  #toast {
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 22px;
+    font-size:0.88rem; z-index:2000;
+    opacity:0; pointer-events:none; transition:.3s;
+    white-space:nowrap;
+  }
+  #toast.show { opacity:1; }
+  #toast.success { border-color:var(--success); color:var(--success); }
+  #toast.warn { border-color:var(--warn); color:var(--warn); }
+
+  /* Empty state */
+  .empty-hint {
+    text-align:center; color:var(--muted);
+    padding:32px;
+    font-size:0.9rem; display:none;
+  }
+  .empty-hint.show { display:block; }
+
+  /* Spinner */
+  .spin {
+    display:inline-block; width:16px; height:16px;
+    border:2px solid rgba(0,0,0,.3);
+    border-top-color:#000;
+    border-radius:50%;
+    animation: spin .7s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+
+  @media(max-width:480px) {
+    .btn-row { flex-direction:column; }
+    .options-bar { grid-template-columns:1fr; }
+  }
+
+  /* ── Source Tabs ── */
+  .source-tabs {
+    display:flex; gap:0; margin-bottom:0;
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow:hidden;
+    border: 1px solid var(--border);
+    border-bottom:none;
+  }
+  .source-tab {
+    flex:1; padding:12px 16px; border:none; background:var(--surface2);
+    color:var(--muted); font-family:inherit; font-size:0.88rem; font-weight:600;
+    cursor:pointer; transition:all .2s; display:flex; align-items:center;
+    justify-content:center; gap:6px;
+  }
+  .source-tab.active {
+    background:var(--surface); color:var(--accent);
+    border-bottom: 2px solid var(--accent);
+  }
+  .source-tab:hover:not(.active) { color:var(--text); background:var(--surface); }
+
+  .source-panel {
+    border: 1px solid var(--border);
+    border-radius: 0 0 var(--radius) var(--radius);
+    background:var(--surface);
+    padding:16px;
+    margin-bottom:20px;
+    display:none;
+  }
+  .source-panel.active { display:block; }
+
+  /* ── PACS panel ── */
+  .pacs-settings {
+    display:grid; grid-template-columns:1fr 1fr;
+    gap:10px; margin-bottom:14px;
+  }
+  .pacs-field { display:flex; flex-direction:column; gap:4px; }
+  .pacs-field label { font-size:0.75rem; color:var(--muted); font-weight:600; }
+  .pacs-field input {
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); border-radius:8px; padding:8px 10px;
+    font-family:'JetBrains Mono',monospace; font-size:0.85rem; outline:none;
+    transition: border-color .2s;
+  }
+  .pacs-field input:focus { border-color:var(--accent); }
+
+  .pacs-actions { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .pacs-btn {
+    padding:9px 18px; border-radius:8px; border:none;
+    font-family:inherit; font-size:0.85rem; font-weight:600;
+    cursor:pointer; transition:all .2s; display:flex; align-items:center; gap:6px;
+  }
+  .pacs-btn-ping {
+    background:rgba(0,212,255,.12); border:1px solid rgba(0,212,255,.35);
+    color:var(--accent);
+  }
+  .pacs-btn-ping:hover { background:rgba(0,212,255,.22); }
+  .pacs-btn-search {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color:#000; flex:1;
+  }
+  .pacs-btn-search:hover { opacity:.9; transform:translateY(-1px); }
+  .pacs-btn-search:disabled { opacity:.4; cursor:not-allowed; transform:none; }
+
+  .pacs-status {
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:0.78rem; font-family:'JetBrains Mono',monospace;
+    padding:4px 12px; border-radius:20px; margin-bottom:14px;
+    background:rgba(100,116,139,.12); color:var(--muted);
+    transition:all .3s;
+  }
+  .pacs-status.online  { background:rgba(0,229,160,.12); color:var(--success); }
+  .pacs-status.offline { background:rgba(255,68,102,.12); color:var(--danger); }
+  .pacs-status-dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+  /* Search filters */
+  .search-filters {
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+    gap:8px; margin-bottom:10px;
+  }
+  .search-filters input, .search-filters select {
+    width:100%; background:var(--surface2); border:1px solid var(--border);
+    color:var(--text); border-radius:8px; padding:8px 10px;
+    font-family:inherit; font-size:0.85rem; outline:none;
+  }
+  .search-filters input:focus, .search-filters select:focus { border-color:var(--accent); }
+  .search-filters input::placeholder { color:var(--muted); }
+
+  /* Studies list */
+  .studies-list { max-height:320px; overflow-y:auto; }
+  .study-card {
+    display:flex; align-items:center; gap:12px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:10px; padding:12px 14px; margin-bottom:8px;
+    transition:all .2s; cursor:pointer;
+    animation: slideIn .2s ease;
+  }
+  .study-card:hover { border-color:var(--accent2); transform:translateX(-2px); }
+  .study-card.loading-study { opacity:.6; pointer-events:none; }
+  .study-icon { font-size:1.6rem; flex-shrink:0; }
+  .study-info { flex:1; min-width:0; }
+  .study-patient { font-weight:700; font-size:0.9rem; direction:rtl; }
+  .study-meta {
+    font-size:0.75rem; color:var(--muted); margin-top:3px;
+    font-family:'JetBrains Mono',monospace;
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .study-badge {
+    padding:2px 8px; border-radius:10px; font-size:0.72rem;
+    font-family:'JetBrains Mono',monospace; font-weight:600;
+    background:rgba(0,212,255,.12); color:var(--accent);
+  }
+  .fetch-btn {
+    padding:6px 14px; border-radius:7px; border:1px solid rgba(0,229,160,.4);
+    background:rgba(0,229,160,.1); color:var(--success);
+    font-family:inherit; font-size:0.8rem; font-weight:600;
+    cursor:pointer; transition:all .2s; white-space:nowrap;
+  }
+  .fetch-btn:hover { background:rgba(0,229,160,.2); }
+  .fetch-btn:disabled { opacity:.5; cursor:not-allowed; }
+
+  .studies-empty {
+    text-align:center; color:var(--muted); padding:28px;
+    font-size:0.88rem;
+  }
+  .pacs-hint {
+    font-size:0.75rem; color:var(--muted);
+    padding:8px 12px; background:rgba(0,212,255,.05);
+    border:1px solid rgba(0,212,255,.15); border-radius:8px;
+    margin-top:10px;
+  }
+  .vw-open-btn {
+    width:30px; height:30px; border-radius:50%; border:1px solid rgba(0,212,255,.3);
+    background:rgba(0,212,255,.08); color:#00d4ff; font-size:.85rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:background .2s;
+  }
+  .vw-open-btn:active { background:rgba(0,212,255,.2); }
+
+  /* ══════════════ VIEWER ══════════════ */
+  #viewer-modal {
+    display:none; position:fixed; inset:0; z-index:2000;
+    background:#000; flex-direction:column;
+    touch-action:none; user-select:none;
+  }
+  #viewer-modal.open { display:flex; }
+
+  .vw-header {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px; background:rgba(0,0,0,.7);
+    border-bottom:1px solid rgba(255,255,255,.08);
+    flex-shrink:0; z-index:10;
+  }
+  .vw-patient { font-weight:700; font-size:.95rem; color:#fff; direction:rtl; }
+  .vw-meta { font-size:.72rem; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-top:2px; }
+  .vw-actions { display:flex; gap:8px; }
+  .vw-btn {
+    width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.08); color:#fff; font-size:1rem;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .2s;
+  }
+  .vw-btn:active { background:rgba(255,255,255,.2); }
+
+  .vw-canvas-wrap {
+    flex:1; position:relative; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    background:#000;
+  }
+  #vw-canvas { display:block; max-width:100%; max-height:100%; touch-action:none; }
+
+  .vw-wl-overlay {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    background:rgba(0,0,0,.65); color:#00d4ff;
+    font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:700;
+    padding:10px 22px; border-radius:30px; border:1px solid rgba(0,212,255,.3);
+    pointer-events:none; opacity:0; transition:opacity .3s;
+    white-space:nowrap;
+  }
+  .vw-wl-overlay.show { opacity:1; }
+
+  .vw-hint {
+    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,.55); color:rgba(255,255,255,.6);
+    font-size:.72rem; padding:5px 14px; border-radius:20px;
+    pointer-events:none; transition:opacity .5s;
+    white-space:nowrap;
+  }
+  .vw-hint.hidden { opacity:0; }
+
+  .vw-footer {
+    background:rgba(0,0,0,.8); border-top:1px solid rgba(255,255,255,.08);
+    padding:8px 14px; flex-shrink:0;
+  }
+  .vw-counter {
+    text-align:center; font-family:'JetBrains Mono',monospace;
+    font-size:.85rem; color:#94a3b8; margin-bottom:6px;
+  }
+  .vw-wl-info {
+    text-align:center; font-family:'JetBrains Mono',monospace;
+    font-size:.75rem; color:rgba(0,212,255,.7); margin-bottom:8px;
+  }
+  .vw-thumb-row {
+    display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;
+    scrollbar-width:none;
+  }
+  .vw-thumb-row::-webkit-scrollbar { display:none; }
+  .vw-thumb {
+    width:48px; height:48px; flex-shrink:0; border-radius:6px;
+    overflow:hidden; border:2px solid transparent; cursor:pointer;
+    transition:border-color .2s;
+    background:#111;
+  }
+  .vw-thumb.active { border-color:#00d4ff; }
+  .vw-thumb img { width:100%; height:100%; object-fit:cover; }
+  .vw-thumb-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="logo">
+      <div class="logo-icon">🏥</div>
+      <div class="logo-text"><span>DICOM</span> → PDF</div>
+    </div>
+    <h1>محول ملفات <em>DICOM</em> إلى PDF</h1>
+    <p class="subtitle">تحويل صور الأشعة التشخيصية إلى ملفات PDF جاهزة للطباعة والمشاركة</p>
+    <p class="copyright">© <span id="yr"></span> Sa3d Abdo — جميع الحقوق محفوظة</p>
+  </header>
+
+  <!-- Source Tabs -->
+  <!-- Upload -->
+  <div class="upload-row">
+    <div class="upload-btn-wrap">
+      <input type="file" id="file-input" accept=".dcm,.dicom,application/dicom" multiple style="display:none">
+      <button class="upload-btn files-btn" onclick="document.getElementById('file-input').click()">
+        <span class="upload-btn-icon">🗂️</span>
+        <span class="upload-btn-title">رفع ملفات</span>
+        <span class="upload-btn-sub">.dcm / .dicom</span>
+      </button>
+    </div>
+    <div class="upload-btn-wrap">
+      <input type="file" id="folder-input" webkitdirectory multiple style="display:none">
+      <button class="upload-btn folder-btn" onclick="document.getElementById('folder-input').click()">
+        <span class="upload-btn-icon">📁</span>
+        <span class="upload-btn-title">رفع فولدر</span>
+        <span class="upload-btn-sub">فولدر الحالة كاملاً</span>
+      </button>
+    </div>
+  </div>
+  <div class="drop-zone" id="drop-zone">
+    <span class="drop-icon">📂</span>
+    <div class="drop-title">أو اسحب وأفلت الملفات هنا</div>
+    <span class="drop-badge">.dcm / .dicom / فولدر الحالة</span>
+  </div>
+  <div class="options-bar">
+    <div class="opt-group">
+      <div class="opt-label">📐 حجم الصفحة</div>
+      <select id="opt-size">
+        <option value="a4">A4</option>
+        <option value="letter">Letter</option>
+        <option value="a3">A3</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🔄 اتجاه الصفحة</div>
+      <select id="opt-orient">
+        <option value="portrait">عمودي Portrait</option>
+        <option value="landscape">أفقي Landscape</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">📄 ملف PDF واحد أم متعدد</div>
+      <select id="opt-mode">
+        <option value="single">كل الصور في ملف واحد</option>
+        <option value="multi">ملف منفصل لكل صورة</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🎨 جودة الصورة في PDF</div>
+      <select id="opt-quality">
+        <option value="0.3">منخفضة جداً — حجم أصغر</option>
+        <option value="0.5">منخفضة (Low)</option>
+        <option value="0.75">متوسطة (Medium)</option>
+        <option value="0.92" selected>عالية (High) — افتراضي</option>
+        <option value="0.97">عالية جداً (Very High)</option>
+        <option value="1.0">أقصى جودة (Ultra)</option>
+        <option value="png">بدون ضغط (PNG Lossless)</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🔆 Windowing (ونداوينج)</div>
+      <select id="opt-window">
+        <optgroup label="── عام ──">
+          <option value="auto">تلقائي (Auto)</option>
+        </optgroup>
+        <optgroup label="── CT ──">
+          <option value="soft">أنسجة رخوة (Soft Tissue)</option>
+          <option value="liver">كبد (Liver)</option>
+          <option value="lung">رئة (Lung)</option>
+          <option value="bone">عظام (Bone)</option>
+          <option value="brain">مخ (Brain)</option>
+          <option value="stroke">جلطة/نزيف (Stroke)</option>
+          <option value="subdural">تحت الجافية (Subdural)</option>
+          <option value="spine">عمود فقري (Spine)</option>
+          <option value="chest">صدر (Chest)</option>
+          <option value="abdomen">بطن (Abdomen)</option>
+          <option value="angio">أوعية دموية (Angio)</option>
+        </optgroup>
+        <optgroup label="── MRI ──">
+          <option value="mri_brain">MRI مخ</option>
+          <option value="mri_spine">MRI عمود فقري</option>
+          <option value="mri_soft">MRI أنسجة رخوة</option>
+        </optgroup>
+      </select>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats" id="stats" style="display:none">
+    <div class="stat">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">إجمالي الملفات</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-done" style="color:var(--success)">0</div>
+      <div class="stat-label">تم التحويل</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-err" style="color:var(--danger)">0</div>
+      <div class="stat-label">أخطاء</div>
+    </div>
+  </div>
+
+  <!-- Progress -->
+  <div class="prog-wrap" id="prog-wrap">
+    <div class="prog-bar" id="prog-bar"></div>
+  </div>
+
+  <!-- File list -->
+  <div id="file-list"></div>
+  <div class="empty-hint" id="empty-hint">لم يتم إضافة ملفات بعد</div>
+
+  <!-- Buttons -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="convert-btn" disabled>
+      <span id="btn-content">⚡ تحويل إلى PDF</span>
+    </button>
+    <button class="btn btn-ghost" id="clear-btn">🗑️ مسح الكل</button>
+  </div>
+
+</div>
+
+<!-- Preview Modal -->
+<div id="preview-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">معاينة</div>
+      <button class="close-btn" onclick="closePreview()">×</button>
+    </div>
+    <canvas id="preview-canvas"></canvas>
+    <table class="tag-table" id="tag-table">
+      <thead><tr><th>Tag</th><th>القيمة</th></tr></thead>
+      <tbody id="tag-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════ VIEWER MODAL ═══════════════ -->
+<div id="viewer-modal">
+  <!-- Header -->
+  <div class="vw-header">
+    <div class="vw-info">
+      <div class="vw-patient" id="vw-patient">—</div>
+      <div class="vw-meta" id="vw-meta">—</div>
+    </div>
+    <div class="vw-actions">
+      <button class="vw-btn" onclick="vwReset()" title="إعادة ضبط">↺</button>
+      <button class="vw-btn" onclick="shareViewerImage()" title="مشاركة">📤</button>
+      <button class="vw-btn" onclick="closeViewer()" title="إغلاق">✕</button>
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="vw-canvas-wrap" id="vw-wrap">
+    <canvas id="vw-canvas"></canvas>
+    <!-- WL overlay -->
+    <div class="vw-wl-overlay" id="vw-wl-overlay"></div>
+    <!-- Gesture hint -->
+    <div class="vw-hint" id="vw-hint">
+      ↕ تمرير للصور &nbsp;|&nbsp; ↔ تفتيح/تغميق &nbsp;|&nbsp; 🤏 تكبير
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="vw-footer">
+    <div class="vw-counter" id="vw-counter">1 / 1</div>
+    <div class="vw-wl-info" id="vw-wl-info">W: — &nbsp; L: —</div>
+    <div class="vw-thumb-row" id="vw-thumb-row"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ===================== DICOM PARSER =====================
+class DicomParser {
+  constructor(buffer) {
+    this.buf = new DataView(buffer);
+    this.pos = 0;
+    this.tags = {};
+    this.littleEndian = true;
+  }
+
+  readUint8() { return this.buf.getUint8(this.pos++); }
+  readUint16() { const v = this.buf.getUint16(this.pos, this.littleEndian); this.pos+=2; return v; }
+  readUint32() { const v = this.buf.getUint32(this.pos, this.littleEndian); this.pos+=4; return v; }
+  readInt16() { const v = this.buf.getInt16(this.pos, this.littleEndian); this.pos+=2; return v; }
+
+  readString(len) {
+    let s='';
+    for(let i=0;i<len;i++) s += String.fromCharCode(this.readUint8());
+    return s.trim();
+  }
+
+  parse() {
+    // Check DICOM magic at offset 128
+    if(this.buf.byteLength < 132) return false;
+    this.pos = 128;
+    const magic = this.readString(4);
+    if(magic !== 'DICM') {
+      // Try implicit without preamble
+      this.pos = 0;
+    }
+
+    while(this.pos < this.buf.byteLength - 8) {
+      try {
+        const group = this.buf.getUint16(this.pos, true);
+        const elem  = this.buf.getUint16(this.pos+2, true);
+        this.pos += 4;
+
+        const tag = `(${group.toString(16).padStart(4,'0')},${elem.toString(16).padStart(4,'0')})`;
+
+        // VR
+        let vr = '';
+        let len = 0;
+
+        const vr1 = String.fromCharCode(this.buf.getUint8(this.pos));
+        const vr2 = String.fromCharCode(this.buf.getUint8(this.pos+1));
+        const explicitVRs = ['AE','AS','AT','CS','DA','DS','DT','FL','FD','IS','LO','LT','OB','OD','OF','OW','PN','SH','SL','SQ','SS','ST','TM','UC','UI','UL','UN','UR','US','UT'];
+        
+        if(explicitVRs.includes(vr1+vr2)) {
+          vr = vr1+vr2;
+          this.pos += 2;
+          if(['OB','OD','OF','OW','SQ','UC','UN','UR','UT'].includes(vr)) {
+            this.pos += 2; // reserved
+            len = this.buf.getUint32(this.pos, true); this.pos+=4;
+          } else {
+            len = this.buf.getUint16(this.pos, true); this.pos+=2;
+          }
+        } else {
+          // implicit
+          len = this.buf.getUint32(this.pos, true); this.pos+=4;
+        }
+
+        const isUndef = (len === 0xFFFFFFFF);
+        if(isUndef) len = 0;
+        if(!isUndef && this.pos + len > this.buf.byteLength) break;
+
+        if(tag === '(7fe0,0010)') {
+          // Pixel data
+          if(isUndef) {
+            this.tags['PixelData'] = this._extractEncapsulated();
+          } else {
+            this.tags['PixelData'] = { offset: this.pos, length: len, encapsulated: false };
+            this.pos += len;
+          }
+        } else if(vr === 'US') {
+          this.tags[tag] = len >= 2 ? String(this.buf.getUint16(this.pos, true)) : '';
+          this.pos += len;
+        } else if(vr === 'SS') {
+          this.tags[tag] = len >= 2 ? String(this.buf.getInt16(this.pos, true)) : '';
+          this.pos += len;
+        } else if(vr === 'UL') {
+          this.tags[tag] = len >= 4 ? String(this.buf.getUint32(this.pos, true)) : '';
+          this.pos += len;
+        } else if(vr === 'SL') {
+          this.tags[tag] = len >= 4 ? String(this.buf.getInt32(this.pos, true)) : '';
+          this.pos += len;
+        } else if(vr === 'FL') {
+          this.tags[tag] = len >= 4 ? String(this.buf.getFloat32(this.pos, true)) : '';
+          this.pos += len;
+        } else if(vr === 'FD') {
+          this.tags[tag] = len >= 8 ? String(this.buf.getFloat64(this.pos, true)) : '';
+          this.pos += len;
+        } else if(vr === 'OW' || vr === 'OB' || vr === 'SQ' || vr === 'UN' || vr === 'UC' || vr === 'UR' || vr === 'UT') {
+          this.pos += len;
+        } else if(len > 0 && len < 1024) {
+          this.tags[tag] = this.readString(len);
+          // don't advance pos - readString already did
+        } else {
+          this.pos += len;
+        }
+      } catch(e) { break; }
+    }
+    return true;
+  }
+
+  getTag(tag, def='') { return this.tags[tag] || def; }
+
+  _extractEncapsulated() {
+    // Parse encapsulated pixel data: skip BOT, find first real fragment
+    const fragments = [];
+    while(this.pos < this.buf.byteLength - 8) {
+      const g = this.buf.getUint16(this.pos, true);
+      const e = this.buf.getUint16(this.pos+2, true);
+      const itemLen = this.buf.getUint32(this.pos+4, true);
+      this.pos += 8;
+      if(g === 0xFFFE && e === 0xE0DD) break; // sequence delimiter
+      if(g === 0xFFFE && e === 0xE000) {
+        if(itemLen > 0 && itemLen !== 0xFFFFFFFF) {
+          fragments.push({ offset: this.pos, length: itemLen });
+          this.pos += itemLen;
+        }
+      } else { break; }
+    }
+    const first = fragments.find(f => f.length > 4);
+    return first ? { ...first, encapsulated: true } : { offset: 0, length: 0, encapsulated: true };
+  }
+
+  async renderPixels(canvas, windowPreset) {
+    const pd = this.tags['PixelData'];
+    if(!pd || pd.length === 0) return false;
+
+    if(pd.encapsulated) {
+      // JPEG / JPEG2000 / JPEG-LS - let browser decode it
+      try {
+        const bytes = new Uint8Array(this.buf.buffer, pd.offset, pd.length);
+        const blob = new Blob([bytes], { type: 'image/jpeg' });
+        const url = URL.createObjectURL(blob);
+        return await new Promise(resolve => {
+          const img = new Image();
+          img.onload = () => {
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            resolve(true);
+          };
+          img.onerror = () => { URL.revokeObjectURL(url); resolve(false); };
+          img.src = url;
+        });
+      } catch(e) { return false; }
+    }
+
+    // Uncompressed raw pixel data
+    const rows   = parseInt(this.getTag('(0028,0010)')) || 0;
+    const cols   = parseInt(this.getTag('(0028,0011)')) || 0;
+    if(!rows || !cols) return false;
+
+    const bitsAlloc = parseInt(this.getTag('(0028,0100)')) || 16;
+    const pixRep    = parseInt(this.getTag('(0028,0103)')) || 0;
+    const rescaleI  = parseFloat(this.getTag('(0028,1052)')) || 0;
+    const rescaleS  = parseFloat(this.getTag('(0028,1053)')) || 1;
+    let wc = parseFloat(this.getTag('(0028,1050)')) || 0;
+    let ww = parseFloat(this.getTag('(0028,1051)')) || 0;
+
+    const presets = {
+      // CT presets (WC / WW)
+      soft:     { wc:40,   ww:400  },
+      liver:    { wc:60,   ww:160  },
+      lung:     { wc:-600, ww:1600 },
+      bone:     { wc:300,  ww:1500 },
+      brain:    { wc:40,   ww:80   },
+      stroke:   { wc:40,   ww:40   },
+      subdural: { wc:75,   ww:215  },
+      spine:    { wc:50,   ww:200  },
+      chest:    { wc:-500, ww:1500 },
+      abdomen:  { wc:60,   ww:400  },
+      angio:    { wc:300,  ww:600  },
+      // MRI presets (relative — will fall to auto-scale if DICOM values exist)
+      mri_brain:{ wc:500,  ww:1200 },
+      mri_spine:{ wc:400,  ww:900  },
+      mri_soft: { wc:600,  ww:1400 },
+    };
+    if(windowPreset !== 'auto' && presets[windowPreset]) {
+      ({ wc, ww } = presets[windowPreset]);
+    }
+
+    const rawBuf = this.buf.buffer.slice(pd.offset, pd.offset + pd.length);
+    let pixels = bitsAlloc === 16
+      ? (pixRep ? new Int16Array(rawBuf) : new Uint16Array(rawBuf))
+      : new Uint8Array(rawBuf);
+
+    const huArr = new Float32Array(pixels.length);
+    for(let i = 0; i < pixels.length; i++) huArr[i] = pixels[i] * rescaleS + rescaleI;
+
+    if(windowPreset === 'auto' || ww === 0) {
+      let mn = Infinity, mx = -Infinity;
+      for(let i = 0; i < huArr.length; i++) { if(huArr[i]<mn) mn=huArr[i]; if(huArr[i]>mx) mx=huArr[i]; }
+      wc = (mx+mn)/2; ww = (mx-mn) || 1;
+    }
+
+    canvas.width = cols; canvas.height = rows;
+    const ctx = canvas.getContext('2d');
+    const imgData = ctx.createImageData(cols, rows);
+    const lo = wc - ww/2, hi = wc + ww/2;
+    const scale = 255 / ww;
+
+    for(let i = 0; i < huArr.length && i < rows*cols; i++) {
+      const g = Math.round(Math.max(0, Math.min(255, (Math.max(lo, Math.min(hi, huArr[i])) - lo) * scale)));
+      const p = i*4;
+      imgData.data[p] = g; imgData.data[p+1] = g; imgData.data[p+2] = g; imgData.data[p+3] = 255;
+    }
+    ctx.putImageData(imgData, 0, 0);
+    return true;
+  }
+}
+
+// ===================== STATE =====================
+let files = []; // {file, id, status, dcm, thumb}
+let idCounter = 0;
+
+const dropZone   = document.getElementById('drop-zone');
+const fileInput  = document.getElementById('file-input');
+const fileList   = document.getElementById('file-list');
+const convertBtn = document.getElementById('convert-btn');
+const clearBtn   = document.getElementById('clear-btn');
+const progWrap   = document.getElementById('prog-wrap');
+const progBar    = document.getElementById('prog-bar');
+const statsDiv   = document.getElementById('stats');
+const emptyHint  = document.getElementById('empty-hint');
+
+// ===================== DROP / INPUT =====================
+// Drop zone (desktop)
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  const items = e.dataTransfer.items;
+  if(items && items.length) {
+    const allFiles = [];
+    let pending = 0;
+    const checkDone = () => { if(!pending) addFiles(allFiles); };
+    for(const item of items) {
+      const entry = item.webkitGetAsEntry ? item.webkitGetAsEntry() : null;
+      if(entry && entry.isDirectory) {
+        pending++;
+        readDir(entry, allFiles, () => { pending--; checkDone(); });
+      } else {
+        const f = item.getAsFile();
+        if(f) allFiles.push(f);
+      }
+    }
+    checkDone();
+  } else {
+    addFiles(e.dataTransfer.files);
+  }
+});
+
+fileInput.addEventListener('change', e => { addFiles(e.target.files); e.target.value=''; });
+document.getElementById('folder-input').addEventListener('change', e => { addFiles(e.target.files); e.target.value=''; });
+
+function readDir(entry, results, done) {
+  const reader = entry.createReader();
+  let collected = [];
+  function readNext() {
+    reader.readEntries(entries => {
+      if(!entries.length) {
+        let pending = collected.length;
+        if(!pending) { done(); return; }
+        for(const ent of collected) {
+          if(ent.isFile) {
+            ent.file(f => { results.push(f); if(!--pending) done(); });
+          } else if(ent.isDirectory) {
+            readDir(ent, results, () => { if(!--pending) done(); });
+          } else { if(!--pending) done(); }
+        }
+      } else {
+        collected = collected.concat(Array.from(entries));
+        readNext();
+      }
+    });
+  }
+  readNext();
+}
+function addFiles(fList) {
+  let added = 0;
+  const arr = Array.isArray(fList) ? fList : Array.from(fList);
+  for(const f of arr) {
+    if(!f) continue;
+    const ext = f.name.split('.').pop().toLowerCase();
+    const isDicom = ['dcm','dicom'].includes(ext) || f.type === 'application/dicom' || !f.name.includes('.');
+    if(!isDicom) continue; // skip non-DICOM files from folders
+    const id = ++idCounter;
+    files.push({ file:f, id, status:'pending', dcm:null, thumb:null });
+    added++;
+    renderCard(id);
+    parseDicom(id);
+  }
+  if(added) updateUI();
+}
+
+// ===================== PARSE =====================
+async function parseDicom(id) {
+  const item = files.find(f=>f.id===id);
+  if(!item) return;
+  const buf = await item.file.arrayBuffer();
+  const parser = new DicomParser(buf);
+  parser.parse();
+  item.dcm = parser;
+
+  // Render thumbnail
+  const cvs = document.createElement('canvas');
+  const ok = await parser.renderPixels(cvs, document.getElementById('opt-window').value);
+  if(ok) {
+    item.thumb = cvs.toDataURL('image/jpeg', 0.6);
+    const el = document.getElementById(`card-${id}`);
+    if(el) {
+      const thumb = el.querySelector('.file-thumb');
+      thumb.innerHTML = `<img src="${item.thumb}" alt="thumb">`;
+    }
+  }
+}
+
+// ===================== RENDER CARD =====================
+function renderCard(id) {
+  const item = files.find(f=>f.id===id);
+  if(!item) return;
+  const card = document.createElement('div');
+  card.className = 'file-card';
+  card.id = `card-${id}`;
+  card.innerHTML = `
+    <div class="file-thumb" id="thumb-${id}">🩻</div>
+    <div class="file-info">
+      <div class="file-name">${item.file.name}</div>
+      <div class="file-meta">${(item.file.size/1024).toFixed(1)} KB</div>
+    </div>
+    <span class="file-status pending" id="status-${id}">انتظار</span>
+    <button class="vw-open-btn" onclick="openViewer(${id})" title="عرض">👁</button>
+    <button class="remove-btn" onclick="removeFile(${id})" title="حذف">×</button>
+  `;
+  card.querySelector('.file-thumb').addEventListener('click', () => showPreview(id));
+  fileList.appendChild(card);
+}
+
+function setStatus(id, status, text) {
+  const el = document.getElementById(`status-${id}`);
+  const card = document.getElementById(`card-${id}`);
+  if(!el || !card) return;
+  el.className = `file-status ${status}`;
+  el.textContent = text;
+  card.className = `file-card ${status}`;
+}
+
+function removeFile(id) {
+  files = files.filter(f=>f.id!==id);
+  const el = document.getElementById(`card-${id}`);
+  if(el) el.remove();
+  updateUI();
+}
+
+function updateUI() {
+  convertBtn.disabled = files.length === 0;
+  statsDiv.style.display = files.length ? 'flex' : 'none';
+  emptyHint.className = files.length ? 'empty-hint' : 'empty-hint show';
+  document.getElementById('stat-total').textContent = files.length;
+  document.getElementById('stat-done').textContent = files.filter(f=>f.status==='done').length;
+  document.getElementById('stat-err').textContent = files.filter(f=>f.status==='error').length;
+}
+
+clearBtn.addEventListener('click', () => {
+  files = [];
+  fileList.innerHTML = '';
+  updateUI();
+  progWrap.style.display='none';
+  progBar.style.width='0%';
+});
+
+// ===================== CONVERT =====================
+convertBtn.addEventListener('click', convertAll);
+
+async function convertAll() {
+  if(files.length === 0) return;
+
+  convertBtn.disabled = true;
+  document.getElementById('btn-content').innerHTML = '<span class="spin"></span> جاري التحويل...';
+  progWrap.style.display = 'block';
+
+  const mode = document.getElementById('opt-mode').value;
+  const size = document.getElementById('opt-size').value;
+  const orient = document.getElementById('opt-orient').value;
+  const windowPreset = document.getElementById('opt-window').value;
+  const imgQuality = document.getElementById('opt-quality').value;
+  const isPng = imgQuality === 'png';
+  const qualityVal = isPng ? 1.0 : parseFloat(imgQuality);
+
+  // Helper: build filename with SD_ prefix + patient name
+  function buildFilename(item, fallback) {
+    const dcm = item ? item.dcm : null;
+    let patName = (dcm ? (dcm.getTag('(0010,0010)') || dcm.getTag('(0010,0020)') || '') : '').trim();
+    patName = patName.replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g, '_').replace(/^_+|_+$/g,'');
+    return patName ? `SD_${patName}.pdf` : (fallback || `SD_DICOM_${Date.now()}.pdf`);
+  }
+
+  const { jsPDF } = window.jspdf;
+
+  if(mode === 'single') {
+    const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
+    let first = true;
+
+    for(let i=0; i<files.length; i++) {
+      const item = files[i];
+      setStatus(item.id, 'processing', '⏳ جاري...');
+      progBar.style.width = `${((i)/files.length)*100}%`;
+
+      try {
+        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first);
+        first = false;
+        item.status = 'done';
+        setStatus(item.id, 'done', '✅ تم');
+      } catch(e) {
+        item.status = 'error';
+        setStatus(item.id, 'error', '❌ خطأ');
+      }
+      await sleep(10);
+    }
+
+    progBar.style.width = '100%';
+    const fname = buildFilename(files[0], `SD_DICOM_${Date.now()}.pdf`);
+    doc.save(fname);
+    toast(`✅ تم حفظ: ${fname}`, 'success');
+
+  } else {
+    for(let i=0; i<files.length; i++) {
+      const item = files[i];
+      setStatus(item.id, 'processing', '⏳ جاري...');
+      progBar.style.width = `${((i)/files.length)*100}%`;
+
+      try {
+        const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
+        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, true);
+        const fname = buildFilename(item, `SD_${item.file.name.replace(/\.[^.]+$/, '')}.pdf`);
+        doc.save(fname);
+        item.status = 'done';
+        setStatus(item.id, 'done', '✅ تم');
+      } catch(e) {
+        item.status = 'error';
+        setStatus(item.id, 'error', '❌ خطأ');
+      }
+      await sleep(50);
+    }
+    progBar.style.width = '100%';
+    toast('✅ تم تحميل جميع الملفات', 'success');
+  }
+
+  updateUI();
+  document.getElementById('btn-content').innerHTML = '⚡ تحويل إلى PDF';
+  convertBtn.disabled = false;
+}
+
+async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, isPng, isFirst) {
+  if(!isFirst) doc.addPage();
+
+  // Page dims in mm
+  const pageDims = {
+    a4:      { w:210, h:297 },
+    letter:  { w:216, h:279 },
+    a3:      { w:297, h:420 },
+  };
+  let { w, h } = pageDims[size] || pageDims.a4;
+  if(orient === 'landscape') [w,h] = [h,w];
+
+  const margin = 12;
+  const availW = w - margin*2;
+  const headerH = 28;
+
+  // Header bar
+  doc.setFillColor(17, 24, 39);
+  doc.rect(0, 0, w, headerH, 'F');
+
+  // Title
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(11);
+  doc.setTextColor(0, 212, 255);
+  doc.text('DICOM Radiology Export', margin, 10);
+
+  // Meta from tags
+  const dcm = item.dcm;
+  let patName='', patId='', studyDate='', modality='', desc='';
+  if(dcm) {
+    patName  = dcm.getTag('(0010,0010)') || dcm.getTag('(0010,0020)') || '';
+    patId    = dcm.getTag('(0010,0020)') || '';
+    studyDate = dcm.getTag('(0008,0020)') || '';
+    modality  = dcm.getTag('(0008,0060)') || '';
+    desc      = dcm.getTag('(0008,103e)') || dcm.getTag('(0008,1030)') || '';
+  }
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.setTextColor(180,180,180);
+  if(patName) doc.text(`Patient: ${patName}`, margin, 17);
+  if(studyDate) doc.text(`Date: ${studyDate}`, margin + 60, 17);
+  if(modality) doc.text(`Modality: ${modality}`, margin + 120, 17);
+  doc.text(`File: ${item.file.name}`, margin, 23);
+  doc.text(new Date().toLocaleString('ar-EG'), w-margin, 23, {align:'right'});
+
+  // Divider
+  doc.setDrawColor(0,212,255); doc.setLineWidth(.3);
+  doc.line(0, headerH, w, headerH);
+
+  // Image
+  const cvs = document.createElement('canvas');
+  let imgOk = false;
+  if(dcm) imgOk = await dcm.renderPixels(cvs, windowPreset);
+
+  if(imgOk) {
+    const imgData = isPng
+      ? cvs.toDataURL('image/png')
+      : cvs.toDataURL('image/jpeg', imgQuality);
+    const aspect = cvs.width / cvs.height;
+    const imgH = h - headerH - margin*2;
+    const imgW = Math.min(availW, imgH * aspect);
+    const imgX = margin + (availW - imgW)/2;
+    doc.addImage(imgData, 'JPEG', imgX, headerH + margin, imgW, imgH);
+  } else {
+    // Placeholder
+    doc.setFillColor(20,30,45);
+    doc.rect(margin, headerH+margin, availW, h-headerH-margin*2, 'F');
+    doc.setTextColor(100,116,139);
+    doc.setFontSize(14);
+    doc.text('⚠ تعذّر عرض بيانات البكسل', w/2, h/2, {align:'center'});
+    doc.setFontSize(10);
+    doc.text(item.file.name, w/2, h/2+10, {align:'center'});
+  }
+
+  // Footer
+  doc.setFillColor(17,24,39);
+  doc.rect(0, h-8, w, 8, 'F');
+  doc.setFontSize(7); doc.setTextColor(80,100,120);
+  doc.text(`DICOM\u2192PDF Converter  \u00A9 ${new Date().getFullYear()} Sa3d Abdo`, w/2, h-3, {align:'center'});
+}
+
+// ===================== PREVIEW =====================
+async function showPreview(id) {
+  const item = files.find(f=>f.id===id);
+  if(!item || !item.dcm) return;
+
+  const cvs = document.getElementById('preview-canvas');
+  const windowPreset = document.getElementById('opt-window').value;
+  await item.dcm.renderPixels(cvs, windowPreset);
+
+  document.getElementById('modal-title').textContent = item.file.name;
+
+  // Fill tag table
+  const tbody = document.getElementById('tag-body');
+  tbody.innerHTML = '';
+  const interesting = [
+    ['(0010,0010)', 'اسم المريض'],
+    ['(0010,0020)', 'ID المريض'],
+    ['(0008,0020)', 'تاريخ الدراسة'],
+    ['(0008,0060)', 'الوضع (Modality)'],
+    ['(0008,103e)', 'وصف السلسلة'],
+    ['(0028,0010)', 'الصفوف (Rows)'],
+    ['(0028,0011)', 'الأعمدة (Columns)'],
+    ['(0028,0100)', 'Bits Allocated'],
+    ['(0028,1050)', 'Window Center'],
+    ['(0028,1051)', 'Window Width'],
+    ['(0020,0013)', 'رقم الصورة'],
+    ['(0018,0050)', 'Slice Thickness'],
+  ];
+  for(const [tag, label] of interesting) {
+    const val = item.dcm.getTag(tag);
+    if(val) {
+      tbody.innerHTML += `<tr>
+        <td><span class="tag-key">${tag}</span> ${label}</td>
+        <td>${val}</td>
+      </tr>`;
+    }
+  }
+
+  document.getElementById('preview-modal').classList.add('open');
+}
+
+function closePreview() {
+  document.getElementById('preview-modal').classList.remove('open');
+}
+document.getElementById('preview-modal').addEventListener('click', e => {
+  if(e.target === document.getElementById('preview-modal')) closePreview();
+});
+
+// ===================== UTILS =====================
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function toast(msg, type='') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `show ${type}`;
+  setTimeout(() => el.className='', 3000);
+}
+
+// ══════════════════════════════════════════════════════
+//  PACS BRIDGE
+// ══════════════════════════════════════════════════════
+
+function getBridgeBase() {
+  const host = document.getElementById('pacs-host').value.trim() || '127.0.0.1';
+  const port = document.getElementById('pacs-port').value.trim() || '5050';
+  // لو اليوزر كتب IP السيرفر مباشرة، نفترض إن الـ Bridge شغال على localhost
+  return `http://127.0.0.1:${port}`;
+}
+
+// ── Tab switching ─────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.source-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.source-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`panel-${tab}`).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── Detect Network Mode ───────────────────────────────
+async function detectNetwork() {
+  const statusEl  = document.getElementById('pacs-status');
+  const modeBar   = document.getElementById('net-mode-bar');
+  const modeBadge = document.getElementById('net-mode-badge');
+
+  statusEl.className = 'pacs-status';
+  statusEl.innerHTML = '<span class="pacs-status-dot"></span> جاري اكتشاف الشبكة...';
+  modeBar.style.display = 'none';
+
+  try {
+    const res  = await fetch(`${getBridgeBase()}/api/network`, { signal: AbortSignal.timeout(8000) });
+    const data = await res.json();
+
+    modeBar.style.display = 'block';
+    const isLan = data.mode && data.mode.includes('LAN');
+    modeBadge.style.cssText = modeBadge.style.cssText.replace(
+      /color:[^;]+/g, `color:${isLan ? 'var(--success)' : 'var(--warn)'}`
+    );
+    modeBadge.style.background    = isLan ? 'rgba(0,229,160,.1)' : 'rgba(255,149,0,.1)';
+    modeBadge.style.borderColor   = isLan ? 'rgba(0,229,160,.3)' : 'rgba(255,149,0,.3)';
+    modeBadge.style.color         = isLan ? 'var(--success)'     : 'var(--warn)';
+    modeBadge.textContent = isLan
+      ? `🏥 داخل المركز (LAN) — ${data.host}:${data.port}`
+      : `🌐 خارج المركز (WAN) — ${data.host}:${data.port}`;
+
+    statusEl.className = 'pacs-status online';
+    statusEl.innerHTML = `<span class="pacs-status-dot"></span> Bridge متصل ✅`;
+    toast(`✅ ${data.mode}`, 'success');
+  } catch(e) {
+    statusEl.className = 'pacs-status offline';
+    statusEl.innerHTML = '<span class="pacs-status-dot"></span> الـ Bridge مش شغال';
+    toast('❌ تأكد إن nebras_bridge_service.py شغال', 'warn');
+  }
+}
+async function pingPacs() {
+  const statusEl  = document.getElementById('pacs-status');
+  const modeBar   = document.getElementById('net-mode-bar');
+  const modeBadge = document.getElementById('net-mode-badge');
+  statusEl.className = 'pacs-status';
+  statusEl.innerHTML = '<span class="pacs-status-dot"></span> جاري الاختبار...';
+  try {
+    const res  = await fetch(`${getBridgeBase()}/api/ping`, { signal: AbortSignal.timeout(8000) });
+    const data = await res.json();
+    if(data.ok) {
+      statusEl.className = 'pacs-status online';
+      statusEl.innerHTML = '<span class="pacs-status-dot"></span> متصل ✅';
+      if(data.mode) {
+        modeBar.style.display = 'block';
+        const isLan = data.mode.includes('LAN');
+        modeBadge.style.background  = isLan ? 'rgba(0,229,160,.1)' : 'rgba(255,149,0,.1)';
+        modeBadge.style.borderColor = isLan ? 'rgba(0,229,160,.3)' : 'rgba(255,149,0,.3)';
+        modeBadge.style.color       = isLan ? 'var(--success)'     : 'var(--warn)';
+        modeBadge.textContent = isLan
+          ? `🏥 داخل المركز (LAN) — ${data.host}:${data.port}`
+          : `🌐 خارج المركز (WAN) — ${data.host}:${data.port}`;
+      }
+      toast('✅ الاتصال بالـ PACS ناجح', 'success');
+    } else {
+      statusEl.className = 'pacs-status offline';
+      statusEl.innerHTML = `<span class="pacs-status-dot"></span> ${data.error || 'فشل الاتصال'}`;
+    }
+  } catch(e) {
+    statusEl.className = 'pacs-status offline';
+    statusEl.innerHTML = '<span class="pacs-status-dot"></span> الـ Bridge مش شغال';
+    toast('❌ تأكد إن nebras_bridge_service.py شغال', 'warn');
+  }
+}
+
+// ── Search Studies ────────────────────────────────────
+async function searchPacs() {
+  const btn  = document.getElementById('pacs-search-btn');
+  const list = document.getElementById('studies-list');
+  const name = document.getElementById('srch-name').value.trim() || '*';
+  const id   = document.getElementById('srch-id').value.trim();
+  const date = document.getElementById('srch-date').value.trim();
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin" style="border-color:rgba(0,0,0,.3);border-top-color:#000"></span> جاري البحث...';
+  list.innerHTML = '<div class="studies-empty">⏳ جاري البحث في السيرفر...</div>';
+
+  const params = new URLSearchParams({ name, id, date });
+  try {
+    const res  = await fetch(`${getBridgeBase()}/api/search?${params}`, { signal: AbortSignal.timeout(30000) });
+    const data = await res.json();
+
+    if(!data.ok) {
+      list.innerHTML = `<div class="studies-empty">❌ ${data.error || 'خطأ في البحث'}</div>`;
+      return;
+    }
+    if(!data.studies || data.studies.length === 0) {
+      list.innerHTML = '<div class="studies-empty">لم يتم العثور على حالات 🔍</div>';
+      return;
+    }
+    renderStudies(data.studies);
+  } catch(e) {
+    list.innerHTML = '<div class="studies-empty">❌ تأكد إن nebras_bridge.py شغال</div>';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔍 بحث في السيرفر';
+  }
+}
+
+// ── Render study cards ────────────────────────────────
+function renderStudies(studies) {
+  const list = document.getElementById('studies-list');
+  list.innerHTML = '';
+
+  for(const s of studies) {
+    const card = document.createElement('div');
+    card.className = 'study-card';
+    card.id = `study-${s.uid}`;
+
+    const fmtDate = s.date
+      ? `${s.date.slice(0,4)}-${s.date.slice(4,6)}-${s.date.slice(6,8)}`
+      : '—';
+
+    card.innerHTML = `
+      <div class="study-icon">🩻</div>
+      <div class="study-info">
+        <div class="study-patient">${s.patient || 'مجهول'}</div>
+        <div class="study-meta">
+          <span>📅 ${fmtDate}</span>
+          ${s.modality ? `<span class="study-badge">${s.modality}</span>` : ''}
+          ${s.images   ? `<span>🖼 ${s.images} صورة</span>` : ''}
+          ${s.patientId ? `<span>ID: ${s.patientId}</span>` : ''}
+        </div>
+        ${s.description ? `<div style="font-size:.75rem;color:var(--muted);margin-top:4px">${s.description}</div>` : ''}
+      </div>
+      <button class="fetch-btn" onclick="fetchStudy('${s.uid}', '${s.patient}', this)">
+        ⬇ تحميل
+      </button>
+    `;
+    list.appendChild(card);
+  }
+}
+
+// ── Fetch Study from PACS ─────────────────────────────
+async function fetchStudy(uid, patientName, btn) {
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري...';
+  const card = document.getElementById(`study-${uid}`);
+  if(card) card.classList.add('loading-study');
+
+  try {
+    const res  = await fetch(`${getBridgeBase()}/api/fetch/${encodeURIComponent(uid)}`,
+                             { signal: AbortSignal.timeout(120000) });
+    const data = await res.json();
+
+    if(!data.ok || data.count === 0) {
+      toast(`❌ ${data.error || 'لم يتم استقبال ملفات'}`, 'warn');
+      btn.disabled = false;
+      btn.textContent = '⬇ تحميل';
+      if(card) card.classList.remove('loading-study');
+      return;
+    }
+
+    // جلب كل ملف وتحويله لـ File object
+    toast(`📥 تم استقبال ${data.count} ملف، جاري التحميل...`, '');
+
+    const fetchedFiles = [];
+    for(const fname of data.files) {
+      const url = `${getBridgeBase()}/api/file/${encodeURIComponent(uid)}/${encodeURIComponent(fname)}`;
+      const fileRes  = await fetch(url);
+      const blob     = await fileRes.blob();
+      const fileObj  = new File([blob], fname, { type: 'application/dicom' });
+      fetchedFiles.push(fileObj);
+    }
+
+    // أضف الملفات للـ App
+    addFiles(fetchedFiles);
+    toast(`✅ تم تحميل ${fetchedFiles.length} ملف من السيرفر`, 'success');
+
+    btn.textContent = `✅ تم (${data.count})`;
+    if(card) card.classList.remove('loading-study');
+
+    // انتقل لتبويب المحلي عشان يشوف الملفات
+    document.querySelectorAll('.source-tab')[0].click();
+
+  } catch(e) {
+    toast('❌ انتهت المهلة أو الـ Bridge مش شغال', 'warn');
+    btn.disabled = false;
+    btn.textContent = '⬇ تحميل';
+    if(card) card.classList.remove('loading-study');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  DICOM VIEWER
+// ══════════════════════════════════════════════════════
+const vwModal   = document.getElementById('viewer-modal');
+const vwCanvas  = document.getElementById('vw-canvas');
+const vwCtx     = vwCanvas.getContext('2d');
+const vwWrap    = document.getElementById('vw-wrap');
+const vwOverlay = document.getElementById('vw-wl-overlay');
+const vwHint    = document.getElementById('vw-hint');
+
+let vwFiles   = [];   // كل ملفات الـ session
+let vwIdx     = 0;    // الصورة الحالية
+let vwScale   = 1;
+let vwOffX    = 0;
+let vwOffY    = 0;
+let vwWC      = null; // window center
+let vwWW      = null; // window width
+let vwBaseWC  = null;
+let vwBaseWW  = null;
+let vwImgData = null; // raw pixel imageData
+let vwHintTimer = null;
+let vwWLTimer   = null;
+
+function vwReset() {
+  vwScale=1; vwOffX=0; vwOffY=0;
+  vwWC=vwBaseWC; vwWW=vwBaseWW;
+  vwApplyWL();
+}
+
+// ── Open Viewer ───────────────────────────────────────
+async function openViewer(startId) {
+  // اجمع كل الملفات المحمّلة
+  vwFiles = [...files];
+  vwIdx   = vwFiles.findIndex(f => f.id === startId);
+  if(vwIdx < 0) vwIdx = 0;
+
+  vwModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  buildThumbRow();
+  await vwLoadFrame(vwIdx);
+  showHint();
+  attachViewerEvents();
+}
+
+function closeViewer() {
+  vwModal.classList.remove('open');
+  document.body.style.overflow = '';
+  detachViewerEvents();
+}
+
+// ── Load frame ────────────────────────────────────────
+async function vwLoadFrame(idx) {
+  vwIdx = Math.max(0, Math.min(idx, vwFiles.length - 1));
+  const item = vwFiles[vwIdx];
+  if(!item) return;
+
+  // Parse إذا لسه مش parsed
+  if(!item.dcm) {
+    const buf = await item.file.arrayBuffer();
+    const p = new DicomParser(buf);
+    p.parse();
+    item.dcm = p;
+  }
+
+  const dcm = item.dcm;
+
+  // Patient info
+  const patient = dcm.getTag('(0010,0010)') || '—';
+  const modality = dcm.getTag('(0008,0060)') || '';
+  const date     = dcm.getTag('(0008,0020)') || '';
+  const desc     = dcm.getTag('(0008,103e)') || '';
+  document.getElementById('vw-patient').textContent = patient;
+  document.getElementById('vw-meta').textContent =
+    [modality, date, desc].filter(Boolean).join('  ·  ');
+
+  // Window values
+  const wcTag = dcm.getTag('(0028,1050)');
+  const wwTag = dcm.getTag('(0028,1051)');
+  vwBaseWC = wcTag ? parseFloat(wcTag) : null;
+  vwBaseWW = wwTag ? parseFloat(wwTag) : null;
+  vwWC = vwBaseWC;
+  vwWW = vwBaseWW;
+
+  // Render to canvas — استخدم قيم الـ DICOM أو auto
+  const tmp = document.createElement('canvas');
+  const windowPreset = document.getElementById('opt-window')?.value || 'auto';
+  const ok  = await dcm.renderPixels(tmp, windowPreset);
+  if(!ok) return;
+
+  vwCanvas.width  = tmp.width;
+  vwCanvas.height = tmp.height;
+  vwImgData = tmp.getContext('2d').getImageData(0, 0, tmp.width, tmp.height);
+
+  vwScale = 1; vwOffX = 0; vwOffY = 0;
+  vwApplyWL();
+
+  // Counter & thumb
+  document.getElementById('vw-counter').textContent = `${vwIdx+1} / ${vwFiles.length}`;
+  document.querySelectorAll('.vw-thumb').forEach((t,i) => t.classList.toggle('active', i===vwIdx));
+  document.querySelectorAll('.vw-thumb')[vwIdx]?.scrollIntoView({behavior:'smooth', inline:'center'});
+}
+
+// ── Apply Window/Level ────────────────────────────────
+async function vwApplyWL() {
+  const item = vwFiles[vwIdx];
+  if(!item?.dcm) return;
+
+  // عمل canvas مؤقت بالـ WC/WW الجديدة
+  const tmp = document.createElement('canvas');
+
+  if(vwWC !== null && vwWW !== null) {
+    // inject custom WC/WW مؤقتاً في الـ tags
+    const origWC = item.dcm.tags['(0028,1050)'];
+    const origWW = item.dcm.tags['(0028,1051)'];
+    item.dcm.tags['(0028,1050)'] = String(vwWC);
+    item.dcm.tags['(0028,1051)'] = String(vwWW);
+    await item.dcm.renderPixels(tmp, 'auto');
+    // restore
+    item.dcm.tags['(0028,1050)'] = origWC;
+    item.dcm.tags['(0028,1051)'] = origWW;
+  } else {
+    await item.dcm.renderPixels(tmp, 'auto');
+  }
+
+  vwCanvas.width  = tmp.width;
+  vwCanvas.height = tmp.height;
+  vwCanvas.getContext('2d').drawImage(tmp, 0, 0);
+  vwImgData = vwCanvas.getContext('2d').getImageData(0, 0, tmp.width, tmp.height);
+  vwDraw();
+
+  const wl = vwWC !== null
+    ? `W: ${Math.round(vwWW || 0)}  L: ${Math.round(vwWC || 0)}`
+    : 'W: auto  L: auto';
+  document.getElementById('vw-wl-info').textContent = wl;
+}
+
+// ── Draw with transform ───────────────────────────────
+function vwDraw() {
+  // حدود الحركة — تمنع الصورة تخرج برا الشاشة
+  const wrap = vwWrap.getBoundingClientRect();
+  const cw = vwCanvas.width  * vwScale;
+  const ch = vwCanvas.height * vwScale;
+
+  const maxX = Math.max(0, (cw - wrap.width)  / 2 + wrap.width  * 0.1);
+  const maxY = Math.max(0, (ch - wrap.height) / 2 + wrap.height * 0.1);
+
+  vwOffX = Math.max(-maxX, Math.min(maxX, vwOffX));
+  vwOffY = Math.max(-maxY, Math.min(maxY, vwOffY));
+
+  vwCanvas.style.transform = `translate(${vwOffX}px,${vwOffY}px) scale(${vwScale})`;
+  vwCanvas.style.transformOrigin = 'center center';
+}
+
+// ── Thumbnails ────────────────────────────────────────
+function buildThumbRow() {
+  const row = document.getElementById('vw-thumb-row');
+  row.innerHTML = '';
+  vwFiles.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'vw-thumb' + (i === vwIdx ? ' active' : '');
+    if(item.thumb) {
+      div.innerHTML = `<img src="${item.thumb}" alt="${i+1}">`;
+    } else {
+      div.innerHTML = `<div class="vw-thumb-placeholder">🩻</div>`;
+    }
+    div.addEventListener('click', () => vwLoadFrame(i));
+    row.appendChild(div);
+  });
+}
+
+// ── Share current frame ───────────────────────────────
+async function shareViewerImage() {
+  const item = vwFiles[vwIdx];
+  const name = (item?.dcm?.getTag('(0010,0010)') || 'DICOM').trim().replace(/\s+/g,'_');
+
+  vwCanvas.toBlob(async blob => {
+    if(!blob) return;
+    const file = new File([blob], `SD_${name}_${vwIdx+1}.jpg`, {type:'image/jpeg'});
+    if(navigator.share && navigator.canShare({files:[file]})) {
+      await navigator.share({ files:[file], title:`صورة ${name}` });
+    } else {
+      // fallback: download
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = file.name;
+      a.click();
+    }
+  }, 'image/jpeg', 0.92);
+}
+
+// ── Hint ──────────────────────────────────────────────
+function showHint() {
+  vwHint.classList.remove('hidden');
+  clearTimeout(vwHintTimer);
+  vwHintTimer = setTimeout(() => vwHint.classList.add('hidden'), 3000);
+}
+
+function showWLOverlay(w, l) {
+  vwOverlay.textContent = `W ${Math.round(w)}  ·  L ${Math.round(l)}`;
+  vwOverlay.classList.add('show');
+  clearTimeout(vwWLTimer);
+  vwWLTimer = setTimeout(() => vwOverlay.classList.remove('show'), 1000);
+}
+
+// ══════════════════════════════════════════════════════
+//  TOUCH & MOUSE EVENTS
+// ══════════════════════════════════════════════════════
+let _touches      = [];
+let _lastDist     = 0;
+let _dragStart    = null;
+let _gesture      = null; // 'scroll'|'wl'|'zoom'|'pan'
+let _startScroll  = 0;
+let _startWL      = null;
+let _startScale   = 1;
+let _startOff     = {x:0,y:0};
+
+function attachViewerEvents() {
+  vwWrap.addEventListener('touchstart',  onVwTouchStart,  {passive:false});
+  vwWrap.addEventListener('touchmove',   onVwTouchMove,   {passive:false});
+  vwWrap.addEventListener('touchend',    onVwTouchEnd,    {passive:false});
+  vwWrap.addEventListener('wheel',       onVwWheel,       {passive:false});
+  vwWrap.addEventListener('mousedown',   onVwMouseDown);
+  window.addEventListener('mousemove',   onVwMouseMove);
+  window.addEventListener('mouseup',     onVwMouseUp);
+}
+function detachViewerEvents() {
+  vwWrap.removeEventListener('touchstart',  onVwTouchStart);
+  vwWrap.removeEventListener('touchmove',   onVwTouchMove);
+  vwWrap.removeEventListener('touchend',    onVwTouchEnd);
+  vwWrap.removeEventListener('wheel',       onVwWheel);
+  vwWrap.removeEventListener('mousedown',   onVwMouseDown);
+  window.removeEventListener('mousemove',   onVwMouseMove);
+  window.removeEventListener('mouseup',     onVwMouseUp);
+}
+
+// ── Touch ─────────────────────────────────────────────
+function onVwTouchStart(e) {
+  e.preventDefault();
+  _touches = Array.from(e.touches);
+  _gesture = null;
+
+  if(_touches.length === 1) {
+    _dragStart   = {x: _touches[0].clientX, y: _touches[0].clientY};
+    _startScroll = 0;
+    _startWL     = {wc: vwWC ?? 128, ww: vwWW ?? 256};
+    _startOff    = {x: vwOffX, y: vwOffY};
+  } else if(_touches.length === 2) {
+    _lastDist  = getTouchDist(_touches);
+    _startScale = vwScale;
+    _startOff   = {x: vwOffX, y: vwOffY};
+    _gesture    = 'zoom';
+  }
+}
+
+function onVwTouchMove(e) {
+  e.preventDefault();
+  _touches = Array.from(e.touches);
+
+  if(_touches.length === 2) {
+    // Pinch zoom
+    const dist  = getTouchDist(_touches);
+    const ratio = dist / _lastDist;
+    vwScale = Math.max(0.5, Math.min(8, _startScale * ratio));
+    vwDraw();
+    _gesture = 'zoom';
+    return;
+  }
+
+  if(_touches.length !== 1 || !_dragStart) return;
+
+  const dx = _touches[0].clientX - _dragStart.x;
+  const dy = _touches[0].clientY - _dragStart.y;
+
+  // تحديد نوع الحركة من أول move
+  if(!_gesture) {
+    if(Math.abs(dy) > Math.abs(dx) * 1.5 && Math.abs(dy) > 10) {
+      _gesture = vwScale > 1.1 ? 'pan' : 'scroll';
+    } else if(Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 10) {
+      _gesture = 'wl';
+    } else if(Math.abs(dy) > 10 || Math.abs(dx) > 10) {
+      _gesture = vwScale > 1.1 ? 'pan' : 'scroll';
+    }
+  }
+
+  if(_gesture === 'scroll') {
+    // كل 40px → صورة جديدة
+    const steps = Math.round(dy / -40);
+    if(steps !== _startScroll) {
+      _startScroll = steps;
+      vwLoadFrame(vwIdx + steps > vwIdx ? vwIdx+1 : vwIdx-1);
+      _dragStart = {x: _touches[0].clientX, y: _touches[0].clientY};
+    }
+  } else if(_gesture === 'pan') {
+    vwOffX = _startOff.x + dx;
+    vwOffY = _startOff.y + dy;
+    vwDraw();
+  } else if(_gesture === 'wl') {
+    // يمين/يسار → Width ، فوق/تحت → Center
+    const newWW = Math.max(1, (_startWL.ww || 400) + dx * 5);
+    const newWC = (_startWL.wc ?? 40) - dy * 2;
+    vwWC = newWC;
+    vwWW = newWW;
+    vwApplyWL();
+    showWLOverlay(newWW, newWC);
+  }
+}
+
+function onVwTouchEnd(e) {
+  _touches = Array.from(e.touches);
+  if(_touches.length === 0) {
+    // double-tap to reset
+    const now = Date.now();
+    if(now - (_lastTap||0) < 300) {
+      vwScale=1; vwOffX=0; vwOffY=0;
+      vwWC=vwBaseWC; vwWW=vwBaseWW;
+      vwApplyWL();
+      toast('↺ تم إعادة الضبط', '');
+    }
+    _lastTap = now;
+    _dragStart = null;
+    _gesture   = null;
+  }
+}
+let _lastTap = 0;
+
+function getTouchDist(touches) {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx*dx + dy*dy);
+}
+
+// ── Mouse (desktop) ───────────────────────────────────
+let _mouseDown = false;
+let _mouseLast = null;
+let _mouseBtn  = 0;
+
+function onVwMouseDown(e) {
+  _mouseDown = true;
+  _mouseLast = {x: e.clientX, y: e.clientY};
+  _mouseBtn  = e.button;
+  _startWL   = {wc: vwWC ?? 128, ww: vwWW ?? 256};
+  _startOff  = {x: vwOffX, y: vwOffY};
+}
+function onVwMouseMove(e) {
+  if(!_mouseDown || !_mouseLast) return;
+  const dx = e.clientX - _mouseLast.x;
+  const dy = e.clientY - _mouseLast.y;
+
+  if(_mouseBtn === 0) {
+    // Left drag → pan
+    vwOffX += dx; vwOffY += dy;
+    vwDraw();
+  } else if(_mouseBtn === 2) {
+    // Right drag → WL
+    vwWW = Math.max(1, (vwWW||400) + dx * 5);
+    vwWC = (vwWC??40) - dy * 2;
+    vwApplyWL();
+    showWLOverlay(vwWW, vwWC);
+  }
+  _mouseLast = {x: e.clientX, y: e.clientY};
+}
+function onVwMouseUp() { _mouseDown = false; _mouseLast = null; }
+
+function onVwWheel(e) {
+  e.preventDefault();
+  if(e.ctrlKey) {
+    // Zoom
+    vwScale = Math.max(0.5, Math.min(8, vwScale * (e.deltaY < 0 ? 1.1 : 0.9)));
+    vwDraw();
+  } else {
+    // Scroll images
+    if(e.deltaY > 0) vwLoadFrame(vwIdx+1);
+    else             vwLoadFrame(vwIdx-1);
+  }
+}
+
+// Init
+updateUI();
+emptyHint.className = 'empty-hint show';
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
