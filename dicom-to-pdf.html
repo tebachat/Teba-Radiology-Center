@@ -2124,17 +2124,33 @@ function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 // Sort a list of file items by their DICOM Instance Number (0020,0013) so
 // exported PDFs/videos follow the correct anatomical slice order rather than
-// just the order files were uploaded in. Items with no valid Instance Number
-// are pushed to the end, keeping their original relative order.
+// just the order files were uploaded in.
+// Images are first grouped by series (SeriesInstanceUID, falling back to the
+// folder they came from) so slices from DIFFERENT series/sequences never get
+// interleaved — reordering only ever happens WITHIN the same series. Series
+// groups keep the order in which they first appeared in the input.
 function sortItemsByInstanceNumber(items) {
-  return items
-    .map((item, idx) => {
-      const raw = item.dcm ? item.dcm.getTag('(0020,0013)') : '';
-      const num = raw !== '' && raw != null ? parseFloat(raw) : NaN;
-      return { item, idx, num: isNaN(num) ? Infinity : num };
-    })
-    .sort((a, b) => (a.num - b.num) || (a.idx - b.idx))
-    .map(x => x.item);
+  const seriesOrder = [];
+  const seriesMap = new Map();
+  items.forEach((item, idx) => {
+    const seriesUid = item.dcm ? (item.dcm.getTag('(0020,000e)') || '') : '';
+    const key = seriesUid || item.folderKey || '__all__';
+    if(!seriesMap.has(key)) { seriesMap.set(key, []); seriesOrder.push(key); }
+    seriesMap.get(key).push({ item, idx });
+  });
+
+  const result = [];
+  for(const key of seriesOrder) {
+    seriesMap.get(key)
+      .map(g => {
+        const raw = g.item.dcm ? g.item.dcm.getTag('(0020,0013)') : '';
+        const num = raw !== '' && raw != null ? parseFloat(raw) : NaN;
+        return { ...g, num: isNaN(num) ? Infinity : num };
+      })
+      .sort((a, b) => (a.num - b.num) || (a.idx - b.idx))
+      .forEach(g => result.push(g.item));
+  }
+  return result;
 }
 
 
