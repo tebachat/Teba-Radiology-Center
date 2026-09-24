@@ -194,49 +194,70 @@
   }
   select:focus, input[type=number]:focus { border-color: var(--accent); }
 
-  /* File list */
-  #file-list { margin-bottom:20px; }
+  /* File list — larger gallery-style tiles */
+  #file-list {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap:14px; margin-bottom:20px;
+  }
   .file-card {
-    display:flex; align-items:center; gap:12px;
+    display:flex; flex-direction:column;
     background: var(--surface);
     border: 1px solid var(--border);
-    border-radius:10px;
-    padding:12px 16px;
-    margin-bottom:8px;
+    border-radius: var(--radius);
+    overflow:hidden;
     animation: slideIn .25s ease;
     transition: all .2s;
   }
   @keyframes slideIn { from { opacity:0; transform:translateY(-8px); } }
-  .file-card:hover { border-color: var(--accent2); }
+  .file-card:hover { border-color: var(--accent2); transform:translateY(-3px); }
   .file-card.done { border-color: var(--success); }
   .file-card.error { border-color: var(--danger); }
   .file-card.processing { border-color: var(--warn); }
 
   .file-thumb {
-    width:48px; height:48px;
+    position:relative;
+    width:100%; aspect-ratio: 1 / 1;
     background: var(--surface2);
-    border-radius:8px;
     display:flex; align-items:center; justify-content:center;
-    font-size:1.4rem; flex-shrink:0;
-    overflow:hidden;
+    font-size:2.4rem; flex-shrink:0;
+    overflow:hidden; cursor:pointer;
   }
-  .file-thumb img { width:100%; height:100%; object-fit:cover; border-radius:8px; }
-  .file-info { flex:1; min-width:0; }
+  .thumb-img-wrap { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+  .file-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .file-info { flex:1; min-width:0; padding:9px 11px 11px; }
   .file-name {
-    font-size:0.88rem; font-weight:600;
+    font-size:0.8rem; font-weight:600;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     direction:ltr; text-align:right;
   }
-  .file-meta { font-size:0.76rem; color:var(--muted); margin-top:3px; }
+  .file-meta { font-size:0.72rem; color:var(--muted); margin-top:3px; }
+  .file-thumb .file-status {
+    position:absolute; bottom:7px; left:7px; right:7px; z-index:2;
+    text-align:center; backdrop-filter: blur(2px);
+  }
   .file-status {
     font-size:0.78rem; font-family:'JetBrains Mono',monospace;
     padding: 3px 10px; border-radius:20px;
     white-space:nowrap;
   }
-  .file-status.pending { background:rgba(100,116,139,.15); color:var(--muted); }
-  .file-status.processing { background:rgba(255,149,0,.15); color:var(--warn); }
-  .file-status.done { background:rgba(0,229,160,.12); color:var(--success); }
-  .file-status.error { background:rgba(255,68,102,.12); color:var(--danger); }
+  .file-status.pending { background:rgba(100,116,139,.35); color:#e2e8f0; }
+  .file-status.processing { background:rgba(255,149,0,.3); color:#ffd8a8; }
+  .file-status.done { background:rgba(0,229,160,.3); color:#c3ffec; }
+  .file-status.error { background:rgba(255,68,102,.3); color:#ffd0da; }
+
+  .file-thumb .remove-btn {
+    position:absolute; top:6px; left:6px; z-index:3;
+    background:rgba(0,0,0,.55); color:#fff;
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.05rem; padding:0; border:none; cursor:pointer; transition:.2s;
+  }
+  .file-thumb .remove-btn:hover { background:rgba(255,68,102,.9); }
+  .file-thumb .vw-open-btn {
+    position:absolute; top:6px; right:6px; z-index:3;
+    background:rgba(0,0,0,.5); border:1px solid rgba(255,255,255,.2); color:#fff;
+  }
 
   .remove-btn {
     background:none; border:none; color:var(--muted);
@@ -244,6 +265,36 @@
     border-radius:6px; transition:.2s;
   }
   .remove-btn:hover { color:var(--danger); background:rgba(255,68,102,.1); }
+
+  /* Range sliders (Brightness / Contrast) */
+  input[type=range] {
+    -webkit-appearance:none; appearance:none;
+    width:100%; height:6px; border-radius:20px;
+    background: linear-gradient(90deg, var(--surface2), var(--surface2));
+    border:1px solid var(--border); outline:none; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance:none; appearance:none;
+    width:18px; height:18px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border:2px solid #0a0e1a; cursor:pointer;
+  }
+  input[type=range]::-moz-range-thumb {
+    width:18px; height:18px; border-radius:50%;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border:2px solid #0a0e1a; cursor:pointer;
+  }
+  .bc-row { display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end; }
+  .bc-slider { flex:1; min-width:160px; }
+  .bc-slider-labels { display:flex; justify-content:space-between; font-size:.7rem; color:var(--muted); margin-bottom:5px; }
+  .bc-slider-labels b { color:var(--text); font-family:'JetBrains Mono',monospace; }
+  .bc-reset-btn {
+    padding:9px 16px; border-radius:8px; border:1px solid rgba(0,212,255,.35);
+    background:rgba(0,212,255,.1); color:var(--accent);
+    font-family:inherit; font-size:0.82rem; font-weight:600;
+    cursor:pointer; transition:all .2s; white-space:nowrap;
+  }
+  .bc-reset-btn:hover { background:rgba(0,212,255,.2); }
 
   /* Progress bar */
   .prog-wrap {
@@ -380,6 +431,23 @@
   }
   .empty-hint.show { display:block; }
 
+  /* Disclaimer */
+  .disclaimer-box {
+    background: rgba(255,149,0,.06);
+    border: 1px solid rgba(255,149,0,.35);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin: 4px 0 20px;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: #cbd5e1;
+  }
+  .disclaimer-box .disclaimer-title {
+    display:flex; align-items:center; gap:8px;
+    font-weight:700; color: var(--warn);
+    font-size: 0.88rem; margin-bottom:8px;
+  }
+
   /* Spinner */
   .spin {
     display:inline-block; width:16px; height:16px;
@@ -398,6 +466,7 @@
   @media(max-width:480px) {
     .btn-row { flex-direction:column; }
     .options-bar { grid-template-columns:1fr; }
+    #file-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:10px; }
   }
 
   /* ── Source Tabs ── */
@@ -681,6 +750,13 @@
       </select>
     </div>
     <div class="opt-group">
+      <div class="opt-label">🕶️ الخصوصية</div>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; padding-top:2px;">
+        <input type="checkbox" id="opt-anonymize" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
+        إخفاء اسم/رقم المريض في الملفات المُصدَّرة
+      </label>
+    </div>
+    <div class="opt-group">
       <div class="opt-label">🎨 جودة الصورة في PDF</div>
       <select id="opt-quality">
         <option value="0.3">منخفضة جداً — حجم أصغر</option>
@@ -690,6 +766,18 @@
         <option value="0.97">عالية جداً (Very High)</option>
         <option value="1.0">أقصى جودة (Ultra)</option>
         <option value="png">بدون ضغط (PNG Lossless)</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🖨️ تخطيط الطباعة (كام صورة بالصفحة)</div>
+      <select id="opt-print-grid">
+        <option value="1" selected>عادي — صورة واحدة لكل صفحة</option>
+        <option value="2x2">2 × 2 — 4 صور بالصفحة</option>
+        <option value="2x3">2 × 3 — 6 صور بالصفحة</option>
+        <option value="3x3">3 × 3 — 9 صور بالصفحة</option>
+        <option value="3x4">3 × 4 — 12 صورة بالصفحة</option>
+        <option value="4x4">4 × 4 — 16 صورة بالصفحة</option>
+        <option value="4x6">4 × 6 — 24 صورة بالصفحة</option>
       </select>
     </div>
     <div class="opt-group">
@@ -728,13 +816,40 @@
       </select>
     </div>
     <div class="opt-group">
+      <div class="opt-label">📼 صيغة الفيديو (Format)</div>
+      <select id="opt-vid-format">
+        <option value="mp4" selected>MP4 — أوسع توافق (ويندوز / آيفون / أندرويد)</option>
+        <option value="webm">WebM (Chrome / أندرويد)</option>
+        <option value="auto">تلقائي — أفضل صيغة متاحة بالمتصفح</option>
+      </select>
+    </div>
+    <div class="opt-group">
       <div class="opt-label">🎞️ سرعة عرض الفيديو (FPS)</div>
       <select id="opt-vid-fps">
+        <option value="1">بطيء جداً — 1 FPS</option>
+        <option value="2">بطيء جداً — 2 FPS</option>
+        <option value="3">بطيء — 3 FPS</option>
         <option value="5">بطيء — 5 FPS</option>
         <option value="10" selected>عادي — 10 FPS</option>
         <option value="15">سريع — 15 FPS</option>
         <option value="24">سينمائي — 24 FPS</option>
       </select>
+    </div>
+  </div>
+
+  <!-- Brightness / Contrast — quick fix for images that look too dark or too bright -->
+  <div class="opt-group" style="margin:-8px 0 20px;">
+    <div class="opt-label">☀️ السطوع والتباين — لو الصورة غامقة أو فاتحة أكتر من اللازم</div>
+    <div class="bc-row">
+      <div class="bc-slider">
+        <div class="bc-slider-labels"><span>🌙 أغمق</span><span>السطوع: <b id="brightness-val">0</b></span><span>☀️ أفتح</span></div>
+        <input type="range" id="opt-brightness" min="-100" max="100" value="0" step="5">
+      </div>
+      <div class="bc-slider">
+        <div class="bc-slider-labels"><span>◐ أقل</span><span>التباين: <b id="contrast-val">100%</b></span><span>◑ أكتر</span></div>
+        <input type="range" id="opt-contrast" min="50" max="200" value="100" step="5">
+      </div>
+      <button class="bc-reset-btn" id="bc-reset-btn" type="button">↺ إعادة ضبط</button>
     </div>
   </div>
 
@@ -762,6 +877,16 @@
   <!-- File list -->
   <div id="file-list"></div>
   <div class="empty-hint" id="empty-hint">لم يتم إضافة ملفات بعد</div>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer-box">
+    <div class="disclaimer-title">⚠️ إخلاء مسئولية</div>
+    هذه الأداة مخصصة فقط لتحويل ملفات DICOM إلى PDF أو فيديو، لأخذ فكرة مبدئية عن صور الفحص لحين استلام الأفلام المطبوعة والتقرير الرسمي من الطبيب المختص.
+    <br><br>
+    الأداة لا تحتفظ بأي صور أو بيانات خاصة بالمرضى، وغير مرتبطة بأي سيرفر أو أي وسيلة تواصل أو نشر نهائيًا — كل عمليات المعالجة والتحويل تتم محليًا داخل متصفحك فقط.
+    <br><br>
+    قد تظهر بعض الصور غامقة أو فاتحة أكثر من اللازم في بعض الأحيان. لذلك لا يُعتد بتشخيص الفيديو أو ملف الـ PDF الناتجين نهائيًا، ولا يغنيان عن التقرير الطبي الرسمي.
+  </div>
 
   <!-- Buttons -->
   <div class="btn-row">
@@ -957,6 +1082,12 @@ class DicomParser {
     const pd = this.tags['PixelData'];
     if(!pd || pd.length === 0) return false;
 
+    // Global brightness/contrast — a simple photo-editor-style fix for images
+    // that render too dark or too bright, applied on top of any windowing.
+    const brightness = getBrightnessAdjust();
+    const contrastFactor = getContrastFactor();
+    const bcActive = brightness !== 0 || contrastFactor !== 1;
+
     if(pd.encapsulated) {
       // JPEG / JPEG2000 / JPEG-LS - let browser decode it
       try {
@@ -968,7 +1099,9 @@ class DicomParser {
           img.onload = () => {
             canvas.width = img.naturalWidth;
             canvas.height = img.naturalHeight;
-            canvas.getContext('2d').drawImage(img, 0, 0);
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            if(bcActive) applyBrightnessContrast(ctx, canvas.width, canvas.height, brightness, contrastFactor);
             URL.revokeObjectURL(url);
             resolve(true);
           };
@@ -1033,13 +1166,35 @@ class DicomParser {
     const scale = 255 / ww;
 
     for(let i = 0; i < huArr.length && i < rows*cols; i++) {
-      const g = Math.round(Math.max(0, Math.min(255, (Math.max(lo, Math.min(hi, huArr[i])) - lo) * scale)));
+      let g = Math.round(Math.max(0, Math.min(255, (Math.max(lo, Math.min(hi, huArr[i])) - lo) * scale)));
+      if(bcActive) g = Math.max(0, Math.min(255, Math.round((g - 128) * contrastFactor + 128 + brightness)));
       const p = i*4;
       imgData.data[p] = g; imgData.data[p+1] = g; imgData.data[p+2] = g; imgData.data[p+3] = 255;
     }
     ctx.putImageData(imgData, 0, 0);
     return true;
   }
+}
+
+// ── Brightness / Contrast helpers (global — read live from the sliders) ──
+function getBrightnessAdjust() {
+  const el = document.getElementById('opt-brightness');
+  return el ? parseInt(el.value, 10) || 0 : 0;
+}
+function getContrastFactor() {
+  const el = document.getElementById('opt-contrast');
+  const pct = el ? parseInt(el.value, 10) || 100 : 100;
+  return pct / 100;
+}
+function applyBrightnessContrast(ctx, w, h, brightness, contrastFactor) {
+  const imgData = ctx.getImageData(0, 0, w, h);
+  const d = imgData.data;
+  for(let i = 0; i < d.length; i += 4) {
+    d[i]   = Math.max(0, Math.min(255, Math.round((d[i]   - 128) * contrastFactor + 128 + brightness)));
+    d[i+1] = Math.max(0, Math.min(255, Math.round((d[i+1] - 128) * contrastFactor + 128 + brightness)));
+    d[i+2] = Math.max(0, Math.min(255, Math.round((d[i+2] - 128) * contrastFactor + 128 + brightness)));
+  }
+  ctx.putImageData(imgData, 0, 0);
 }
 
 // ===================== STATE =====================
@@ -1056,6 +1211,57 @@ const progWrap   = document.getElementById('prog-wrap');
 const progBar    = document.getElementById('prog-bar');
 const statsDiv   = document.getElementById('stats');
 const emptyHint  = document.getElementById('empty-hint');
+
+// ===================== BRIGHTNESS / CONTRAST (live re-render) =====================
+const brightnessSlider = document.getElementById('opt-brightness');
+const contrastSlider   = document.getElementById('opt-contrast');
+const brightnessValEl  = document.getElementById('brightness-val');
+const contrastValEl    = document.getElementById('contrast-val');
+let bcRefreshTimer = null;
+
+function scheduleThumbRefresh() {
+  clearTimeout(bcRefreshTimer);
+  bcRefreshTimer = setTimeout(refreshAllRenderedImages, 150);
+}
+
+brightnessSlider.addEventListener('input', () => {
+  brightnessValEl.textContent = brightnessSlider.value;
+  scheduleThumbRefresh();
+});
+contrastSlider.addEventListener('input', () => {
+  contrastValEl.textContent = contrastSlider.value + '%';
+  scheduleThumbRefresh();
+});
+document.getElementById('bc-reset-btn').addEventListener('click', () => {
+  brightnessSlider.value = 0;
+  contrastSlider.value = 100;
+  brightnessValEl.textContent = '0';
+  contrastValEl.textContent = '100%';
+  scheduleThumbRefresh();
+});
+
+// Re-render every thumbnail, plus the preview/viewer canvases if open, so a
+// brightness/contrast tweak shows its effect immediately everywhere.
+async function refreshAllRenderedImages() {
+  const windowPreset = document.getElementById('opt-window').value;
+  for(const item of files) {
+    if(!item.dcm) continue;
+    const cvs = document.createElement('canvas');
+    let ok = false;
+    try { ok = await item.dcm.renderPixels(cvs, windowPreset); } catch(e) { ok = false; }
+    if(ok) {
+      item.thumb = cvs.toDataURL('image/jpeg', 0.6);
+      const el = document.getElementById(`card-${item.id}`);
+      if(el) {
+        const wrap = el.querySelector('.thumb-img-wrap');
+        if(wrap) wrap.innerHTML = `<img src="${item.thumb}" alt="thumb">`;
+      }
+    }
+  }
+  if(currentPreviewId != null) await showPreview(currentPreviewId, true);
+  const viewerModal = document.getElementById('viewer-modal');
+  if(viewerModal && viewerModal.classList.contains('open')) vwLoadFrame(vwIdx);
+}
 
 // ===================== DROP / INPUT =====================
 // Drop zone (desktop)
@@ -1194,7 +1400,7 @@ async function parseDicom(id) {
     item.thumb = cvs.toDataURL('image/jpeg', 0.6);
     const el = document.getElementById(`card-${id}`);
     if(el) {
-      const thumb = el.querySelector('.file-thumb');
+      const thumb = el.querySelector('.thumb-img-wrap');
       thumb.innerHTML = `<img src="${item.thumb}" alt="thumb">`;
     }
   }
@@ -1209,15 +1415,17 @@ function renderCard(id, targetFrag) {
   card.id = `card-${id}`;
   const folderTag = item.folderKey ? `<div class="file-meta">📁 ${item.folderKey}</div>` : '';
   card.innerHTML = `
-    <div class="file-thumb" id="thumb-${id}">🩻</div>
+    <div class="file-thumb" id="thumb-${id}">
+      <div class="thumb-img-wrap">🩻</div>
+      <button class="remove-btn" onclick="event.stopPropagation(); removeFile(${id})" title="حذف">×</button>
+      <button class="vw-open-btn" onclick="event.stopPropagation(); openViewer(${id})" title="عرض بالكامل">👁</button>
+      <span class="file-status pending" id="status-${id}">انتظار</span>
+    </div>
     <div class="file-info">
-      <div class="file-name">${item.file.name}</div>
+      <div class="file-name" title="${item.file.name}">${item.file.name}</div>
       <div class="file-meta">${(item.file.size/1024).toFixed(1)} KB</div>
       ${folderTag}
     </div>
-    <span class="file-status pending" id="status-${id}">انتظار</span>
-    <button class="vw-open-btn" onclick="openViewer(${id})" title="عرض">👁</button>
-    <button class="remove-btn" onclick="removeFile(${id})" title="حذف">×</button>
   `;
   card.querySelector('.file-thumb').addEventListener('click', () => showPreview(id));
   if(targetFrag) targetFrag.appendChild(card);
@@ -1276,40 +1484,54 @@ async function convertAll() {
   const imgQuality = document.getElementById('opt-quality').value;
   const isPng = imgQuality === 'png';
   const qualityVal = isPng ? 1.0 : parseFloat(imgQuality);
+  const anonymize = document.getElementById('opt-anonymize').checked;
+  const gridSel = document.getElementById('opt-print-grid').value;
+  const gridParts = gridSel !== '1' ? gridSel.split('x').map(Number) : null;
 
-  // Helper: build filename with SD_ prefix + patient name
+  // Helper: build filename starting with the patient name + credit
   function buildFilename(item, fallback) {
     const dcm = item ? item.dcm : null;
-    let patName = (dcm ? (dcm.getTag('(0010,0010)') || dcm.getTag('(0010,0020)') || '') : '').trim();
+    let patName = (dcm && !anonymize) ? (dcm.getTag('(0010,0010)') || dcm.getTag('(0010,0020)') || '').trim() : '';
     patName = patName.replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g, '_').replace(/^_+|_+$/g,'');
-    return patName ? `SD_${patName}.pdf` : (fallback || `SD_DICOM_${Date.now()}.pdf`);
+    return patName ? `${patName} (By Sa3d abdo).pdf` : (fallback || `DICOM_${Date.now()} (By Sa3d abdo).pdf`);
   }
 
   const { jsPDF } = window.jspdf;
 
   if(mode === 'single') {
+    const orderedFiles = sortItemsByInstanceNumber(files);
     const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
-    let first = true;
 
-    for(let i=0; i<files.length; i++) {
-      const item = files[i];
-      setStatus(item.id, 'processing', '⏳ جاري...');
-      progBar.style.width = `${((i)/files.length)*100}%`;
-
-      try {
-        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first);
-        first = false;
+    if(gridParts) {
+      const [gr, gc] = gridParts;
+      orderedFiles.forEach(it => setStatus(it.id, 'processing', '⏳ جاري...'));
+      await renderGridToPdf(doc, orderedFiles, size, orient, windowPreset, gr, gc, anonymize, (item) => {
         item.status = 'done';
         setStatus(item.id, 'done', '✅ تم');
-      } catch(e) {
-        item.status = 'error';
-        setStatus(item.id, 'error', '❌ خطأ');
+      });
+      progBar.style.width = '100%';
+    } else {
+      let first = true;
+      for(let i=0; i<orderedFiles.length; i++) {
+        const item = orderedFiles[i];
+        setStatus(item.id, 'processing', '⏳ جاري...');
+        progBar.style.width = `${((i)/orderedFiles.length)*100}%`;
+
+        try {
+          await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first, anonymize, i+1, orderedFiles.length);
+          first = false;
+          item.status = 'done';
+          setStatus(item.id, 'done', '✅ تم');
+        } catch(e) {
+          item.status = 'error';
+          setStatus(item.id, 'error', '❌ خطأ');
+        }
+        await sleep(10);
       }
-      await sleep(10);
+      progBar.style.width = '100%';
     }
 
-    progBar.style.width = '100%';
-    const fname = buildFilename(files[0], `SD_DICOM_${Date.now()}.pdf`);
+    const fname = buildFilename(orderedFiles[0], `DICOM_${Date.now()} (By Sa3d abdo).pdf`);
     doc.save(fname);
     toast(`✅ تم حفظ: ${fname}`, 'success');
 
@@ -1321,8 +1543,8 @@ async function convertAll() {
 
       try {
         const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
-        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, true);
-        const fname = buildFilename(item, `SD_${item.file.name.replace(/\.[^.]+$/, '')}.pdf`);
+        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, true, anonymize, 1, 1);
+        const fname = buildFilename(item, `${item.file.name.replace(/\.[^.]+$/, '')} (By Sa3d abdo).pdf`);
         doc.save(fname);
         item.status = 'done';
         setStatus(item.id, 'done', '✅ تم');
@@ -1352,33 +1574,54 @@ async function convertAll() {
 
     for(const key of order) {
       groupIndex++;
-      const groupItems = groups.get(key);
+      const groupItems = sortItemsByInstanceNumber(groups.get(key));
       const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
-      let first = true;
       let groupError = false;
+      let renderedAny = false;
 
-      for(const item of groupItems) {
-        setStatus(item.id, 'processing', '⏳ جاري...');
-        progBar.style.width = `${(doneCount/total)*100}%`;
+      if(gridParts) {
+        const [gr, gc] = gridParts;
+        groupItems.forEach(it => setStatus(it.id, 'processing', '⏳ جاري...'));
         try {
-          await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first);
-          first = false;
-          item.status = 'done';
-          setStatus(item.id, 'done', '✅ تم');
+          await renderGridToPdf(doc, groupItems, size, orient, windowPreset, gr, gc, anonymize, (item) => {
+            item.status = 'done';
+            setStatus(item.id, 'done', '✅ تم');
+          });
+          renderedAny = true;
         } catch(e) {
-          item.status = 'error';
           groupError = true;
-          setStatus(item.id, 'error', '❌ خطأ');
+          groupItems.forEach(it => setStatus(it.id, 'error', '❌ خطأ'));
         }
-        doneCount++;
-        await sleep(10);
+        doneCount += groupItems.length;
+        progBar.style.width = `${(doneCount/total)*100}%`;
+      } else {
+        let first = true;
+        let pageNum = 0;
+        for(const item of groupItems) {
+          setStatus(item.id, 'processing', '⏳ جاري...');
+          progBar.style.width = `${(doneCount/total)*100}%`;
+          pageNum++;
+          try {
+            await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first, anonymize, pageNum, groupItems.length);
+            first = false;
+            renderedAny = true;
+            item.status = 'done';
+            setStatus(item.id, 'done', '✅ تم');
+          } catch(e) {
+            item.status = 'error';
+            groupError = true;
+            setStatus(item.id, 'error', '❌ خطأ');
+          }
+          doneCount++;
+          await sleep(10);
+        }
       }
 
-      if(!first) { // at least one page was rendered
+      if(renderedAny) {
         const safeKey = key.replace(/[\\/:"*?<>|]+/g, '_').trim();
-        const fname = safeKey && safeKey !== '(بدون فولدر)'
-          ? `SD_${safeKey}.pdf`
-          : buildFilename(groupItems[0], `SD_DICOM_group${groupIndex}_${Date.now()}.pdf`);
+        const fname = (safeKey && safeKey !== '(بدون فولدر)')
+          ? `${safeKey} (By Sa3d abdo).pdf`
+          : buildFilename(groupItems[0], `DICOM_group${groupIndex}_${Date.now()} (By Sa3d abdo).pdf`);
         doc.save(fname);
         toast(groupError ? `⚠️ تم حفظ ${fname} مع بعض الأخطاء` : `✅ تم حفظ: ${fname}`, groupError ? 'warn' : 'success');
         await sleep(50);
@@ -1393,7 +1636,7 @@ async function convertAll() {
   convertBtn.disabled = false;
 }
 
-async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, isPng, isFirst) {
+async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, isPng, isFirst, anonymize, pageIndex, totalPages) {
   if(!isFirst) doc.addPage();
 
   // Page dims in mm
@@ -1433,7 +1676,11 @@ async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, is
   doc.setFont('helvetica','normal');
   doc.setFontSize(8);
   doc.setTextColor(180,180,180);
-  if(patName) doc.text(`Patient: ${patName}`, margin, 17);
+  if(anonymize) {
+    doc.text('Patient: (Hidden for privacy)', margin, 17);
+  } else if(patName) {
+    doc.text(`Patient: ${patName}`, margin, 17);
+  }
   if(studyDate) doc.text(`Date: ${studyDate}`, margin + 60, 17);
   if(modality) doc.text(`Modality: ${modality}`, margin + 120, 17);
 
@@ -1446,7 +1693,7 @@ async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, is
   doc.setFontSize(8);
   doc.setTextColor(180,180,180);
 
-  doc.text(`File: ${item.file.name}`, margin, 28);
+  doc.text(`File: ${anonymize ? '(hidden)' : item.file.name}`, margin, 28);
   doc.text(new Date().toLocaleString('ar-EG'), w-margin, 28, {align:'right'});
 
   // Divider
@@ -1475,14 +1722,114 @@ async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, is
     doc.setFontSize(14);
     doc.text('⚠ تعذّر عرض بيانات البكسل', w/2, h/2, {align:'center'});
     doc.setFontSize(10);
-    doc.text(item.file.name, w/2, h/2+10, {align:'center'});
+    doc.text(anonymize ? '(hidden)' : item.file.name, w/2, h/2+10, {align:'center'});
   }
 
-  // Footer
+  // Footer — credit + page numbering
   doc.setFillColor(17,24,39);
   doc.rect(0, h-8, w, 8, 'F');
   doc.setFontSize(7); doc.setTextColor(80,100,120);
   doc.text(`DICOM\u2192PDF Converter  \u00A9 ${new Date().getFullYear()} Sa3d Abdo`, w/2, h-3, {align:'center'});
+  if(pageIndex && totalPages) {
+    doc.text(`Page ${pageIndex} / ${totalPages}`, w-margin, h-3, {align:'right'});
+  }
+}
+
+// ===================== PRINT LAYOUT (contact-sheet grid PDF) =====================
+// Lays several DICOM images per A4/Letter/A3 page in a rows×cols grid — like a
+// classic radiology film sheet — instead of one image per page.
+async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows, gridCols, anonymize, onItemDone) {
+  const pageDims = { a4:{w:210,h:297}, letter:{w:216,h:279}, a3:{w:297,h:420} };
+  let { w, h } = pageDims[size] || pageDims.a4;
+  if(orient === 'landscape') [w,h] = [h,w];
+
+  const margin = 10;
+  const headerH = 18;
+  const footerH = 8;
+  const availW = w - margin*2;
+  const availH = h - headerH - footerH - margin/2;
+
+  const cellGap = 3;
+  const cellW = (availW - cellGap*(gridCols-1)) / gridCols;
+  const cellH = (availH - cellGap*(gridRows-1)) / gridRows;
+  const perPage = gridRows * gridCols;
+  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+
+  // Representative patient/study meta for the page header
+  let patName='', studyDate='', modality='';
+  for(const it of items) {
+    if(it.dcm) {
+      const n = it.dcm.getTag('(0010,0010)') || it.dcm.getTag('(0010,0020)') || '';
+      if(n) { patName = n; studyDate = it.dcm.getTag('(0008,0020)') || ''; modality = it.dcm.getTag('(0008,0060)') || ''; break; }
+    }
+  }
+
+  for(let p = 0; p < totalPages; p++) {
+    if(p > 0) doc.addPage(size, orient);
+
+    // Header bar
+    doc.setFillColor(17,24,39);
+    doc.rect(0, 0, w, headerH, 'F');
+    doc.setFont('helvetica','bold'); doc.setFontSize(9.5); doc.setTextColor(0,212,255);
+    doc.text('DICOM Radiology Export — Contact Sheet', margin, 7);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(180,180,180);
+    if(anonymize) doc.text('Patient: (Hidden for privacy)', margin, 13);
+    else if(patName) doc.text(`Patient: ${patName}`, margin, 13);
+    if(studyDate) doc.text(`Date: ${studyDate}`, margin+55, 13);
+    if(modality) doc.text(`Modality: ${modality}`, margin+95, 13);
+    doc.setFont('times','italic'); doc.setFontSize(6.5); doc.setTextColor(0,212,255);
+    doc.text('designed by saad abdo', w-margin, 13, {align:'right'});
+    doc.setDrawColor(0,212,255); doc.setLineWidth(.3);
+    doc.line(0, headerH, w, headerH);
+
+    // Grid cells
+    const startIdx = p * perPage;
+    for(let cellIdx = 0; cellIdx < perPage; cellIdx++) {
+      const itemIdx = startIdx + cellIdx;
+      if(itemIdx >= items.length) break;
+      const item = items[itemIdx];
+      const row = Math.floor(cellIdx / gridCols);
+      const col = cellIdx % gridCols;
+      const cx = margin + col*(cellW+cellGap);
+      const cy = headerH + margin/2 + row*(cellH+cellGap);
+
+      doc.setDrawColor(60,70,90); doc.setLineWidth(.15);
+      doc.rect(cx, cy, cellW, cellH);
+
+      let imgOk = false;
+      const cvs = document.createElement('canvas');
+      if(item.dcm) {
+        try { imgOk = await item.dcm.renderPixels(cvs, windowPreset); } catch(e) { imgOk = false; }
+      }
+      const labelH = 3.5;
+      const imgAreaH = cellH - labelH;
+      if(imgOk) {
+        const aspect = cvs.width / cvs.height;
+        let dw = cellW - 1.5, dh = dw / aspect;
+        if(dh > imgAreaH - 1) { dh = imgAreaH - 1; dw = dh * aspect; }
+        const dx = cx + (cellW - dw)/2;
+        const dy = cy + (imgAreaH - dh)/2;
+        const imgData = cvs.toDataURL('image/jpeg', 0.85);
+        doc.addImage(imgData, 'JPEG', dx, dy, dw, dh);
+      } else {
+        doc.setFillColor(20,30,45);
+        doc.rect(cx+0.5, cy+0.5, cellW-1, imgAreaH-1, 'F');
+        doc.setTextColor(100,116,139); doc.setFontSize(7);
+        doc.text('⚠', cx+cellW/2, cy+imgAreaH/2, {align:'center'});
+      }
+      doc.setFontSize(6); doc.setTextColor(120,130,150);
+      doc.text(`#${itemIdx+1}`, cx+cellW/2, cy+cellH-1, {align:'center'});
+
+      if(onItemDone) onItemDone(item, itemIdx);
+    }
+
+    // Footer — credit + page numbering
+    doc.setFillColor(17,24,39);
+    doc.rect(0, h-footerH, w, footerH, 'F');
+    doc.setFontSize(6.5); doc.setTextColor(80,100,120);
+    doc.text(`DICOM\u2192PDF Converter  \u00A9 ${new Date().getFullYear()} Sa3d Abdo`, w/2, h-2.5, {align:'center'});
+    doc.text(`Page ${p+1} / ${totalPages}`, w-margin, h-2.5, {align:'right'});
+  }
 }
 
 // ===================== VIDEO EXPORT (DICOM → Video, multiple qualities) =====================
@@ -1495,9 +1842,13 @@ const VIDEO_QUALITY_PRESETS = {
   'original': { height: 0,    bitrate: 12_000_000 }
 };
 
-function pickVideoMimeType() {
-  const candidates = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
-  for(const c of candidates) {
+function pickVideoMimeType(formatPref) {
+  const mp4Candidates  = ['video/mp4;codecs=h264', 'video/mp4;codecs=avc1', 'video/mp4'];
+  const webmCandidates = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+  let order;
+  if(formatPref === 'webm') order = [...webmCandidates, ...mp4Candidates];
+  else order = [...mp4Candidates, ...webmCandidates]; // 'mp4' or 'auto' — prefer MP4 for wider device compatibility
+  for(const c of order) {
     if(window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(c)) return c;
   }
   return '';
@@ -1533,7 +1884,9 @@ async function convertToVideo() {
   const mode = document.getElementById('opt-mode').value;
   const windowPreset = document.getElementById('opt-window').value;
   const qualityKey = document.getElementById('opt-vid-quality').value;
+  const formatPref = document.getElementById('opt-vid-format').value;
   const fps = parseInt(document.getElementById('opt-vid-fps').value, 10) || 10;
+  const anonymize = document.getElementById('opt-anonymize').checked;
 
   // Reuse the "folder" grouping so one video is produced per case/folder;
   // any other mode exports the whole current list as a single cine video.
@@ -1557,7 +1910,7 @@ async function convertToVideo() {
   for(let g = 0; g < groups.length; g++) {
     const group = groups[g];
     try {
-      await renderGroupToVideo(group, windowPreset, qualityKey, fps, () => {
+      await renderGroupToVideo(group, windowPreset, qualityKey, formatPref, fps, anonymize, () => {
         doneCount++;
         progBar.style.width = `${(doneCount/total)*100}%`;
       });
@@ -1573,8 +1926,8 @@ async function convertToVideo() {
   updateUI();
 }
 
-async function renderGroupToVideo(group, windowPreset, qualityKey, fps, onFrame) {
-  const items = group.items.filter(Boolean);
+async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, fps, anonymize, onFrame) {
+  const items = sortItemsByInstanceNumber(group.items.filter(Boolean));
   if(!items.length) return;
 
   for(const item of items) await ensureParsed(item);
@@ -1612,7 +1965,11 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, fps, onFrame)
     }
   }
 
-  const mimeType = pickVideoMimeType();
+  const mimeType = pickVideoMimeType(formatPref);
+  const isMp4 = mimeType.includes('mp4');
+  if(formatPref === 'mp4' && !isMp4) {
+    toast('⚠️ المتصفح الحالي لا يدعم MP4 — تم الحفظ بصيغة WebM بدلاً منه', 'warn');
+  }
   const stream = canvas.captureStream(fps);
   const recorderOpts = mimeType ? { mimeType, videoBitsPerSecond: preset.bitrate } : { videoBitsPerSecond: preset.bitrate };
   const recorder = new MediaRecorder(stream, recorderOpts);
@@ -1657,10 +2014,14 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, fps, onFrame)
     ctx.font = `bold ${Math.round(headerH*0.32)}px Arial, sans-serif`;
     ctx.textAlign = 'left';
     ctx.fillText('DICOM Radiology Export', 10, Math.round(headerH*0.4));
-    if(patName) {
+    if(patName && !anonymize) {
       ctx.fillStyle = '#b4b4b4';
       ctx.font = `${Math.round(headerH*0.24)}px Arial, sans-serif`;
       ctx.fillText(`Patient: ${patName}`, 10, Math.round(headerH*0.75));
+    } else if(anonymize) {
+      ctx.fillStyle = '#b4b4b4';
+      ctx.font = `${Math.round(headerH*0.24)}px Arial, sans-serif`;
+      ctx.fillText('Patient: (Hidden for privacy)', 10, Math.round(headerH*0.75));
     }
     if(modality || studyDate) {
       ctx.fillStyle = '#b4b4b4';
@@ -1693,8 +2054,11 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, fps, onFrame)
   await stopped;
 
   const blob = new Blob(chunks, { type: mimeType || 'video/webm' });
-  const safeName = (patName || group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
-  const fname = `SD_${safeName}_${targetH}p.webm`;
+  const ext = isMp4 ? 'mp4' : 'webm';
+  const safeName = anonymize
+    ? (group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM'
+    : (patName || group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
+  const fname = `${safeName} (By Sa3d abdo)_${targetH}p.${ext}`;
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = fname; a.click();
@@ -1702,7 +2066,9 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, fps, onFrame)
 }
 
 // ===================== PREVIEW =====================
-async function showPreview(id) {
+let currentPreviewId = null;
+
+async function showPreview(id, refreshOnly) {
   const item = files.find(f=>f.id===id);
   if(!item || !item.dcm) return;
 
@@ -1710,6 +2076,9 @@ async function showPreview(id) {
   const windowPreset = document.getElementById('opt-window').value;
   await item.dcm.renderPixels(cvs, windowPreset);
 
+  if(refreshOnly) return; // just repaint the canvas, keep the tag table/title as-is
+
+  currentPreviewId = id;
   document.getElementById('modal-title').textContent = item.file.name;
 
   // Fill tag table
@@ -1744,6 +2113,7 @@ async function showPreview(id) {
 
 function closePreview() {
   document.getElementById('preview-modal').classList.remove('open');
+  currentPreviewId = null;
 }
 document.getElementById('preview-modal').addEventListener('click', e => {
   if(e.target === document.getElementById('preview-modal')) closePreview();
@@ -1751,6 +2121,22 @@ document.getElementById('preview-modal').addEventListener('click', e => {
 
 // ===================== UTILS =====================
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// Sort a list of file items by their DICOM Instance Number (0020,0013) so
+// exported PDFs/videos follow the correct anatomical slice order rather than
+// just the order files were uploaded in. Items with no valid Instance Number
+// are pushed to the end, keeping their original relative order.
+function sortItemsByInstanceNumber(items) {
+  return items
+    .map((item, idx) => {
+      const raw = item.dcm ? item.dcm.getTag('(0020,0013)') : '';
+      const num = raw !== '' && raw != null ? parseFloat(raw) : NaN;
+      return { item, idx, num: isNaN(num) ? Infinity : num };
+    })
+    .sort((a, b) => (a.num - b.num) || (a.idx - b.idx))
+    .map(x => x.item);
+}
+
 
 function toast(msg, type='') {
   const el = document.getElementById('toast');
@@ -2143,7 +2529,7 @@ async function shareViewerImage() {
 
   vwCanvas.toBlob(async blob => {
     if(!blob) return;
-    const file = new File([blob], `SD_${name}_${vwIdx+1}.jpg`, {type:'image/jpeg'});
+    const file = new File([blob], `${name}_${vwIdx+1}.jpg`, {type:'image/jpeg'});
     if(navigator.share && navigator.canShare({files:[file]})) {
       await navigator.share({ files:[file], title:`صورة ${name}` });
     } else {
