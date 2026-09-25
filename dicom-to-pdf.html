@@ -194,6 +194,29 @@
   }
   select:focus, input[type=number]:focus { border-color: var(--accent); }
 
+  /* Settings tabs — separate PDF settings from Video settings */
+  .settings-tabs {
+    display:flex; gap:8px; margin: 4px 0 12px;
+  }
+  .settings-tab-btn {
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-family: inherit; font-size: 0.88rem; font-weight:600;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .settings-tab-btn.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: linear-gradient(135deg, rgba(0,212,255,.12), rgba(0,136,204,.08));
+  }
+  .settings-tab-panel { display:none; }
+  .settings-tab-panel.active { display:grid; }
+
   /* File list — larger gallery-style tiles */
   #file-list {
     display:grid;
@@ -791,27 +814,13 @@
     <div class="drop-title">أو اسحب وأفلت الملفات هنا</div>
     <span class="drop-badge">.dcm / .dicom / فولدر الحالة</span>
   </div>
+  <!-- Shared settings — apply whether exporting to PDF or Video -->
   <div class="options-bar">
     <div class="opt-group">
-      <div class="opt-label">📐 حجم الصفحة</div>
-      <select id="opt-size">
-        <option value="a4">A4</option>
-        <option value="letter">Letter</option>
-        <option value="a3">A3</option>
-      </select>
-    </div>
-    <div class="opt-group">
-      <div class="opt-label">🔄 اتجاه الصفحة</div>
-      <select id="opt-orient">
-        <option value="portrait">عمودي Portrait</option>
-        <option value="landscape">أفقي Landscape</option>
-      </select>
-    </div>
-    <div class="opt-group">
-      <div class="opt-label">📄 ملف PDF واحد أم متعدد</div>
+      <div class="opt-label">📄 طريقة التصدير (PDF أو فيديو)</div>
       <select id="opt-mode">
-        <option value="single">كل الصور في ملف واحد</option>
-        <option value="multi">ملف منفصل لكل صورة</option>
+        <option value="single">كل الصور/الفولدرات في ملف واحد</option>
+        <option value="multi">ملف منفصل لكل صورة (PDF) / فيديو منفصل لكل فولدر</option>
         <option value="folder">ملف منفصل لكل فولدر (Per Folder)</option>
       </select>
     </div>
@@ -819,7 +828,7 @@
       <div class="opt-label">📦 تحميل الملفات المتعددة</div>
       <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; padding-top:2px;">
         <input type="checkbox" id="opt-zip" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
-        تجميعها كلها في ملف ZIP واحد بدل تنزيل كل ملف لوحده
+        تجميعها كلها في ملف ZIP واحد بدل تنزيل كل ملف لوحده (يعمل مع PDF والفيديو)
       </label>
     </div>
     <div class="opt-group">
@@ -828,30 +837,6 @@
         <input type="checkbox" id="opt-anonymize" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
         إخفاء اسم/رقم المريض في الملفات المُصدَّرة
       </label>
-    </div>
-    <div class="opt-group">
-      <div class="opt-label">🎨 جودة الصورة في PDF</div>
-      <select id="opt-quality">
-        <option value="0.3">منخفضة جداً — حجم أصغر</option>
-        <option value="0.5">منخفضة (Low)</option>
-        <option value="0.75">متوسطة (Medium)</option>
-        <option value="0.92" selected>عالية (High) — افتراضي</option>
-        <option value="0.97">عالية جداً (Very High)</option>
-        <option value="1.0">أقصى جودة (Ultra)</option>
-        <option value="png">بدون ضغط (PNG Lossless)</option>
-      </select>
-    </div>
-    <div class="opt-group">
-      <div class="opt-label">🖨️ تخطيط الطباعة (كام صورة بالصفحة)</div>
-      <select id="opt-print-grid">
-        <option value="1" selected>عادي — صورة واحدة لكل صفحة</option>
-        <option value="2x2">2 × 2 — 4 صور بالصفحة</option>
-        <option value="2x3">2 × 3 — 6 صور بالصفحة</option>
-        <option value="3x3">3 × 3 — 9 صور بالصفحة</option>
-        <option value="3x4">3 × 4 — 12 صورة بالصفحة</option>
-        <option value="4x4">4 × 4 — 16 صورة بالصفحة</option>
-        <option value="4x6">4 × 6 — 24 صورة بالصفحة</option>
-      </select>
     </div>
     <div class="opt-group">
       <div class="opt-label">🔆 Windowing (ونداوينج)</div>
@@ -879,6 +864,57 @@
         </optgroup>
       </select>
     </div>
+  </div>
+
+  <!-- Type-specific settings tabs -->
+  <div class="settings-tabs">
+    <button type="button" class="settings-tab-btn active" data-tab="pdf">🖨️ إعدادات PDF</button>
+    <button type="button" class="settings-tab-btn" data-tab="video">🎬 إعدادات الفيديو</button>
+  </div>
+
+  <div class="options-bar settings-tab-panel active" id="tab-panel-pdf" data-tab-panel="pdf">
+    <div class="opt-group">
+      <div class="opt-label">📐 حجم الصفحة</div>
+      <select id="opt-size">
+        <option value="a4">A4</option>
+        <option value="letter">Letter</option>
+        <option value="a3">A3</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🔄 اتجاه الصفحة</div>
+      <select id="opt-orient">
+        <option value="portrait">عمودي Portrait</option>
+        <option value="landscape">أفقي Landscape</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🎨 جودة الصورة في PDF</div>
+      <select id="opt-quality">
+        <option value="0.3">منخفضة جداً — حجم أصغر</option>
+        <option value="0.5">منخفضة (Low)</option>
+        <option value="0.75">متوسطة (Medium)</option>
+        <option value="0.92" selected>عالية (High) — افتراضي</option>
+        <option value="0.97">عالية جداً (Very High)</option>
+        <option value="1.0">أقصى جودة (Ultra)</option>
+        <option value="png">بدون ضغط (PNG Lossless)</option>
+      </select>
+    </div>
+    <div class="opt-group">
+      <div class="opt-label">🖨️ تخطيط الطباعة (كام صورة بالصفحة)</div>
+      <select id="opt-print-grid">
+        <option value="1" selected>عادي — صورة واحدة لكل صفحة</option>
+        <option value="2x2">2 × 2 — 4 صور بالصفحة</option>
+        <option value="2x3">2 × 3 — 6 صور بالصفحة</option>
+        <option value="3x3">3 × 3 — 9 صور بالصفحة</option>
+        <option value="3x4">3 × 4 — 12 صورة بالصفحة</option>
+        <option value="4x4">4 × 4 — 16 صورة بالصفحة</option>
+        <option value="4x6">4 × 6 — 24 صورة بالصفحة</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="options-bar settings-tab-panel" id="tab-panel-video" data-tab-panel="video">
     <div class="opt-group">
       <div class="opt-label">🎬 جودة الفيديو (Video)</div>
       <select id="opt-vid-quality">
@@ -1444,6 +1480,15 @@ cancelBtn.addEventListener('click', () => {
   cancelBtn.textContent = '⏳ جاري إلغاء التحويل...';
 });
 
+// ===================== SETTINGS TABS (PDF / Video) =====================
+document.querySelectorAll('.settings-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.settings-tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+    document.querySelectorAll('.settings-tab-panel').forEach(p => p.classList.toggle('active', p.dataset.tabPanel === tab));
+  });
+});
+
 // ===================== SAVE PREFERRED SETTINGS LOCALLY =====================
 const SETTINGS_STORAGE_KEY = 'dicom2pdf_settings_v1';
 const SETTINGS_SELECT_IDS = ['opt-size','opt-orient','opt-mode','opt-quality','opt-print-grid','opt-window','opt-vid-quality','opt-vid-format','opt-vid-fps'];
@@ -1777,7 +1822,9 @@ async function convertAll() {
   const qualityVal = isPng ? 1.0 : parseFloat(imgQuality);
   const anonymize = document.getElementById('opt-anonymize').checked;
   const gridSel = document.getElementById('opt-print-grid').value;
-  const gridParts = gridSel !== '1' ? gridSel.split('x').map(Number) : null;
+  // Larger number = vertical count (rows), smaller = horizontal count (columns) —
+  // regardless of the order written in the option value (e.g. "3x4" or "4x6").
+  const gridParts = gridSel !== '1' ? gridSel.split('x').map(Number).sort((a,b) => b - a) : null;
   const useZip = document.getElementById('opt-zip').checked && mode !== 'single' && typeof JSZip !== 'undefined';
   const zip = useZip ? new JSZip() : null;
   let zipCount = 0;
@@ -2216,13 +2263,18 @@ async function convertToVideo() {
   const formatPref = document.getElementById('opt-vid-format').value;
   const fps = parseInt(document.getElementById('opt-vid-fps').value, 10) || 10;
   const anonymize = document.getElementById('opt-anonymize').checked;
-  const useZip = document.getElementById('opt-zip').checked && mode === 'folder' && typeof JSZip !== 'undefined';
+  // Match the PDF export behavior: ZIP applies whenever the mode isn't "single"
+  // (previously this only worked for 'folder', so ZIP silently did nothing for video
+  // in 'multi' mode — now 'multi' groups per-folder for video too, same as below).
+  const useZip = document.getElementById('opt-zip').checked && mode !== 'single' && typeof JSZip !== 'undefined';
   const zip = useZip ? new JSZip() : null;
 
   // Reuse the "folder" grouping so one video is produced per case/folder;
-  // any other mode exports the whole current list as a single cine video.
+  // "multi" behaves the same way for video (there's no meaningful
+  // per-single-image video), so both group by folder here; only "single"
+  // exports the whole current list as one cine video.
   let groups;
-  if(mode === 'folder') {
+  if(mode === 'folder' || mode === 'multi') {
     const order = []; const map = new Map();
     for(const item of files) {
       const key = item.folderKey || '(بدون فولدر)';
