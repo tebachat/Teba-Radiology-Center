@@ -8,6 +8,7 @@
 <!-- Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -37,14 +38,13 @@
     overflow-x: hidden;
   }
 
-  /* Animated grid background */
+  /* Code / binary background — matrix-style digits & code glyphs over the dark bg */
   body::before {
     content:'';
     position:fixed; inset:0;
-    background-image:
-      linear-gradient(rgba(0,212,255,.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,212,255,.03) 1px, transparent 1px);
-    background-size: 40px 40px;
+    background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27200%27%20height%3D%27200%27%3E%0A%3Ctext%20x%3D%274%27%20y%3D%2716%27%20font-family%3D%27monospace%27%20font-size%3D%2712%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.08%27%3E01001101%3C/text%3E%0A%3Ctext%20x%3D%2760%27%20y%3D%2734%27%20font-family%3D%27monospace%27%20font-size%3D%2710%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.05%27%3E%7B%2010%20%7D%3C/text%3E%0A%3Ctext%20x%3D%2710%27%20y%3D%2752%27%20font-family%3D%27monospace%27%20font-size%3D%2712%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.07%27%3E0011010%3C/text%3E%0A%3Ctext%20x%3D%2790%27%20y%3D%2770%27%20font-family%3D%27monospace%27%20font-size%3D%2711%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.06%27%3E%26lt%3B01/%26gt%3B%3C/text%3E%0A%3Ctext%20x%3D%270%27%20y%3D%2788%27%20font-family%3D%27monospace%27%20font-size%3D%2712%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.05%27%3E110100%3C/text%3E%0A%3Ctext%20x%3D%2755%27%20y%3D%27106%27%20font-family%3D%27monospace%27%20font-size%3D%2710%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.08%27%3E0x1F%3C/text%3E%0A%3Ctext%20x%3D%2720%27%20y%3D%27124%27%20font-family%3D%27monospace%27%20font-size%3D%2712%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.06%27%3E10011001%3C/text%3E%0A%3Ctext%20x%3D%27100%27%20y%3D%27142%27%20font-family%3D%27monospace%27%20font-size%3D%2711%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.05%27%3E01%3C/text%3E%0A%3Ctext%20x%3D%275%27%20y%3D%27160%27%20font-family%3D%27monospace%27%20font-size%3D%2712%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.07%27%3E01101011%3C/text%3E%0A%3Ctext%20x%3D%2770%27%20y%3D%27178%27%20font-family%3D%27monospace%27%20font-size%3D%2710%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.06%27%3E%7B%2001%20%7D%3C/text%3E%0A%3Ctext%20x%3D%2730%27%20y%3D%27196%27%20font-family%3D%27monospace%27%20font-size%3D%2712%27%20fill%3D%27%2300d4ff%27%20opacity%3D%270.05%27%3E001101%3C/text%3E%0A%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 200px 200px;
     pointer-events:none;
     z-index:0;
   }
@@ -352,6 +352,36 @@
   .btn-video:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(124,58,237,.4); }
   .btn-video:disabled { opacity:.4; cursor:not-allowed; transform:none; }
 
+  /* Cancel button — shown only while a conversion is running */
+  .btn-cancel {
+    display:none;
+    width:100%;
+    margin:-12px 0 20px;
+    padding:10px;
+    border:1px solid rgba(255,68,102,.4);
+    background: rgba(255,68,102,.12);
+    color: var(--danger);
+    border-radius: var(--radius);
+    font-family:inherit; font-size:0.85rem; font-weight:700;
+    cursor:pointer; transition:all .2s;
+  }
+  .btn-cancel:hover { background:rgba(255,68,102,.22); border-color:var(--danger); }
+  .btn-cancel:disabled { opacity:.6; cursor:not-allowed; }
+
+  /* Version badge */
+  .version-badge {
+    position:absolute; top:8px; left:8px;
+    background: rgba(0,212,255,.08);
+    border: 1px solid rgba(0,212,255,.25);
+    color: var(--muted);
+    font-family:'JetBrains Mono', monospace;
+    font-size:0.68rem;
+    border-radius:20px;
+    padding:3px 10px;
+    cursor:default;
+  }
+  .version-badge b { color:var(--accent); }
+
   /* Stats row */
   .stats {
     display:flex; gap:12px; flex-wrap:wrap;
@@ -430,6 +460,41 @@
     font-size:0.9rem; display:none;
   }
   .empty-hint.show { display:block; }
+
+  /* Pre-convert single-image preview modal */
+  #preconvert-modal {
+    display:none;
+    position:fixed; inset:0; z-index:1100;
+    background: rgba(0,0,0,.85);
+    backdrop-filter: blur(8px);
+    align-items:center; justify-content:center;
+    padding:20px;
+  }
+  #preconvert-modal.open { display:flex; }
+  .pc-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    max-width:520px; width:100%;
+    max-height:92vh; overflow-y:auto;
+  }
+  .pc-note {
+    font-size:0.8rem; color:var(--muted);
+    background: rgba(0,212,255,.06);
+    border:1px solid rgba(0,212,255,.25);
+    border-radius:8px; padding:10px 12px;
+    margin-bottom:12px; line-height:1.7;
+  }
+  #pc-canvas { width:100%; border-radius:10px; background:#000; display:block; }
+  .pc-settings {
+    display:flex; flex-wrap:wrap; gap:6px 14px;
+    font-size:0.76rem; color:var(--muted);
+    margin:10px 0 16px; font-family:'JetBrains Mono',monospace;
+  }
+  .pc-settings b { color:var(--text); }
+  .pc-actions { display:flex; gap:10px; flex-wrap:wrap; }
+  .pc-actions .btn { flex:1; min-width:140px; padding:12px; font-size:0.88rem; }
 
   /* Disclaimer */
   .disclaimer-box {
@@ -691,6 +756,7 @@
 <div class="container">
 
   <header>
+    <div class="version-badge" id="version-badge" title="سيتم تحديث الرقم هنا تلقائيًا مع كل تعديل جديد على التطبيق">Ver <b id="app-version">1.1.0</b></div>
     <div class="logo">
       <div class="logo-icon">🏥</div>
       <div class="logo-text"><span>DICOM</span> → PDF</div>
@@ -748,6 +814,13 @@
         <option value="multi">ملف منفصل لكل صورة</option>
         <option value="folder">ملف منفصل لكل فولدر (Per Folder)</option>
       </select>
+    </div>
+    <div class="opt-group" id="opt-zip-group">
+      <div class="opt-label">📦 تحميل الملفات المتعددة</div>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; padding-top:2px;">
+        <input type="checkbox" id="opt-zip" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
+        تجميعها كلها في ملف ZIP واحد بدل تنزيل كل ملف لوحده
+      </label>
     </div>
     <div class="opt-group">
       <div class="opt-label">🕶️ الخصوصية</div>
@@ -873,6 +946,7 @@
   <div class="prog-wrap" id="prog-wrap">
     <div class="prog-bar" id="prog-bar"></div>
   </div>
+  <button class="btn-cancel" id="cancel-btn" type="button">✖️ إلغاء التحويل</button>
 
   <!-- File list -->
   <div id="file-list"></div>
@@ -916,6 +990,25 @@
   </div>
 </div>
 
+<!-- ═══════════════ PRE-CONVERT PREVIEW (check W/L before full export) ═══════════════ -->
+<div id="preconvert-modal">
+  <div class="pc-box">
+    <div class="modal-header">
+      <div class="modal-title">🔍 معاينة قبل التحويل</div>
+      <button class="close-btn" onclick="closePreConvertPreview()">×</button>
+    </div>
+    <div class="pc-note">
+      دي أول صورة (حسب الترتيب) بنفس إعدادات الـ Window والسطوع/التباين الحالية. لو مش مظبوطة، اقفل المعاينة وعدّل الإعدادات فوق، وبعدين جرّب تاني.
+    </div>
+    <canvas id="pc-canvas"></canvas>
+    <div class="pc-settings" id="pc-settings"></div>
+    <div class="pc-actions">
+      <button class="btn btn-ghost" onclick="closePreConvertPreview()">✖️ إلغاء / تعديل الإعدادات</button>
+      <button class="btn btn-primary" id="pc-confirm-btn">✅ الصورة تمام — كمل التحويل</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════ VIEWER MODAL ═══════════════ -->
 <div id="viewer-modal">
   <!-- Header -->
@@ -953,6 +1046,94 @@
 <div id="toast"></div>
 
 <script>
+// ===================== DICOM PIXEL WORKER POOL =====================
+// Windowing math (HU conversion + brightness/contrast) over a full slice's
+// pixel buffer is the real CPU cost when rendering many DICOM images — this
+// runs it in a small pool of Web Workers (parallel across CPU cores) instead
+// of blocking the main thread, so uploading/exporting large batches keeps the
+// UI responsive. If workers are unavailable for any reason, everything falls
+// back transparently to the original main-thread computation — no behavior
+// change, just slower.
+const DICOM_WORKER_POOL_SIZE = Math.min(4, Math.max(2, (navigator.hardwareConcurrency || 4) - 1));
+let dicomWorkers = [];
+let workerTaskId = 0;
+const workerPending = new Map();
+let dicomWorkerRR = 0;
+
+const DICOM_WORKER_SRC = `
+self.onmessage = function(e) {
+  const { id, buffer, bitsAlloc, pixRep, rows, cols, rescaleI, rescaleS, autoWindow, brightness, contrastFactor } = e.data;
+  let { wc, ww } = e.data;
+  try {
+    const pixels = bitsAlloc === 16
+      ? (pixRep ? new Int16Array(buffer) : new Uint16Array(buffer))
+      : new Uint8Array(buffer);
+    const len = pixels.length;
+
+    if(autoWindow) {
+      let mn = Infinity, mx = -Infinity;
+      for(let i=0; i<len; i++) {
+        const v = pixels[i]*rescaleS + rescaleI;
+        if(v<mn) mn=v; if(v>mx) mx=v;
+      }
+      wc = (mx+mn)/2; ww = (mx-mn) || 1;
+    }
+
+    const n = Math.min(len, rows*cols);
+    const out = new Uint8ClampedArray(rows*cols*4);
+    const lo = wc - ww/2, hi = wc + ww/2, scale = 255/ww;
+    const bcActive = brightness !== 0 || contrastFactor !== 1;
+
+    for(let i=0; i<n; i++) {
+      const hu = pixels[i]*rescaleS + rescaleI;
+      let g = Math.round(Math.max(0, Math.min(255, (Math.max(lo, Math.min(hi, hu)) - lo) * scale)));
+      if(bcActive) g = Math.max(0, Math.min(255, Math.round((g-128)*contrastFactor + 128 + brightness)));
+      const p = i*4;
+      out[p]=g; out[p+1]=g; out[p+2]=g; out[p+3]=255;
+    }
+    self.postMessage({ id, ok:true, buffer: out.buffer }, [out.buffer]);
+  } catch(err) {
+    self.postMessage({ id, ok:false, error: String(err) });
+  }
+};
+`;
+
+function initDicomWorkers() {
+  if(dicomWorkers.length || typeof Worker === 'undefined') return;
+  try {
+    const blob = new Blob([DICOM_WORKER_SRC], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+    for(let i=0; i<DICOM_WORKER_POOL_SIZE; i++) {
+      const w = new Worker(url);
+      w.onmessage = (e) => {
+        const { id, ok, buffer, error } = e.data;
+        const pending = workerPending.get(id);
+        if(!pending) return;
+        workerPending.delete(id);
+        if(ok) pending.resolve(buffer); else pending.reject(new Error(error || 'worker error'));
+      };
+      w.onerror = () => { /* individual task failures are handled per-message via reject above */ };
+      dicomWorkers.push(w);
+    }
+  } catch(e) {
+    dicomWorkers = []; // أي بيئة لا تدعم Blob workers — رجوع تلقائي وآمن للـ main thread
+  }
+}
+
+// Sends one slice's raw pixel buffer to a worker for windowing; resolves
+// with a transferable RGBA ArrayBuffer, or rejects if no worker is available.
+function computeWindowedPixelsInWorker(buffer, bitsAlloc, pixRep, rows, cols, rescaleI, rescaleS, wc, ww, autoWindow, brightness, contrastFactor) {
+  return new Promise((resolve, reject) => {
+    if(!dicomWorkers.length) { reject(new Error('no dicom workers available')); return; }
+    const id = ++workerTaskId;
+    const worker = dicomWorkers[dicomWorkerRR++ % dicomWorkers.length];
+    workerPending.set(id, { resolve, reject });
+    worker.postMessage({ id, buffer, bitsAlloc, pixRep, rows, cols, rescaleI, rescaleS, wc, ww, autoWindow, brightness, contrastFactor }, [buffer]);
+  });
+}
+
+initDicomWorkers();
+
 // ===================== DICOM PARSER =====================
 class DicomParser {
   constructor(buffer) {
@@ -1150,28 +1331,52 @@ class DicomParser {
       ? (pixRep ? new Int16Array(rawBuf) : new Uint16Array(rawBuf))
       : new Uint8Array(rawBuf);
 
-    const huArr = new Float32Array(pixels.length);
-    for(let i = 0; i < pixels.length; i++) huArr[i] = pixels[i] * rescaleS + rescaleI;
-
-    if(windowPreset === 'auto' || ww === 0) {
-      let mn = Infinity, mx = -Infinity;
-      for(let i = 0; i < huArr.length; i++) { if(huArr[i]<mn) mn=huArr[i]; if(huArr[i]>mx) mx=huArr[i]; }
-      wc = (mx+mn)/2; ww = (mx-mn) || 1;
-    }
+    const autoWindow = (windowPreset === 'auto' || ww === 0);
 
     canvas.width = cols; canvas.height = rows;
     const ctx = canvas.getContext('2d');
-    const imgData = ctx.createImageData(cols, rows);
-    const lo = wc - ww/2, hi = wc + ww/2;
-    const scale = 255 / ww;
 
-    for(let i = 0; i < huArr.length && i < rows*cols; i++) {
-      let g = Math.round(Math.max(0, Math.min(255, (Math.max(lo, Math.min(hi, huArr[i])) - lo) * scale)));
-      if(bcActive) g = Math.max(0, Math.min(255, Math.round((g - 128) * contrastFactor + 128 + brightness)));
-      const p = i*4;
-      imgData.data[p] = g; imgData.data[p+1] = g; imgData.data[p+2] = g; imgData.data[p+3] = 255;
+    // Try the worker pool first (parallel, off the main thread). We hand the
+    // worker its own COPY of the pixel buffer (not a transfer of `pixels`
+    // itself), so `pixels` stays intact here for the fallback path below if
+    // the worker round-trip fails for any reason.
+    let rgba = null;
+    if(dicomWorkers.length) {
+      try {
+        const workerCopy = pixels.slice();
+        rgba = await computeWindowedPixelsInWorker(
+          workerCopy.buffer, bitsAlloc, pixRep, rows, cols, rescaleI, rescaleS, wc, ww, autoWindow, brightness, contrastFactor
+        );
+      } catch(e) { rgba = null; }
     }
-    ctx.putImageData(imgData, 0, 0);
+
+    if(rgba) {
+      ctx.putImageData(new ImageData(new Uint8ClampedArray(rgba), cols, rows), 0, 0);
+    } else {
+      // Main-thread fallback — identical math to the worker, used when
+      // workers are unavailable or a round-trip failed.
+      let fwc = wc, fww = ww;
+      if(autoWindow) {
+        let mn = Infinity, mx = -Infinity;
+        for(let i = 0; i < pixels.length; i++) {
+          const v = pixels[i]*rescaleS + rescaleI;
+          if(v<mn) mn=v; if(v>mx) mx=v;
+        }
+        fwc = (mx+mn)/2; fww = (mx-mn) || 1;
+      }
+      const imgData = ctx.createImageData(cols, rows);
+      const lo = fwc - fww/2, hi = fwc + fww/2;
+      const scale = 255 / fww;
+
+      for(let i = 0; i < pixels.length && i < rows*cols; i++) {
+        const hu = pixels[i]*rescaleS + rescaleI;
+        let g = Math.round(Math.max(0, Math.min(255, (Math.max(lo, Math.min(hi, hu)) - lo) * scale)));
+        if(bcActive) g = Math.max(0, Math.min(255, Math.round((g - 128) * contrastFactor + 128 + brightness)));
+        const p = i*4;
+        imgData.data[p] = g; imgData.data[p+1] = g; imgData.data[p+2] = g; imgData.data[p+3] = 255;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
     return true;
   }
 }
@@ -1211,6 +1416,79 @@ const progWrap   = document.getElementById('prog-wrap');
 const progBar    = document.getElementById('prog-bar');
 const statsDiv   = document.getElementById('stats');
 const emptyHint  = document.getElementById('empty-hint');
+const cancelBtn  = document.getElementById('cancel-btn');
+
+// ===================== APP VERSION =====================
+// يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
+// CHANGELOG (أحدث تعديل في الأعلى):
+//   1.3.0 — إضافة: تحميل الملفات المتعددة (multi/folder — PDF أو فيديو) كملف ZIP واحد بدل تنزيلها منفصلة
+//   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
+//   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
+//   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
+const APP_VERSION = '1.3.0';
+document.getElementById('app-version').textContent = APP_VERSION;
+
+// ===================== CANCEL CONVERSION =====================
+let cancelRequested = false;
+function showCancelBtn() {
+  cancelBtn.style.display = 'block';
+  cancelBtn.disabled = false;
+  cancelBtn.textContent = '✖️ إلغاء التحويل';
+}
+function hideCancelBtn() {
+  cancelBtn.style.display = 'none';
+}
+cancelBtn.addEventListener('click', () => {
+  cancelRequested = true;
+  cancelBtn.disabled = true;
+  cancelBtn.textContent = '⏳ جاري إلغاء التحويل...';
+});
+
+// ===================== SAVE PREFERRED SETTINGS LOCALLY =====================
+const SETTINGS_STORAGE_KEY = 'dicom2pdf_settings_v1';
+const SETTINGS_SELECT_IDS = ['opt-size','opt-orient','opt-mode','opt-quality','opt-print-grid','opt-window','opt-vid-quality','opt-vid-format','opt-vid-fps'];
+const SETTINGS_CHECKBOX_IDS = ['opt-anonymize', 'opt-zip'];
+const SETTINGS_RANGE_IDS = ['opt-brightness','opt-contrast'];
+
+function saveSettings() {
+  try {
+    const data = {};
+    SETTINGS_SELECT_IDS.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
+    SETTINGS_CHECKBOX_IDS.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.checked; });
+    SETTINGS_RANGE_IDS.forEach(id => { const el = document.getElementById(id); if(el) data[id] = el.value; });
+    localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(data));
+  } catch(e) { /* localStorage غير متاح (وضع خاص/تصفح خفي) — تجاهل بأمان */ }
+}
+
+function loadSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_STORAGE_KEY);
+    if(!raw) return;
+    const data = JSON.parse(raw);
+    SETTINGS_SELECT_IDS.forEach(id => { const el = document.getElementById(id); if(el && data[id] !== undefined) el.value = data[id]; });
+    SETTINGS_CHECKBOX_IDS.forEach(id => { const el = document.getElementById(id); if(el && data[id] !== undefined) el.checked = data[id]; });
+    SETTINGS_RANGE_IDS.forEach(id => { const el = document.getElementById(id); if(el && data[id] !== undefined) el.value = data[id]; });
+    // مزامنة العناصر المعتمدة على السلايدر (نصوص السطوع/التباين)
+    const bVal = document.getElementById('brightness-val');
+    const cVal = document.getElementById('contrast-val');
+    if(bVal) bVal.textContent = document.getElementById('opt-brightness').value;
+    if(cVal) cVal.textContent = document.getElementById('opt-contrast').value + '%';
+  } catch(e) { /* بيانات تالفة — تجاهل والبدء من الإعدادات الافتراضية */ }
+}
+
+function attachSettingsAutoSave() {
+  [...SETTINGS_SELECT_IDS, ...SETTINGS_CHECKBOX_IDS].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('change', saveSettings);
+  });
+  SETTINGS_RANGE_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', saveSettings);
+  });
+}
+
+loadSettings();
+attachSettingsAutoSave();
 
 // ===================== BRIGHTNESS / CONTRAST (live re-render) =====================
 const brightnessSlider = document.getElementById('opt-brightness');
@@ -1368,9 +1646,10 @@ function addFiles(fList) {
 }
 
 // ===================== PARSE =====================
-// Parsing/rendering many DICOM files at once (hundreds of images) can freeze
-// the tab if fired all in parallel, so run parses through a small pool.
-const PARSE_CONCURRENCY = 3;
+// Parsing/rendering many DICOM files at once (hundreds of images). The
+// per-pixel windowing math now runs in the worker pool above, so several
+// files can be in flight at once without freezing the tab.
+const PARSE_CONCURRENCY = dicomWorkers.length ? Math.max(4, dicomWorkers.length * 2) : 3;
 let parseQueue = [];
 let parseActive = 0;
 function enqueueParse(id) {
@@ -1464,14 +1743,26 @@ clearBtn.addEventListener('click', () => {
   updateUI();
   progWrap.style.display='none';
   progBar.style.width='0%';
+  hideCancelBtn();
 });
 
 // ===================== CONVERT =====================
-convertBtn.addEventListener('click', convertAll);
+convertBtn.addEventListener('click', () => openPreConvertPreview('pdf'));
+
+// Bundles a JSZip instance into one downloaded .zip file.
+async function downloadZipBlob(zip, fname) {
+  const blob = await zip.generateAsync({ type: 'blob' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fname; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
 
 async function convertAll() {
   if(files.length === 0) return;
 
+  cancelRequested = false;
+  showCancelBtn();
   convertBtn.disabled = true;
   videoBtn.disabled = true;
   document.getElementById('btn-content').innerHTML = '<span class="spin"></span> جاري التحويل...';
@@ -1487,6 +1778,9 @@ async function convertAll() {
   const anonymize = document.getElementById('opt-anonymize').checked;
   const gridSel = document.getElementById('opt-print-grid').value;
   const gridParts = gridSel !== '1' ? gridSel.split('x').map(Number) : null;
+  const useZip = document.getElementById('opt-zip').checked && mode !== 'single' && typeof JSZip !== 'undefined';
+  const zip = useZip ? new JSZip() : null;
+  let zipCount = 0;
 
   // Helper: build filename starting with the patient name + credit
   function buildFilename(item, fallback) {
@@ -1513,6 +1807,7 @@ async function convertAll() {
     } else {
       let first = true;
       for(let i=0; i<orderedFiles.length; i++) {
+        if(cancelRequested) break;
         const item = orderedFiles[i];
         setStatus(item.id, 'processing', '⏳ جاري...');
         progBar.style.width = `${((i)/orderedFiles.length)*100}%`;
@@ -1531,12 +1826,17 @@ async function convertAll() {
       progBar.style.width = '100%';
     }
 
-    const fname = buildFilename(orderedFiles[0], `DICOM_${Date.now()} (By Sa3d abdo).pdf`);
-    doc.save(fname);
-    toast(`✅ تم حفظ: ${fname}`, 'success');
+    if(cancelRequested) {
+      toast('⛔ تم إلغاء التحويل', 'warn');
+    } else {
+      const fname = buildFilename(orderedFiles[0], `DICOM_${Date.now()} (By Sa3d abdo).pdf`);
+      doc.save(fname);
+      toast(`✅ تم حفظ: ${fname}`, 'success');
+    }
 
   } else if(mode === 'multi') {
     for(let i=0; i<files.length; i++) {
+      if(cancelRequested) break;
       const item = files[i];
       setStatus(item.id, 'processing', '⏳ جاري...');
       progBar.style.width = `${((i)/files.length)*100}%`;
@@ -1545,17 +1845,29 @@ async function convertAll() {
         const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
         await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, true, anonymize, 1, 1);
         const fname = buildFilename(item, `${item.file.name.replace(/\.[^.]+$/, '')} (By Sa3d abdo).pdf`);
-        doc.save(fname);
+        if(useZip) { zip.file(fname, doc.output('blob')); zipCount++; }
+        else doc.save(fname);
         item.status = 'done';
         setStatus(item.id, 'done', '✅ تم');
       } catch(e) {
         item.status = 'error';
         setStatus(item.id, 'error', '❌ خطأ');
       }
-      await sleep(50);
+      await sleep(useZip ? 0 : 50);
     }
     progBar.style.width = '100%';
-    toast('✅ تم تحميل جميع الملفات', 'success');
+
+    if(cancelRequested) {
+      toast('⛔ تم إلغاء التحويل', 'warn');
+    } else if(useZip) {
+      if(zipCount > 0) {
+        toast('📦 جاري تجهيز ملف ZIP...', '');
+        await downloadZipBlob(zip, `DICOM_PDFs_${Date.now()} (By Sa3d abdo).zip`);
+        toast(`✅ تم تحميل ${zipCount} ملف داخل ZIP واحد`, 'success');
+      }
+    } else {
+      toast('✅ تم تحميل جميع الملفات', 'success');
+    }
 
   } else if(mode === 'folder') {
     // Group files by the folder they were dropped/selected from.
@@ -1573,6 +1885,7 @@ async function convertAll() {
     let groupIndex = 0;
 
     for(const key of order) {
+      if(cancelRequested) break;
       groupIndex++;
       const groupItems = sortItemsByInstanceNumber(groups.get(key));
       const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
@@ -1598,6 +1911,7 @@ async function convertAll() {
         let first = true;
         let pageNum = 0;
         for(const item of groupItems) {
+          if(cancelRequested) break;
           setStatus(item.id, 'processing', '⏳ جاري...');
           progBar.style.width = `${(doneCount/total)*100}%`;
           pageNum++;
@@ -1617,20 +1931,33 @@ async function convertAll() {
         }
       }
 
-      if(renderedAny) {
+      if(renderedAny && !cancelRequested) {
         const safeKey = key.replace(/[\\/:"*?<>|]+/g, '_').trim();
         const fname = (safeKey && safeKey !== '(بدون فولدر)')
           ? `${safeKey} (By Sa3d abdo).pdf`
           : buildFilename(groupItems[0], `DICOM_group${groupIndex}_${Date.now()} (By Sa3d abdo).pdf`);
-        doc.save(fname);
-        toast(groupError ? `⚠️ تم حفظ ${fname} مع بعض الأخطاء` : `✅ تم حفظ: ${fname}`, groupError ? 'warn' : 'success');
-        await sleep(50);
+        if(useZip) {
+          zip.file(fname, doc.output('blob'));
+          zipCount++;
+        } else {
+          doc.save(fname);
+          toast(groupError ? `⚠️ تم حفظ ${fname} مع بعض الأخطاء` : `✅ تم حفظ: ${fname}`, groupError ? 'warn' : 'success');
+          await sleep(50);
+        }
       }
     }
 
     progBar.style.width = '100%';
+    if(cancelRequested) {
+      toast('⛔ تم إلغاء التحويل', 'warn');
+    } else if(useZip && zipCount > 0) {
+      toast('📦 جاري تجهيز ملف ZIP...', '');
+      await downloadZipBlob(zip, `DICOM_PDFs_${Date.now()} (By Sa3d abdo).zip`);
+      toast(`✅ تم تحميل ${zipCount} ملف (فولدر) داخل ZIP واحد`, 'success');
+    }
   }
 
+  hideCancelBtn();
   updateUI();
   document.getElementById('btn-content').innerHTML = '⚡ تحويل إلى PDF';
   convertBtn.disabled = false;
@@ -1833,7 +2160,7 @@ async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows,
 }
 
 // ===================== VIDEO EXPORT (DICOM → Video, multiple qualities) =====================
-videoBtn.addEventListener('click', convertToVideo);
+videoBtn.addEventListener('click', () => openPreConvertPreview('video'));
 
 const VIDEO_QUALITY_PRESETS = {
   '480':      { height: 480,  bitrate: 1_500_000 },
@@ -1873,6 +2200,8 @@ async function convertToVideo() {
     return;
   }
 
+  cancelRequested = false;
+  showCancelBtn();
   convertBtn.disabled = true;
   videoBtn.disabled = true;
   const btnContentEl = document.getElementById('video-btn-content');
@@ -1887,6 +2216,8 @@ async function convertToVideo() {
   const formatPref = document.getElementById('opt-vid-format').value;
   const fps = parseInt(document.getElementById('opt-vid-fps').value, 10) || 10;
   const anonymize = document.getElementById('opt-anonymize').checked;
+  const useZip = document.getElementById('opt-zip').checked && mode === 'folder' && typeof JSZip !== 'undefined';
+  const zip = useZip ? new JSZip() : null;
 
   // Reuse the "folder" grouping so one video is produced per case/folder;
   // any other mode exports the whole current list as a single cine video.
@@ -1906,14 +2237,17 @@ async function convertToVideo() {
   const total = files.length || 1;
   let doneCount = 0;
   let anyError = false;
+  let zipCount = 0;
 
   for(let g = 0; g < groups.length; g++) {
+    if(cancelRequested) break;
     const group = groups[g];
     try {
-      await renderGroupToVideo(group, windowPreset, qualityKey, formatPref, fps, anonymize, () => {
+      const savedName = await renderGroupToVideo(group, windowPreset, qualityKey, formatPref, fps, anonymize, () => {
         doneCount++;
         progBar.style.width = `${(doneCount/total)*100}%`;
-      });
+      }, zip);
+      if(useZip && savedName) zipCount++;
     } catch(e) {
       anyError = true;
       toast(`⚠️ تعذّر إنشاء الفيديو${group.key ? ' — ' + group.key : ''}`, 'warn');
@@ -1921,12 +2255,21 @@ async function convertToVideo() {
   }
 
   progBar.style.width = '100%';
-  if(!anyError) toast('✅ تم إنشاء الفيديو بنجاح', 'success');
+  if(cancelRequested) {
+    toast('⛔ تم إلغاء التحويل', 'warn');
+  } else if(useZip && zipCount > 0) {
+    toast('📦 جاري تجهيز ملف ZIP...', '');
+    await downloadZipBlob(zip, `DICOM_Videos_${Date.now()} (By Sa3d abdo).zip`);
+    toast(`✅ تم تحميل ${zipCount} فيديو داخل ZIP واحد`, 'success');
+  } else if(!anyError) {
+    toast('✅ تم إنشاء الفيديو بنجاح', 'success');
+  }
   btnContentEl.innerHTML = origLabel;
+  hideCancelBtn();
   updateUI();
 }
 
-async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, fps, anonymize, onFrame) {
+async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, fps, anonymize, onFrame, zip) {
   const items = sortItemsByInstanceNumber(group.items.filter(Boolean));
   if(!items.length) return;
 
@@ -1982,6 +2325,7 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
   const frameDelay = 1000 / fps;
 
   for(let i = 0; i < items.length; i++) {
+    if(cancelRequested) break;
     const item = items[i];
     let ok = false;
     if(item.dcm) {
@@ -2053,16 +2397,25 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
   recorder.stop();
   await stopped;
 
+  if(cancelRequested) return null; // تم الإلغاء — لا يتم حفظ فيديو ناقص
+
   const blob = new Blob(chunks, { type: mimeType || 'video/webm' });
   const ext = isMp4 ? 'mp4' : 'webm';
   const safeName = anonymize
     ? (group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM'
     : (patName || group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
   const fname = `${safeName} (By Sa3d abdo)_${targetH}p.${ext}`;
+
+  if(zip) {
+    zip.file(fname, blob);
+    return fname;
+  }
+
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = fname; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 4000);
+  return fname;
 }
 
 // ===================== PREVIEW =====================
@@ -2117,6 +2470,51 @@ function closePreview() {
 }
 document.getElementById('preview-modal').addEventListener('click', e => {
   if(e.target === document.getElementById('preview-modal')) closePreview();
+});
+
+// ===================== PRE-CONVERT PREVIEW (check W/L before full export) =====================
+async function openPreConvertPreview(kind) {
+  if(files.length === 0) return;
+
+  const ordered = sortItemsByInstanceNumber(files);
+  const item = ordered[0];
+  if(!item.dcm) await ensureParsed(item);
+  if(!item.dcm) { toast('⚠️ تعذّر تجهيز صورة المعاينة', 'warn'); return; }
+
+  const windowPreset = document.getElementById('opt-window').value;
+  const cvs = document.getElementById('pc-canvas');
+  let ok = false;
+  try { ok = await item.dcm.renderPixels(cvs, windowPreset); } catch(e) { ok = false; }
+  if(!ok) { toast('⚠️ تعذّر عرض معاينة لهذه الصورة', 'warn'); return; }
+
+  const windowSelect = document.getElementById('opt-window');
+  const windowLabel = windowSelect.options[windowSelect.selectedIndex].text;
+  const brightness = getBrightnessAdjust();
+  const contrastPct = document.getElementById('opt-contrast').value;
+
+  document.getElementById('pc-settings').innerHTML = `
+    <span>🔆 Window: <b>${windowLabel}</b></span>
+    <span>☀️ السطوع: <b>${brightness}</b></span>
+    <span>◑ التباين: <b>${contrastPct}%</b></span>
+    <span>📄 الملف: <b>${item.file.name}</b></span>
+  `;
+
+  const confirmBtn = document.getElementById('pc-confirm-btn');
+  confirmBtn.textContent = kind === 'video' ? '✅ تمام — حوّل الفيديو' : '✅ تمام — حوّل PDF';
+  confirmBtn.onclick = () => {
+    closePreConvertPreview();
+    if(kind === 'video') convertToVideo(); else convertAll();
+  };
+
+  document.getElementById('preconvert-modal').classList.add('open');
+}
+
+function closePreConvertPreview() {
+  document.getElementById('preconvert-modal').classList.remove('open');
+}
+
+document.getElementById('preconvert-modal').addEventListener('click', e => {
+  if(e.target === document.getElementById('preconvert-modal')) closePreConvertPreview();
 });
 
 // ===================== UTILS =====================
