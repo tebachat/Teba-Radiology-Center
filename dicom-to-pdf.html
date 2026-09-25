@@ -85,6 +85,41 @@
   .copyright { color:var(--muted); font-size:0.78rem; margin-top:6px; opacity:.7; }
   .copyright span { color: var(--accent); }
 
+  /* About / How-to footer notice */
+  .app-notice {
+    margin-top: 32px;
+    padding: 20px 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+  .app-notice-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 16px 0 8px;
+  }
+  .app-notice-title:first-child { margin-top: 0; }
+  .app-notice p {
+    color: var(--text);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    opacity: .9;
+  }
+  .app-notice-steps, .app-notice-features {
+    color: var(--text);
+    font-size: 0.85rem;
+    line-height: 1.9;
+    opacity: .9;
+    padding-inline-start: 20px;
+  }
+  .app-notice .copyright {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
   /* Upload row */
   .upload-row {
     display: grid;
@@ -1009,6 +1044,33 @@
     <button class="btn btn-ghost" id="clear-btn">🗑️ مسح الكل</button>
   </div>
 
+  <!-- About / How-to Footer Notice -->
+  <footer class="app-notice">
+    <div class="app-notice-title">ℹ️ عن الأداة</div>
+    <p>
+      <strong>DICOM → PDF</strong> أداة مجانية لتحويل ملفات الأشعة التشخيصية (DICOM) إلى ملف PDF أو فيديو
+      جاهز للمعاينة والمشاركة، من غير الحاجة لأي برنامج عرض متخصص (Viewer)، وكل ده شغّال محليًا جوه المتصفح بتاعك من غير رفع أي صور أو بيانات لأي سيرفر.
+    </p>
+
+    <div class="app-notice-title">🛠️ طريقة الاستخدام</div>
+    <ol class="app-notice-steps">
+      <li>ارفع ملفات DICOM (.dcm) أو مجلد الفحص كامل.</li>
+      <li>اضبط إعدادات العرض (Window/Level) والتخطيط من لوحة الإعدادات.</li>
+      <li>عاين النتيجة قبل التصدير من زر المعاينة.</li>
+      <li>اضغط "تحويل إلى PDF" أو "تحويل إلى فيديو" لتنزيل الملف النهائي.</li>
+    </ol>
+
+    <div class="app-notice-title">✨ المميزات</div>
+    <ul class="app-notice-features">
+      <li>تحويل عدة ملفات DICOM دفعة واحدة إلى ملف PDF واحد (Contact Sheet) أو فيديو.</li>
+      <li>معاينة تفاعلية للصور (تكبير/تصغير، تعديل السطوع والتباين، تمرير بين الصور).</li>
+      <li>معالجة كاملة داخل المتصفح — بدون رفع أي بيانات على أي سيرفر خارجي.</li>
+      <li>يعمل على الموبايل والكمبيوتر بدون تثبيت أي برنامج إضافي.</li>
+    </ul>
+
+    <p class="copyright">© <span id="yr-footer"></span> Sa3d Abdo — جميع الحقوق محفوظة</p>
+  </footer>
+
 </div>
 
 <!-- Preview Modal -->
@@ -1461,7 +1523,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '1.3.0';
+const APP_VERSION = '2.5.9';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -2178,12 +2240,27 @@ async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows,
       const labelH = 3.5;
       const imgAreaH = cellH - labelH;
       if(imgOk) {
-        const aspect = cvs.width / cvs.height;
-        let dw = cellW - 1.5, dh = dw / aspect;
-        if(dh > imgAreaH - 1) { dh = imgAreaH - 1; dw = dh * aspect; }
-        const dx = cx + (cellW - dw)/2;
+        // Fill the entire frame (cover): crop the source to match the frame's
+        // aspect ratio first, so the placed image has no empty margins.
+        const dw = cellW - 1.5, dh = imgAreaH - 1;
+        const targetAspect = dw / dh;
+        const srcAspect = cvs.width / cvs.height;
+        let sx = 0, sy = 0, sw = cvs.width, sh = cvs.height;
+        if(srcAspect > targetAspect) {
+          // source wider than target → crop left/right
+          sw = cvs.height * targetAspect;
+          sx = (cvs.width - sw) / 2;
+        } else {
+          // source taller than target → crop top/bottom
+          sh = cvs.width / targetAspect;
+          sy = (cvs.height - sh) / 2;
+        }
+        const cropCvs = document.createElement('canvas');
+        cropCvs.width = sw; cropCvs.height = sh;
+        cropCvs.getContext('2d').drawImage(cvs, sx, sy, sw, sh, 0, 0, sw, sh);
+        const dx = cx + 0.75;
         const dy = cy + (imgAreaH - dh)/2;
-        const imgData = cvs.toDataURL('image/jpeg', 0.85);
+        const imgData = cropCvs.toDataURL('image/jpeg', 0.85);
         doc.addImage(imgData, 'JPEG', dx, dy, dw, dh);
       } else {
         doc.setFillColor(20,30,45);
@@ -3198,6 +3275,7 @@ function onVwWheel(e) {
 updateUI();
 emptyHint.className = 'empty-hint show';
 document.getElementById('yr').textContent = new Date().getFullYear();
+document.getElementById('yr-footer').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>
