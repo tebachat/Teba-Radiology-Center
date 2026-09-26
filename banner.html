@@ -1,25 +1,25 @@
-<!-- ver 26.9.28 -->
+<!-- ver 26.9.32 -->
 <!--
   ==========================================================================
   هذا الملف مستقل تمامًا. ارفعه على نفس مجلد index.html على الاستضافة
   (نفس المكان بالظبط، بنفس الاسم "banner.html") وهيظهر الشريط تلقائيًا.
   لو الملف مش موجود، index.html هيفتح عادي جدًا من غير أي شريط.
 
-  لتغيير النص: عدّل الجملتين داخل span.warn-marquee-text (الاثنين متطابقين
-  عمدًا عشان التمرير يبقى متصل من غير فجوة — غيّرهم مع بعض بنفس الصياغة).
+  لتغيير النص: عدّل الجملة داخل span.warn-marquee-text.
   ==========================================================================
 -->
 <style>
 .warn-marquee{
   position:relative;
   overflow:hidden;
-  background:linear-gradient(90deg,#fed7aa 0%,#fdba74 45%,#fed7aa 100%);
-  color:#7c2d12;
-  padding:10px 0;
+  background:linear-gradient(90deg,#e2e8f0 0%,#bae6fd 50%,#e2e8f0 100%);
+  color:#0c4a6e;
+  padding:10px 16px;
   display:flex;
   align-items:center;
-  border-top:1px solid rgba(124,45,18,.15);
-  border-bottom:1px solid rgba(124,45,18,.15);
+  justify-content:center;
+  border-top:1px solid rgba(12,74,110,.12);
+  border-bottom:1px solid rgba(12,74,110,.12);
 }
 .warn-marquee::before{
   content:'';
@@ -37,17 +37,6 @@
   55%{left:150%;}
   100%{left:150%;}
 }
-.warn-marquee-track{
-  display:flex;
-  align-items:center;
-  white-space:nowrap;
-  animation:warnScroll 22s linear infinite;
-  will-change:transform;
-}
-@keyframes warnScroll{
-  0%{transform:translateX(0);}
-  100%{transform:translateX(-50%);}
-}
 .warn-marquee-text{
   display:inline-flex;
   align-items:center;
@@ -56,27 +45,21 @@
   font-size:.88rem;
   font-weight:800;
   letter-spacing:.2px;
-  padding:0 40px;
   text-shadow:none;
+  text-align:center;
 }
 .warn-marquee-text .wm-icon{
   font-size:1.05rem;
   flex-shrink:0;
 }
 @media (max-width:640px){
-  .warn-marquee-text{font-size:.76rem;padding:0 24px;}
+  .warn-marquee-text{font-size:.76rem;}
 }
 </style>
 
-<div class="warn-marquee" role="alert" aria-label="تنبيه هام">
-  <div class="warn-marquee-track">
-    <span class="warn-marquee-text">
-      <span class="wm-icon">⚠️</span>
-      تنبيه: المركز ليس لديه أي وسيلة دفع رقمي، وغير مسؤول عن أي تحويلات نقدية تتم باسم المركز سواء من أشخاص مجهولين على وسائل التواصل الاجتماعي أو أي وسيلة أخرى.
-    </span>
-    <span class="warn-marquee-text">
-      <span class="wm-icon">⚠️</span>
-      تنبيه: المركز ليس لديه أي وسيلة دفع رقمي، وغير مسؤول عن أي تحويلات نقدية تتم باسم المركز سواء من أشخاص مجهولين على وسائل التواصل الاجتماعي أو أي وسيلة أخرى.
-    </span>
-  </div>
+<div class="warn-marquee" role="alert" aria-label="تنبيه هام" dir="rtl">
+  <span class="warn-marquee-text">
+    <span class="wm-icon">⚠️</span>
+    الدفع نقدي فقط داخل المركز، ولا يوجد أي وسيلة دفع غير ذلك.
+  </span>
 </div>

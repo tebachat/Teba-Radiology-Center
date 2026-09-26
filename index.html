@@ -2027,7 +2027,7 @@ body.dark .map-btns { background:#0d1520; border-color:rgba(255,255,255,.08); }
 
 <script>
 // يحاول تحميل banner.html من نفس مجلد الموقع؛ لو الملف مش موجود، الصفحة تفضل زي ما هي بدون أي تغيير
-fetch('banner.html?ver=26.9.28', {cache:'no-store'})
+fetch('banner.html?ver=26.9.32', {cache:'no-store'})
   .then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); })
   .then(function(buf){
     var html = new TextDecoder('utf-8').decode(buf);
