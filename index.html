@@ -2011,6 +2011,9 @@ body.dark .map-btns { background:#0d1520; border-color:rgba(255,255,255,.08); }
     <span class="hs-dot active" style="display:none" onclick="hsGo(0)"></span>
   </div>
 
+  <!-- مكان ظهور شريط التحذير (يتحمّل تلقائيًا من banner.html إن وُجد) -->
+  <div id="warnBannerSlot"></div>
+
   <!-- شريط الأزرار -->
   <div class="hero-bottom-bar" style="flex-direction:column;gap:10px;">
     <div style="display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;width:100%;">
@@ -2021,6 +2024,18 @@ body.dark .map-btns { background:#0d1520; border-color:rgba(255,255,255,.08); }
     </div>
   </div>
 </section>
+
+<script>
+// يحاول تحميل banner.html من نفس مجلد الموقع؛ لو الملف مش موجود، الصفحة تفضل زي ما هي بدون أي تغيير
+fetch('banner.html?ver=26.9.28', {cache:'no-store'})
+  .then(function(r){ if(!r.ok) throw 0; return r.arrayBuffer(); })
+  .then(function(buf){
+    var html = new TextDecoder('utf-8').decode(buf);
+    var slot = document.getElementById('warnBannerSlot');
+    if (slot) slot.innerHTML = html;
+  })
+  .catch(function(){ /* الملف غير موجود: لا يظهر أي شريط */ });
+</script>
 
 <!-- ===== 4 SERVICE TILES ===== -->
 <style>
@@ -3323,7 +3338,7 @@ body.dark .map-btns { background:#0d1520; border-color:rgba(255,255,255,.08); }
   <div class="foot-bottom">
     <div class="foot-copy">© 2026 All Rights Reserved. Teba Radiology Imaging Center</div>
     <div class="foot-disc">لا يوجد لدينا أى فروع أخرى داخل أو خارج المنصورة</div>
-    <div class="foot-dev" onclick="openAdmin()">Developed by Sa3d Abdo, Teba iT with AI — ver.20.3.26</div>
+    <div class="foot-dev" onclick="openAdmin()">Developed by Sa3d Abdo, Teba iT with AI — ver.26.9.26</div>
   </div>
 </div>
 
