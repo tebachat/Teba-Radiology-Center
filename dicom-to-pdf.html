@@ -62,6 +62,15 @@
 
   * { margin:0; padding:0; box-sizing:border-box; }
 
+  /* Accessible keyboard focus — visible only for keyboard navigation,
+     never on a mouse/touch click, so it doesn't clutter the UI. */
+  :focus { outline: none; }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
   body {
     background: var(--bg);
     color: var(--text);
@@ -486,6 +495,43 @@
   }
   .theme-toggle:hover { background: rgba(0,212,255,.18); transform:scale(1.08); }
 
+  .shortcuts-toggle {
+    position:absolute; top:8px; right:52px;
+    background: rgba(0,212,255,.08);
+    border: 1px solid rgba(0,212,255,.25);
+    color: var(--accent);
+    font-size:0.95rem;
+    line-height:1;
+    border-radius:20px;
+    padding:6px 10px;
+    cursor:pointer;
+    transition: transform .2s, background .2s;
+  }
+  .shortcuts-toggle:hover { background: rgba(0,212,255,.18); transform:scale(1.08); }
+
+  /* Keyboard shortcuts help modal */
+  #shortcuts-modal {
+    display:none; position:fixed; inset:0; z-index:3000;
+    background:rgba(0,0,0,.6); backdrop-filter:blur(3px);
+    align-items:center; justify-content:center; padding:20px;
+  }
+  #shortcuts-modal.open { display:flex; }
+  .shortcuts-box {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); padding:22px 24px;
+    max-width:380px; width:100%;
+    box-shadow:0 20px 60px rgba(0,0,0,.4);
+  }
+  .shortcuts-box h3 { font-size:1rem; margin-bottom:14px; color:var(--accent); }
+  .shortcuts-list { display:flex; flex-direction:column; gap:10px; }
+  .shortcuts-row { display:flex; align-items:center; justify-content:space-between; gap:12px; font-size:0.85rem; }
+  .shortcuts-row kbd {
+    background:var(--surface2); border:1px solid var(--border);
+    border-radius:6px; padding:2px 8px; font-family:'JetBrains Mono', monospace;
+    font-size:0.78rem; color:var(--accent); min-width:28px; text-align:center;
+  }
+  .shortcuts-close { margin-top:16px; width:100%; }
+
   /* Stats row */
   .stats {
     display:flex; gap:12px; flex-wrap:wrap;
@@ -544,18 +590,30 @@
   .tag-table tr:last-child td { border:none; }
   .tag-key { color:var(--accent); font-family:'JetBrains Mono',monospace; font-size:0.78rem; }
 
-  /* Toast */
-  #toast {
+  /* Toast — stacking queue, each item owns its own timer */
+  #toast-stack {
     position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-    background:var(--surface2); border:1px solid var(--border);
-    border-radius:10px; padding:12px 22px;
-    font-size:0.88rem; z-index:2000;
-    opacity:0; pointer-events:none; transition:.3s;
-    white-space:nowrap;
+    z-index:2000; display:flex; flex-direction:column-reverse; gap:8px;
+    align-items:center; pointer-events:none;
+    max-width: min(92vw, 420px);
   }
-  #toast.show { opacity:1; }
-  #toast.success { border-color:var(--success); color:var(--success); }
-  #toast.warn { border-color:var(--warn); color:var(--warn); }
+  .toast-item {
+    display:flex; align-items:center; gap:10px;
+    background:var(--surface2); border:1px solid var(--border);
+    border-inline-start: 3px solid var(--border);
+    border-radius:10px; padding:11px 18px;
+    font-size:0.86rem; line-height:1.4;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+    opacity:0; transform:translateY(10px) scale(.96);
+    transition: opacity .25s ease, transform .25s ease;
+    pointer-events:auto; cursor:pointer;
+  }
+  .toast-item.show { opacity:1; transform:translateY(0) scale(1); }
+  .toast-item.leaving { opacity:0; transform:translateY(6px) scale(.96); }
+  .toast-item.success { border-inline-start-color:var(--success); }
+  .toast-item.warn    { border-inline-start-color:var(--warn); }
+  .toast-item.error   { border-inline-start-color:var(--danger); }
+  .toast-icon { font-size:1rem; flex-shrink:0; }
 
   /* Empty state */
   .empty-hint {
@@ -580,8 +638,19 @@
     border: 1px solid var(--border);
     border-radius:16px;
     padding:20px;
-    max-width:520px; width:100%;
+    max-width:820px; width:100%;
     max-height:92vh; overflow-y:auto;
+  }
+  #pc-grid { display:block; }
+  .pc-row { display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px; }
+  .pc-folder-title { font-size:0.8rem; color:var(--text); margin:12px 0 6px; font-weight:700; }
+  .pc-folder-title:first-child { margin-top:0; }
+  .pc-cell { position:relative; }
+  .pc-cell canvas { width:100%; border-radius:10px; background:#000; display:block; }
+  .pc-cell .pc-idx {
+    position:absolute; top:6px; left:6px; padding:2px 7px; border-radius:6px;
+    background:rgba(0,0,0,.65); color:#00d4ff; font-size:0.7rem;
+    font-family:'JetBrains Mono',monospace;
   }
   .pc-note {
     font-size:0.8rem; color:var(--muted);
@@ -776,83 +845,146 @@
   }
   .vw-open-btn:active { background:rgba(0,212,255,.2); }
 
-  /* ══════════════ VIEWER ══════════════ */
+  /* ══════════════ VIEWER (multi-viewport + measurements) ══════════════ */
   #viewer-modal {
     display:none; position:fixed; inset:0; z-index:2000;
-    background:#000; flex-direction:column;
-    touch-action:none; user-select:none;
+    background:#000; flex-direction:column; direction:ltr;
+    user-select:none; -webkit-user-select:none;
   }
   #viewer-modal.open { display:flex; }
 
   .vw-header {
-    display:flex; align-items:center; justify-content:space-between;
-    padding:10px 14px; background:rgba(0,0,0,.7);
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:5px 10px; background:rgba(10,14,26,.94);
     border-bottom:1px solid rgba(255,255,255,.08);
     flex-shrink:0; z-index:10;
   }
-  .vw-patient { font-weight:700; font-size:.95rem; color:#fff; direction:rtl; }
-  .vw-meta { font-size:.72rem; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-top:2px; }
-  .vw-actions { display:flex; gap:8px; }
+  .vw-info { min-width:0; flex:1; }
+  .vw-patient { font-weight:700; font-size:.82rem; color:#fff; direction:rtl; text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .vw-meta { font-size:.66rem; color:#94a3b8; font-family:'JetBrains Mono',monospace; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; direction:rtl; text-align:right; }
+  .vw-actions { display:flex; gap:6px; flex-shrink:0; }
   .vw-btn {
-    width:38px; height:38px; border-radius:50%; border:1px solid rgba(255,255,255,.15);
-    background:rgba(255,255,255,.08); color:#fff; font-size:1rem;
+    width:34px; height:34px; border-radius:50%; border:1px solid rgba(255,255,255,.15);
+    background:rgba(255,255,255,.08); color:#fff; font-size:.95rem;
     cursor:pointer; display:flex; align-items:center; justify-content:center;
     transition:background .2s;
   }
   .vw-btn:active { background:rgba(255,255,255,.2); }
 
-  .vw-canvas-wrap {
-    flex:1; position:relative; overflow:hidden;
-    display:flex; align-items:center; justify-content:center;
-    background:#000;
+  .vw-toolbar {
+    display:flex; gap:5px; align-items:center; padding:4px 8px;
+    background:rgba(10,14,26,.88); border-bottom:1px solid rgba(255,255,255,.06);
+    overflow-x:auto; flex-shrink:0; scrollbar-width:none; z-index:10;
   }
-  #vw-canvas { display:block; max-width:100%; max-height:100%; touch-action:none; }
+  .vw-toolbar::-webkit-scrollbar { display:none; }
+  .vw-tool {
+    flex:0 0 auto; min-width:44px; padding:3px 7px; border-radius:9px;
+    border:1px solid rgba(255,255,255,.14); background:rgba(255,255,255,.06);
+    color:#e2e8f0; font-family:inherit; font-size:.64rem; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:0; line-height:1.25;
+    transition:background .15s, border-color .15s;
+  }
+  .vw-tool .ic { font-size:1.05rem; line-height:1.2; }
+  .vw-tool:active { background:rgba(255,255,255,.18); }
+  .vw-tool.active { background:rgba(0,212,255,.18); border-color:#00d4ff; color:#00d4ff; }
+  .vw-sep { width:1px; height:28px; background:rgba(255,255,255,.14); flex:0 0 auto; margin:0 2px; }
+  .vw-select {
+    flex:0 0 auto; background:#111827; color:#e2e8f0;
+    border:1px solid rgba(255,255,255,.18); border-radius:8px;
+    padding:6px 6px; font-family:inherit; font-size:.72rem; max-width:150px;
+  }
+
+  .vw-stage { flex:1; min-height:0; display:grid; gap:2px; background:#1a2030; position:relative; }
+  .vp { position:relative; overflow:hidden; background:#000; min-width:0; min-height:0; outline:2px solid transparent; outline-offset:-2px; }
+  .vp.active { outline-color:rgba(0,212,255,.7); }
+  .vp canvas { position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+  .vw-stage[data-tool="nav"] .vp canvas, .vw-stage[data-tool="pan"] .vp canvas { cursor:grab; }
+  .vw-stage[data-tool="zoom"] .vp canvas { cursor:zoom-in; }
+  .vw-stage[data-tool="wl"] .vp canvas { cursor:ns-resize; }
+  .vw-stage[data-tool="len"] .vp canvas, .vw-stage[data-tool="ang"] .vp canvas,
+  .vw-stage[data-tool="roi"] .vp canvas, .vw-stage[data-tool="pt"] .vp canvas,
+  .vw-stage[data-tool="link"] .vp canvas { cursor:crosshair; }
+
+  .vp-tl, .vp-tr, .vp-bl, .vp-br {
+    position:absolute; z-index:2; padding:4px 6px;
+    font-family:'JetBrains Mono',monospace; font-size:.66rem; line-height:1.45;
+    color:rgba(255,255,255,.88); text-shadow:0 0 3px #000, 0 0 3px #000;
+    pointer-events:none; white-space:pre;
+  }
+  .vp-tl { top:0; left:0; pointer-events:auto; }
+  .vp-tr { top:0; right:0; text-align:right; }
+  .vp-bl { bottom:0; left:0; }
+  .vp-br { bottom:0; right:0; text-align:right; color:#ffd60a; }
+  .vp-folder {
+    max-width:46vw; background:rgba(0,0,0,.6); color:#00d4ff;
+    border:1px solid rgba(0,212,255,.35); border-radius:6px;
+    font-size:.68rem; padding:2px 4px; font-family:inherit; direction:rtl;
+  }
 
   .vw-wl-overlay {
     position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
     background:rgba(0,0,0,.65); color:#00d4ff;
-    font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:700;
+    font-family:'JetBrains Mono',monospace; font-size:1.05rem; font-weight:700;
     padding:10px 22px; border-radius:30px; border:1px solid rgba(0,212,255,.3);
-    pointer-events:none; opacity:0; transition:opacity .3s;
-    white-space:nowrap;
+    pointer-events:none; opacity:0; transition:opacity .3s; white-space:nowrap; z-index:20;
   }
   .vw-wl-overlay.show { opacity:1; }
-
   .vw-hint {
-    position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
-    background:rgba(0,0,0,.55); color:rgba(255,255,255,.6);
-    font-size:.72rem; padding:5px 14px; border-radius:20px;
-    pointer-events:none; transition:opacity .5s;
-    white-space:nowrap;
+    position:absolute; bottom:92px; left:50%; transform:translateX(-50%);
+    background:rgba(0,0,0,.66); color:rgba(255,255,255,.8);
+    font-size:.72rem; padding:5px 14px; border-radius:20px; direction:rtl;
+    pointer-events:none; transition:opacity .5s; text-align:center;
+    max-width:92vw; z-index:20;
   }
   .vw-hint.hidden { opacity:0; }
 
   .vw-footer {
-    background:rgba(0,0,0,.8); border-top:1px solid rgba(255,255,255,.08);
-    padding:8px 14px; flex-shrink:0;
+    background:rgba(10,14,26,.92); border-top:1px solid rgba(255,255,255,.08);
+    padding:4px 12px 6px; flex-shrink:0; z-index:10;
   }
-  .vw-counter {
-    text-align:center; font-family:'JetBrains Mono',monospace;
-    font-size:.85rem; color:#94a3b8; margin-bottom:6px;
-  }
-  .vw-wl-info {
-    text-align:center; font-family:'JetBrains Mono',monospace;
-    font-size:.75rem; color:rgba(0,212,255,.7); margin-bottom:8px;
-  }
-  .vw-thumb-row {
-    display:flex; gap:6px; overflow-x:auto; padding-bottom:4px;
-    scrollbar-width:none;
-  }
+  .vw-counter { text-align:center; font-family:'JetBrains Mono',monospace; font-size:.78rem; color:#94a3b8; direction:rtl; }
+  .vw-slider { width:100%; accent-color:#00d4ff; margin:2px 0; height:18px; }
+  .vw-wl-info { text-align:center; font-family:'JetBrains Mono',monospace; font-size:.68rem; color:rgba(0,212,255,.75); direction:rtl; }
+  .vw-thumb-row { display:none; gap:6px; overflow-x:auto; padding:6px 0 2px; scrollbar-width:none; }
+  .vw-thumb-row.show { display:flex; }
   .vw-thumb-row::-webkit-scrollbar { display:none; }
   .vw-thumb {
-    width:48px; height:48px; flex-shrink:0; border-radius:6px;
+    width:44px; height:44px; flex-shrink:0; border-radius:6px;
     overflow:hidden; border:2px solid transparent; cursor:pointer;
-    transition:border-color .2s;
-    background:#111;
+    transition:border-color .2s; background:#111;
   }
   .vw-thumb.active { border-color:#00d4ff; }
   .vw-thumb img { width:100%; height:100%; object-fit:cover; }
-  .vw-thumb-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .vw-thumb-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+
+  /* ── Viewer upgrades (v3.0) ── */
+  .vw-stage[data-tool="mag"] .vp canvas { cursor:zoom-in; }
+  #viewer-modal.no-hud .vp-tr, #viewer-modal.no-hud .vp-bl, #viewer-modal.no-hud .vp-br { display:none; }
+  #vw-toolbar2 { border-top:0; }
+  #vw-toolbar2 .vw-select { max-width:128px; }
+  #vw-tags {
+    display:none; position:absolute; inset:0; z-index:40; flex-direction:column;
+    background:rgba(6,9,18,.97); direction:ltr;
+  }
+  #vw-tags.open { display:flex; }
+  .vwt-head { display:flex; gap:8px; align-items:center; padding:8px 10px; border-bottom:1px solid rgba(255,255,255,.1); }
+  #vwt-q {
+    flex:1; min-width:0; background:#111827; color:#e2e8f0; border:1px solid rgba(255,255,255,.18);
+    border-radius:10px; padding:9px 12px; font-family:inherit; font-size:.85rem; direction:rtl;
+  }
+  .vwt-chips { display:flex; gap:6px; align-items:center; padding:6px 10px; border-bottom:1px solid rgba(255,255,255,.06); }
+  .vwt-chip {
+    padding:4px 12px; border-radius:16px; border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.06); color:#e2e8f0; font-family:inherit; font-size:.72rem; cursor:pointer;
+  }
+  .vwt-chip.active { background:rgba(0,212,255,.18); border-color:#00d4ff; color:#00d4ff; }
+  .vwt-count { margin-inline-start:auto; font-size:.68rem; color:#64748b; font-family:'JetBrains Mono',monospace; }
+  .vwt-list { flex:1; overflow-y:auto; padding:2px 10px 18px; -webkit-overflow-scrolling:touch; user-select:text; -webkit-user-select:text; }
+  .vwt-row { display:grid; grid-template-columns:96px 1fr; gap:1px 10px; padding:7px 2px; border-bottom:1px solid rgba(255,255,255,.06); font-size:.74rem; }
+  .vwt-tag { font-family:'JetBrains Mono',monospace; color:#00d4ff; }
+  .vwt-name { color:#e2e8f0; font-weight:600; }
+  .vwt-val { grid-column:2; font-family:'JetBrains Mono',monospace; color:#ffd60a; word-break:break-all; }
+  .vwt-empty { padding:28px 8px; text-align:center; color:#64748b; font-size:.8rem; direction:rtl; }
 </style>
 </head>
 <body>
@@ -861,7 +993,8 @@
 
   <header>
     <div class="version-badge" id="version-badge" title="سيتم تحديث الرقم هنا تلقائيًا مع كل تعديل جديد على التطبيق">Ver <b id="app-version">1.1.0</b></div>
-    <button class="theme-toggle" id="theme-toggle" title="تبديل الوضع الليلي/النهاري" onclick="toggleTheme()">🌙</button>
+    <button class="theme-toggle" id="theme-toggle" title="تبديل الوضع الليلي/النهاري" aria-label="تبديل الوضع الليلي/النهاري" onclick="toggleTheme()">🌙</button>
+    <button class="shortcuts-toggle" title="اختصارات الكيبورد" aria-label="عرض اختصارات الكيبورد" onclick="openShortcutsModal()">⌨️</button>
     <div class="logo">
       <div class="logo-icon">🏥</div>
       <div class="logo-text"><span>DICOM</span> → PDF</div>
@@ -1103,7 +1236,7 @@
     <ol class="app-notice-steps">
       <li>ارفع ملفات DICOM (.dcm) أو مجلد الفحص كامل.</li>
       <li>اضبط إعدادات العرض (Window/Level) والتخطيط من لوحة الإعدادات.</li>
-      <li>عاين النتيجة قبل التصدير من زر المعاينة.</li>
+      <li>عاين النتيجة قبل التصدير من زر المعاينة، أو افتح العارض الكامل من زر 👁 على الصورة.</li>
       <li>اضغط "تحويل إلى PDF" أو "تحويل إلى فيديو" لتنزيل الملف النهائي.</li>
     </ol>
 
@@ -1111,6 +1244,12 @@
     <ul class="app-notice-features">
       <li>تحويل عدة ملفات DICOM دفعة واحدة إلى ملف PDF واحد (Contact Sheet) أو فيديو.</li>
       <li>معاينة تفاعلية للصور (تكبير/تصغير، تعديل السطوع والتباين، تمرير بين الصور).</li>
+      <li>عارض كامل بعدة شاشات: Window/Level وقياسات (طول، زاوية، كثافة ROI، قيمة نقطة) ومؤشر متزامن بين السيكونس.</li>
+      <li>عدسة مكبّرة 3×، وقلب ولف الصورة، وعكس الألوان (نيجاتيف)، وألوان وفلاتر للعرض.</li>
+      <li>اتجاهات الجسم (R/L/A/P/S/I) ومسطرة بالمليمتر وخطوط مرجعية بين الوضعيات (Axial / Coronal / Sagittal).</li>
+      <li>تشغيل سينما للسيكونس بسرعة تختارها، وإعدادات Window جاهزة (Soft, Lung, Bone, Brain…).</li>
+      <li>عرض كل بيانات الـ DICOM (TR/TE/kVp/Contrast…) مع بحث ونسخ.</li>
+      <li>اختصارات كيبورد للعارض — اضغط <kbd>?</kbd> لعرضها كلها.</li>
       <li>معالجة كاملة داخل المتصفح — بدون رفع أي بيانات على أي سيرفر خارجي.</li>
       <li>يعمل على الموبايل والكمبيوتر بدون تثبيت أي برنامج إضافي.</li>
     </ul>
@@ -1121,11 +1260,11 @@
 </div>
 
 <!-- Preview Modal -->
-<div id="preview-modal">
+<div id="preview-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
   <div class="modal-box">
     <div class="modal-header">
       <div class="modal-title" id="modal-title">معاينة</div>
-      <button class="close-btn" onclick="closePreview()">×</button>
+      <button class="close-btn" onclick="closePreview()" aria-label="إغلاق المعاينة">×</button>
     </div>
     <canvas id="preview-canvas"></canvas>
     <table class="tag-table" id="tag-table">
@@ -1136,16 +1275,16 @@
 </div>
 
 <!-- ═══════════════ PRE-CONVERT PREVIEW (check W/L before full export) ═══════════════ -->
-<div id="preconvert-modal">
+<div id="preconvert-modal" role="dialog" aria-modal="true" aria-labelledby="pc-modal-title">
   <div class="pc-box">
     <div class="modal-header">
-      <div class="modal-title">🔍 معاينة قبل التحويل</div>
-      <button class="close-btn" onclick="closePreConvertPreview()">×</button>
+      <div class="modal-title" id="pc-modal-title">🔍 معاينة قبل التحويل</div>
+      <button class="close-btn" onclick="closePreConvertPreview()" aria-label="إغلاق المعاينة">×</button>
     </div>
     <div class="pc-note">
-      دي أول صورة (حسب الترتيب) بنفس إعدادات الـ Window والسطوع/التباين الحالية. لو مش مظبوطة، اقفل المعاينة وعدّل الإعدادات فوق، وبعدين جرّب تاني.
+      دي كذا صورة من منتصف الفولدر/المجموعة بنفس إعدادات الـ Window والسطوع/التباين الحالية. لو مش مظبوطة، اقفل المعاينة وعدّل الإعدادات فوق، وبعدين جرّب تاني.
     </div>
-    <canvas id="pc-canvas"></canvas>
+    <div id="pc-grid"></div>
     <div class="pc-settings" id="pc-settings"></div>
     <div class="pc-actions">
       <button class="btn btn-ghost" onclick="closePreConvertPreview()">✖️ إلغاء / تعديل الإعدادات</button>
@@ -1155,40 +1294,164 @@
 </div>
 
 <!-- ═══════════════ VIEWER MODAL ═══════════════ -->
-<div id="viewer-modal">
-  <!-- Header -->
+<div id="viewer-modal" role="dialog" aria-modal="true" aria-label="عارض الصور">
   <div class="vw-header">
     <div class="vw-info">
       <div class="vw-patient" id="vw-patient">—</div>
       <div class="vw-meta" id="vw-meta">—</div>
     </div>
     <div class="vw-actions">
-      <button class="vw-btn" onclick="vwReset()" title="إعادة ضبط">↺</button>
-      <button class="vw-btn" onclick="shareViewerImage()" title="مشاركة">📤</button>
-      <button class="vw-btn" onclick="closeViewer()" title="إغلاق">✕</button>
+      <button class="vw-btn" onclick="vwReset()" title="إعادة ضبط (Space)" aria-label="إعادة ضبط">↺</button>
+      <button class="vw-btn" onclick="vwToggleFullscreen()" title="ملء الشاشة" aria-label="ملء الشاشة">⛶</button>
+      <button class="vw-btn" onclick="shareViewerImage()" title="حفظ / مشاركة الصورة (مع القياسات)" aria-label="مشاركة الصورة">📤</button>
+      <button class="vw-btn" onclick="closeViewer()" title="إغلاق" aria-label="إغلاق العارض">✕</button>
     </div>
   </div>
 
-  <!-- Canvas -->
-  <div class="vw-canvas-wrap" id="vw-wrap">
-    <canvas id="vw-canvas"></canvas>
-    <!-- WL overlay -->
-    <div class="vw-wl-overlay" id="vw-wl-overlay"></div>
-    <!-- Gesture hint -->
-    <div class="vw-hint" id="vw-hint">
-      ↕ تمرير للصور &nbsp;|&nbsp; ↔ تفتيح/تغميق &nbsp;|&nbsp; 🤏 تكبير
-    </div>
+  <div class="vw-toolbar" id="vw-toolbar">
+    <button class="vw-tool active" data-tool="nav"  onclick="vwSetTool('nav')"  title="تصفح (N)"><span class="ic">🧭</span>تصفح</button>
+    <button class="vw-tool" data-tool="wl"   onclick="vwSetTool('wl')"   title="Window/Level (W)"><span class="ic">🔆</span>W/L</button>
+    <button class="vw-tool" data-tool="pan"  onclick="vwSetTool('pan')"  title="تحريك (P)"><span class="ic">✋</span>تحريك</button>
+    <button class="vw-tool" data-tool="zoom" onclick="vwSetTool('zoom')" title="تكبير (Z)"><span class="ic">🔍</span>تكبير</button>
+    <span class="vw-sep"></span>
+    <button class="vw-tool" data-tool="len" onclick="vwSetTool('len')" title="قياس الطول (L)"><span class="ic">📏</span>طول</button>
+    <button class="vw-tool" data-tool="ang" onclick="vwSetTool('ang')" title="قياس الزاوية (A)"><span class="ic">∠</span>زاوية</button>
+    <button class="vw-tool" data-tool="roi" onclick="vwSetTool('roi')" title="قياس الكثافة ROI (R)"><span class="ic">⭕</span>كثافة</button>
+    <button class="vw-tool" data-tool="pt"  onclick="vwSetTool('pt')"  title="قراءة قيمة نقطة (T)"><span class="ic">📍</span>نقطة</button>
+    <button class="vw-tool" data-tool="mag" onclick="vwSetTool('mag')" title="عدسة مكبّرة 3× (M)"><span class="ic">🔎</span>عدسة</button>
+    <button class="vw-tool" data-tool="link" onclick="vwSetTool('link')" title="مؤشر متزامن — نفس المنطقة في كل السيكونس والوضعيات (C)"><span class="ic">🎯</span>متزامن</button>
+    <button class="vw-tool active" id="vw-auto-btn" onclick="vwToggleAuto()" title="تمرير الشاشات الأخرى تلقائيًا لنفس مكان المؤشر"><span class="ic">⤵</span>تمرير تلقائي</button>
+    <button class="vw-tool" onclick="vwUndo()" title="تراجع (Ctrl+Z)"><span class="ic">↶</span>تراجع</button>
+    <button class="vw-tool" onclick="vwClearMeasurements()" title="مسح قياسات الصورة الحالية"><span class="ic">🗑</span>مسح</button>
+    <span class="vw-sep"></span>
+    <select class="vw-select" id="vw-layout" onchange="vwBuildLayout()" aria-label="تقسيم الشاشة">
+      <option value="auto">📁 فولدر لكل شاشة</option>
+      <option value="1">▢ شاشة واحدة</option>
+      <option value="2">▢▢ شاشتين</option>
+      <option value="4">▦ 4 شاشات</option>
+    </select>
+    <button class="vw-tool active" id="vw-sync-btn" onclick="vwToggleSync()" title="مزامنة التمرير بين الشاشات"><span class="ic">🔗</span>مزامنة</button>
+    <button class="vw-tool" id="vw-thumbs-btn" onclick="vwToggleThumbs()" title="شريط الصور المصغرة"><span class="ic">🎞</span>شريط</button>
   </div>
 
-  <!-- Footer -->
+  <div class="vw-toolbar" id="vw-toolbar2">
+    <select class="vw-select" id="vw-preset" onchange="vwApplyPreset(this.value)" aria-label="Window جاهز">
+      <option value="">🔆 Window جاهز</option>
+      <option value="auto">Auto (من الملف)</option>
+      <option value="full">Full range</option>
+      <optgroup label="CT (أرقام 1–9)">
+        <option value="soft">1 · Soft tissue</option>
+        <option value="lung">2 · Lung</option>
+        <option value="bone">3 · Bone</option>
+        <option value="brain">4 · Brain</option>
+        <option value="liver">5 · Liver</option>
+        <option value="subdural">6 · Subdural</option>
+        <option value="stroke">7 · Stroke</option>
+        <option value="spine">8 · Spine</option>
+        <option value="angio">9 · Angio</option>
+        <option value="chest">Chest</option>
+        <option value="abdomen">Abdomen</option>
+      </optgroup>
+      <optgroup label="MRI">
+        <option value="mri_brain">MRI Brain</option>
+        <option value="mri_spine">MRI Spine</option>
+        <option value="mri_soft">MRI Soft</option>
+      </optgroup>
+    </select>
+    <select class="vw-select" id="vw-cmap" onchange="vwSetCmap(this.value)" aria-label="ألوان الصورة">
+      <option value="gray">⬜ رمادي</option>
+      <option value="bone">🦴 Bone</option>
+      <option value="hot">🔥 Hot</option>
+      <option value="jet">🌈 Jet</option>
+      <option value="viridis">🟢 Viridis</option>
+    </select>
+    <select class="vw-select" id="vw-filter" onchange="vwSetFilter(this.value)" aria-label="فلتر الصورة">
+      <option value="none">✨ بدون فلتر</option>
+      <option value="sharpen">حدّة Sharpen</option>
+      <option value="smooth">تنعيم Smooth</option>
+      <option value="edge">حواف Edge</option>
+    </select>
+    <span class="vw-sep"></span>
+    <button class="vw-tool" id="vw-inv-btn" onclick="vwToggleInvert()" title="عكس الألوان — نيجاتيف (I)"><span class="ic">◐</span>عكس</button>
+    <button class="vw-tool" onclick="vwFlip('h')" title="قلب أفقي (H)"><span class="ic">⇋</span>قلب</button>
+    <button class="vw-tool" onclick="vwFlip('v')" title="قلب رأسي (V)"><span class="ic">⇅</span>قلب</button>
+    <button class="vw-tool" onclick="vwRotate(-1)" title="لف 90° عكس عقارب الساعة ( [ )"><span class="ic">⟲</span>لف</button>
+    <button class="vw-tool" onclick="vwRotate(1)" title="لف 90° مع عقارب الساعة ( ] )"><span class="ic">⟳</span>لف</button>
+    <span class="vw-sep"></span>
+    <button class="vw-tool" id="vw-cine-btn" onclick="vwToggleCine()" title="تشغيل / إيقاف السينما (K)"><span class="ic">▶</span>سينما</button>
+    <select class="vw-select" id="vw-fps" onchange="vwSetFps(this.value)" aria-label="سرعة السينما">
+      <option value="2">2 fps</option>
+      <option value="5">5 fps</option>
+      <option value="8">8 fps</option>
+      <option value="10" selected>10 fps</option>
+      <option value="15">15 fps</option>
+      <option value="20">20 fps</option>
+      <option value="30">30 fps</option>
+    </select>
+    <button class="vw-tool" id="vw-pp-btn" onclick="vwTogglePingPong()" title="السينما رايح جاي بدل التكرار"><span class="ic">⇄</span>رايح جاي</button>
+    <span class="vw-sep"></span>
+    <button class="vw-tool active" id="vw-ref-btn" onclick="vwToggleRef()" title="خطوط مرجعية: مكان الشريحة الحالية على الوضعيات التانية (G)"><span class="ic">✛</span>خطوط</button>
+    <button class="vw-tool active" id="vw-hud-btn" onclick="vwToggleHud()" title="إظهار / إخفاء البيانات والمسطرة واتجاهات الجسم (O)"><span class="ic">🏷</span>بيانات</button>
+    <button class="vw-tool" onclick="vwOpenTags()" title="كل بيانات الـ DICOM مع بحث (D)"><span class="ic">🧾</span>Tags</button>
+  </div>
+
+  <div class="vw-stage" id="vw-stage" data-tool="nav"></div>
+
+  <div class="vw-wl-overlay" id="vw-wl-overlay"></div>
+  <div class="vw-hint" id="vw-hint"></div>
+
   <div class="vw-footer">
     <div class="vw-counter" id="vw-counter">1 / 1</div>
-    <div class="vw-wl-info" id="vw-wl-info">W: — &nbsp; L: —</div>
+    <input type="range" class="vw-slider" id="vw-slider" min="1" max="1" value="1" aria-label="التنقل بين الصور">
+    <div class="vw-wl-info" id="vw-wl-info"></div>
     <div class="vw-thumb-row" id="vw-thumb-row"></div>
+  </div>
+
+  <div id="vw-tags" role="dialog" aria-modal="true" aria-label="بيانات DICOM">
+    <div class="vwt-head">
+      <input id="vwt-q" type="search" placeholder="🔍 ابحث: اسم أو كود أو قيمة (TR, kVp, contrast...)" autocomplete="off">
+      <button class="vw-btn" onclick="vwCopyTags()" title="نسخ النتائج" aria-label="نسخ">📋</button>
+      <button class="vw-btn" onclick="vwCloseTags()" title="إغلاق" aria-label="إغلاق">✕</button>
+    </div>
+    <div class="vwt-chips">
+      <button class="vwt-chip active" id="vwt-chip-key" onclick="vwTagMode('key')">الأهم</button>
+      <button class="vwt-chip" id="vwt-chip-all" onclick="vwTagMode('all')">الكل</button>
+      <span class="vwt-count" id="vwt-count"></span>
+    </div>
+    <div class="vwt-list" id="vwt-list"></div>
   </div>
 </div>
 
-<div id="toast"></div>
+<!-- ═══════════════ KEYBOARD SHORTCUTS HELP ═══════════════ -->
+<div id="shortcuts-modal" role="dialog" aria-modal="true" aria-labelledby="shortcuts-title" onclick="if(event.target.id==='shortcuts-modal') closeShortcutsModal()">
+  <div class="shortcuts-box">
+    <h3 id="shortcuts-title">⌨️ اختصارات الكيبورد</h3>
+    <div class="shortcuts-list">
+      <div class="shortcuts-row"><span>إغلاق أي نافذة مفتوحة</span><kbd>Esc</kbd></div>
+      <div class="shortcuts-row"><span>الصورة التالية/السابقة (العارض)</span><kbd>→</kbd><kbd>←</kbd></div>
+      <div class="shortcuts-row"><span>إعادة ضبط التكبير والـ W/L (العارض)</span><kbd>Space</kbd></div>
+      <div class="shortcuts-row"><span>تكبير / تصغير (العارض)</span><kbd>+</kbd><kbd>-</kbd></div>
+      <div class="shortcuts-row"><span>أدوات العارض: تصفح / W-L / تحريك / تكبير</span><kbd>N</kbd><kbd>W</kbd><kbd>P</kbd><kbd>Z</kbd></div>
+      <div class="shortcuts-row"><span>قياس: طول / زاوية / كثافة / نقطة</span><kbd>L</kbd><kbd>A</kbd><kbd>R</kbd><kbd>T</kbd></div>
+      <div class="shortcuts-row"><span>مؤشر متزامن بين السيكونس (العارض)</span><kbd>C</kbd></div>
+      <div class="shortcuts-row"><span>عدسة مكبّرة (العارض)</span><kbd>M</kbd></div>
+      <div class="shortcuts-row"><span>عكس الألوان — نيجاتيف (العارض)</span><kbd>I</kbd></div>
+      <div class="shortcuts-row"><span>قلب أفقي / رأسي (العارض)</span><kbd>H</kbd><kbd>V</kbd></div>
+      <div class="shortcuts-row"><span>لف الصورة 90° (العارض)</span><kbd>[</kbd><kbd>]</kbd></div>
+      <div class="shortcuts-row"><span>تشغيل / إيقاف السينما (العارض)</span><kbd>K</kbd></div>
+      <div class="shortcuts-row"><span>Window جاهز (العارض)</span><kbd>1</kbd><kbd>…</kbd><kbd>9</kbd></div>
+      <div class="shortcuts-row"><span>خطوط مرجعية بين الوضعيات (العارض)</span><kbd>G</kbd></div>
+      <div class="shortcuts-row"><span>إخفاء / إظهار البيانات على الصورة (العارض)</span><kbd>O</kbd></div>
+      <div class="shortcuts-row"><span>كل بيانات الـ DICOM (العارض)</span><kbd>D</kbd></div>
+      <div class="shortcuts-row"><span>أول / آخر صورة (العارض)</span><kbd>Home</kbd><kbd>End</kbd></div>
+      <div class="shortcuts-row"><span>تراجع عن آخر قياس (العارض)</span><kbd>Ctrl+Z</kbd></div>
+      <div class="shortcuts-row"><span>عرض هذه النافذة</span><kbd>?</kbd></div>
+    </div>
+    <button class="btn btn-ghost shortcuts-close" onclick="closeShortcutsModal()">إغلاق</button>
+  </div>
+</div>
+
+<div id="toast-stack" role="status" aria-live="polite" aria-atomic="false"></div>
 
 <script>
 // ===================== DICOM PIXEL WORKER POOL =====================
@@ -1566,11 +1829,18 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   2.9.0 — العارض: مؤشر متزامن (🎯) — نفس المنطقة بتظهر في كل السيكونس والوضعيات (Axial/Coronal/Sagittal) بالإحداثيات الحقيقية للمريض،
+//           مع تمرير تلقائي للشاشات الأخرى لأقرب شريحة وقراءة قيمة الإشارة في كل سيكونس
+//   2.8.0 — العارض (Viewer): صور أكبر (fit-to-screen) + قياس الطول والزوايا والكثافة (ROI) + قراءة قيمة أي نقطة (Cursor Point)
+//           + عرض متعدد الشاشات (شاشة لكل فولدر) مع مزامنة التمرير؛ إصلاح ZIP الفيديو (كل فولدر فيديو)؛ معاينة من منتصف كل فولدر
+//   2.7.0 — تعديل احترافي: نظام تنبيهات (toast) متراكم بدل الباگ القديم اللي كان بيقطع التنبيه التاني بدري؛
+//           تحسينات إمكانية الوصول (focus-visible، aria-label/aria-live/role=dialog)؛
+//           مودال جديد لاختصارات الكيبورد (زرار ⌨️ أو مفتاح ؟)
 //   1.3.0 — إضافة: تحميل الملفات المتعددة (multi/folder — PDF أو فيديو) كملف ZIP واحد بدل تنزيلها منفصلة
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '2.6.9';
+const APP_VERSION = '3.0.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -1692,7 +1962,7 @@ async function refreshAllRenderedImages() {
   }
   if(currentPreviewId != null) await showPreview(currentPreviewId, true);
   const viewerModal = document.getElementById('viewer-modal');
-  if(viewerModal && viewerModal.classList.contains('open')) vwLoadFrame(vwIdx);
+  if(viewerModal && viewerModal.classList.contains('open')) vwPorts.forEach(p => p.req(true)); // أعد رسم العارض بالسطوع/التباين الجديدين
 }
 
 // ===================== DROP / INPUT =====================
@@ -1903,6 +2173,17 @@ clearBtn.addEventListener('click', () => {
 // ===================== CONVERT =====================
 convertBtn.addEventListener('click', () => openPreConvertPreview('pdf'));
 
+// Returns a filename that doesn't already exist inside the zip (adds " (2)", " (3)"...)
+function uniqueZipName(zip, fname) {
+  if(!zip.file(fname)) return fname;
+  const dot = fname.lastIndexOf('.');
+  const base = dot > 0 ? fname.slice(0, dot) : fname;
+  const ext  = dot > 0 ? fname.slice(dot) : '';
+  let n = 2;
+  while(zip.file(`${base} (${n})${ext}`)) n++;
+  return `${base} (${n})${ext}`;
+}
+
 // Bundles a JSZip instance into one downloaded .zip file.
 async function downloadZipBlob(zip, fname) {
   const blob = await zip.generateAsync({ type: 'blob' });
@@ -2093,7 +2374,7 @@ async function convertAll() {
           ? `${safeKey} (By Sa3d abdo).pdf`
           : buildFilename(groupItems[0], `DICOM_group${groupIndex}_${Date.now()} (By Sa3d abdo).pdf`);
         if(useZip) {
-          zip.file(fname, doc.output('blob'));
+          zip.file(uniqueZipName(zip, fname), doc.output('blob'));
           zipCount++;
         } else {
           doc.save(fname);
@@ -2464,6 +2745,7 @@ async function convertToVideo() {
         progBar.style.width = `${(doneCount/total)*100}%`;
       }, zip);
       if(useZip && savedName) zipCount++;
+      else if(!useZip && savedName && g < groups.length - 1) await sleep(600);
     } catch(e) {
       anyError = true;
       toast(`⚠️ تعذّر إنشاء الفيديو${group.key ? ' — ' + group.key : ''}`, 'warn');
@@ -2630,12 +2912,16 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
 
   const blob = new Blob(chunks, { type: mimeType || 'video/webm' });
   const ext = isMp4 ? 'mp4' : 'webm';
-  const safeName = anonymize
-    ? (group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM'
-    : (patName || group.key || 'DICOM').trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
-  const fname = `${safeName} (By Sa3d abdo)_${targetH}p.${ext}`;
+  // اسم الفولدر له الأولوية (كل فولدر لازم يطلع باسم مختلف) — اسم المريض بس لو مفيش فولدر.
+  // قبل كده كان اسم المريض هو الأول، فلما كذا فولدر لنفس المريض كانوا بيطلعوا بنفس الاسم
+  // وبيكتبوا فوق بعض جوه الـ ZIP فيفضل فيديو واحد بس.
+  const hasKey = group.key && group.key !== '(بدون فولدر)';
+  const safeName = (hasKey ? group.key : (anonymize ? 'DICOM' : (patName || 'DICOM')))
+    .trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
+  let fname = `${safeName} (By Sa3d abdo)_${targetH}p.${ext}`;
 
   if(zip) {
+    fname = uniqueZipName(zip, fname);
     zip.file(fname, blob);
     return fname;
   }
@@ -2702,6 +2988,14 @@ async function showPreview(id, refreshOnly) {
   document.getElementById('preview-modal').classList.add('open');
 }
 
+// ===================== KEYBOARD SHORTCUTS HELP =====================
+function openShortcutsModal() {
+  document.getElementById('shortcuts-modal').classList.add('open');
+}
+function closeShortcutsModal() {
+  document.getElementById('shortcuts-modal').classList.remove('open');
+}
+
 function closePreview() {
   document.getElementById('preview-modal').classList.remove('open');
   currentPreviewId = null;
@@ -2714,16 +3008,64 @@ document.getElementById('preview-modal').addEventListener('click', e => {
 async function openPreConvertPreview(kind) {
   if(files.length === 0) return;
 
-  const ordered = sortItemsByInstanceNumber(files);
-  const item = ordered[0];
-  if(!item.dcm) await ensureParsed(item);
-  if(!item.dcm) { toast('⚠️ تعذّر تجهيز صورة المعاينة', 'warn'); return; }
+  const mode = document.getElementById('opt-mode').value;
+  const byFolder = kind === 'video' ? mode !== 'single' : mode === 'folder';
+
+  // قسّم الصور لمجموعات (فولدر لكل مجموعة) زي ما التصدير بيعمل
+  let groups;
+  if(byFolder) {
+    const order = []; const map = new Map();
+    for(const it of files) {
+      const key = it.folderKey || '(بدون فولدر)';
+      if(!map.has(key)) { map.set(key, []); order.push(key); }
+      map.get(key).push(it);
+    }
+    groups = order.map(k => ({ key: k, items: sortItemsByInstanceNumber(map.get(k)) }));
+  } else {
+    groups = [{ key: '', items: sortItemsByInstanceNumber(files) }];
+  }
+  // لحد 3 فولدرات: 3 صور من منتصف كل فولدر — أكتر من كده: صورة واحدة من منتصف كل فولدر (عشان السرعة)
+  const fracs = groups.length <= 3 ? [0.35, 0.5, 0.65] : [0.5];
 
   const windowPreset = document.getElementById('opt-window').value;
-  const cvs = document.getElementById('pc-canvas');
-  let ok = false;
-  try { ok = await item.dcm.renderPixels(cvs, windowPreset); } catch(e) { ok = false; }
-  if(!ok) { toast('⚠️ تعذّر عرض معاينة لهذه الصورة', 'warn'); return; }
+  const grid = document.getElementById('pc-grid');
+  grid.innerHTML = '';
+  let shownCount = 0;
+  for(const g of groups) {
+    const n = g.items.length;
+    let idxs;
+    if(n <= fracs.length) idxs = g.items.map((_, i) => i);
+    else idxs = [...new Set(fracs.map(f => Math.min(n - 1, Math.max(0, Math.round((n - 1) * f)))))];
+
+    const row = document.createElement('div');
+    row.className = 'pc-row';
+    for(const i of idxs) {
+      const item = g.items[i];
+      if(!item.dcm) await ensureParsed(item);
+      if(!item.dcm) continue;
+      const cell = document.createElement('div');
+      cell.className = 'pc-cell';
+      const cvs = document.createElement('canvas');
+      let ok = false;
+      try { ok = await item.dcm.renderPixels(cvs, windowPreset); } catch(e) { ok = false; }
+      if(!ok) continue;
+      const tag = document.createElement('span');
+      tag.className = 'pc-idx';
+      tag.textContent = `${i + 1}/${n}`;
+      cell.appendChild(cvs); cell.appendChild(tag);
+      row.appendChild(cell);
+      shownCount++;
+    }
+    if(!row.children.length) continue;
+    if(g.key) {
+      const title = document.createElement('div');
+      title.className = 'pc-folder-title';
+      title.textContent = `📁 ${g.key}`;
+      grid.appendChild(title);
+    }
+    grid.appendChild(row);
+  }
+  if(!shownCount) { toast('⚠️ تعذّر عرض معاينة', 'warn'); return; }
 
   const windowSelect = document.getElementById('opt-window');
   const windowLabel = windowSelect.options[windowSelect.selectedIndex].text;
@@ -2734,7 +3076,7 @@ async function openPreConvertPreview(kind) {
     <span>🔆 Window: <b>${windowLabel}</b></span>
     <span>☀️ السطوع: <b>${brightness}</b></span>
     <span>◑ التباين: <b>${contrastPct}%</b></span>
-    <span>📄 الملف: <b>${item.file.name}</b></span>
+    <span>🖼️ معاينة: <b>${shownCount}</b> صورة${byFolder ? ' من ' + groups.length + ' فولدر' : ''}</span>
   `;
 
   const confirmBtn = document.getElementById('pc-confirm-btn');
@@ -2790,11 +3132,44 @@ function sortItemsByInstanceNumber(items) {
 }
 
 
+// Stacking toast notifications — each toast owns its own timer, so a second
+// toast firing shortly after the first no longer cuts it off early (the
+// single-element version this replaced shared one shared timeout).
+const TOAST_ICONS = { success: '✅', warn: '⚠️', error: '❌', '': 'ℹ️' };
 function toast(msg, type='') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = `show ${type}`;
-  setTimeout(() => el.className='', 3000);
+  const stack = document.getElementById('toast-stack');
+  if(!stack) return;
+
+  const el = document.createElement('div');
+  el.className = `toast-item ${type}`;
+  el.setAttribute('role', 'status');
+
+  const icon = document.createElement('span');
+  icon.className = 'toast-icon';
+  icon.textContent = TOAST_ICONS[type] || TOAST_ICONS[''];
+  icon.setAttribute('aria-hidden', 'true');
+
+  const text = document.createElement('span');
+  text.textContent = msg;
+
+  el.appendChild(icon);
+  el.appendChild(text);
+  stack.appendChild(el);
+
+  // دخول ناعم في الإطار التالي
+  requestAnimationFrame(() => el.classList.add('show'));
+
+  let dismissed = false;
+  const dismiss = () => {
+    if(dismissed) return;
+    dismissed = true;
+    el.classList.remove('show');
+    el.classList.add('leaving');
+    setTimeout(() => el.remove(), 260);
+  };
+
+  const timer = setTimeout(dismiss, 3200);
+  el.addEventListener('click', () => { clearTimeout(timer); dismiss(); });
 }
 
 // ══════════════════════════════════════════════════════
@@ -3004,385 +3379,1355 @@ async function fetchStudy(uid, patientName, btn) {
 }
 
 // ══════════════════════════════════════════════════════
-//  DICOM VIEWER
+//  DICOM VIEWER — multi-viewport (شاشة لكل فولدر) + قياسات
+//  Tools: تصفح / W-L / تحريك / تكبير / طول / زاوية / كثافة (ROI) / نقطة (Cursor Point)
 // ══════════════════════════════════════════════════════
 const vwModal   = document.getElementById('viewer-modal');
-const vwCanvas  = document.getElementById('vw-canvas');
-const vwCtx     = vwCanvas.getContext('2d');
-const vwWrap    = document.getElementById('vw-wrap');
+const vwStage   = document.getElementById('vw-stage');
 const vwOverlay = document.getElementById('vw-wl-overlay');
 const vwHint    = document.getElementById('vw-hint');
 
-let vwFiles   = [];   // كل ملفات الـ session
-let vwIdx     = 0;    // الصورة الحالية
-let vwScale   = 1;
-let vwOffX    = 0;
-let vwOffY    = 0;
-let vwWC      = null; // window center
-let vwWW      = null; // window width
-let vwBaseWC  = null;
-let vwBaseWW  = null;
-let vwImgData = null; // raw pixel imageData
-let vwHintTimer = null;
-let vwWLTimer   = null;
+const VW_PRESETS = {
+  soft:{wc:40,ww:400}, liver:{wc:60,ww:160}, lung:{wc:-600,ww:1600}, bone:{wc:300,ww:1500},
+  brain:{wc:40,ww:80}, stroke:{wc:40,ww:40}, subdural:{wc:75,ww:215}, spine:{wc:50,ww:200},
+  chest:{wc:-500,ww:1500}, abdomen:{wc:60,ww:400}, angio:{wc:300,ww:600},
+  mri_brain:{wc:500,ww:1200}, mri_spine:{wc:400,ww:900}, mri_soft:{wc:600,ww:1400}
+};
+const VW_HINTS = {
+  nav:  '↕ تمرير للصور · ↔ تفتيح/تغميق · 🤏 تكبير · ضغطتين = إعادة ضبط  |  ماوس: سحب = تحريك · كليك يمين = W/L · عجلة = تمرير',
+  wl:   'اسحب لتغيير الـ Window/Level',
+  pan:  'اسحب لتحريك الصورة',
+  zoom: 'اسحب لأعلى/لأسفل للتكبير والتصغير',
+  len:  '📏 اسحب من نقطة لنقطة لقياس الطول',
+  ang:  '∠ اضغط 3 نقاط: طرف ← رأس الزاوية ← الطرف التاني',
+  roi:  '⭕ اسحب لرسم دائرة/بيضاوي وقياس الكثافة (Mean / SD / Min / Max)',
+  pt:   '📍 اضغط أو اسحب لقراءة قيمة البكسل',
+  link: '🎯 مرّر الماوس أو اضغط على المنطقة — هتظهر في باقي السيكونس/الوضعيات. اضغط لتثبيت المؤشر · Esc لإلغائه'
+};
 
-function vwReset() {
-  vwScale=1; vwOffX=0; vwOffY=0;
-  vwWC=vwBaseWC; vwWW=vwBaseWW;
-  vwApplyWL();
+let vwGroups = [];     // [{key, items}] — كل فولدر مجموعة
+let vwPorts  = [];     // الشاشات (viewports)
+let vwActive = null;
+let vwTool   = 'nav';
+let vwSync   = true;
+let vwStartItem = null;
+let vwLink = null;       // المؤشر المتزامن: نقطة في فراغ المريض (mm)
+let vwAutoScroll = true;
+let vwThumbsOn = false;
+let vwThumbGroup = null;
+let vwHintTimer = null, vwWLTimer = null, vwLastTap = 0;
+let vwRO = null;
+const vwPxCache = [];
+
+// ── Pixel data + calibration ─────────────────────────
+function vwSpacing(dcm) {
+  for(const t of ['(0028,0030)', '(0018,1164)', '(0018,2010)']) {
+    const s = dcm.getTag(t);
+    if(!s) continue;
+    const parts = String(s).split('\\').map(parseFloat);
+    if(parts.length >= 2 && parts[0] > 0 && parts[1] > 0) return { r: parts[0], c: parts[1], est: t !== '(0028,0030)' };
+    if(parts.length === 1 && parts[0] > 0) return { r: parts[0], c: parts[0], est: true };
+  }
+  return null;
 }
 
-// ── Open Viewer ───────────────────────────────────────
-async function openViewer(startId) {
-  // اجمع كل الملفات المحمّلة
-  vwFiles = [...files];
-  vwIdx   = vwFiles.findIndex(f => f.id === startId);
-  if(vwIdx < 0) vwIdx = 0;
+async function vwGetPixels(item) {
+  if(item._vwPx) return item._vwPx;
+  if(!item.dcm) await ensureParsed(item);
+  const dcm = item.dcm;
+  if(!dcm) return null;
+  const pd = dcm.tags['PixelData'];
+  if(!pd || !pd.length) return null;
 
+  let px;
+  if(pd.encapsulated) {
+    // JPEG/JPEG2000 — المتصفح بيفك الضغط؛ القيم هنا تدرّج رمادي 0-255 (غير معايَر)
+    const tmp = document.createElement('canvas');
+    const ok = await dcm.renderPixels(tmp, 'auto');
+    if(!ok) return null;
+    const id = tmp.getContext('2d').getImageData(0, 0, tmp.width, tmp.height).data;
+    const n = tmp.width * tmp.height;
+    const data = new Uint8Array(n);
+    for(let i = 0; i < n; i++) data[i] = id[i*4];
+    px = { data, rows: tmp.height, cols: tmp.width, slope: 1, inter: 0, min: 0, max: 255, raw: false, bcDone: true };
+  } else {
+    const rows = parseInt(dcm.getTag('(0028,0010)')) || 0;
+    const cols = parseInt(dcm.getTag('(0028,0011)')) || 0;
+    if(!rows || !cols) return null;
+    const bits = parseInt(dcm.getTag('(0028,0100)')) || 16;
+    const rep  = parseInt(dcm.getTag('(0028,0103)')) || 0;
+    let raw = dcm.buf.buffer.slice(pd.offset, pd.offset + pd.length);
+    if(bits === 16 && (raw.byteLength & 1)) raw = raw.slice(0, raw.byteLength - 1);
+    const data = bits === 16 ? (rep ? new Int16Array(raw) : new Uint16Array(raw)) : new Uint8Array(raw);
+    const n = Math.min(data.length, rows * cols);
+    let mn = Infinity, mx = -Infinity;
+    for(let i = 0; i < n; i++) { const v = data[i]; if(v < mn) mn = v; if(v > mx) mx = v; }
+    if(!isFinite(mn)) { mn = 0; mx = 0; }
+    px = {
+      data, rows, cols,
+      slope: parseFloat(dcm.getTag('(0028,1053)')) || 1,
+      inter: parseFloat(dcm.getTag('(0028,1052)')) || 0,
+      min: mn, max: mx, raw: true, bcDone: false
+    };
+  }
+  px.spacing  = vwSpacing(dcm);
+  px.modality = (dcm.getTag('(0008,0060)') || '').toUpperCase();
+  px.unit     = !px.raw ? 'gray' : (px.modality === 'CT' ? 'HU' : 'SI');
+  item._vwPx = px;
+  vwPxCache.push(item);
+  while(vwPxCache.length > 24) {
+    const o = vwPxCache.shift();
+    if(!vwPorts.some(v => v.item === o)) delete o._vwPx;
+  }
+  return px;
+}
+
+function vwValueAt(px, x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y);
+  if(xi < 0 || yi < 0 || xi >= px.cols || yi >= px.rows) return null;
+  const raw = px.data[yi * px.cols + xi];
+  if(raw === undefined) return null;
+  return raw * px.slope + px.inter;
+}
+function vwFmtVal(v) { return Number.isInteger(v) ? String(v) : v.toFixed(1); }
+
+function vwDist(px, a, b) {
+  const sp = px.spacing;
+  return Math.hypot((b.x - a.x) * (sp ? sp.c : 1), (b.y - a.y) * (sp ? sp.r : 1));
+}
+function vwFmtLen(px, d) {
+  if(!px.spacing) return d.toFixed(1) + ' px';
+  const pre = px.spacing.est ? '≈ ' : '';
+  return pre + (d >= 100 ? (d / 10).toFixed(2) + ' cm' : d.toFixed(1) + ' mm');
+}
+function vwFmtArea(px, st) {
+  if(!px.spacing) return st.n + ' px²';
+  const pre = px.spacing.est ? '≈ ' : '';
+  return pre + (st.area >= 100 ? (st.area / 100).toFixed(2) + ' cm²' : st.area.toFixed(1) + ' mm²');
+}
+function vwAngle(px, a, b, c) {
+  const sp = px.spacing, sx = sp ? sp.c : 1, sy = sp ? sp.r : 1;
+  const ux = (a.x - b.x) * sx, uy = (a.y - b.y) * sy;
+  const vx = (c.x - b.x) * sx, vy = (c.y - b.y) * sy;
+  const lu = Math.hypot(ux, uy), lv = Math.hypot(vx, vy);
+  if(!lu || !lv) return 0;
+  return Math.acos(Math.max(-1, Math.min(1, (ux*vx + uy*vy) / (lu*lv)))) * 180 / Math.PI;
+}
+function vwRoiStats(px, a, b) {
+  const x0 = Math.min(a.x, b.x), x1 = Math.max(a.x, b.x);
+  const y0 = Math.min(a.y, b.y), y1 = Math.max(a.y, b.y);
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+  const rx = Math.max(0.5, (x1 - x0) / 2), ry = Math.max(0.5, (y1 - y0) / 2);
+  const ix0 = Math.max(0, Math.floor(x0)), ix1 = Math.min(px.cols - 1, Math.ceil(x1));
+  const iy0 = Math.max(0, Math.floor(y0)), iy1 = Math.min(px.rows - 1, Math.ceil(y1));
+  let n = 0, s = 0, s2 = 0, mn = Infinity, mx = -Infinity;
+  for(let y = iy0; y <= iy1; y++) {
+    const ddy = (y + 0.5 - cy) / ry;
+    for(let x = ix0; x <= ix1; x++) {
+      const ddx = (x + 0.5 - cx) / rx;
+      if(ddx*ddx + ddy*ddy <= 1) {
+        const raw = px.data[y * px.cols + x];
+        if(raw === undefined) continue;
+        const v = raw * px.slope + px.inter;
+        n++; s += v; s2 += v*v;
+        if(v < mn) mn = v; if(v > mx) mx = v;
+      }
+    }
+  }
+  if(!n) return null;
+  const mean = s / n;
+  const sp = px.spacing;
+  return { n, mean, sd: Math.sqrt(Math.max(0, s2/n - mean*mean)), min: mn, max: mx, area: sp ? n * sp.r * sp.c : null };
+}
+
+function vwLabel(ctx, lines, x, y, color, W, H) {
+  ctx.font = '600 12px "JetBrains Mono", monospace';
+  ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+  const pad = 4, lh = 15;
+  let w = 0;
+  for(const l of lines) w = Math.max(w, ctx.measureText(l).width);
+  const bw = w + pad*2, bh = lines.length * lh + pad*2 - 2;
+  x = Math.max(2, Math.min(W - bw - 2, x));
+  y = Math.max(2, Math.min(H - bh - 2, y));
+  ctx.fillStyle = 'rgba(0,0,0,.74)'; ctx.fillRect(x, y, bw, bh);
+  ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(x + .5, y + .5, bw - 1, bh - 1);
+  ctx.fillStyle = color;
+  lines.forEach((l, i) => ctx.fillText(l, x + pad, y + pad + i * lh));
+}
+
+
+// ══ مؤشر متزامن (Linked cursor) ══════════════════════
+// الفكرة: نحوّل مكان المؤشر لإحداثيات المريض (mm) باستخدام ImagePositionPatient + ImageOrientationPatient
+// ونرجّعه لإحداثيات بكسل في أي صورة تانية (حتى لو سيكونس/وضعية مختلفة: Axial / Coronal / Sagittal)
+const vw3 = {
+  dot: (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2],
+  sub: (a, b) => [a[0]-b[0], a[1]-b[1], a[2]-b[2]],
+  cross: (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]]
+};
+function vwGeo(item) {
+  if(item._vwGeo !== undefined) return item._vwGeo;
+  let g = null;
+  const dcm = item.dcm;
+  if(dcm) {
+    const nums = t => String(dcm.getTag(t) || '').split('\\').map(parseFloat);
+    const ipp = nums('(0020,0032)'), iop = nums('(0020,0037)');
+    const sp = vwSpacing(dcm);
+    if(ipp.length >= 3 && iop.length >= 6 && [...ipp.slice(0,3), ...iop.slice(0,6)].every(isFinite) && sp && !sp.est) {
+      const row = iop.slice(0, 3), col = iop.slice(3, 6);
+      const th = Math.max(parseFloat(dcm.getTag('(0018,0050)')) || 0, parseFloat(dcm.getTag('(0018,0088)')) || 0);
+      g = { ipp: ipp.slice(0, 3), row, col, n: vw3.cross(row, col), dr: sp.r, dc: sp.c,
+            FOR: dcm.getTag('(0020,0052)') || '', tol: (th > 0 ? th / 2 : 1) + 0.01 };
+    }
+  }
+  item._vwGeo = g;
+  return g;
+}
+function vwImgToPatient(g, x, y) {
+  const a = (x - 0.5) * g.dc, b = (y - 0.5) * g.dr;
+  return [g.ipp[0] + a*g.row[0] + b*g.col[0], g.ipp[1] + a*g.row[1] + b*g.col[1], g.ipp[2] + a*g.row[2] + b*g.col[2]];
+}
+function vwPatientToImg(g, P) {
+  const v = vw3.sub(P, g.ipp);
+  return { x: vw3.dot(v, g.row) / g.dc + 0.5, y: vw3.dot(v, g.col) / g.dr + 0.5, d: vw3.dot(v, g.n) };
+}
+function vwSameFOR(a, b) { return !(a && b && a !== b); }
+
+// أقرب شريحة في فولدر الشاشة دي (بنفس اتجاه صورتها الحالية) للنقطة P
+function vwNearestSlice(port, P) {
+  const cur = port.item && vwGeo(port.item);
+  if(!cur || !vwSameFOR(vwLink && vwLink.FOR, cur.FOR)) return -1;
+  let best = -1, bd = Infinity;
+  port.group.items.forEach((it, i) => {
+    const g = vwGeo(it);
+    if(!g || !vwSameFOR(cur.FOR, g.FOR) || Math.abs(vw3.dot(g.n, cur.n)) < 0.98) return;
+    const d = Math.abs(vw3.dot(vw3.sub(P, g.ipp), g.n));
+    if(d < bd) { bd = d; best = i; }
+  });
+  return best;
+}
+
+function vwSetLink(port, sp, scroll, pin) {
+  if(!port.px || !port.item) return;
+  const q = port.toImage(sp.x, sp.y);
+  if(q.x < 0 || q.y < 0 || q.x >= port.px.cols || q.y >= port.px.rows) return;
+  const g = vwGeo(port.item);
+  vwLink = { P: g ? vwImgToPatient(g, q.x, q.y) : null, FOR: g ? g.FOR : '',
+             nx: q.x / port.px.cols, ny: q.y / port.px.rows, src: port, pin: !!pin };
+  if(scroll && vwAutoScroll && vwLink.P) {
+    for(const o of vwPorts) {
+      if(o === port || !o.item) continue;
+      const ni = vwNearestSlice(o, vwLink.P);
+      if(ni >= 0 && ni !== o.idx) { o.cancelDraft(); o.load(ni); }
+    }
+  }
+  vwPorts.forEach(o => o.req(false));
+}
+function vwClearLink() {
+  if(!vwLink) return;
+  vwLink = null;
+  vwPorts.forEach(o => o.req(false));
+}
+function vwToggleAuto() {
+  vwAutoScroll = !vwAutoScroll;
+  document.getElementById('vw-auto-btn').classList.toggle('active', vwAutoScroll);
+  toast(vwAutoScroll ? '⤵ التمرير التلقائي شغال' : '⤵ التمرير التلقائي متوقف', '');
+}
+
+// ── Viewport ──────────────────────────────────────────
+// ══ Viewer upgrades (v3.0): ألوان / فلاتر / سينما / خطوط مرجعية / Tags ══
+VW_HINTS.mag = '🔎 مرّر الماوس أو المس واسحب — عدسة 3× بتوضح البيكسلات وقيمتها';
+const VW_PRESET_KEYS = ['soft', 'lung', 'bone', 'brain', 'liver', 'subdural', 'stroke', 'spine', 'angio'];
+const VW_REF_COLORS = ['#22d3ee', '#a3e635', '#f472b6', '#fb923c', '#c084fc', '#facc15'];
+let vwRef = true;      // خطوط مرجعية
+let vwHud = true;      // البيانات + المسطرة + اتجاهات الجسم
+const vwCine = { on: false, fps: 10, pp: false, dir: 1, last: 0, raf: 0 };
+
+// ── Colormaps (256 × RGB) ──
+const vwCmapCache = {};
+function vwStops(stops, t) {
+  const n = stops.length - 1, x = Math.max(0, Math.min(1, t)) * n, i = Math.min(n - 1, Math.floor(x)), f = x - i;
+  const a = stops[i], b = stops[i + 1];
+  return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f];
+}
+function vwCmap(name) {
+  if(vwCmapCache[name]) return vwCmapCache[name];
+  const lut = new Uint8Array(768), cl = v => Math.max(0, Math.min(1, v));
+  const VIRIDIS = [[68,1,84],[59,82,139],[33,145,140],[94,201,98],[253,231,37]];
+  const BONE = [[0,0,0],[58,58,80],[120,140,150],[200,215,215],[255,255,255]];
+  for(let i = 0; i < 256; i++) {
+    const t = i / 255; let r, g, b;
+    if(name === 'hot') { r = cl(t / 0.4) * 255; g = cl((t - 0.4) / 0.4) * 255; b = cl((t - 0.8) / 0.2) * 255; }
+    else if(name === 'jet') { r = cl(1.5 - Math.abs(4 * t - 3)) * 255; g = cl(1.5 - Math.abs(4 * t - 2)) * 255; b = cl(1.5 - Math.abs(4 * t - 1)) * 255; }
+    else if(name === 'viridis') [r, g, b] = vwStops(VIRIDIS, t);
+    else [r, g, b] = vwStops(BONE, t);
+    lut[i * 3] = Math.round(r); lut[i * 3 + 1] = Math.round(g); lut[i * 3 + 2] = Math.round(b);
+  }
+  return (vwCmapCache[name] = lut);
+}
+
+// ── 3×3 filters on the displayed gray image (القياسات بتفضل على البيانات الأصلية) ──
+function vwFilterGray(src, w, h, mode) {
+  const out = new Uint8Array(src.length);
+  for(let y = 0; y < h; y++) {
+    const y0 = Math.max(0, y - 1) * w, y1 = y * w, y2 = Math.min(h - 1, y + 1) * w;
+    for(let x = 0; x < w; x++) {
+      const x0 = Math.max(0, x - 1), x2 = Math.min(w - 1, x + 1);
+      const a = src[y0 + x0], b = src[y0 + x], c = src[y0 + x2];
+      const d = src[y1 + x0], e = src[y1 + x], f = src[y1 + x2];
+      const g = src[y2 + x0], k = src[y2 + x], i = src[y2 + x2];
+      let v;
+      if(mode === 'sharpen') v = 5 * e - b - d - f - k;
+      else if(mode === 'smooth') v = (a + 2 * b + c + 2 * d + 4 * e + 2 * f + g + 2 * k + i) / 16;
+      else { const gx = (c + 2 * f + i) - (a + 2 * d + g), gy = (g + 2 * k + i) - (a + 2 * b + c); v = Math.hypot(gx, gy); }
+      out[y1 + x] = v < 0 ? 0 : v > 255 ? 255 : v;
+    }
+  }
+  return out;
+}
+
+// ── View actions (على الشاشة النشطة) ──
+function vwSyncViewUI(p) {
+  if(!p) return;
+  document.getElementById('vw-inv-btn').classList.toggle('active', !!p.inv);
+  document.getElementById('vw-cmap').value = p.cmap;
+  document.getElementById('vw-filter').value = p.filt;
+}
+function vwToggleInvert() { const p = vwActive; if(!p || !p.px) return; p.inv = !p.inv; vwSyncViewUI(p); p.req(true); }
+function vwSetCmap(v) { const p = vwActive; if(!p || !p.px) return; p.cmap = v; p.req(true); }
+function vwSetFilter(v) { const p = vwActive; if(!p || !p.px) return; p.filt = v; p.req(true); }
+function vwFlip(axis) {
+  const p = vwActive; if(!p || !p.px) return;
+  if(axis === 'h') p.fh = !p.fh; else p.fv = !p.fv;
+  p.req(false);
+}
+function vwRotate(dir) {
+  const p = vwActive; if(!p || !p.px) return;
+  p.rot = (p.rot + dir + 4) & 3; p.panX = 0; p.panY = 0;
+  p.req(false);
+}
+function vwApplyPreset(key) {
+  const sel = document.getElementById('vw-preset'); if(sel) sel.value = '';
+  const p = vwActive; if(!p || !p.px || !key) return;
+  if(!p.px.raw) { toast('⚠️ الصورة دي مضغوطة (JPEG) — الـ Window الجاهز مش متاح', 'warn'); return; }
+  if(key === 'full') {
+    const a = p.px.min * p.px.slope + p.px.inter, b = p.px.max * p.px.slope + p.px.inter;
+    p.wc = (a + b) / 2; p.ww = Math.abs(b - a) || 1;
+  } else p.initWL(key);
+  showWLOverlay(p.ww, p.wc);
+  p.req(true);
+}
+
+function vwToggleRef() {
+  vwRef = !vwRef;
+  document.getElementById('vw-ref-btn').classList.toggle('active', vwRef);
+  if(vwRef && vwPorts.length < 2) toast('✛ الخطوط المرجعية بتظهر لما يبقى فيه شاشتين أو أكتر بوضعيات مختلفة', '');
+  vwPorts.forEach(o => o.req(false));
+}
+function vwToggleHud() {
+  vwHud = !vwHud;
+  vwModal.classList.toggle('no-hud', !vwHud);
+  document.getElementById('vw-hud-btn').classList.toggle('active', vwHud);
+  vwPorts.forEach(o => o.req(false));
+}
+
+// ── Cine ──
+function vwCineUI() {
+  const b = document.getElementById('vw-cine-btn');
+  b.classList.toggle('active', vwCine.on);
+  b.querySelector('.ic').textContent = vwCine.on ? '⏸' : '▶';
+}
+function vwStartCine() {
+  const p = vwActive;
+  if(!p || p.group.items.length < 2) { toast('⚠️ السينما محتاجة أكتر من صورة في الفولدر', 'warn'); return; }
+  vwCine.on = true; vwCine.last = 0; vwCine.dir = 1;
+  vwCineUI();
+  vwCine.raf = requestAnimationFrame(vwCineTick);
+}
+function vwStopCine() {
+  if(vwCine.raf) cancelAnimationFrame(vwCine.raf);
+  vwCine.raf = 0; vwCine.on = false; vwCineUI();
+}
+function vwToggleCine() { if(vwCine.on) vwStopCine(); else vwStartCine(); }
+function vwSetFps(v) { vwCine.fps = Math.max(1, parseInt(v, 10) || 10); }
+function vwTogglePingPong() {
+  vwCine.pp = !vwCine.pp; vwCine.dir = 1;
+  document.getElementById('vw-pp-btn').classList.toggle('active', vwCine.pp);
+}
+function vwCineTick(ts) {
+  if(!vwCine.on) return;
+  vwCine.raf = requestAnimationFrame(vwCineTick);
+  const p = vwActive;
+  if(!p) return;
+  if(!vwCine.last) vwCine.last = ts;
+  if(ts - vwCine.last < 1000 / vwCine.fps || p.busy) return;   // استنى الصورة الحالية تخلص تحميل
+  vwCine.last = ts;
+  const n = p.group.items.length;
+  let ni = p.idx + vwCine.dir;
+  if(ni >= n || ni < 0) {
+    if(vwCine.pp) { vwCine.dir = -vwCine.dir; ni = p.idx + vwCine.dir; }
+    else ni = ni >= n ? 0 : n - 1;
+  }
+  vwGoto(p, Math.max(0, Math.min(n - 1, ni)));
+}
+
+// ── DICOM Tags browser ──
+const VW_TAG_NAMES = {
+  '(0008,0008)':'Image Type','(0008,0016)':'SOP Class UID','(0008,0018)':'SOP Instance UID','(0008,0020)':'Study Date',
+  '(0008,0021)':'Series Date','(0008,0022)':'Acquisition Date','(0008,0023)':'Content Date','(0008,0030)':'Study Time',
+  '(0008,0031)':'Series Time','(0008,0032)':'Acquisition Time','(0008,0050)':'Accession Number','(0008,0060)':'Modality',
+  '(0008,0070)':'Manufacturer','(0008,0080)':'Institution Name','(0008,0090)':'Referring Physician','(0008,1010)':'Station Name',
+  '(0008,1030)':'Study Description','(0008,103e)':'Series Description','(0008,1040)':'Institutional Department',
+  '(0008,1050)':'Performing Physician','(0008,1090)':'Manufacturer Model Name',
+  '(0010,0010)':'Patient Name','(0010,0020)':'Patient ID','(0010,0030)':'Patient Birth Date','(0010,0040)':'Patient Sex',
+  '(0010,1010)':'Patient Age','(0010,1020)':'Patient Size','(0010,1030)':'Patient Weight',
+  '(0018,0010)':'Contrast/Bolus Agent','(0018,0015)':'Body Part Examined','(0018,0020)':'Scanning Sequence',
+  '(0018,0021)':'Sequence Variant','(0018,0022)':'Scan Options','(0018,0023)':'MR Acquisition Type','(0018,0024)':'Sequence Name',
+  '(0018,0050)':'Slice Thickness','(0018,0060)':'KVP','(0018,0080)':'Repetition Time (TR)','(0018,0081)':'Echo Time (TE)',
+  '(0018,0082)':'Inversion Time (TI)','(0018,0083)':'Number of Averages','(0018,0084)':'Imaging Frequency',
+  '(0018,0085)':'Imaged Nucleus','(0018,0086)':'Echo Number','(0018,0087)':'Magnetic Field Strength',
+  '(0018,0088)':'Spacing Between Slices','(0018,0089)':'Number of Phase Encoding Steps','(0018,0091)':'Echo Train Length',
+  '(0018,0093)':'Percent Sampling','(0018,0094)':'Percent Phase FOV','(0018,0095)':'Pixel Bandwidth',
+  '(0018,1000)':'Device Serial Number','(0018,1020)':'Software Version','(0018,1030)':'Protocol Name',
+  '(0018,1041)':'Contrast/Bolus Volume','(0018,1044)':'Contrast/Bolus Total Dose','(0018,1046)':'Contrast Flow Rate',
+  '(0018,1050)':'Spatial Resolution','(0018,1060)':'Trigger Time','(0018,1088)':'Heart Rate','(0018,1100)':'Reconstruction Diameter',
+  '(0018,1110)':'Distance Source to Detector','(0018,1111)':'Distance Source to Patient','(0018,1120)':'Gantry/Detector Tilt',
+  '(0018,1130)':'Table Height','(0018,1140)':'Rotation Direction','(0018,1150)':'Exposure Time','(0018,1151)':'X-Ray Tube Current (mA)',
+  '(0018,1152)':'Exposure (mAs)','(0018,1160)':'Filter Type','(0018,1170)':'Generator Power','(0018,1190)':'Focal Spot(s)',
+  '(0018,1210)':'Convolution Kernel','(0018,1250)':'Receive Coil Name','(0018,1251)':'Transmit Coil Name',
+  '(0018,1310)':'Acquisition Matrix','(0018,1312)':'In-plane Phase Encoding Direction','(0018,1314)':'Flip Angle','(0018,1316)':'SAR',
+  '(0018,5100)':'Patient Position',
+  '(0020,000d)':'Study Instance UID','(0020,000e)':'Series Instance UID','(0020,0010)':'Study ID','(0020,0011)':'Series Number',
+  '(0020,0012)':'Acquisition Number','(0020,0013)':'Instance Number','(0020,0032)':'Image Position (Patient)',
+  '(0020,0037)':'Image Orientation (Patient)','(0020,0052)':'Frame of Reference UID','(0020,1040)':'Position Reference Indicator',
+  '(0020,1041)':'Slice Location','(0020,4000)':'Image Comments',
+  '(0028,0002)':'Samples per Pixel','(0028,0004)':'Photometric Interpretation','(0028,0008)':'Number of Frames','(0028,0010)':'Rows',
+  '(0028,0011)':'Columns','(0028,0030)':'Pixel Spacing','(0028,0100)':'Bits Allocated','(0028,0101)':'Bits Stored',
+  '(0028,0102)':'High Bit','(0028,0103)':'Pixel Representation','(0028,1050)':'Window Center','(0028,1051)':'Window Width',
+  '(0028,1052)':'Rescale Intercept','(0028,1053)':'Rescale Slope','(0028,1054)':'Rescale Type',
+  '(0032,1060)':'Requested Procedure Description','(0040,0254)':'Performed Procedure Step Description'
+};
+let vwTagRows = [], vwTagShown = [], vwTagKeyOnly = true;
+const vwTagsEl = document.getElementById('vw-tags');
+
+function vwOpenTags() {
+  const p = vwActive, dcm = p && p.item && p.item.dcm;
+  if(!dcm) { toast('⚠️ مفيش بيانات DICOM للصورة دي', 'warn'); return; }
+  vwTagRows = Object.keys(dcm.tags).filter(k => k !== 'PixelData').sort()
+    .map(k => ({ tag: k, name: VW_TAG_NAMES[k] || '', val: String(dcm.tags[k]) }));
+  vwTagsEl.classList.add('open');
+  document.getElementById('vwt-q').value = '';
+  vwRenderTags();
+}
+function vwCloseTags() { vwTagsEl.classList.remove('open'); }
+function vwTagMode(m) {
+  vwTagKeyOnly = m === 'key';
+  document.getElementById('vwt-chip-key').classList.toggle('active', vwTagKeyOnly);
+  document.getElementById('vwt-chip-all').classList.toggle('active', !vwTagKeyOnly);
+  vwRenderTags();
+}
+function vwRenderTags() {
+  const q = document.getElementById('vwt-q').value.trim().toLowerCase();
+  const list = document.getElementById('vwt-list');
+  vwTagShown = vwTagRows.filter(r => {
+    if(q) return (r.tag + ' ' + r.name + ' ' + r.val).toLowerCase().includes(q);   // البحث بيدوّر في الكل
+    return !vwTagKeyOnly || r.name;
+  });
+  list.textContent = '';
+  if(!vwTagShown.length) {
+    const d = document.createElement('div'); d.className = 'vwt-empty'; d.textContent = 'مفيش نتائج';
+    list.appendChild(d);
+  }
+  const frag = document.createDocumentFragment();
+  for(const r of vwTagShown) {
+    const row = document.createElement('div'); row.className = 'vwt-row';
+    const t = document.createElement('div'); t.className = 'vwt-tag'; t.textContent = r.tag;
+    const n = document.createElement('div'); n.className = 'vwt-name'; n.textContent = r.name || '—';
+    const v = document.createElement('div'); v.className = 'vwt-val'; v.textContent = r.val || '(فاضي)';
+    row.append(t, n, v); frag.appendChild(row);
+  }
+  list.appendChild(frag);
+  document.getElementById('vwt-count').textContent = `${vwTagShown.length} / ${vwTagRows.length}`;
+}
+function vwCopyTags() {
+  const txt = vwTagShown.map(r => `${r.tag}  ${r.name || '-'}: ${r.val}`).join('\n');
+  const fallback = () => {
+    const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch(_) {}
+    ta.remove(); toast(ok ? '📋 تم النسخ' : '⚠️ النسخ مش متاح', ok ? 'success' : 'warn');
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(() => toast('📋 تم النسخ', 'success'), fallback);
+  else fallback();
+}
+document.getElementById('vwt-q').addEventListener('input', vwRenderTags);
+document.getElementById('vwt-q').addEventListener('keydown', e => { if(e.key === 'Escape') { vwCloseTags(); e.stopPropagation(); } });
+
+// ── VwPort class ──────────────────────────────────────
+class VwPort {
+  constructor(group, idx) {
+    this.group = group; this.idx = idx || 0;
+    this.item = null; this.px = null;
+    this.scale = 1; this.panX = 0; this.panY = 0;
+    this.wc = null; this.ww = null;
+    this.off = document.createElement('canvas');
+    this.dirty = true; this.tok = 0; this.raf = 0;
+    this.cw = 1; this.ch = 1; this.dpr = 1;
+    this.ptrs = new Map(); this.mode = null; this.start = null; this.last = null;
+    this.moved = false; this.gest = null; this.acc = 0; this.wacc = 0;
+    this.cursor = null; this.draft = null; this.dims = '';
+    this.rot = 0; this.fh = false; this.fv = false; this.inv = false; this.cmap = 'gray'; this.filt = 'none';
+    this.busy = false; this.ptype = 'mouse';
+    this.build();
+  }
+
+  build() {
+    const el = document.createElement('div');
+    el.className = 'vp';
+    el.innerHTML = '<canvas></canvas><div class="vp-tl"><select class="vp-folder" aria-label="اختيار الفولدر"></select></div><div class="vp-tr"></div><div class="vp-bl"></div><div class="vp-br"></div>';
+    this.el = el; el._vp = this;
+    this.canvas = el.querySelector('canvas');
+    this.ctx = this.canvas.getContext('2d');
+    this.selEl = el.querySelector('.vp-folder');
+    this.trEl = el.querySelector('.vp-tr');
+    this.blEl = el.querySelector('.vp-bl');
+    this.brEl = el.querySelector('.vp-br');
+    this.fillSelect();
+    this.selEl.addEventListener('change', () => {
+      const g = vwGroups[parseInt(this.selEl.value, 10)];
+      if(g) this.setGroup(g);
+    });
+    this.selEl.addEventListener('pointerdown', e => e.stopPropagation());
+    el.addEventListener('pointerdown', () => vwSetActive(this), true);
+
+    const c = this.canvas;
+    c.addEventListener('pointerdown', e => this.onDown(e));
+    c.addEventListener('pointermove', e => this.onMove(e));
+    c.addEventListener('pointerup', e => this.onUp(e));
+    c.addEventListener('pointercancel', e => this.onUp(e));
+    c.addEventListener('pointerleave', e => {
+      if(e.pointerType === 'mouse') {
+        this.cursor = null; this.req(false);
+        if(vwLink && !vwLink.pin && vwLink.src === this) vwClearLink();
+      }
+    });
+    c.addEventListener('wheel', e => this.onWheel(e), { passive: false });
+    c.addEventListener('contextmenu', e => e.preventDefault());
+    c.addEventListener('dblclick', () => { if(vwTool === 'nav') this.resetView(); });
+  }
+
+  fillSelect() {
+    this.selEl.innerHTML = '';
+    vwGroups.forEach((g, i) => {
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = `📁 ${g.key || 'بدون فولدر'} (${g.items.length})`;
+      if(g === this.group) o.selected = true;
+      this.selEl.appendChild(o);
+    });
+  }
+
+  destroy() {
+    if(this.raf) cancelAnimationFrame(this.raf);
+    this.tok++;
+    if(vwRO) vwRO.unobserve(this.el);
+    this.el.remove();
+  }
+
+  setGroup(g) {
+    this.group = g; this.wc = null; this.ww = null;
+    this.scale = 1; this.panX = 0; this.panY = 0; this.draft = null;
+    this.rot = 0; this.fh = false; this.fv = false;
+    this.fillSelect();
+    this.load(0);
+    if(this === vwActive) vwUpdateChrome(true);
+  }
+
+  async load(idx) {
+    const items = this.group.items;
+    this.idx = Math.max(0, Math.min(idx, items.length - 1));
+    const tok = ++this.tok;
+    this.busy = true;
+    const item = items[this.idx];
+    let px = null;
+    try { px = await vwGetPixels(item); } catch(e) { px = null; }
+    if(tok !== this.tok || !this.el.isConnected) return;
+    this.busy = false;
+    this.item = item; this.px = px;
+    if(px) {
+      if(this.wc == null) this.initWL();
+      const dims = px.cols + 'x' + px.rows;
+      if(this.dims && this.dims !== dims) { this.scale = 1; this.panX = 0; this.panY = 0; }
+      this.dims = dims;
+      this.dirty = true;
+    }
+    this.draw();
+    if(this === vwActive) vwUpdateChrome(false);
+  }
+
+  initWL(forceKey) {
+    const px = this.px, dcm = this.item && this.item.dcm;
+    if(!px) return;
+    const key = forceKey || (document.getElementById('opt-window') || {}).value || 'auto';
+    let wc = null, ww = null;
+    if(key !== 'auto' && VW_PRESETS[key]) { wc = VW_PRESETS[key].wc; ww = VW_PRESETS[key].ww; }
+    else if(px.raw && dcm) {
+      const tc = parseFloat(dcm.getTag('(0028,1050)')), tw = parseFloat(dcm.getTag('(0028,1051)'));
+      if(tw > 0 && isFinite(tc)) { wc = tc; ww = tw; }
+    }
+    if(wc == null) {
+      const a = px.min * px.slope + px.inter, b = px.max * px.slope + px.inter;
+      const lo = Math.min(a, b), hi = Math.max(a, b);
+      wc = (lo + hi) / 2; ww = (hi - lo) || 1;
+    }
+    this.wc = wc; this.ww = ww;
+  }
+
+  resetView() {
+    this.scale = 1; this.panX = 0; this.panY = 0;
+    this.rot = 0; this.fh = false; this.fv = false; this.inv = false; this.cmap = 'gray'; this.filt = 'none';
+    this.initWL(); this.dirty = true; this.req(false);
+    if(this === vwActive) vwSyncViewUI(this);
+  }
+
+  resize() {
+    const r = this.el.getBoundingClientRect();
+    this.dpr = window.devicePixelRatio || 1;
+    this.cw = Math.max(1, r.width); this.ch = Math.max(1, r.height);
+    const w = Math.round(this.cw * this.dpr), h = Math.round(this.ch * this.dpr);
+    if(this.canvas.width !== w || this.canvas.height !== h) { this.canvas.width = w; this.canvas.height = h; }
+    this.draw();
+  }
+
+  req(dirtyImg) {
+    if(dirtyImg) this.dirty = true;
+    if(this.raf) return;
+    this.raf = requestAnimationFrame(() => { this.raf = 0; this.draw(); });
+  }
+
+  // fit-to-viewport × zoom  → الصورة بتملا الشاشة
+  ds() {
+    const sw = (this.rot & 1) ? this.px.rows : this.px.cols, sh = (this.rot & 1) ? this.px.cols : this.px.rows;
+    return Math.min(this.cw / sw, this.ch / sh) * this.scale;
+  }
+  // مصفوفة التحويل: إحداثيات الصورة (من المركز) → الشاشة  |  x' = a·u + c·v ,  y' = b·u + d·v
+  xf() {
+    const fx = this.fh ? -1 : 1, fy = this.fv ? -1 : 1;
+    const ang = this.rot * Math.PI / 2, co = Math.round(Math.cos(ang)), si = Math.round(Math.sin(ang));
+    return { a: co * fx, b: si * fx, c: -si * fy, d: co * fy };
+  }
+  toScreen(x, y) {
+    const k = this.ds(), m = this.xf(), u = x - this.px.cols/2, v = y - this.px.rows/2;
+    return { x: this.cw/2 + this.panX + k * (m.a * u + m.c * v), y: this.ch/2 + this.panY + k * (m.b * u + m.d * v) };
+  }
+  toImage(sx, sy) {
+    const k = this.ds(), m = this.xf(), det = m.a * m.d - m.b * m.c;
+    const dx = (sx - this.cw/2 - this.panX) / k, dy = (sy - this.ch/2 - this.panY) / k;
+    return { x: (m.d * dx - m.c * dy) / det + this.px.cols/2, y: (-m.b * dx + m.a * dy) / det + this.px.rows/2 };
+  }
+  zoomAt(sx, sy, ns) {
+    ns = Math.max(0.3, Math.min(32, ns));
+    const fx = sx - this.cw/2, fy = sy - this.ch/2, k = ns / this.scale;
+    this.panX = fx - (fx - this.panX) * k;
+    this.panY = fy - (fy - this.panY) * k;
+    this.scale = ns;
+  }
+  clampPan() {
+    if(!this.px) return;
+    const d = this.ds(), sw = (this.rot & 1) ? this.px.rows : this.px.cols, sh = (this.rot & 1) ? this.px.cols : this.px.rows;
+    const mx = sw * d / 2 + this.cw / 4, my = sh * d / 2 + this.ch / 4;
+    this.panX = Math.max(-mx, Math.min(mx, this.panX));
+    this.panY = Math.max(-my, Math.min(my, this.panY));
+  }
+
+  renderOff() {
+    const px = this.px, rows = px.rows, cols = px.cols, data = px.data;
+    if(this.off.width !== cols || this.off.height !== rows) { this.off.width = cols; this.off.height = rows; }
+    const octx = this.off.getContext('2d');
+    const img = octx.createImageData(cols, rows), out = img.data;
+    const lo = this.wc - this.ww / 2, hi = this.wc + this.ww / 2, k = 255 / this.ww;
+    const b = px.bcDone ? 0 : getBrightnessAdjust(), c = px.bcDone ? 1 : getContrastFactor();
+    const bcOn = b !== 0 || c !== 1;
+    const mn = px.min, span = px.max - px.min + 1;
+    const lut = new Uint8Array(span);
+    for(let i = 0; i < span; i++) {
+      const v = (mn + i) * px.slope + px.inter;
+      let g = Math.round((Math.max(lo, Math.min(hi, v)) - lo) * k);
+      g = Math.max(0, Math.min(255, g));
+      if(bcOn) g = Math.max(0, Math.min(255, Math.round((g - 128) * c + 128 + b)));
+      lut[i] = g;
+    }
+    if(this.inv) for(let i = 0; i < span; i++) lut[i] = 255 - lut[i];
+    const n = Math.min(data.length, rows * cols);
+    let gray = null;
+    if(this.filt !== 'none') {
+      gray = new Uint8Array(rows * cols);
+      for(let i = 0; i < n; i++) gray[i] = lut[data[i] - mn];
+      gray = vwFilterGray(gray, cols, rows, this.filt);
+    }
+    const cm = this.cmap !== 'gray' ? vwCmap(this.cmap) : null;
+    for(let i = 0, p = 0; i < n; i++, p += 4) {
+      const g = gray ? gray[i] : lut[data[i] - mn];
+      if(cm) { const q = g * 3; out[p] = cm[q]; out[p+1] = cm[q+1]; out[p+2] = cm[q+2]; }
+      else { out[p] = g; out[p+1] = g; out[p+2] = g; }
+      out[p+3] = 255;
+    }
+    octx.putImageData(img, 0, 0);
+  }
+
+  draw() {
+    const ctx = this.ctx, dpr = this.dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, this.cw, this.ch);
+    if(!this.px) {
+      ctx.fillStyle = '#64748b'; ctx.font = '14px Cairo, Arial, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(this.item ? 'تعذّر عرض هذه الصورة' : '...', this.cw/2, this.ch/2);
+      this.updateHud();
+      return;
+    }
+    if(this.dirty) { this.renderOff(); this.dirty = false; }
+    this.clampPan();
+    const d = this.ds(), w = this.px.cols * d, h = this.px.rows * d;
+    ctx.imageSmoothingEnabled = d < 3;
+    const m = this.xf();
+    ctx.save();
+    ctx.transform(m.a * d, m.b * d, m.c * d, m.d * d, this.cw/2 + this.panX, this.ch/2 + this.panY);
+    ctx.drawImage(this.off, -this.px.cols/2, -this.px.rows/2, this.px.cols, this.px.rows);
+    ctx.restore();
+    this.drawMeasurements(ctx);
+    this.drawRefLines(ctx);
+    if(vwHud) { this.drawOrient(ctx); this.drawScaleBar(ctx); }
+    this.drawLoupe(ctx);
+    this.updateHud();
+  }
+
+  updateHud() {
+    const n = this.group.items.length;
+    let tr = `${this.idx + 1} / ${n}`;
+    const dcm = this.item && this.item.dcm;
+    if(dcm) {
+      const loc = parseFloat(dcm.getTag('(0020,1041)'));
+      if(isFinite(loc)) tr += `\nLoc ${loc.toFixed(1)} mm`;
+    }
+    this.trEl.textContent = tr;
+    if(this.px) {
+      const sp = this.px.spacing;
+      this.blEl.textContent = `W ${Math.round(this.ww)}  L ${Math.round(this.wc)}\n×${this.scale.toFixed(2)}  ` +
+        (sp ? `${sp.est ? '≈' : ''}${sp.c.toFixed(2)} mm/px` : 'بدون معايرة (px)');
+      let br = '';
+      if(this.cursor) {
+        const q = this.toImage(this.cursor.x, this.cursor.y);
+        const v = vwValueAt(this.px, q.x, q.y);
+        if(v !== null) br = `x:${Math.floor(q.x)} y:${Math.floor(q.y)}\n${vwFmtVal(v)} ${this.px.unit}`;
+      }
+      this.brEl.textContent = br;
+      const fl = [this.rot ? `↻${this.rot * 90}°` : '', this.fh ? '⇋' : '', this.fv ? '⇅' : '', this.inv ? 'INV' : '',
+                  this.cmap !== 'gray' ? this.cmap : '', this.filt !== 'none' ? this.filt : ''].filter(Boolean).join(' ');
+      if(fl) this.blEl.textContent += '\n' + fl;
+    } else { this.blEl.textContent = ''; this.brEl.textContent = ''; }
+    if(this === vwActive && this.px) {
+      document.getElementById('vw-wl-info').textContent =
+        `W: ${Math.round(this.ww)}   L: ${Math.round(this.wc)}   ·   ` +
+        (this.px.spacing ? (this.px.spacing.est ? 'مقياس تقريبي' : 'مقياس معايَر (mm)') : 'القياس بالبكسل') +
+        `   ·   الوحدة: ${this.px.unit}`;
+    }
+  }
+
+  // ── measurements ──
+  drawMeasurements(ctx) {
+    const list = (this.item && this.item._vwMeas) || [];
+    for(const m of list) this.drawShape(ctx, m, false);
+    if(this.draft) this.drawShape(ctx, this.draft, true);
+    this.drawLink(ctx);
+  }
+
+  drawLink(ctx) {
+    const L = vwLink, px = this.px;
+    if(!L || !px || !this.item) return;
+    const g = vwGeo(this.item);
+    let x, y, d = 0, tol = 1;
+    if(L.P && g && vwSameFOR(L.FOR, g.FOR)) { const r = vwPatientToImg(g, L.P); x = r.x; y = r.y; d = r.d; tol = g.tol; }
+    else { x = L.nx * px.cols; y = L.ny * px.rows; }   // مفيش هندسة → نفترض نفس الـ FOV
+    if(x < 0 || y < 0 || x >= px.cols || y >= px.rows) return;
+    const s = this.toScreen(x, y), col = '#ff9f0a';
+    const inPlane = Math.abs(d) <= tol;
+    ctx.save();
+    ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.lineCap = 'round';
+    if(!inPlane) { ctx.globalAlpha = 0.75; ctx.setLineDash([4, 3]); }
+    const r = inPlane ? 6 : 9;
+    ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.beginPath();
+    ctx.moveTo(s.x - r - 9, s.y); ctx.lineTo(s.x - r + 2, s.y); ctx.moveTo(s.x + r - 2, s.y); ctx.lineTo(s.x + r + 9, s.y);
+    ctx.moveTo(s.x, s.y - r - 9); ctx.lineTo(s.x, s.y - r + 2); ctx.moveTo(s.x, s.y + r - 2); ctx.lineTo(s.x, s.y + r + 9);
+    ctx.stroke();
+    ctx.restore();
+    const v = vwValueAt(px, x, y);
+    const lines = inPlane ? [v === null ? '—' : `${vwFmtVal(v)} ${px.unit}`] : [`Δ ${Math.abs(d).toFixed(1)} mm`];
+    vwLabel(ctx, lines, s.x + r + 6, s.y + r + 2, col, this.cw, this.ch);
+  }
+
+  drawShape(ctx, m, draft) {
+    const px = this.px, W = this.cw, H = this.ch;
+    const col = { len:'#ffd60a', ang:'#00e5ff', roi:'#34d399', pt:'#ff6bd6' }[m.type];
+    const pts = m.type === 'ang' && draft ? [...m.pts, m.live].slice(0, 3) : m.p;
+    const P = pts.map(q => this.toScreen(q.x, q.y));
+    ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.strokeStyle = col; ctx.fillStyle = col;
+    const dot = p => {
+      ctx.beginPath(); ctx.arc(p.x, p.y, 4, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill();
+      ctx.lineWidth = 1; ctx.strokeStyle = '#000'; ctx.stroke();
+      ctx.lineWidth = 2; ctx.strokeStyle = col;
+    };
+
+    if(m.type === 'len' && P.length >= 2) {
+      ctx.beginPath(); ctx.moveTo(P[0].x, P[0].y); ctx.lineTo(P[1].x, P[1].y); ctx.stroke();
+      dot(P[0]); dot(P[1]);
+      vwLabel(ctx, [vwFmtLen(px, vwDist(px, pts[0], pts[1]))], (P[0].x + P[1].x)/2 + 8, (P[0].y + P[1].y)/2 + 8, col, W, H);
+    } else if(m.type === 'ang' && P.length >= 2) {
+      ctx.beginPath(); ctx.moveTo(P[0].x, P[0].y); ctx.lineTo(P[1].x, P[1].y);
+      if(P.length >= 3) ctx.lineTo(P[2].x, P[2].y);
+      ctx.stroke();
+      P.forEach(dot);
+      if(P.length >= 3) {
+        const a1 = Math.atan2(P[0].y - P[1].y, P[0].x - P[1].x), a2 = Math.atan2(P[2].y - P[1].y, P[2].x - P[1].x);
+        let diff = a2 - a1;
+        while(diff > Math.PI) diff -= 2 * Math.PI;
+        while(diff < -Math.PI) diff += 2 * Math.PI;
+        ctx.beginPath(); ctx.arc(P[1].x, P[1].y, 22, a1, a2, diff < 0); ctx.stroke();
+        vwLabel(ctx, [vwAngle(px, pts[0], pts[1], pts[2]).toFixed(1) + '°'], P[1].x + 14, P[1].y + 10, col, W, H);
+      }
+    } else if(m.type === 'roi' && P.length >= 2) {
+      const cx = (P[0].x + P[1].x) / 2, cy = (P[0].y + P[1].y) / 2;
+      const rx = Math.max(1, Math.abs(P[1].x - P[0].x) / 2), ry = Math.max(1, Math.abs(P[1].y - P[0].y) / 2);
+      ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(52,211,153,.12)'; ctx.fill(); ctx.stroke();
+      const st = m.stat || vwRoiStats(px, pts[0], pts[1]);
+      if(st) {
+        const u = px.unit;
+        vwLabel(ctx, [
+          `Mean ${st.mean.toFixed(1)} ${u}`,
+          `SD   ${st.sd.toFixed(1)}`,
+          `Min ${vwFmtVal(st.min)} / Max ${vwFmtVal(st.max)}`,
+          `Area ${vwFmtArea(px, st)}`
+        ], cx + rx + 8, cy - 26, col, W, H);
+      }
+    } else if(m.type === 'pt' && P.length >= 1) {
+      const p = P[0];
+      ctx.beginPath(); ctx.arc(p.x, p.y, 5, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(p.x - 11, p.y); ctx.lineTo(p.x - 3, p.y); ctx.moveTo(p.x + 3, p.y); ctx.lineTo(p.x + 11, p.y);
+      ctx.moveTo(p.x, p.y - 11); ctx.lineTo(p.x, p.y - 3); ctx.moveTo(p.x, p.y + 3); ctx.lineTo(p.x, p.y + 11); ctx.stroke();
+      const v = vwValueAt(px, pts[0].x, pts[0].y);
+      vwLabel(ctx, v === null ? ['خارج الصورة'] : [`(${Math.floor(pts[0].x)}, ${Math.floor(pts[0].y)})`, `${vwFmtVal(v)} ${px.unit}`], p.x + 10, p.y + 8, col, W, H);
+    }
+    ctx.lineWidth = 2;
+  }
+
+  // ── اتجاهات الجسم (R/L · A/P · S/I) على حواف الصورة ──
+  drawOrient(ctx) {
+    const dcm = this.item && this.item.dcm;
+    if(!dcm) return;
+    const iop = String(dcm.getTag('(0020,0037)') || '').split('\\').map(parseFloat);
+    if(iop.length < 6 || !iop.slice(0, 6).every(isFinite)) return;
+    const row = iop.slice(0, 3), col = iop.slice(3, 6), m = this.xf(), det = m.a * m.d - m.b * m.c;
+    const letters = (sx, sy) => {
+      const ix = (m.d * sx - m.c * sy) / det, iy = (-m.b * sx + m.a * sy) / det;
+      const v = [0, 1, 2].map(i => ix * row[i] + iy * col[i]);          // اتجاه الشاشة ده في فراغ المريض (LPS)
+      return [['L', 'R', v[0]], ['P', 'A', v[1]], ['S', 'I', v[2]]]
+        .map(([pos, neg, val]) => ({ l: val >= 0 ? pos : neg, a: Math.abs(val) }))
+        .filter(o => o.a > 0.25).sort((p, q) => q.a - p.a).slice(0, 2).map(o => o.l).join('');
+    };
+    ctx.save();
+    ctx.font = '700 14px "JetBrains Mono", monospace';
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.fillStyle = 'rgba(255,214,10,.95)';
+    const put = (t, x, y, al, bl) => { if(!t) return; ctx.textAlign = al; ctx.textBaseline = bl; ctx.strokeText(t, x, y); ctx.fillText(t, x, y); };
+    put(letters(1, 0),  this.cw - 8, this.ch / 2, 'right', 'middle');
+    put(letters(-1, 0), 8,           this.ch / 2, 'left',  'middle');
+    put(letters(0, -1), this.cw / 2, 6,           'center', 'top');
+    put(letters(0, 1),  this.cw / 2, this.ch - 6, 'center', 'bottom');
+    ctx.restore();
+  }
+
+  // ── مسطرة بالمليمتر (لو الصورة معايَرة) ──
+  drawScaleBar(ctx) {
+    const sp = this.px && this.px.spacing;
+    if(!sp) return;
+    const k = this.ds(), perPx = (this.rot & 1) ? sp.r : sp.c, pxPerMm = k / perPx;
+    let mm = 1;
+    for(const n of [1, 2, 5, 10, 20, 50, 100, 200, 500]) { mm = n; if(n * pxPerMm >= 70) break; }
+    const len = mm * pxPerMm;
+    if(len < 20 || len > this.cw * 0.6) return;
+    const x0 = this.cw / 2 - len / 2, x1 = x0 + len, y = this.ch - 30;
+    const lab = (sp.est ? '≈ ' : '') + (mm >= 10 ? (mm / 10) + ' cm' : mm + ' mm');
+    ctx.save();
+    const line = () => { ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y); ctx.moveTo(x0, y - 5); ctx.lineTo(x0, y + 5); ctx.moveTo(x1, y - 5); ctx.lineTo(x1, y + 5); ctx.stroke(); };
+    ctx.lineCap = 'butt'; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.lineWidth = 4; line();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; line();
+    ctx.font = '600 11px "JetBrains Mono", monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.strokeText(lab, this.cw / 2, y - 7);
+    ctx.fillStyle = '#fff'; ctx.fillText(lab, this.cw / 2, y - 7);
+    ctx.restore();
+  }
+
+  // ── خطوط مرجعية: تقاطع مستوى الشاشات التانية مع الصورة دي ──
+  drawRefLines(ctx) {
+    if(!vwRef || vwPorts.length < 2 || !this.item || !this.px) return;
+    const g1 = vwGeo(this.item);
+    if(!g1) return;
+    const cols = this.px.cols, rows = this.px.rows;
+    vwPorts.forEach((o, oi) => {
+      if(o === this || !o.item) return;
+      const g2 = vwGeo(o.item);
+      if(!g2 || !vwSameFOR(g1.FOR, g2.FOR) || Math.abs(vw3.dot(g1.n, g2.n)) > 0.9) return;   // نفس الوضعية = مفيش تقاطع مفيد
+      // المستوى التاني بمعادلة A·x + B·y + C = 0 في إحداثيات بكسل الصورة دي
+      const A = g1.dc * vw3.dot(g1.row, g2.n), B = g1.dr * vw3.dot(g1.col, g2.n);
+      const C = vw3.dot(vw3.sub(g1.ipp, g2.ipp), g2.n) - 0.5 * A - 0.5 * B;
+      const pts = [], add = (x, y) => { if(x >= -0.01 && x <= cols + 0.01 && y >= -0.01 && y <= rows + 0.01) pts.push({ x, y }); };
+      if(Math.abs(B) > 1e-9) { add(0, -C / B); add(cols, -(C + A * cols) / B); }
+      if(Math.abs(A) > 1e-9) { add(-C / A, 0); add(-(C + B * rows) / A, rows); }
+      if(pts.length < 2) return;
+      let p0 = pts[0], p1 = pts[1], best = -1;
+      for(let i = 0; i < pts.length; i++) for(let j = i + 1; j < pts.length; j++) {
+        const dd = Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y);
+        if(dd > best) { best = dd; p0 = pts[i]; p1 = pts[j]; }
+      }
+      if(best < 2) return;
+      const col = VW_REF_COLORS[oi % VW_REF_COLORS.length], s0 = this.toScreen(p0.x, p0.y), s1 = this.toScreen(p1.x, p1.y);
+      ctx.save();
+      ctx.strokeStyle = col; ctx.globalAlpha = 0.85; ctx.lineWidth = 1.25; ctx.setLineDash([8, 5]);
+      ctx.beginPath(); ctx.moveTo(s0.x, s0.y); ctx.lineTo(s1.x, s1.y); ctx.stroke();
+      ctx.restore();
+      vwLabel(ctx, ['#' + (oi + 1)], s0.x + 4, s0.y + 4, col, this.cw, this.ch);
+    });
+  }
+
+  // ── عدسة مكبّرة 3× ──
+  drawLoupe(ctx) {
+    if(vwTool !== 'mag' || !this.cursor || !this.px) return;
+    const p = this.cursor, R = 84, Z = 3, k = this.ds() * Z, m = this.xf();
+    const q = this.toImage(p.x, p.y);
+    const touch = this.ptype !== 'mouse';
+    let cx = p.x, cy = touch ? p.y - R - 34 : p.y;
+    if(touch && cy < R + 4) cy = p.y + R + 34;                     // قرب الحافة العلوية → العدسة تحت الصباع
+    cx = Math.max(R + 2, Math.min(this.cw - R - 2, cx)); cy = Math.max(R + 2, Math.min(this.ch - R - 2, cy));
+    const uq = q.x - this.px.cols / 2, vq = q.y - this.px.rows / 2;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.clip();
+    ctx.fillStyle = '#000'; ctx.fillRect(cx - R, cy - R, R * 2, R * 2);
+    ctx.imageSmoothingEnabled = k < 3;
+    ctx.transform(m.a * k, m.b * k, m.c * k, m.d * k, cx - k * (m.a * uq + m.c * vq), cy - k * (m.b * uq + m.d * vq));
+    ctx.drawImage(this.off, -this.px.cols / 2, -this.px.rows / 2, this.px.cols, this.px.rows);
+    ctx.restore();
+    ctx.save();
+    ctx.lineWidth = 2; ctx.strokeStyle = '#00d4ff'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, Math.PI * 2); ctx.stroke();
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,.75)';
+    ctx.beginPath(); ctx.moveTo(cx - 9, cy); ctx.lineTo(cx + 9, cy); ctx.moveTo(cx, cy - 9); ctx.lineTo(cx, cy + 9); ctx.stroke();
+    ctx.restore();
+    const v = vwValueAt(this.px, q.x, q.y);
+    if(v !== null) vwLabel(ctx, [`${vwFmtVal(v)} ${this.px.unit}`], cx - 34, cy + R + 4, '#00d4ff', this.cw, this.ch);
+  }
+
+  cancelDraft() { if(this.draft) { this.draft = null; this.req(false); } }
+
+  commit(shape) {
+    if(!this.item) return;
+    if(shape.type === 'roi') shape.stat = vwRoiStats(this.px, shape.p[0], shape.p[1]);
+    if(!this.item._vwMeas) this.item._vwMeas = [];
+    this.item._vwMeas.push(shape);
+    vwPorts.forEach(o => { if(o.item === this.item) o.req(false); });
+  }
+
+  // ── input ──
+  rel(e) { this.ptype = e.pointerType; const r = this.canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+
+  onDown(e) {
+    const p = this.rel(e);
+    try { this.canvas.setPointerCapture(e.pointerId); } catch(_) {}
+    this.ptrs.set(e.pointerId, p);
+    if(this.ptrs.size === 2) {
+      this.draft = null; this.mode = 'pinch';
+      const [a, b] = [...this.ptrs.values()];
+      this.pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, scale: this.scale, panX: this.panX, panY: this.panY, cx: (a.x + b.x)/2, cy: (a.y + b.y)/2 };
+      this.req(false);
+      return;
+    }
+    if(this.ptrs.size > 2) return;
+
+    const btn = e.pointerType === 'mouse' ? e.button : 0;
+    let tool = vwTool;
+    if(btn === 2) tool = 'wl';
+    else if(btn === 1) tool = 'pan';
+    else if(e.pointerType === 'mouse' && tool === 'nav') tool = 'pan';
+    this.mode = tool;
+    this.start = { x: p.x, y: p.y, scale: this.scale };
+    this.last = { x: p.x, y: p.y };
+    this.moved = false; this.gest = null; this.acc = 0;
+    if(e.pointerType !== 'mouse') this.cursor = p;
+    if(!this.px) return;
+    if(tool === 'link') { vwSetLink(this, p, true, true); return; }
+
+    const q = this.toImage(p.x, p.y);
+    if(tool === 'len' || tool === 'roi') this.draft = { type: tool, p: [q, q] };
+    else if(tool === 'pt') this.draft = { type: 'pt', p: [q] };
+    else if(tool === 'ang' && !this.draft) this.draft = { type: 'ang', pts: [], live: q, startPt: q };
+    this.req(false);
+  }
+
+  onMove(e) {
+    const p = this.rel(e);
+    if(!this.ptrs.has(e.pointerId)) {            // hover (ماوس بدون ضغط)
+      if(e.pointerType === 'mouse') this.cursor = p;
+      if(vwTool === 'link' && e.pointerType === 'mouse' && this.px && !(vwLink && vwLink.pin)) vwSetLink(this, p, false, false);
+      if(this.draft && this.draft.type === 'ang' && this.px) this.draft.live = this.toImage(p.x, p.y);
+      this.req(false);
+      return;
+    }
+    this.ptrs.set(e.pointerId, p);
+    this.cursor = p;
+
+    if(this.mode === 'pinch' && this.ptrs.size >= 2) {
+      const [a, b] = [...this.ptrs.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y), cx = (a.x + b.x)/2, cy = (a.y + b.y)/2;
+      const ns = Math.max(0.3, Math.min(32, this.pinch.scale * d / this.pinch.d));
+      const fx = this.pinch.cx - this.cw/2, fy = this.pinch.cy - this.ch/2, k = ns / this.pinch.scale;
+      this.panX = fx - (fx - this.pinch.panX) * k + (cx - this.pinch.cx);
+      this.panY = fy - (fy - this.pinch.panY) * k + (cy - this.pinch.cy);
+      this.scale = ns;
+      this.req(false);
+      return;
+    }
+    if(this.ptrs.size !== 1 || !this.start) return;
+
+    const dx = p.x - this.start.x, dy = p.y - this.start.y;
+    const ddx = p.x - this.last.x, ddy = p.y - this.last.y;
+    this.last = p;
+    if(Math.hypot(dx, dy) > 4) this.moved = true;
+
+    let tool = this.mode;
+    if(tool === 'nav') {                         // لمس: سحب رأسي = تمرير، أفقي = W/L
+      if(!this.gest && Math.max(Math.abs(dx), Math.abs(dy)) > 8) {
+        if(Math.abs(dx) > Math.abs(dy) * 1.5) this.gest = 'wl';
+        else this.gest = this.scale > 1.05 ? 'pan' : 'scroll';
+      }
+      tool = this.gest;
+    }
+    if(!tool || !this.px) return;
+
+    if(tool === 'scroll') {
+      this.acc += ddy;
+      while(this.acc <= -28) { vwScrollPort(this, 1); this.acc += 28; }
+      while(this.acc >= 28)  { vwScrollPort(this, -1); this.acc -= 28; }
+    } else if(tool === 'pan') {
+      this.panX += ddx; this.panY += ddy; this.req(false);
+    } else if(tool === 'zoom') {
+      this.zoomAt(this.start.x, this.start.y, this.scale * Math.exp(-ddy * 0.01)); this.req(false);
+    } else if(tool === 'wl') {
+      this.ww = Math.max(1, this.ww * (1 + ddx * 0.006));
+      this.wc -= ddy * this.ww * 0.004;
+      showWLOverlay(this.ww, this.wc);
+      this.req(true);
+    } else if(tool === 'mag') {
+      this.req(false);
+    } else if(tool === 'link') {
+      vwSetLink(this, p, true, true);
+    } else if((tool === 'len' || tool === 'roi') && this.draft) {
+      this.draft.p[1] = this.toImage(p.x, p.y); this.req(false);
+    } else if(tool === 'pt' && this.draft) {
+      this.draft.p[0] = this.toImage(p.x, p.y); this.req(false);
+    } else if(tool === 'ang' && this.draft) {
+      this.draft.live = this.toImage(p.x, p.y); this.req(false);
+    }
+  }
+
+  onUp(e) {
+    const had = this.ptrs.has(e.pointerId);
+    this.ptrs.delete(e.pointerId);
+    try { this.canvas.releasePointerCapture(e.pointerId); } catch(_) {}
+    if(this.mode === 'pinch') {
+      if(this.ptrs.size < 2) { this.mode = null; this.start = null; }
+      return;
+    }
+    if(!had || !this.start) return;
+    const p = this.rel(e), tool = this.mode;
+    const dist = Math.hypot(p.x - this.start.x, p.y - this.start.y);
+
+    if((tool === 'len' || tool === 'roi') && this.draft) {
+      const d = this.draft; this.draft = null;
+      if(dist > 5) { d.p[1] = this.toImage(p.x, p.y); this.commit({ type: d.type, p: d.p }); }
+    } else if(tool === 'pt' && this.draft) {
+      const d = this.draft; this.draft = null;
+      d.p[0] = this.toImage(p.x, p.y);
+      this.commit({ type: 'pt', p: [d.p[0]] });
+    } else if(tool === 'ang' && this.draft) {
+      const q = this.toImage(p.x, p.y), d = this.draft;
+      if(d.pts.length === 0) { d.pts.push(d.startPt); if(dist > 6) d.pts.push(q); }
+      else d.pts.push(q);
+      if(d.pts.length >= 3) { this.draft = null; this.commit({ type: 'ang', p: d.pts.slice(0, 3) }); }
+      else d.live = q;
+    } else if(tool === 'nav' && !this.moved && e.pointerType !== 'mouse') {
+      const now = Date.now();
+      if(now - vwLastTap < 300) { this.resetView(); toast('↺ تم إعادة الضبط', ''); }
+      vwLastTap = now;
+    }
+    if(e.pointerType !== 'mouse') this.cursor = null;
+    this.start = null; this.mode = null; this.gest = null;
+    this.req(false);
+  }
+
+  onWheel(e) {
+    e.preventDefault();
+    if(!this.px) return;
+    let dy = e.deltaY * (e.deltaMode === 1 ? 33 : 1);
+    if(e.ctrlKey) {
+      const r = this.canvas.getBoundingClientRect();
+      this.zoomAt(e.clientX - r.left, e.clientY - r.top, this.scale * Math.exp(-dy * 0.01));
+      this.req(false);
+      return;
+    }
+    if(Math.abs(dy) >= 50) { vwScrollPort(this, Math.sign(dy)); this.wacc = 0; }
+    else { this.wacc += dy; if(Math.abs(this.wacc) >= 50) { vwScrollPort(this, Math.sign(this.wacc)); this.wacc = 0; } }
+  }
+}
+
+// ── Scrolling / sync ─────────────────────────────────
+function vwScrollPort(p, d) {
+  const n = p.group.items.length;
+  const ni = Math.max(0, Math.min(n - 1, p.idx + d));
+  if(ni === p.idx) return;
+  p.cancelDraft(); p.load(ni);
+  if(vwSync && vwPorts.length > 1) {
+    for(const o of vwPorts) {
+      if(o === p) continue;
+      const m = o.group.items.length;
+      o.cancelDraft();
+      o.load(n > 1 ? Math.round(ni / (n - 1) * (m - 1)) : 0);
+    }
+  }
+}
+function vwGoto(p, ni) { if(p) vwScrollPort(p, ni - p.idx); }
+
+// ── Chrome (header / footer) ─────────────────────────
+function vwSetActive(p) {
+  if(vwActive === p) return;
+  vwActive = p;
+  vwPorts.forEach(o => o.el.classList.toggle('active', o === p));
+  vwUpdateChrome(true);
+  if(p) p.updateHud();
+}
+
+function vwUpdateChrome(rebuildThumbs) {
+  const p = vwActive;
+  if(!p) return;
+  vwSyncViewUI(p);
+  const dcm = p.item && p.item.dcm;
+  if(dcm) {
+    const g = t => dcm.getTag(t) || '';
+    document.getElementById('vw-patient').textContent =
+      [g('(0010,0010)') || '—', g('(0010,0020)') && `ID: ${g('(0010,0020)')}`, g('(0010,0040)'), g('(0010,1010)')].filter(Boolean).join('  ·  ');
+    document.getElementById('vw-meta').textContent =
+      [g('(0008,0060)'), g('(0008,0020)'), g('(0018,0015)'), g('(0008,103e)')].filter(Boolean).join('  ·  ');
+  }
+  const n = p.group.items.length;
+  document.getElementById('vw-counter').textContent = `${p.group.key ? '📁 ' + p.group.key + '  ·  ' : ''}${p.idx + 1} / ${n}`;
+  const sl = document.getElementById('vw-slider');
+  sl.max = n; sl.min = 1; sl.value = p.idx + 1;
+  if(vwThumbsOn) {
+    if(rebuildThumbs || vwThumbGroup !== p.group) vwBuildThumbs();
+    else vwMarkThumb();
+  }
+}
+
+function vwBuildThumbs() {
+  const row = document.getElementById('vw-thumb-row');
+  row.innerHTML = '';
+  const p = vwActive;
+  if(!p) return;
+  vwThumbGroup = p.group;
+  p.group.items.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'vw-thumb' + (i === p.idx ? ' active' : '');
+    div.innerHTML = item.thumb ? `<img src="${item.thumb}" alt="${i + 1}">` : '<div class="vw-thumb-placeholder">🩻</div>';
+    div.addEventListener('click', () => vwGoto(vwActive, i));
+    row.appendChild(div);
+  });
+  vwMarkThumb();
+}
+function vwMarkThumb() {
+  const p = vwActive;
+  if(!p) return;
+  const ts = document.querySelectorAll('#vw-thumb-row .vw-thumb');
+  ts.forEach((t, i) => t.classList.toggle('active', i === p.idx));
+  if(ts[p.idx]) ts[p.idx].scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+function vwToggleThumbs() {
+  vwThumbsOn = !vwThumbsOn;
+  document.getElementById('vw-thumbs-btn').classList.toggle('active', vwThumbsOn);
+  document.getElementById('vw-thumb-row').classList.toggle('show', vwThumbsOn);
+  if(vwThumbsOn) vwBuildThumbs();
+  setTimeout(() => vwPorts.forEach(p => p.resize()), 30);
+}
+function vwToggleSync() {
+  vwSync = !vwSync;
+  document.getElementById('vw-sync-btn').classList.toggle('active', vwSync);
+  toast(vwSync ? '🔗 مزامنة التمرير شغالة' : '🔓 المزامنة متوقفة', '');
+}
+document.getElementById('vw-slider').addEventListener('input', e => vwGoto(vwActive, parseInt(e.target.value, 10) - 1));
+
+// ── Tools ────────────────────────────────────────────
+function vwSetTool(t) {
+  vwTool = t;
+  vwStage.dataset.tool = t;
+  document.querySelectorAll('#vw-toolbar .vw-tool[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
+  vwPorts.forEach(p => p.cancelDraft());
+  vwHint.textContent = VW_HINTS[t] || '';
+  showHint();
+}
+function vwUndo() {
+  const p = vwActive;
+  if(!p) return;
+  if(p.draft) { p.cancelDraft(); return; }
+  const l = p.item && p.item._vwMeas;
+  if(l && l.length) { l.pop(); vwPorts.forEach(o => { if(o.item === p.item) o.req(false); }); }
+}
+function vwClearMeasurements() {
+  const p = vwActive;
+  if(!p || !p.item) return;
+  vwClearLink();
+  p.draft = null;
+  if(p.item._vwMeas && p.item._vwMeas.length) {
+    p.item._vwMeas = [];
+    vwPorts.forEach(o => { if(o.item === p.item) o.req(false); });
+    toast('🗑 تم مسح قياسات الصورة الحالية', '');
+  }
+}
+function vwReset() { if(vwActive) vwActive.resetView(); }
+function vwZoomActive(f) { const p = vwActive; if(p && p.px) { p.zoomAt(p.cw / 2, p.ch / 2, p.scale * f); p.req(false); } }
+function vwScrollActive(d) { if(vwActive) vwScrollPort(vwActive, d); }
+
+function vwToggleFullscreen() {
+  if(document.fullscreenElement) { document.exitFullscreen(); }
+  else if(vwModal.requestFullscreen) { vwModal.requestFullscreen().catch(() => {}); }
+  else toast('⚠️ ملء الشاشة غير مدعوم في المتصفح ده', 'warn');
+}
+
+// ── Layout ───────────────────────────────────────────
+function vwComputeGroups() {
+  const order = [], map = new Map();
+  for(const it of files) {
+    const k = it.folderKey || '';
+    if(!map.has(k)) { map.set(k, []); order.push(k); }
+    map.get(k).push(it);
+  }
+  return order.map(k => ({ key: k, items: sortItemsByInstanceNumber(map.get(k)) }));
+}
+
+function vwApplyGrid() {
+  const n = vwPorts.length;
+  const land = vwStage.clientWidth >= vwStage.clientHeight;
+  let cols, rows;
+  if(n <= 1) { cols = 1; rows = 1; }
+  else if(n === 2) { cols = land ? 2 : 1; rows = land ? 1 : 2; }
+  else if(n === 3) { cols = land ? 3 : 1; rows = land ? 1 : 3; }
+  else if(n === 4) { cols = 2; rows = 2; }
+  else { cols = land ? 3 : 2; rows = Math.ceil(n / cols); }
+  vwStage.style.gridTemplateColumns = `repeat(${cols}, minmax(0, 1fr))`;
+  vwStage.style.gridTemplateRows = `repeat(${rows}, minmax(0, 1fr))`;
+}
+
+function vwBuildLayout() {
+  if(!vwGroups.length) return;
+  const mode = document.getElementById('vw-layout').value;
+  const prev = vwPorts.map(p => ({ g: p.group, idx: p.idx, vs: { rot: p.rot, fh: p.fh, fv: p.fv, inv: p.inv, cmap: p.cmap, filt: p.filt } }));
+  const activeIdx = Math.max(0, vwPorts.indexOf(vwActive));
+  const count = mode === 'auto' ? Math.min(vwGroups.length, 6) : parseInt(mode, 10);
+
+  vwPorts.forEach(p => p.destroy());
+  vwPorts = []; vwActive = null; vwStage.innerHTML = '';
+  if(!vwRO) vwRO = new ResizeObserver(entries => { for(const en of entries) if(en.target._vp) en.target._vp.resize(); });
+
+  // نسبة موضع الصورة المفتوحة (للمزامنة عند أول فتح)
+  let rel = 0;
+  if(vwStartItem) {
+    const g0 = vwGroups.find(g => g.items.includes(vwStartItem));
+    if(g0 && g0.items.length > 1) rel = g0.items.indexOf(vwStartItem) / (g0.items.length - 1);
+  }
+  for(let i = 0; i < count; i++) {
+    const g = mode === 'auto' ? vwGroups[i] : ((prev[i] && prev[i].g) || vwGroups[i % vwGroups.length]);
+    let idx;
+    if(prev[i] && prev[i].g === g) idx = prev[i].idx;
+    else if(vwStartItem && g.items.includes(vwStartItem)) idx = g.items.indexOf(vwStartItem);
+    else idx = g.items.length > 1 ? Math.round(rel * (g.items.length - 1)) : 0;
+    const p = new VwPort(g, idx);
+    if(prev[i] && prev[i].g === g && prev[i].vs) Object.assign(p, prev[i].vs);
+    vwStage.appendChild(p.el);
+    vwPorts.push(p);
+  }
+  vwStartItem = null;
+  vwApplyGrid();
+  vwPorts.forEach(p => { vwRO.observe(p.el); p.load(p.idx); });
+  vwSetActive(vwPorts[Math.min(activeIdx, vwPorts.length - 1)]);
+}
+function vwOnResize() { vwApplyGrid(); }
+
+// ── Open / Close ─────────────────────────────────────
+async function openViewer(startId) {
+  if(!files.length) return;
   vwModal.classList.add('open');
   document.body.style.overflow = 'hidden';
-
-  buildThumbRow();
-  await vwLoadFrame(vwIdx);
-  showHint();
-  attachViewerEvents();
+  for(const it of files) { if(!it.dcm) await ensureParsed(it); }
+  vwGroups = vwComputeGroups();
+  const startItem = files.find(f => f.id === startId) || files[0];
+  const gi = vwGroups.findIndex(g => g.items.includes(startItem));
+  if(gi > 0) vwGroups.unshift(vwGroups.splice(gi, 1)[0]);   // الفولدر المفتوح يبقى أول شاشة
+  vwStartItem = startItem;
+  vwPorts.forEach(p => p.destroy()); vwPorts = [];
+  vwBuildLayout();
+  window.addEventListener('resize', vwOnResize);
+  vwSetTool('nav');
 }
 
 function closeViewer() {
+  vwStopCine(); vwCloseTags();
   vwModal.classList.remove('open');
   document.body.style.overflow = '';
-  detachViewerEvents();
+  window.removeEventListener('resize', vwOnResize);
+  if(document.fullscreenElement) { try { document.exitFullscreen(); } catch(_) {} }
+  vwPorts.forEach(p => p.destroy());
+  vwPorts = []; vwActive = null; vwStage.innerHTML = ''; vwLink = null;
 }
 
-// ── Load frame ────────────────────────────────────────
-async function vwLoadFrame(idx) {
-  vwIdx = Math.max(0, Math.min(idx, vwFiles.length - 1));
-  const item = vwFiles[vwIdx];
-  if(!item) return;
-
-  // Parse إذا لسه مش parsed
-  if(!item.dcm) {
-    const buf = await item.file.arrayBuffer();
-    const p = new DicomParser(buf);
-    p.parse();
-    item.dcm = p;
-  }
-
-  const dcm = item.dcm;
-
-  // Patient info
-  const patient  = dcm.getTag('(0010,0010)') || '—';
-  const patId    = dcm.getTag('(0010,0020)') || '';
-  const patSex   = dcm.getTag('(0010,0040)') || '';
-  const patAge   = dcm.getTag('(0010,1010)') || '';
-  const modality = dcm.getTag('(0008,0060)') || '';
-  const date     = dcm.getTag('(0008,0020)') || '';
-  const desc     = dcm.getTag('(0008,103e)') || '';
-  const bodyPart = dcm.getTag('(0018,0015)') || '';
-  document.getElementById('vw-patient').textContent =
-    [patient, patId && `ID: ${patId}`, patSex, patAge].filter(Boolean).join('  ·  ');
-  document.getElementById('vw-meta').textContent =
-    [modality, date, bodyPart, desc].filter(Boolean).join('  ·  ');
-
-  // Window values
-  const wcTag = dcm.getTag('(0028,1050)');
-  const wwTag = dcm.getTag('(0028,1051)');
-  vwBaseWC = wcTag ? parseFloat(wcTag) : null;
-  vwBaseWW = wwTag ? parseFloat(wwTag) : null;
-  vwWC = vwBaseWC;
-  vwWW = vwBaseWW;
-
-  // Render to canvas — استخدم قيم الـ DICOM أو auto
-  const tmp = document.createElement('canvas');
-  const windowPreset = document.getElementById('opt-window')?.value || 'auto';
-  const ok  = await dcm.renderPixels(tmp, windowPreset);
-  if(!ok) return;
-
-  vwCanvas.width  = tmp.width;
-  vwCanvas.height = tmp.height;
-  vwImgData = tmp.getContext('2d').getImageData(0, 0, tmp.width, tmp.height);
-
-  vwScale = 1; vwOffX = 0; vwOffY = 0;
-  vwApplyWL();
-
-  // Counter & thumb
-  document.getElementById('vw-counter').textContent = `${vwIdx+1} / ${vwFiles.length}`;
-  document.querySelectorAll('.vw-thumb').forEach((t,i) => t.classList.toggle('active', i===vwIdx));
-  document.querySelectorAll('.vw-thumb')[vwIdx]?.scrollIntoView({behavior:'smooth', inline:'center'});
-}
-
-// ── Apply Window/Level ────────────────────────────────
-async function vwApplyWL() {
-  const item = vwFiles[vwIdx];
-  if(!item?.dcm) return;
-
-  // عمل canvas مؤقت بالـ WC/WW الجديدة
-  const tmp = document.createElement('canvas');
-
-  if(vwWC !== null && vwWW !== null) {
-    // inject custom WC/WW مؤقتاً في الـ tags
-    const origWC = item.dcm.tags['(0028,1050)'];
-    const origWW = item.dcm.tags['(0028,1051)'];
-    item.dcm.tags['(0028,1050)'] = String(vwWC);
-    item.dcm.tags['(0028,1051)'] = String(vwWW);
-    await item.dcm.renderPixels(tmp, 'auto');
-    // restore
-    item.dcm.tags['(0028,1050)'] = origWC;
-    item.dcm.tags['(0028,1051)'] = origWW;
-  } else {
-    await item.dcm.renderPixels(tmp, 'auto');
-  }
-
-  vwCanvas.width  = tmp.width;
-  vwCanvas.height = tmp.height;
-  vwCanvas.getContext('2d').drawImage(tmp, 0, 0);
-  vwImgData = vwCanvas.getContext('2d').getImageData(0, 0, tmp.width, tmp.height);
-  vwDraw();
-
-  const wl = vwWC !== null
-    ? `W: ${Math.round(vwWW || 0)}  L: ${Math.round(vwWC || 0)}`
-    : 'W: auto  L: auto';
-  document.getElementById('vw-wl-info').textContent = wl;
-}
-
-// ── Draw with transform ───────────────────────────────
-function vwDraw() {
-  // حدود الحركة — تمنع الصورة تخرج برا الشاشة
-  const wrap = vwWrap.getBoundingClientRect();
-  const cw = vwCanvas.width  * vwScale;
-  const ch = vwCanvas.height * vwScale;
-
-  const maxX = Math.max(0, (cw - wrap.width)  / 2 + wrap.width  * 0.1);
-  const maxY = Math.max(0, (ch - wrap.height) / 2 + wrap.height * 0.1);
-
-  vwOffX = Math.max(-maxX, Math.min(maxX, vwOffX));
-  vwOffY = Math.max(-maxY, Math.min(maxY, vwOffY));
-
-  vwCanvas.style.transform = `translate(${vwOffX}px,${vwOffY}px) scale(${vwScale})`;
-  vwCanvas.style.transformOrigin = 'center center';
-}
-
-// ── Thumbnails ────────────────────────────────────────
-function buildThumbRow() {
-  const row = document.getElementById('vw-thumb-row');
-  row.innerHTML = '';
-  vwFiles.forEach((item, i) => {
-    const div = document.createElement('div');
-    div.className = 'vw-thumb' + (i === vwIdx ? ' active' : '');
-    if(item.thumb) {
-      div.innerHTML = `<img src="${item.thumb}" alt="${i+1}">`;
-    } else {
-      div.innerHTML = `<div class="vw-thumb-placeholder">🩻</div>`;
-    }
-    div.addEventListener('click', () => vwLoadFrame(i));
-    row.appendChild(div);
-  });
-}
-
-// ── Share current frame ───────────────────────────────
+// ── Share / save current view (مع القياسات) ──────────
 async function shareViewerImage() {
-  const item = vwFiles[vwIdx];
-  const name = (item?.dcm?.getTag('(0010,0010)') || 'DICOM').trim().replace(/\s+/g,'_');
-
-  vwCanvas.toBlob(async blob => {
+  const p = vwActive;
+  if(!p || !p.px) { toast('⚠️ مفيش صورة معروضة', 'warn'); return; }
+  p.draw();
+  const name = ((p.item && p.item.dcm && p.item.dcm.getTag('(0010,0010)')) || 'DICOM').trim().replace(/\s+/g, '_');
+  p.canvas.toBlob(async blob => {
     if(!blob) return;
-    const file = new File([blob], `${name}_${vwIdx+1}.jpg`, {type:'image/jpeg'});
-    if(navigator.share && navigator.canShare({files:[file]})) {
-      await navigator.share({ files:[file], title:`صورة ${name}` });
-    } else {
-      // fallback: download
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = file.name;
-      a.click();
-    }
+    const file = new File([blob], `${name}_${p.idx + 1}.jpg`, { type: 'image/jpeg' });
+    try {
+      if(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({ files: [file], title: `صورة ${name}` });
+        return;
+      }
+    } catch(err) { if(err && err.name === 'AbortError') return; }
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
   }, 'image/jpeg', 0.92);
 }
 
-// ── Hint ──────────────────────────────────────────────
+// ── Overlays ─────────────────────────────────────────
 function showHint() {
   vwHint.classList.remove('hidden');
   clearTimeout(vwHintTimer);
-  vwHintTimer = setTimeout(() => vwHint.classList.add('hidden'), 3000);
+  vwHintTimer = setTimeout(() => vwHint.classList.add('hidden'), 4000);
 }
-
 function showWLOverlay(w, l) {
   vwOverlay.textContent = `W ${Math.round(w)}  ·  L ${Math.round(l)}`;
   vwOverlay.classList.add('show');
   clearTimeout(vwWLTimer);
   vwWLTimer = setTimeout(() => vwOverlay.classList.remove('show'), 1000);
-}
-
-// ══════════════════════════════════════════════════════
-//  TOUCH & MOUSE EVENTS
-// ══════════════════════════════════════════════════════
-let _touches      = [];
-let _lastDist     = 0;
-let _dragStart    = null;
-let _gesture      = null; // 'scroll'|'wl'|'zoom'|'pan'
-let _startScroll  = 0;
-let _startWL      = null;
-let _startScale   = 1;
-let _startOff     = {x:0,y:0};
-
-function attachViewerEvents() {
-  vwWrap.addEventListener('touchstart',  onVwTouchStart,  {passive:false});
-  vwWrap.addEventListener('touchmove',   onVwTouchMove,   {passive:false});
-  vwWrap.addEventListener('touchend',    onVwTouchEnd,    {passive:false});
-  vwWrap.addEventListener('wheel',       onVwWheel,       {passive:false});
-  vwWrap.addEventListener('mousedown',   onVwMouseDown);
-  window.addEventListener('mousemove',   onVwMouseMove);
-  window.addEventListener('mouseup',     onVwMouseUp);
-}
-function detachViewerEvents() {
-  vwWrap.removeEventListener('touchstart',  onVwTouchStart);
-  vwWrap.removeEventListener('touchmove',   onVwTouchMove);
-  vwWrap.removeEventListener('touchend',    onVwTouchEnd);
-  vwWrap.removeEventListener('wheel',       onVwWheel);
-  vwWrap.removeEventListener('mousedown',   onVwMouseDown);
-  window.removeEventListener('mousemove',   onVwMouseMove);
-  window.removeEventListener('mouseup',     onVwMouseUp);
-}
-
-// ── Touch ─────────────────────────────────────────────
-function onVwTouchStart(e) {
-  e.preventDefault();
-  _touches = Array.from(e.touches);
-  _gesture = null;
-
-  if(_touches.length === 1) {
-    _dragStart   = {x: _touches[0].clientX, y: _touches[0].clientY};
-    _startScroll = 0;
-    _startWL     = {wc: vwWC ?? 128, ww: vwWW ?? 256};
-    _startOff    = {x: vwOffX, y: vwOffY};
-  } else if(_touches.length === 2) {
-    _lastDist  = getTouchDist(_touches);
-    _startScale = vwScale;
-    _startOff   = {x: vwOffX, y: vwOffY};
-    _gesture    = 'zoom';
-  }
-}
-
-function onVwTouchMove(e) {
-  e.preventDefault();
-  _touches = Array.from(e.touches);
-
-  if(_touches.length === 2) {
-    // Pinch zoom
-    const dist  = getTouchDist(_touches);
-    const ratio = dist / _lastDist;
-    vwScale = Math.max(0.5, Math.min(8, _startScale * ratio));
-    vwDraw();
-    _gesture = 'zoom';
-    return;
-  }
-
-  if(_touches.length !== 1 || !_dragStart) return;
-
-  const dx = _touches[0].clientX - _dragStart.x;
-  const dy = _touches[0].clientY - _dragStart.y;
-
-  // تحديد نوع الحركة من أول move
-  if(!_gesture) {
-    if(Math.abs(dy) > Math.abs(dx) * 1.5 && Math.abs(dy) > 10) {
-      _gesture = vwScale > 1.1 ? 'pan' : 'scroll';
-    } else if(Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 10) {
-      _gesture = 'wl';
-    } else if(Math.abs(dy) > 10 || Math.abs(dx) > 10) {
-      _gesture = vwScale > 1.1 ? 'pan' : 'scroll';
-    }
-  }
-
-  if(_gesture === 'scroll') {
-    // كل 40px → صورة جديدة
-    const steps = Math.round(dy / -40);
-    if(steps !== _startScroll) {
-      _startScroll = steps;
-      vwLoadFrame(vwIdx + steps > vwIdx ? vwIdx+1 : vwIdx-1);
-      _dragStart = {x: _touches[0].clientX, y: _touches[0].clientY};
-    }
-  } else if(_gesture === 'pan') {
-    vwOffX = _startOff.x + dx;
-    vwOffY = _startOff.y + dy;
-    vwDraw();
-  } else if(_gesture === 'wl') {
-    // يمين/يسار → Width ، فوق/تحت → Center
-    const newWW = Math.max(1, (_startWL.ww || 400) + dx * 5);
-    const newWC = (_startWL.wc ?? 40) - dy * 2;
-    vwWC = newWC;
-    vwWW = newWW;
-    vwApplyWL();
-    showWLOverlay(newWW, newWC);
-  }
-}
-
-function onVwTouchEnd(e) {
-  _touches = Array.from(e.touches);
-  if(_touches.length === 0) {
-    // double-tap to reset
-    const now = Date.now();
-    if(now - (_lastTap||0) < 300) {
-      vwScale=1; vwOffX=0; vwOffY=0;
-      vwWC=vwBaseWC; vwWW=vwBaseWW;
-      vwApplyWL();
-      toast('↺ تم إعادة الضبط', '');
-    }
-    _lastTap = now;
-    _dragStart = null;
-    _gesture   = null;
-  }
-}
-let _lastTap = 0;
-
-function getTouchDist(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.sqrt(dx*dx + dy*dy);
-}
-
-// ── Mouse (desktop) ───────────────────────────────────
-let _mouseDown = false;
-let _mouseLast = null;
-let _mouseBtn  = 0;
-
-function onVwMouseDown(e) {
-  _mouseDown = true;
-  _mouseLast = {x: e.clientX, y: e.clientY};
-  _mouseBtn  = e.button;
-  _startWL   = {wc: vwWC ?? 128, ww: vwWW ?? 256};
-  _startOff  = {x: vwOffX, y: vwOffY};
-}
-function onVwMouseMove(e) {
-  if(!_mouseDown || !_mouseLast) return;
-  const dx = e.clientX - _mouseLast.x;
-  const dy = e.clientY - _mouseLast.y;
-
-  if(_mouseBtn === 0) {
-    // Left drag → pan
-    vwOffX += dx; vwOffY += dy;
-    vwDraw();
-  } else if(_mouseBtn === 2) {
-    // Right drag → WL
-    vwWW = Math.max(1, (vwWW||400) + dx * 5);
-    vwWC = (vwWC??40) - dy * 2;
-    vwApplyWL();
-    showWLOverlay(vwWW, vwWC);
-  }
-  _mouseLast = {x: e.clientX, y: e.clientY};
-}
-function onVwMouseUp() { _mouseDown = false; _mouseLast = null; }
-
-function onVwWheel(e) {
-  e.preventDefault();
-  if(e.ctrlKey) {
-    // Zoom
-    vwScale = Math.max(0.5, Math.min(8, vwScale * (e.deltaY < 0 ? 1.1 : 0.9)));
-    vwDraw();
-  } else {
-    // Scroll images
-    if(e.deltaY > 0) vwLoadFrame(vwIdx+1);
-    else             vwLoadFrame(vwIdx-1);
-  }
 }
 
 // Init
@@ -3453,20 +4798,58 @@ document.addEventListener('keydown', (e) => {
   const viewerOpen     = vwModal && vwModal.classList.contains('open');
   const previewOpen    = document.getElementById('preview-modal').classList.contains('open');
   const preconvertOpen = document.getElementById('preconvert-modal').classList.contains('open');
+  const shortcutsOpen  = document.getElementById('shortcuts-modal').classList.contains('open');
+
+  if(viewerOpen && vwTagsEl.classList.contains('open') && !shortcutsOpen) {   // لوحة الـ Tags مفتوحة: Esc بس
+    if(e.key === 'Escape') { vwCloseTags(); e.preventDefault(); }
+    return;
+  }
+  if(viewerOpen && !e.ctrlKey && !e.metaKey && !e.altKey) {                     // اختصارات جديدة (بـ e.code → شغالة مع الكيبورد العربي)
+    const act = {
+      KeyM: () => vwSetTool('mag'), KeyI: vwToggleInvert, KeyH: () => vwFlip('h'), KeyV: () => vwFlip('v'),
+      BracketLeft: () => vwRotate(-1), BracketRight: () => vwRotate(1), KeyK: vwToggleCine, KeyO: vwToggleHud,
+      KeyG: vwToggleRef, KeyD: vwOpenTags,
+      Home: () => vwGoto(vwActive, 0),
+      End: () => vwGoto(vwActive, vwActive ? vwActive.group.items.length - 1 : 0),
+      PageUp: () => vwScrollActive(-10), PageDown: () => vwScrollActive(10)
+    }[e.code];
+    if(act) { act(); e.preventDefault(); return; }
+    if(/^[1-9]$/.test(e.key) && VW_PRESET_KEYS[+e.key - 1]) { vwApplyPreset(VW_PRESET_KEYS[+e.key - 1]); e.preventDefault(); return; }
+  }
+  if(viewerOpen) {
+    const k = (e.key || '').toLowerCase();
+    if((k === 'z' && (e.ctrlKey || e.metaKey)) || k === 'delete' || k === 'backspace') { vwUndo(); e.preventDefault(); return; }
+    const toolKeys = { n:'nav', w:'wl', p:'pan', z:'zoom', l:'len', a:'ang', r:'roi', t:'pt', c:'link' };
+    if(toolKeys[k] && !e.ctrlKey && !e.metaKey && !e.altKey) { vwSetTool(toolKeys[k]); e.preventDefault(); return; }
+  }
 
   switch(e.key) {
     case 'Escape':
-      if(viewerOpen)          { closeViewer(); e.preventDefault(); }
+      if(shortcutsOpen)       { closeShortcutsModal(); e.preventDefault(); }
+      else if(viewerOpen)     { if(vwActive && vwActive.draft) vwActive.cancelDraft(); else if(vwLink) vwClearLink(); else closeViewer(); e.preventDefault(); }
       else if(previewOpen)    { closePreview(); e.preventDefault(); }
       else if(preconvertOpen) { closePreConvertPreview(); e.preventDefault(); }
       break;
 
+    case '?':
+      openShortcutsModal();
+      e.preventDefault();
+      break;
+
     case 'ArrowRight':
-      if(viewerOpen) { vwLoadFrame(vwIdx + (document.documentElement.dir === 'rtl' ? -1 : 1)); e.preventDefault(); }
+      if(viewerOpen) { vwScrollActive(document.documentElement.dir === 'rtl' ? -1 : 1); e.preventDefault(); }
       break;
 
     case 'ArrowLeft':
-      if(viewerOpen) { vwLoadFrame(vwIdx + (document.documentElement.dir === 'rtl' ? 1 : -1)); e.preventDefault(); }
+      if(viewerOpen) { vwScrollActive(document.documentElement.dir === 'rtl' ? 1 : -1); e.preventDefault(); }
+      break;
+
+    case 'ArrowDown':
+      if(viewerOpen) { vwScrollActive(1); e.preventDefault(); }
+      break;
+
+    case 'ArrowUp':
+      if(viewerOpen) { vwScrollActive(-1); e.preventDefault(); }
       break;
 
     case ' ':
@@ -3475,12 +4858,12 @@ document.addEventListener('keydown', (e) => {
 
     case '+':
     case '=':
-      if(viewerOpen) { vwScale = Math.min(vwScale * 1.15, 8); vwApplyWL(); e.preventDefault(); }
+      if(viewerOpen) { vwZoomActive(1.15); e.preventDefault(); }
       break;
 
     case '-':
     case '_':
-      if(viewerOpen) { vwScale = Math.max(vwScale / 1.15, 0.5); vwApplyWL(); e.preventDefault(); }
+      if(viewerOpen) { vwZoomActive(1 / 1.15); e.preventDefault(); }
       break;
   }
 });
