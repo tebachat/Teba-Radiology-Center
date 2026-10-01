@@ -985,6 +985,81 @@
   .vwt-name { color:#e2e8f0; font-weight:600; }
   .vwt-val { grid-column:2; font-family:'JetBrains Mono',monospace; color:#ffd60a; word-break:break-all; }
   .vwt-empty { padding:28px 8px; text-align:center; color:#64748b; font-size:.8rem; direction:rtl; }
+
+  /* ===== استيراد من رابط ويب ===== */
+  .url-import {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin: 0 0 20px;
+  }
+  .url-head { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
+  .url-title { font-weight:700; font-size:1rem; color:var(--accent); }
+  .url-sub { color:var(--muted); font-size:.8rem; line-height:1.7; }
+  #url-input {
+    width:100%; min-height:76px; max-height:260px; resize:vertical;
+    background: var(--surface2); color: var(--text);
+    border:1px solid var(--border); border-radius:8px;
+    padding:10px 12px;
+    font-family:'JetBrains Mono', monospace; font-size:.78rem; line-height:1.7;
+    direction:ltr; text-align:left;
+  }
+  #url-input:focus { border-color: var(--accent); }
+  #url-input[readonly] { opacity:.7; }
+  .url-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
+  .url-btn {
+    font-family:inherit; font-size:.88rem; font-weight:600;
+    padding:9px 16px; border-radius:8px; cursor:pointer;
+    background: var(--surface2); color: var(--text);
+    border:1px solid var(--border); transition: all .2s;
+  }
+  .url-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .url-btn:disabled { opacity:.5; cursor:not-allowed; }
+  .url-btn.primary {
+    background: linear-gradient(135deg, rgba(0,212,255,.18), rgba(0,136,204,.14));
+    border-color: rgba(0,212,255,.5); color: var(--accent);
+  }
+  .url-btn.danger { border-color: rgba(255,68,102,.45); color: var(--danger); }
+  .url-check {
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+    font-size:.82rem; color: var(--muted); margin-top:10px;
+  }
+  .url-check input { width:16px; height:16px; accent-color: var(--accent); cursor:pointer; }
+  .url-adv { margin-top:10px; font-size:.82rem; }
+  .url-adv summary { cursor:pointer; color: var(--muted); user-select:none; }
+  .url-adv-body { padding-top:8px; display:flex; flex-direction:column; gap:8px; }
+  .url-adv input[type="text"] {
+    width:100%; background: var(--surface2); color: var(--text);
+    border:1px solid var(--border); border-radius:8px; padding:8px 10px;
+    font-family:'JetBrains Mono', monospace; font-size:.76rem; direction:ltr; text-align:left;
+  }
+  .url-warn {
+    background: rgba(255,149,0,.08); border:1px solid rgba(255,149,0,.3);
+    color: var(--warn); border-radius:8px; padding:8px 10px; line-height:1.7;
+  }
+  #url-progress { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  #url-progress:empty { margin-top:0; }
+  .url-row { background: var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px 10px; }
+  .url-row-top { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
+  .url-row-name {
+    font-family:'JetBrains Mono', monospace; font-size:.72rem; color: var(--muted);
+    direction:ltr; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;
+  }
+  .url-row-status { font-size:.78rem; white-space:nowrap; flex-shrink:0; unicode-bidi:plaintext; }
+  .url-row-bar { height:4px; border-radius:2px; background: var(--border); margin-top:6px; overflow:hidden; }
+  .url-row-bar > div { height:100%; width:0; background: var(--accent); transition: width .15s; }
+  .url-row-bar > div.indet { width:40%; animation: urlIndet 1.1s ease-in-out infinite alternate; }
+  @keyframes urlIndet { from { margin-inline-start:0; } to { margin-inline-start:60%; } }
+  .url-row.done  .url-row-status { color: var(--success); }
+  .url-row.done  .url-row-bar > div { background: var(--success); }
+  .url-row.error .url-row-status { color: var(--danger); white-space:normal; }
+  .url-row.error .url-row-bar > div { background: var(--danger); }
+  .url-row.cancel .url-row-status { color: var(--warn); }
+  @media (max-width: 520px) {
+    .url-row-top { flex-direction:column; gap:2px; }
+    .url-btn { flex:1 1 auto; }
+  }
 </style>
 </head>
 <body>
@@ -1029,6 +1104,35 @@
     <div class="drop-title">أو اسحب وأفلت الملفات هنا</div>
     <span class="drop-badge">.dcm / .dicom / فولدر الحالة</span>
   </div>
+  <!-- استيراد من رابط ويب -->
+  <div class="url-import" id="url-import">
+    <div class="url-head">
+      <span class="url-title">🔗 استيراد من رابط ويب</span>
+      <span class="url-sub">الصق رابط مباشر لملف DICOM أو ZIP فيه الصور — تقدر تحط أكتر من رابط (كل رابط في سطر). الصور بتنزل على جهازك وبتتضاف للقائمة تحت، وبعدها بتحوّلها PDF أو فيديو عادي.</span>
+    </div>
+    <textarea id="url-input" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off"
+      aria-label="روابط صور المريض"
+      placeholder="https://example.com/study/image.dcm&#10;https://example.com/study.zip"></textarea>
+    <div class="url-actions">
+      <button class="url-btn primary" id="url-load-btn" type="button">⬇ تحميل الصور</button>
+      <button class="url-btn" id="url-paste-btn" type="button">📋 لصق</button>
+      <button class="url-btn danger" id="url-cancel-btn" type="button" style="display:none">✖ إيقاف</button>
+    </div>
+    <label class="url-check">
+      <input type="checkbox" id="url-auto-export">
+      افتح شاشة تصدير PDF تلقائيًا بعد انتهاء التحميل
+    </label>
+    <details class="url-adv">
+      <summary>⚙️ إعدادات متقدمة (لو السيرفر بيرفض التحميل من المتصفح)</summary>
+      <div class="url-adv-body">
+        <div class="url-sub">بعض السيرفرات مابتسمحش للمتصفح يحمّل منها مباشرة (CORS). لو ده حصل وعندك Proxy بتاعك، اكتب عنوانه هنا — <code dir="ltr">{url}</code> هيتبدل بالرابط. بيتجرّب تلقائيًا بس لو التحميل المباشر فشل.</div>
+        <input type="text" id="url-proxy" placeholder="https://my-proxy.example.com/?target={url}" autocomplete="off" spellcheck="false" aria-label="عنوان Proxy">
+        <div class="url-warn">⚠️ الـ Proxy بيعدّي عليه محتوى الصور، فاستخدم Proxy بتاعك أنت أو مركزك فقط — ماتستخدمش خدمات عامة لبيانات المرضى.</div>
+      </div>
+    </details>
+    <div id="url-progress" aria-live="polite"></div>
+  </div>
+
   <!-- Shared settings — apply whether exporting to PDF or Video -->
   <div class="options-bar">
     <div class="opt-group">
@@ -1047,6 +1151,13 @@
       </label>
     </div>
     <div class="opt-group">
+      <div class="opt-label">📑 فاصل المجموعات</div>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; padding-top:2px;">
+        <input type="checkbox" id="opt-group-sep" checked style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
+        فاصل واسم المجموعة (السيكونس / الفولدر) جوه الملف لما فيه أكتر من مجموعة (PDF والفيديو)
+      </label>
+    </div>
+    <div class="opt-group">
       <div class="opt-label">🕶️ الخصوصية</div>
       <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.85rem; padding-top:2px;">
         <input type="checkbox" id="opt-anonymize" style="width:18px; height:18px; accent-color:var(--accent); cursor:pointer;">
@@ -1058,6 +1169,7 @@
       <select id="opt-window">
         <optgroup label="── عام ──">
           <option value="auto">تلقائي (Auto)</option>
+          <option value="viewer">👁 من العارض (نفس اللي شايفه)</option>
         </optgroup>
         <optgroup label="── CT ──">
           <option value="soft">أنسجة رخوة (Soft Tissue)</option>
@@ -1249,6 +1361,7 @@
       <li>اتجاهات الجسم (R/L/A/P/S/I) ومسطرة بالمليمتر وخطوط مرجعية بين الوضعيات (Axial / Coronal / Sagittal).</li>
       <li>تشغيل سينما للسيكونس بسرعة تختارها، وإعدادات Window جاهزة (Soft, Lung, Bone, Brain…).</li>
       <li>عرض كل بيانات الـ DICOM (TR/TE/kVp/Contrast…) مع بحث ونسخ.</li>
+      <li>فاصل واسم المجموعة بين السيكونس/الفولدرات في PDF والفيديو، واسم المجموعة بيتكتب في اسم الملف.</li>
       <li>اختصارات كيبورد للعارض — اضغط <kbd>?</kbd> لعرضها كلها.</li>
       <li>معالجة كاملة داخل المتصفح — بدون رفع أي بيانات على أي سيرفر خارجي.</li>
       <li>يعمل على الموبايل والكمبيوتر بدون تثبيت أي برنامج إضافي.</li>
@@ -1671,6 +1784,12 @@ class DicomParser {
     const pd = this.tags['PixelData'];
     if(!pd || pd.length === 0) return false;
 
+    // "من العارض": Window/Level + عكس + ألوان + فلتر + لف/قلب زي ما ظبطهم في العارض
+    let look = null;
+    if(windowPreset === 'viewer') {
+      look = vwGetLook(this);          // إعدادات فولدر الصورة دي بس — لو مفيش، بيستخدم Window الملف نفسه
+    }
+
     // Global brightness/contrast — a simple photo-editor-style fix for images
     // that render too dark or too bright, applied on top of any windowing.
     const brightness = getBrightnessAdjust();
@@ -1691,6 +1810,7 @@ class DicomParser {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
             if(bcActive) applyBrightnessContrast(ctx, canvas.width, canvas.height, brightness, contrastFactor);
+            if(look) vwApplyLook(canvas, look);
             URL.revokeObjectURL(url);
             resolve(true);
           };
@@ -1733,6 +1853,7 @@ class DicomParser {
     if(windowPreset !== 'auto' && presets[windowPreset]) {
       ({ wc, ww } = presets[windowPreset]);
     }
+    if(look && look.raw && look.ww > 0) { wc = look.wc; ww = look.ww; }
 
     const rawBuf = this.buf.buffer.slice(pd.offset, pd.offset + pd.length);
     let pixels = bitsAlloc === 16
@@ -1785,7 +1906,66 @@ class DicomParser {
       }
       ctx.putImageData(imgData, 0, 0);
     }
+    if(look) vwApplyLook(canvas, look);
     return true;
+  }
+}
+
+// ── إعدادات العارض للتصدير (لكل فولدر على حدة) ──
+const vwFolderLooks = new Map();     // folderKey → look
+const vwDcmFolder = new WeakMap();   // DicomParser → folderKey
+function vwSnapshotLook(p) {
+  return { wc: p.wc, ww: p.ww, inv: !!p.inv, cmap: p.cmap || 'gray', filt: p.filt || 'none',
+           rot: p.rot | 0, fh: !!p.fh, fv: !!p.fv, raw: !!(p.px && p.px.raw) };
+}
+function vwCaptureLooks() {
+  for(const p of vwPorts) if(p && p.px && p.group) vwFolderLooks.set(p.group.key || '', vwSnapshotLook(p));
+}
+function vwFolderOf(dcm) {
+  if(!vwDcmFolder.has(dcm)) for(const it of files) if(it.dcm) vwDcmFolder.set(it.dcm, it.folderKey || '');
+  return vwDcmFolder.get(dcm);
+}
+function vwGetLook(dcm) {
+  if(vwModal && vwModal.classList.contains('open')) vwCaptureLooks();
+  const k = vwFolderOf(dcm);
+  return k === undefined ? null : (vwFolderLooks.get(k) || null);
+}
+function vwHasLooks() {
+  return vwFolderLooks.size > 0 || !!(vwModal && vwModal.classList.contains('open') && vwPorts.length);
+}
+function vwApplyLook(canvas, L) {
+  const w = canvas.width, h = canvas.height, n = w * h;
+  if(!n) return;
+  let ctx = canvas.getContext('2d');
+  if(L.inv || L.cmap !== 'gray' || L.filt !== 'none') {
+    const id = ctx.getImageData(0, 0, w, h), d = id.data;
+    if(L.cmap === 'gray' && L.filt === 'none') {                       // عكس بس: نحافظ على ألوان الصورة لو ملوّنة
+      for(let i = 0; i < n; i++) { const p = i * 4; d[p] = 255 - d[p]; d[p+1] = 255 - d[p+1]; d[p+2] = 255 - d[p+2]; }
+    } else {
+      let g = new Uint8Array(n);
+      for(let i = 0; i < n; i++) { const p = i * 4; g[i] = (d[p] * 299 + d[p+1] * 587 + d[p+2] * 114) / 1000; }
+      if(L.inv) for(let i = 0; i < n; i++) g[i] = 255 - g[i];
+      if(L.filt !== 'none') g = vwFilterGray(g, w, h, L.filt);
+      const cm = L.cmap !== 'gray' ? vwCmap(L.cmap) : null;
+      for(let i = 0; i < n; i++) {
+        const p = i * 4, v = g[i];
+        if(cm) { const q = v * 3; d[p] = cm[q]; d[p+1] = cm[q+1]; d[p+2] = cm[q+2]; }
+        else { d[p] = v; d[p+1] = v; d[p+2] = v; }
+        d[p+3] = 255;
+      }
+    }
+    ctx.putImageData(id, 0, 0);
+  }
+  if(L.rot || L.fh || L.fv) {                                           // نفس مصفوفة العارض (VwPort.xf)
+    const tmp = document.createElement('canvas'); tmp.width = w; tmp.height = h;
+    tmp.getContext('2d').drawImage(canvas, 0, 0);
+    const fx = L.fh ? -1 : 1, fy = L.fv ? -1 : 1, ang = L.rot * Math.PI / 2, co = Math.round(Math.cos(ang)), si = Math.round(Math.sin(ang));
+    const nw = (L.rot & 1) ? h : w, nh = (L.rot & 1) ? w : h;
+    canvas.width = nw; canvas.height = nh;
+    ctx = canvas.getContext('2d');
+    ctx.setTransform(co * fx, si * fx, -si * fy, co * fy, nw / 2, nh / 2);
+    ctx.drawImage(tmp, -w / 2, -h / 2);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
   }
 }
 
@@ -1829,6 +2009,8 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   3.1.0 — استيراد من رابط ويب: خانة لصق رابط/روابط (DICOM مباشر أو ZIP أو صفحة فهرس) + شريط تقدم + إيقاف + Proxy اختياري؛
+//           الصور بتتضاف لنفس القائمة (معاينة/عارض/PDF/فيديو). حماية: escape لأسماء الملفات وقيم الـ Tags، ومنع كاش الـ Service Worker لطلبات الروابط الخارجية
 //   2.9.0 — العارض: مؤشر متزامن (🎯) — نفس المنطقة بتظهر في كل السيكونس والوضعيات (Axial/Coronal/Sagittal) بالإحداثيات الحقيقية للمريض،
 //           مع تمرير تلقائي للشاشات الأخرى لأقرب شريحة وقراءة قيمة الإشارة في كل سيكونس
 //   2.8.0 — العارض (Viewer): صور أكبر (fit-to-screen) + قياس الطول والزوايا والكثافة (ROI) + قراءة قيمة أي نقطة (Cursor Point)
@@ -1840,7 +2022,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.0.0';
+const APP_VERSION = '3.1.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -2069,6 +2251,397 @@ function addFiles(fList) {
   addFileGroups([{ key: '', files: fList }]);
 }
 
+// ===================== HTML ESCAPE =====================
+// أي اسم ملف/فولدر/قيمة Tag جاية من مصدر خارجي لازم تتعمل لها escape قبل ما تتحط في innerHTML.
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
+// ===================== URL IMPORT (استيراد من رابط ويب) =====================
+// بيحمّل ملفات DICOM (أو ZIP فيه DICOM، أو صفحة فهرس فيها روابط .dcm/.zip) من لينك ويب،
+// وبيضيفها لنفس قائمة الملفات اللي بتشتغل عليها كل أدوات التطبيق (معاينة / عارض / PDF / فيديو).
+// التحميل بيتم مباشرة من المتصفح لجهازك — مفيش أي رفع لأي سيرفر تاني.
+const URL_PROXY_KEY = 'dicom2pdf-url-proxy';
+const URL_CONCURRENCY = 3;                 // عدد الروابط اللي بتتحمّل في نفس الوقت
+const URL_PAGE_CONCURRENCY = 4;            // عدد الملفات المتحمّلة بالتوازي من صفحة فهرس
+const URL_IDLE_TIMEOUT_MS = 60000;         // مهلة عدم وصول بيانات (مش مهلة التحميل الكلي)
+const URL_MAX_LINKS_FROM_PAGE = 2000;
+let urlImportCtrl = null;
+
+class UrlImportError extends Error {
+  constructor(code, extra) { super(code); this.code = code; this.extra = extra; }
+}
+
+function urlSafeName(s) {
+  return String(s || '').replace(/[\u0000-\u001f\u200e\u200f<>:"\\\/|?*]/g, '_').trim().slice(0, 120);
+}
+
+// يقسّم النص لروابط (واحد في كل سطر أو مفصولة بمسافات) ويتأكد إنها http/https
+function urlParseList(text) {
+  const seen = new Set(), ok = [], bad = [];
+  for(let raw of String(text || '').split(/\s+/)) {
+    raw = raw.replace(/^[<"'(\[]+|[>"')\],;]+$/g, '');
+    if(!raw) continue;
+    if(!/^[a-z][a-z0-9+.-]*:/i.test(raw) && /^[\w-]+(\.[\w-]+)+(\/|$)/.test(raw)) raw = 'https://' + raw; // example.com/x.dcm
+    let u;
+    try { u = new URL(raw); } catch(e) { bad.push(raw); continue; }
+    if(u.protocol !== 'http:' && u.protocol !== 'https:') { bad.push(raw); continue; }
+    if(seen.has(u.href)) continue;
+    seen.add(u.href); ok.push(u.href);
+  }
+  return { ok, bad };
+}
+
+// روابط المشاركة الشائعة → رابط تحميل مباشر
+function urlNormalize(href) {
+  try {
+    const u = new URL(href);
+    const h = u.hostname.toLowerCase();
+    if(h === 'www.dropbox.com' || h === 'dropbox.com') {
+      u.searchParams.delete('raw'); u.searchParams.set('dl', '1');
+      return u.href;
+    }
+    if(h === 'drive.google.com') {
+      const m = u.pathname.match(/\/file\/d\/([^/]+)/);
+      const id = m ? m[1] : u.searchParams.get('id');
+      if(id) return 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(id);
+    }
+    return u.href;
+  } catch(e) { return href; }
+}
+
+function urlViaProxy(href, tpl) {
+  tpl = (tpl || '').trim();
+  if(!/^https?:\/\//i.test(tpl)) return null;
+  return tpl.includes('{url}') ? tpl.replace('{url}', encodeURIComponent(href)) : tpl + encodeURIComponent(href);
+}
+
+// تحميل مع شريط تقدم + مهلة خمول + إمكانية الإيقاف. بيرجّع Blob.
+async function urlFetchBlob(href, onProgress, globalSignal) {
+  if(globalSignal.aborted) throw new UrlImportError('cancel');
+  const rc = new AbortController();
+  let idle = null, reason = '';
+  const arm = () => { clearTimeout(idle); idle = setTimeout(() => { reason = 'timeout'; rc.abort(); }, URL_IDLE_TIMEOUT_MS); };
+  const onGlobalAbort = () => { reason = 'cancel'; rc.abort(); };
+  globalSignal.addEventListener('abort', onGlobalAbort);
+  try {
+    arm();
+    let res;
+    try {
+      res = await fetch(href, {
+        signal: rc.signal,
+        credentials: 'omit',          // مابنبعتش كوكيز
+        cache: 'no-store',            // مانخزّنش صور المريض في كاش المتصفح
+        referrerPolicy: 'no-referrer' // مانكشفش عنوان التطبيق للسيرفر
+      });
+    } catch(e) {
+      throw new UrlImportError(reason || 'network');
+    }
+    if(!res.ok) throw new UrlImportError('http', res.status);
+    const total = parseInt(res.headers.get('content-length'), 10) || 0;
+    const chunks = [];
+    let got = 0;
+    if(res.body && res.body.getReader) {
+      const reader = res.body.getReader();
+      for(;;) {
+        let r;
+        try { r = await reader.read(); } catch(e) { throw new UrlImportError(reason || 'network'); }
+        if(r.done) break;
+        chunks.push(r.value); got += r.value.length;
+        arm(); onProgress(got, total);
+      }
+    } else {
+      const b = await res.blob(); chunks.push(b); got = b.size; onProgress(got, got);
+    }
+    return {
+      blob: new Blob(chunks),
+      type: res.headers.get('content-type') || '',
+      disp: res.headers.get('content-disposition') || '',
+      finalUrl: res.url || href
+    };
+  } finally {
+    clearTimeout(idle);
+    globalSignal.removeEventListener('abort', onGlobalAbort);
+  }
+}
+
+// يعرف نوع الملف من محتواه الفعلي (مش من الامتداد)
+async function urlSniff(blob) {
+  const head = new Uint8Array(await blob.slice(0, 2048).arrayBuffer());
+  const n = head.length;
+  if(n >= 132 && head[128] === 0x44 && head[129] === 0x49 && head[130] === 0x43 && head[131] === 0x4D) return 'dicom';
+  if(n >= 4 && head[0] === 0x50 && head[1] === 0x4B && ((head[2] === 3 && head[3] === 4) || (head[2] === 5 && head[3] === 6))) return 'zip';
+  if(n >= 3 && head[0] === 0xFF && head[1] === 0xD8 && head[2] === 0xFF) return 'jpeg';
+  if(n >= 4 && head[0] === 0x89 && head[1] === 0x50 && head[2] === 0x4E && head[3] === 0x47) return 'png';
+  let txt = '';
+  for(let i = 0; i < Math.min(n, 512); i++) txt += String.fromCharCode(head[i]);
+  if(/^(\xEF\xBB\xBF)?\s*<(!doctype|html|head|body|\?xml)/i.test(txt)) return 'html';
+  return 'unknown';
+}
+
+function urlFileName(href, disp, fallback) {
+  let name = '';
+  try {
+    const m1 = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disp || '');
+    const m2 = /filename\s*=\s*"?([^";]+)"?/i.exec(disp || '');
+    if(m1) name = decodeURIComponent(m1[1]); else if(m2) name = m2[1];
+  } catch(e) {}
+  if(!name) {
+    try { name = decodeURIComponent(new URL(href).pathname.split('/').filter(Boolean).pop() || ''); } catch(e) {}
+  }
+  return urlSafeName(name) || fallback;
+}
+
+// فك ZIP → مجموعات { key, files } بنفس منطق "رفع فولدر": كل سيكونس/فولدر فرعي مجموعة لوحده
+async function urlExtractZip(blob, zipBase, onStatus, signal) {
+  if(typeof JSZip === 'undefined') throw new UrlImportError('nozip');
+  let zip;
+  try { zip = await JSZip.loadAsync(await blob.arrayBuffer()); } catch(e) { throw new UrlImportError('badzip'); }
+  const entries = [];
+  zip.forEach((path, entry) => { if(!entry.dir) entries.push(entry); });
+  const groups = new Map();
+  for(let i = 0; i < entries.length; i++) {
+    if(signal.aborted) throw new UrlImportError('cancel');
+    const entry = entries[i];
+    const parts = entry.name.split('/').filter(Boolean);
+    const base = parts[parts.length - 1] || '';
+    if(!base || base.startsWith('.') || parts[0] === '__MACOSX' || /^DICOMDIR$/i.test(base)) continue;
+    const hasDot = base.includes('.');
+    const ext = hasDot ? base.split('.').pop().toLowerCase() : '';
+    const dicomExt = ['dcm', 'dicom', 'ima'].includes(ext);
+    // امتداد معروف إنه مش DICOM (jpg/txt/xml/exe/...) → تجاهل. بدون امتداد أو امتداده رقم (UID) → نتأكد من المحتوى.
+    if(hasDot && !dicomExt && !/^\d+$/.test(ext)) continue;
+    const u8 = await entry.async('uint8array');
+    if(!dicomExt) {
+      const isDcm = u8.length >= 132 && u8[128] === 0x44 && u8[129] === 0x49 && u8[130] === 0x43 && u8[131] === 0x4D;
+      if(!isDcm) continue;
+    }
+    const dirs = parts.slice(0, -1).map(urlSafeName);
+    const key = dirs.length >= 2 ? dirs[1] : (dirs[0] || zipBase);
+    if(!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(new File([u8], urlSafeName(base) || ('image_' + (i + 1)), { type: 'application/dicom' }));
+    if(i % 20 === 0) { onStatus('فك الضغط ' + (i + 1) + ' / ' + entries.length); await sleep(0); }
+  }
+  return Array.from(groups, ([key, files]) => ({ key, files }));
+}
+
+// صفحة فهرس (زي Apache/nginx index) → روابط .dcm/.dicom/.zip اللي فيها
+function urlScanPage(html, baseHref) {
+  const out = [], seen = new Set();
+  const re = /href\s*=\s*["']([^"'#]+)["']/gi;
+  let m;
+  while((m = re.exec(html)) && out.length < URL_MAX_LINKS_FROM_PAGE) {
+    let u;
+    try { u = new URL(m[1].replace(/&amp;/g, '&'), baseHref); } catch(e) { continue; }
+    if(u.protocol !== 'http:' && u.protocol !== 'https:') continue;
+    if(!/\.(dcm|dicom|zip)$/i.test(u.pathname)) continue;
+    if(seen.has(u.href)) continue;
+    seen.add(u.href); out.push(u.href);
+  }
+  return out;
+}
+
+async function urlPool(items, limit, fn) {
+  let next = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while(next < items.length) { const it = items[next++]; await fn(it); }
+  });
+  await Promise.all(workers);
+}
+
+// يعالج رابط واحد → مصفوفة مجموعات { key, files }
+async function urlProcessOne(href, row, ctx, depth) {
+  const target = urlNormalize(href);
+  const onProg = (got, total) => row.progress(got, total);
+  let fetched, viaProxy = false;
+  try {
+    fetched = await urlFetchBlob(target, onProg, ctx.signal);
+  } catch(e) {
+    // فشل شبكة/CORS → جرّب Proxy المستخدم (لو مظبوط)
+    const proxied = (e instanceof UrlImportError && e.code === 'network') ? urlViaProxy(target, ctx.proxy) : null;
+    if(!proxied) throw e;
+    row.status('جاري المحاولة عبر الـ Proxy...');
+    fetched = await urlFetchBlob(proxied, onProg, ctx.signal);
+    viaProxy = true;
+  }
+  if(!fetched.blob.size) throw new UrlImportError('empty');
+
+  let kind = await urlSniff(fetched.blob);
+  if(kind === 'unknown') {
+    // DICOM بدون preamble: نقبله بس لو الرابط/النوع بيقول إنه DICOM
+    if(/\.(dcm|dicom)$/i.test(new URL(target).pathname) || /dicom/i.test(fetched.type)) kind = 'dicom';
+  }
+
+  if(kind === 'dicom') {
+    const name = urlFileName(href, fetched.disp, 'image_' + row.n + '.dcm');
+    return [{ key: '', files: [new File([fetched.blob], name, { type: 'application/dicom' })] }];
+  }
+  if(kind === 'zip') {
+    const base = urlFileName(href, fetched.disp, 'study_' + row.n).replace(/\.zip$/i, '');
+    row.status('جاري فك الضغط...');
+    return await urlExtractZip(fetched.blob, base, t => row.status(t), ctx.signal);
+  }
+  if(kind === 'html') {
+    if(depth > 0 || fetched.blob.size > 5 * 1024 * 1024) throw new UrlImportError('page');
+    const links = urlScanPage(await fetched.blob.text(), viaProxy ? target : fetched.finalUrl);
+    if(!links.length) throw new UrlImportError('page');
+    const all = [];
+    let done = 0, failed = 0;
+    row.status('الصفحة فيها ' + links.length + ' ملف — جاري التحميل...');
+    await urlPool(links, URL_PAGE_CONCURRENCY, async (l) => {
+      try {
+        const sub = { n: row.n, status() {}, progress() {}, pct() {} };
+        const g = await urlProcessOne(l, sub, ctx, depth + 1);
+        for(const x of g) all.push(x);
+      } catch(e) {
+        if(e && e.code === 'cancel') throw e;
+        failed++;
+      }
+      done++;
+      row.pct(done / links.length * 100);
+      row.status('تحميل ' + done + ' / ' + links.length);
+    });
+    if(failed) toast('⚠️ ' + failed + ' ملف من الصفحة مانزلش', 'warn');
+    return all;
+  }
+  if(kind === 'jpeg' || kind === 'png') throw new UrlImportError('image');
+  throw new UrlImportError('unknown');
+}
+
+function urlErrorMessage(e, href) {
+  const code = e && e.code;
+  const mixed = location.protocol === 'https:' && /^http:/i.test(href);
+  switch(code) {
+    case 'cancel':  return 'تم الإيقاف';
+    case 'timeout': return 'انتهت المهلة — السيرفر مابعتش بيانات لمدة دقيقة';
+    case 'network': return mixed
+      ? 'الرابط http والتطبيق شغال على https — المتصفح بيمنع كده. استخدم رابط https'
+      : 'تعذّر التحميل — غالبًا السيرفر مابيسمحش للمتصفح (CORS) أو مفيش اتصال. جرّب الإعدادات المتقدمة';
+    case 'http':
+      if(e.extra === 401 || e.extra === 403) return 'الرابط محتاج تسجيل دخول أو منتهي الصلاحية (HTTP ' + e.extra + ')';
+      if(e.extra === 404) return 'الرابط مش موجود (404)';
+      return 'السيرفر رجّع خطأ HTTP ' + e.extra;
+    case 'page':    return 'الرابط ده صفحة ويب (Viewer) مش ملف مباشر — محتاج رابط تحميل مباشر لملف DICOM أو ZIP';
+    case 'image':   return 'الرابط ده صورة عادية (JPG/PNG) مش DICOM — التطبيق ده بيدعم DICOM بس';
+    case 'unknown': return 'نوع الملف مش مدعوم — المطلوب DICOM أو ZIP فيه DICOM';
+    case 'empty':   return 'الملف فاضي';
+    case 'nodicom': return 'ماتلقيتش ملفات DICOM في الرابط ده';
+    case 'badzip':  return 'ملف الـ ZIP تالف أو ناقص';
+    case 'nozip':   return 'مكتبة فك الـ ZIP مش متحمّلة — أعد تحميل الصفحة وأنت متصل بالإنترنت';
+    default:        return 'حصل خطأ غير متوقع';
+  }
+}
+
+// ── واجهة المستخدم ───────────────────────────────────
+function urlFmtMB(b) { return (b / 1048576).toFixed(b < 10485760 ? 1 : 0) + ' MB'; }
+
+function urlShort(href) {
+  try { const u = new URL(href); const last = decodeURIComponent(u.pathname.split('/').filter(Boolean).pop() || ''); return u.hostname + (last ? ' › ' + last : ''); }
+  catch(e) { return href; }
+}
+
+function urlMakeRow(host, href, n) {
+  const el = document.createElement('div');
+  el.className = 'url-row';
+  const top = document.createElement('div'); top.className = 'url-row-top';
+  const nm = document.createElement('span'); nm.className = 'url-row-name'; nm.textContent = urlShort(href); nm.title = href;
+  const st = document.createElement('span'); st.className = 'url-row-status'; st.textContent = 'في الانتظار';
+  top.append(nm, st);
+  const bar = document.createElement('div'); bar.className = 'url-row-bar';
+  const fill = document.createElement('div'); bar.appendChild(fill);
+  el.append(top, bar);
+  host.appendChild(el);
+  let last = 0;
+  return {
+    n,
+    status(t, cls) { st.textContent = t; if(cls !== undefined) el.className = 'url-row ' + cls; },
+    progress(got, total) {
+      const now = performance.now();
+      if(now - last < 120 && !(total && got >= total)) return;   // لا نزحم الـ DOM
+      last = now;
+      fill.classList.toggle('indet', !total);
+      if(total) fill.style.width = Math.min(100, got / total * 100) + '%';
+      st.textContent = total ? urlFmtMB(got) + ' / ' + urlFmtMB(total) : urlFmtMB(got);
+    },
+    pct(p) { fill.classList.remove('indet'); fill.style.width = Math.max(0, Math.min(100, p)) + '%'; }
+  };
+}
+
+function urlSetBusy(busy) {
+  document.getElementById('url-load-btn').disabled = busy;
+  document.getElementById('url-cancel-btn').style.display = busy ? '' : 'none';
+  document.getElementById('url-input').readOnly = busy;
+}
+
+async function urlImportStart() {
+  if(urlImportCtrl) return;
+  const input = document.getElementById('url-input');
+  const { ok, bad } = urlParseList(input.value);
+  if(!ok.length) { toast(bad.length ? '❌ الرابط غير صالح — لازم يبدأ بـ https://' : '⚠️ الصق رابط الأول', 'warn'); return; }
+  if(bad.length) toast('⚠️ تم تجاهل ' + bad.length + ' رابط غير صالح', 'warn');
+  const proxy = (document.getElementById('url-proxy').value || '').trim();
+  if(proxy && !/^https?:\/\//i.test(proxy)) { toast('❌ عنوان الـ Proxy لازم يبدأ بـ https://', 'warn'); return; }
+  try { localStorage.setItem(URL_PROXY_KEY, proxy); } catch(e) {}
+
+  urlImportCtrl = new AbortController();
+  const ctrl = urlImportCtrl;
+  const ctx = { signal: ctrl.signal, proxy };
+  urlSetBusy(true);
+  const host = document.getElementById('url-progress');
+  host.textContent = '';
+  const rows = ok.map((h, i) => urlMakeRow(host, h, i + 1));
+  let added = 0;
+
+  await urlPool(ok.map((_, i) => i), URL_CONCURRENCY, async (i) => {
+    const row = rows[i];
+    try {
+      row.status('جاري التحميل...', '');
+      const groups = await urlProcessOne(ok[i], row, ctx, 0);
+      const count = groups.reduce((s, g) => s + g.files.length, 0);
+      if(!count) throw new UrlImportError('nodicom');
+      addFileGroups(groups);     // نفس مسار الرفع العادي — بيبدأ الـ parse والمعاينة فورًا
+      added += count;
+      row.pct(100);
+      row.status('✅ تمت إضافة ' + count + ' ملف', 'done');
+    } catch(e) {
+      if(!(e instanceof UrlImportError)) console.error(e);
+      row.status('❌ ' + urlErrorMessage(e, ok[i]), e && e.code === 'cancel' ? 'cancel' : 'error');
+    }
+  });
+
+  const wasCancelled = ctrl.signal.aborted;
+  urlImportCtrl = null;
+  urlSetBusy(false);
+  if(added) {
+    toast('✅ تم تحميل ' + added + ' ملف من الروابط', 'success');
+    if(!wasCancelled && document.getElementById('url-auto-export').checked) openPreConvertPreview('pdf');
+  }
+}
+
+function urlImportCancel() { if(urlImportCtrl) urlImportCtrl.abort(); }
+
+(function initUrlImport() {
+  const input = document.getElementById('url-input');
+  const proxyEl = document.getElementById('url-proxy');
+  if(!input) return;
+  document.getElementById('url-load-btn').addEventListener('click', urlImportStart);
+  document.getElementById('url-cancel-btn').addEventListener('click', urlImportCancel);
+  document.getElementById('url-paste-btn').addEventListener('click', async () => {
+    try {
+      const t = await navigator.clipboard.readText();
+      if(!t.trim()) { toast('⚠️ الحافظة فاضية', 'warn'); return; }
+      input.value = input.value.trim() ? input.value.replace(/\s*$/, '\n') + t.trim() : t.trim();
+    } catch(e) { toast('⚠️ المتصفح مارضيش يقرا الحافظة — الصق الرابط يدويًا', 'warn'); }
+  });
+  input.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); urlImportStart(); } });
+  try { proxyEl.value = localStorage.getItem(URL_PROXY_KEY) || ''; } catch(e) {}
+  // فتح التطبيق بـ ?url=... بيجهّز الروابط في الخانة (بدون تحميل تلقائي — أنت اللي بتدوس تحميل)
+  try {
+    const pre = new URLSearchParams(location.search).getAll('url');
+    if(pre.length) { input.value = pre.join('\n'); setTimeout(() => toast('🔗 الرابط جاهز — دوس "تحميل الصور"', ''), 800); }
+  } catch(e) {}
+})();
+
 // ===================== PARSE =====================
 // Parsing/rendering many DICOM files at once (hundreds of images). The
 // per-pixel windowing math now runs in the worker pool above, so several
@@ -2116,7 +2689,7 @@ function renderCard(id, targetFrag) {
   const card = document.createElement('div');
   card.className = 'file-card';
   card.id = `card-${id}`;
-  const folderTag = item.folderKey ? `<div class="file-meta">📁 ${item.folderKey}</div>` : '';
+  const folderTag = item.folderKey ? `<div class="file-meta">📁 ${escHtml(item.folderKey)}</div>` : '';
   card.innerHTML = `
     <div class="file-thumb" id="thumb-${id}">
       <div class="thumb-img-wrap">🩻</div>
@@ -2125,7 +2698,7 @@ function renderCard(id, targetFrag) {
       <span class="file-status pending" id="status-${id}">انتظار</span>
     </div>
     <div class="file-info">
-      <div class="file-name" title="${item.file.name}">${item.file.name}</div>
+      <div class="file-name" title="${escHtml(item.file.name)}">${escHtml(item.file.name)}</div>
       <div class="file-meta">${(item.file.size/1024).toFixed(1)} KB</div>
       ${folderTag}
     </div>
@@ -2193,6 +2766,83 @@ async function downloadZipBlob(zip, fname) {
   setTimeout(() => URL.revokeObjectURL(url), 4000);
 }
 
+// ===================== فاصل واسم المجموعة (سيكونس / فولدر) =====================
+const NO_FOLDER_KEY = '(بدون فولدر)';
+function groupSepOn() { const el = document.getElementById('opt-group-sep'); return !el || el.checked; }
+function realKey(k) { return k && k !== NO_FOLDER_KEY ? k : ''; }
+function groupNamesOf(items) {
+  const seen = [];
+  for(const it of items) { const k = realKey(it.folderKey || ''); if(k && !seen.includes(k)) seen.push(k); }
+  return seen;
+}
+// اسم المجموعة اللي بيتكتب بين القوسين في اسم الملف (بدل By Sa3d abdo)
+function groupNameForFile(items) {
+  const n = groupNamesOf(items).map(k => k.replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g, ' ').trim()).filter(Boolean);
+  if(!n.length) return '';
+  const t = n.length > 3 ? n.slice(0, 3).join(' + ') + ` +${n.length - 3}` : n.join(' + ');
+  return t.length > 70 ? t.slice(0, 69).trim() + '…' : t;
+}
+function pdfPageDims(size, orient) {
+  const d = { a4: { w: 210, h: 297 }, letter: { w: 216, h: 279 }, a3: { w: 297, h: 420 } };
+  let { w, h } = d[size] || d.a4;
+  if(orient === 'landscape') [w, h] = [h, w];
+  return { w, h };
+}
+// النص بيتحوّل لصورة عشان الأسماء العربي تظهر صح (خطوط jsPDF الأساسية مش بتدعم العربي)
+function makeLabelImg(text, opt) {
+  opt = opt || {};
+  const px = opt.px || 44, bg = opt.bg || '#111827', color = opt.color || '#00d4ff', maxW = opt.maxW || 1600;
+  const font = `${opt.bold === false ? '' : 'bold '}${px}px "Segoe UI", Tahoma, Arial, sans-serif`;
+  const c = document.createElement('canvas'), x = c.getContext('2d');
+  x.font = font;
+  const tw = Math.ceil(x.measureText(text).width);
+  c.width = Math.min(maxW, tw + 16); c.height = Math.round(px * 1.5);
+  x.fillStyle = bg; x.fillRect(0, 0, c.width, c.height);
+  x.font = font; x.fillStyle = color; x.textBaseline = 'middle'; x.textAlign = 'left';
+  x.fillText(text, 8, c.height / 2, c.width - 16);
+  return { url: c.toDataURL('image/png'), w: c.width, h: c.height };
+}
+function pdfAddLabel(doc, L, x, y, maxW, maxH, align) {
+  const sc = Math.min(maxW / L.w, maxH / L.h), ww = L.w * sc, hh = L.h * sc;
+  doc.addImage(L.url, 'PNG', align === 'right' ? x - ww : align === 'center' ? x - ww / 2 : x, y, ww, hh);
+  return { w: ww, h: hh };
+}
+// صفحة فاصلة: خط واسم المجموعة جنبه
+function renderGroupDivider(doc, size, orient, name, no, total, count) {
+  doc.addPage();
+  const { w, h } = pdfPageDims(size, orient), margin = 12, cy = h / 2;
+  doc.setFillColor(17, 24, 39); doc.rect(0, 0, w, h, 'F');
+  const L = makeLabelImg(name, { px: 72 });
+  const sc = Math.min((w - margin * 2 - 40) / L.w, 14 / L.h), ww = L.w * sc, hh = L.h * sc;
+  doc.setDrawColor(0, 212, 255); doc.setLineWidth(.6);
+  if(w / 2 - ww / 2 - 5 > margin) {
+    doc.line(margin, cy, w / 2 - ww / 2 - 5, cy);
+    doc.line(w / 2 + ww / 2 + 5, cy, w - margin, cy);
+  }
+  doc.addImage(L.url, 'PNG', w / 2 - ww / 2, cy - hh / 2, ww, hh);
+  const S = makeLabelImg(`Series ${no} / ${total}   •   ${count} images`, { px: 40, color: '#8b9bb0', bold: false });
+  pdfAddLabel(doc, S, w / 2, cy + hh / 2 + 5, w - margin * 2, 5, 'center');
+}
+// كارت فاصل في الفيديو
+function drawVideoSeriesCard(ctx, W, H, name, no, total, count) {
+  ctx.fillStyle = '#0b1220'; ctx.fillRect(0, 0, W, H);
+  let size = Math.round(H * 0.06);
+  ctx.font = `bold ${size}px Arial, sans-serif`;
+  let tw = ctx.measureText(name).width;
+  while(tw > W * 0.7 && size > 10) { size -= 2; ctx.font = `bold ${size}px Arial, sans-serif`; tw = ctx.measureText(name).width; }
+  const cy = H / 2, gap = W * 0.025;
+  ctx.strokeStyle = '#00d4ff'; ctx.lineWidth = Math.max(2, Math.round(H * 0.004));
+  ctx.beginPath();
+  ctx.moveTo(W * 0.06, cy); ctx.lineTo(W / 2 - tw / 2 - gap, cy);
+  ctx.moveTo(W / 2 + tw / 2 + gap, cy); ctx.lineTo(W * 0.94, cy);
+  ctx.stroke();
+  ctx.fillStyle = '#00d4ff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(name, W / 2, cy);
+  ctx.font = `${Math.round(H * 0.028)}px Arial, sans-serif`; ctx.fillStyle = '#8b9bb0';
+  ctx.fillText(`Series ${no} / ${total}   •   ${count} images`, W / 2, cy + size * 0.9 + H * 0.02);
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+}
+
 async function convertAll() {
   if(files.length === 0) return;
 
@@ -2211,6 +2861,7 @@ async function convertAll() {
   const isPng = imgQuality === 'png';
   const qualityVal = isPng ? 1.0 : parseFloat(imgQuality);
   const anonymize = document.getElementById('opt-anonymize').checked;
+  const sepOn = groupSepOn();
   const gridSel = document.getElementById('opt-print-grid').value;
   // Larger number = vertical count (rows), smaller = horizontal count (columns) —
   // regardless of the order written in the option value (e.g. "3x4" or "4x6").
@@ -2220,10 +2871,12 @@ async function convertAll() {
   let zipCount = 0;
 
   // Helper: build filename starting with the patient name + credit
-  function buildFilename(item, fallback) {
+  // gname = اسم المجموعة (بيتكتب بين القوسين بدل By Sa3d abdo)
+  function buildFilename(item, fallback, gname) {
     const dcm = item ? item.dcm : null;
     let patName = (dcm && !anonymize) ? (dcm.getTag('(0010,0010)') || dcm.getTag('(0010,0020)') || '').trim() : '';
     patName = patName.replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g, '_').replace(/^_+|_+$/g,'');
+    if(gname) return `${patName || 'DICOM'} (${gname}).pdf`;
     return patName ? `${patName} (By Sa3d abdo).pdf` : (fallback || `DICOM_${Date.now()} (By Sa3d abdo).pdf`);
   }
 
@@ -2239,7 +2892,7 @@ async function convertAll() {
       await renderGridToPdf(doc, orderedFiles, size, orient, windowPreset, gr, gc, anonymize, (item) => {
         item.status = 'done';
         setStatus(item.id, 'done', '✅ تم');
-      });
+      }, { sep: sepOn, sectionize: true });
       progBar.style.width = '100%';
     } else {
       let first = true;
@@ -2249,8 +2902,15 @@ async function convertAll() {
         setStatus(item.id, 'processing', '⏳ جاري...');
         progBar.style.width = `${((i)/orderedFiles.length)*100}%`;
 
+        const gk = realKey(item.folderKey || '');
+        if(sepOn && i > 0 && gk && gk !== realKey(orderedFiles[i-1].folderKey || '')) {
+          const gnames = groupNamesOf(orderedFiles);
+          renderGroupDivider(doc, size, orient, gk, gnames.indexOf(gk) + 1, gnames.length,
+            orderedFiles.filter(x => realKey(x.folderKey || '') === gk).length);
+        }
+
         try {
-          await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first, anonymize, i+1, orderedFiles.length);
+          await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first, anonymize, i+1, orderedFiles.length, sepOn ? gk : '');
           first = false;
           item.status = 'done';
           setStatus(item.id, 'done', '✅ تم');
@@ -2266,7 +2926,7 @@ async function convertAll() {
     if(cancelRequested) {
       toast('⛔ تم إلغاء التحويل', 'warn');
     } else {
-      const fname = buildFilename(orderedFiles[0], `DICOM_${Date.now()} (By Sa3d abdo).pdf`);
+      const fname = buildFilename(orderedFiles[0], `DICOM_${Date.now()} (By Sa3d abdo).pdf`, groupNameForFile(orderedFiles));
       doc.save(fname);
       toast(`✅ تم حفظ: ${fname}`, 'success');
     }
@@ -2280,9 +2940,9 @@ async function convertAll() {
 
       try {
         const doc = new jsPDF({ orientation: orient, unit:'mm', format: size });
-        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, true, anonymize, 1, 1);
-        const fname = buildFilename(item, `${item.file.name.replace(/\.[^.]+$/, '')} (By Sa3d abdo).pdf`);
-        if(useZip) { zip.file(fname, doc.output('blob')); zipCount++; }
+        await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, true, anonymize, 1, 1, sepOn ? realKey(item.folderKey || '') : '');
+        const fname = buildFilename(item, `${item.file.name.replace(/\.[^.]+$/, '')} (By Sa3d abdo).pdf`, groupNameForFile([item]));
+        if(useZip) { zip.file(uniqueZipName(zip, fname), doc.output('blob')); zipCount++; }
         else doc.save(fname);
         item.status = 'done';
         setStatus(item.id, 'done', '✅ تم');
@@ -2336,7 +2996,7 @@ async function convertAll() {
           await renderGridToPdf(doc, groupItems, size, orient, windowPreset, gr, gc, anonymize, (item) => {
             item.status = 'done';
             setStatus(item.id, 'done', '✅ تم');
-          });
+          }, { sep: sepOn, label: realKey(key) });
           renderedAny = true;
         } catch(e) {
           groupError = true;
@@ -2353,7 +3013,7 @@ async function convertAll() {
           progBar.style.width = `${(doneCount/total)*100}%`;
           pageNum++;
           try {
-            await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first, anonymize, pageNum, groupItems.length);
+            await renderToPdf(doc, item, size, orient, windowPreset, qualityVal, isPng, first, anonymize, pageNum, groupItems.length, sepOn ? realKey(key) : '');
             first = false;
             renderedAny = true;
             item.status = 'done';
@@ -2369,9 +3029,9 @@ async function convertAll() {
       }
 
       if(renderedAny && !cancelRequested) {
-        const safeKey = key.replace(/[\\/:"*?<>|]+/g, '_').trim();
-        const fname = (safeKey && safeKey !== '(بدون فولدر)')
-          ? `${safeKey} (By Sa3d abdo).pdf`
+        const gn = groupNameForFile(groupItems);
+        const fname = gn
+          ? buildFilename(groupItems[0], null, gn)
           : buildFilename(groupItems[0], `DICOM_group${groupIndex}_${Date.now()} (By Sa3d abdo).pdf`);
         if(useZip) {
           zip.file(uniqueZipName(zip, fname), doc.output('blob'));
@@ -2400,7 +3060,7 @@ async function convertAll() {
   convertBtn.disabled = false;
 }
 
-async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, isPng, isFirst, anonymize, pageIndex, totalPages) {
+async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, isPng, isFirst, anonymize, pageIndex, totalPages, groupLabel) {
   if(!isFirst) doc.addPage();
 
   // Page dims in mm
@@ -2425,6 +3085,7 @@ async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, is
   doc.setFontSize(11);
   doc.setTextColor(0, 212, 255);
   doc.text('DICOM Radiology Export', margin, 9);
+  if(groupLabel) pdfAddLabel(doc, makeLabelImg(groupLabel, { px: 40, color: '#ffd60a' }), w - margin, 3.2, availW * 0.5, 6.2, 'right');
 
   // Meta from tags
   const dcm = item.dcm;
@@ -2519,7 +3180,7 @@ async function renderToPdf(doc, item, size, orient, windowPreset, imgQuality, is
 // ===================== PRINT LAYOUT (contact-sheet grid PDF) =====================
 // Lays several DICOM images per A4/Letter/A3 page in a rows×cols grid — like a
 // classic radiology film sheet — instead of one image per page.
-async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows, gridCols, anonymize, onItemDone) {
+async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows, gridCols, anonymize, onItemDone, opts) {
   const pageDims = { a4:{w:210,h:297}, letter:{w:216,h:279}, a3:{w:297,h:420} };
   let { w, h } = pageDims[size] || pageDims.a4;
   if(orient === 'landscape') [w,h] = [h,w];
@@ -2528,13 +3189,28 @@ async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows,
   const headerH = 26;
   const footerH = 8;
   const availW = w - margin*2;
-  const availH = h - headerH - footerH - margin/2;
+
+  // مجموعات (سيكونس/فولدر): كل مجموعة تبدأ صفحة جديدة وفوقها شريط فيه اسمها
+  const sepOn = !!(opts && opts.sep);
+  const sections = [];
+  if(sepOn && opts.sectionize) {
+    for(const it of items) {
+      const k = realKey(it.folderKey || '');
+      const last = sections[sections.length - 1];
+      if(last && last.label === k) last.items.push(it); else sections.push({ label: k, items: [it] });
+    }
+  } else sections.push({ label: sepOn ? ((opts && opts.label) || '') : '', items });
+  const bandH = (sepOn && sections.some(sc => sc.label)) ? 7 : 0;
+  const availH = h - headerH - footerH - margin/2 - bandH;
 
   const cellGap = 3;
   const cellW = (availW - cellGap*(gridCols-1)) / gridCols;
   const cellH = (availH - cellGap*(gridRows-1)) / gridRows;
   const perPage = gridRows * gridCols;
-  const totalPages = Math.max(1, Math.ceil(items.length / perPage));
+  const pages = [];
+  for(const sc of sections) for(let o = 0; o < sc.items.length; o += perPage) pages.push({ label: sc.label, items: sc.items.slice(o, o + perPage), offset: o });
+  if(!pages.length) pages.push({ label: '', items: [], offset: 0 });
+  const totalPages = pages.length;
 
   // Representative patient/study meta for the page header
   let patName='', patId='', patSex='', patAge='', studyDate='', modality='', bodyPart='', desc='';
@@ -2586,16 +3262,24 @@ async function renderGridToPdf(doc, items, size, orient, windowPreset, gridRows,
     doc.setDrawColor(0,212,255); doc.setLineWidth(.3);
     doc.line(0, headerH, w, headerH);
 
+    // اسم المجموعة + خط فاصل
+    const pg = pages[p];
+    if(bandH && pg.label) {
+      const BL = makeLabelImg(pg.label, { px: 40, bg: '#ffffff', color: '#0077aa' });
+      const bs = pdfAddLabel(doc, BL, margin, headerH + 1.2, availW * 0.6, 4.8, 'left');
+      doc.setDrawColor(0, 119, 170); doc.setLineWidth(.4);
+      doc.line(margin + bs.w + 2.5, headerH + 1.2 + bs.h / 2, w - margin, headerH + 1.2 + bs.h / 2);
+    }
+
     // Grid cells
-    const startIdx = p * perPage;
     for(let cellIdx = 0; cellIdx < perPage; cellIdx++) {
-      const itemIdx = startIdx + cellIdx;
-      if(itemIdx >= items.length) break;
-      const item = items[itemIdx];
+      if(cellIdx >= pg.items.length) break;
+      const itemIdx = pg.offset + cellIdx;
+      const item = pg.items[cellIdx];
       const row = Math.floor(cellIdx / gridCols);
       const col = cellIdx % gridCols;
       const cx = margin + col*(cellW+cellGap);
-      const cy = headerH + margin/2 + row*(cellH+cellGap);
+      const cy = headerH + bandH + margin/2 + row*(cellH+cellGap);
 
       doc.setDrawColor(60,70,90); doc.setLineWidth(.15);
       doc.rect(cx, cy, cellW, cellH);
@@ -2773,6 +3457,9 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
 
   for(const item of items) await ensureParsed(item);
 
+  const sepOn = groupSepOn();
+  const seriesKeys = groupNamesOf(items);
+
   // Native aspect ratio from the first renderable frame
   const probe = document.createElement('canvas');
   let nativeW = 0, nativeH = 0;
@@ -2834,6 +3521,13 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
   for(let i = 0; i < items.length; i++) {
     if(cancelRequested) break;
     const item = items[i];
+    const gk = realKey(item.folderKey || '');
+    if(sepOn && i > 0 && gk && gk !== realKey(items[i-1].folderKey || '')) {      // كارت فاصل بين السيكونس
+      drawVideoSeriesCard(ctx, targetW, targetH, gk, seriesKeys.indexOf(gk) + 1, seriesKeys.length,
+        items.filter(x => realKey(x.folderKey || '') === gk).length);
+      await sleep(1200);
+      if(cancelRequested) break;
+    }
     let ok = false;
     if(item.dcm) {
       try { ok = await item.dcm.renderPixels(frameCanvas, windowPreset); } catch(e) { ok = false; }
@@ -2899,6 +3593,14 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
     ctx.textAlign = 'center';
     ctx.fillText(`Frame ${i+1} / ${items.length}  •  © ${new Date().getFullYear()} Sa3d Abdo`, targetW/2, targetH - footerH*0.35);
     ctx.textAlign = 'left';
+    if(sepOn && gk) {                                                              // اسم المجموعة الحالية في الفوتر
+      ctx.fillStyle = '#00d4ff';
+      ctx.font = `bold ${Math.round(footerH*0.5)}px Arial, sans-serif`;
+      let nm = gk;
+      while(nm.length > 3 && ctx.measureText(nm).width > targetW * 0.28) nm = nm.slice(0, -2);
+      if(nm !== gk) nm = nm.trim() + '…';
+      ctx.fillText(nm, 10, targetH - footerH*0.35);
+    }
 
     onFrame && onFrame();
     await sleep(frameDelay);
@@ -2918,7 +3620,9 @@ async function renderGroupToVideo(group, windowPreset, qualityKey, formatPref, f
   const hasKey = group.key && group.key !== '(بدون فولدر)';
   const safeName = (hasKey ? group.key : (anonymize ? 'DICOM' : (patName || 'DICOM')))
     .trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
-  let fname = `${safeName} (By Sa3d abdo)_${targetH}p.${ext}`;
+  const gname = groupNameForFile(items);
+  const baseName = (anonymize ? 'DICOM' : (patName || 'DICOM')).trim().replace(/[\\/:"*?<>|]+/g, '_').replace(/\s+/g,'_') || 'DICOM';
+  let fname = gname ? `${baseName} (${gname})_${targetH}p.${ext}` : `${safeName} (By Sa3d abdo)_${targetH}p.${ext}`;
 
   if(zip) {
     fname = uniqueZipName(zip, fname);
@@ -2980,7 +3684,7 @@ async function showPreview(id, refreshOnly) {
     if(val) {
       tbody.innerHTML += `<tr>
         <td><span class="tag-key">${tag}</span> ${label}</td>
-        <td>${val}</td>
+        <td>${escHtml(val)}</td>
       </tr>`;
     }
   }
@@ -3068,7 +3772,8 @@ async function openPreConvertPreview(kind) {
   if(!shownCount) { toast('⚠️ تعذّر عرض معاينة', 'warn'); return; }
 
   const windowSelect = document.getElementById('opt-window');
-  const windowLabel = windowSelect.options[windowSelect.selectedIndex].text;
+  let windowLabel = windowSelect.options[windowSelect.selectedIndex].text;
+  if(windowSelect.value === 'viewer') windowLabel += ` — ${vwFolderLooks.size || 0} فولدر بإعداداته`;
   const brightness = getBrightnessAdjust();
   const contrastPct = document.getElementById('opt-contrast').value;
 
@@ -3860,6 +4565,11 @@ function vwCopyTags() {
   else fallback();
 }
 document.getElementById('vwt-q').addEventListener('input', vwRenderTags);
+document.getElementById('opt-window').addEventListener('change', e => {
+  if(e.target.value !== 'viewer') return;
+  if(vwHasLooks()) toast('👁 كل فولدر هيتصدّر بإعداداته اللي ظبطتها في العارض (والفولدر اللي ماظبطتوش بـ Window بتاعه)', 'success');
+  else toast('👁 افتح العارض واظبط كل فولدر الأول — لحد ما تفتحه كل فولدر هيتصدّر بـ Window بتاعه من الملف', 'warn');
+});
 document.getElementById('vwt-q').addEventListener('keydown', e => { if(e.key === 'Escape') { vwCloseTags(); e.stopPropagation(); } });
 
 // ── VwPort class ──────────────────────────────────────
@@ -4687,6 +5397,7 @@ async function openViewer(startId) {
 }
 
 function closeViewer() {
+  vwCaptureLooks();
   vwStopCine(); vwCloseTags();
   vwModal.classList.remove('open');
   document.body.style.overflow = '';
@@ -4775,6 +5486,8 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')) {
       self.addEventListener('activate', e => self.clients.claim());
       self.addEventListener('fetch', e => {
         if(e.request.method !== 'GET') return;
+        if(new URL(e.request.url).origin !== new URL(self.registration.scope).origin) return; // صور المرضى من روابط خارجية: مانخزّنهاش في الكاش
+        if(e.request.headers.has('range')) return;
         e.respondWith(
           caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
             const clone = res.clone();
