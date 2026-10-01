@@ -986,89 +986,74 @@
   .vwt-val { grid-column:2; font-family:'JetBrains Mono',monospace; color:#ffd60a; word-break:break-all; }
   .vwt-empty { padding:28px 8px; text-align:center; color:#64748b; font-size:.8rem; direction:rtl; }
 
-  /* ===== استيراد من رابط ويب ===== */
-  .url-import {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    margin: 0 0 20px;
+  /* ===== قفل الأداة ===== */
+  .lock-toggle {
+    position:absolute; top:8px; right:96px;
+    background: rgba(0,212,255,.08);
+    border: 1px solid rgba(0,212,255,.25);
+    color: var(--accent);
+    font-size:0.95rem; line-height:1;
+    border-radius:20px; padding:6px 10px; cursor:pointer;
+    transition: transform .2s, background .2s;
   }
-  .url-head { display:flex; flex-direction:column; gap:4px; margin-bottom:10px; }
-  .url-title { font-weight:700; font-size:1rem; color:var(--accent); }
-  .url-sub { color:var(--muted); font-size:.8rem; line-height:1.7; }
-  #url-input {
-    width:100%; min-height:76px; max-height:260px; resize:vertical;
+  .lock-toggle:hover { background: rgba(0,212,255,.18); transform:scale(1.08); }
+  #app-lock {
+    position:fixed; inset:0; z-index:100000;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--bg); padding:20px;
+    padding-top: max(20px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  }
+  #lock-card {
+    width:100%; max-width:340px; text-align:center;
+    background: var(--surface); border:1px solid var(--border);
+    border-radius:16px; padding:28px 22px;
+    box-shadow: 0 12px 40px rgba(0,0,0,.35);
+  }
+  #lock-card.shake { animation: lockShake .4s; }
+  @keyframes lockShake { 20%{transform:translateX(-9px)} 40%{transform:translateX(9px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
+  .lock-icon { font-size:2.6rem; margin-bottom:6px; }
+  .lock-title { font-size:1.15rem; font-weight:700; margin-bottom:4px; }
+  .lock-sub { color: var(--muted); font-size:.85rem; margin-bottom:18px; }
+  #lock-input {
+    width:100%; text-align:center; direction:ltr;
+    font-family:'JetBrains Mono', monospace; font-size:1.7rem; letter-spacing:.5em; text-indent:.5em;
     background: var(--surface2); color: var(--text);
-    border:1px solid var(--border); border-radius:8px;
-    padding:10px 12px;
-    font-family:'JetBrains Mono', monospace; font-size:.78rem; line-height:1.7;
-    direction:ltr; text-align:left;
+    border:1px solid var(--border); border-radius:10px; padding:12px 8px;
   }
-  #url-input:focus { border-color: var(--accent); }
-  #url-input[readonly] { opacity:.7; }
-  .url-actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
-  .url-btn {
-    font-family:inherit; font-size:.88rem; font-weight:600;
-    padding:9px 16px; border-radius:8px; cursor:pointer;
-    background: var(--surface2); color: var(--text);
-    border:1px solid var(--border); transition: all .2s;
-  }
-  .url-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
-  .url-btn:disabled { opacity:.5; cursor:not-allowed; }
-  .url-btn.primary {
+  #lock-input:focus { border-color: var(--accent); }
+  #lock-msg { min-height:1.6em; margin-top:12px; font-size:.85rem; color: var(--danger); }
+  #lock-btn {
+    width:100%; margin-top:6px; padding:12px; border-radius:10px; cursor:pointer;
+    font-family:inherit; font-size:1rem; font-weight:700;
     background: linear-gradient(135deg, rgba(0,212,255,.18), rgba(0,136,204,.14));
-    border-color: rgba(0,212,255,.5); color: var(--accent);
+    border:1px solid rgba(0,212,255,.5); color: var(--accent);
   }
-  .url-btn.danger { border-color: rgba(255,68,102,.45); color: var(--danger); }
-  .url-check {
-    display:flex; align-items:center; gap:8px; cursor:pointer;
-    font-size:.82rem; color: var(--muted); margin-top:10px;
-  }
-  .url-check input { width:16px; height:16px; accent-color: var(--accent); cursor:pointer; }
-  .url-adv { margin-top:10px; font-size:.82rem; }
-  .url-adv summary { cursor:pointer; color: var(--muted); user-select:none; }
-  .url-adv-body { padding-top:8px; display:flex; flex-direction:column; gap:8px; }
-  .url-adv input[type="text"] {
-    width:100%; background: var(--surface2); color: var(--text);
-    border:1px solid var(--border); border-radius:8px; padding:8px 10px;
-    font-family:'JetBrains Mono', monospace; font-size:.76rem; direction:ltr; text-align:left;
-  }
-  .url-warn {
-    background: rgba(255,149,0,.08); border:1px solid rgba(255,149,0,.3);
-    color: var(--warn); border-radius:8px; padding:8px 10px; line-height:1.7;
-  }
-  #url-progress { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
-  #url-progress:empty { margin-top:0; }
-  .url-row { background: var(--surface2); border:1px solid var(--border); border-radius:8px; padding:8px 10px; }
-  .url-row-top { display:flex; justify-content:space-between; gap:10px; align-items:baseline; }
-  .url-row-name {
-    font-family:'JetBrains Mono', monospace; font-size:.72rem; color: var(--muted);
-    direction:ltr; text-align:left; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; min-width:0;
-  }
-  .url-row-status { font-size:.78rem; white-space:nowrap; flex-shrink:0; unicode-bidi:plaintext; }
-  .url-row-bar { height:4px; border-radius:2px; background: var(--border); margin-top:6px; overflow:hidden; }
-  .url-row-bar > div { height:100%; width:0; background: var(--accent); transition: width .15s; }
-  .url-row-bar > div.indet { width:40%; animation: urlIndet 1.1s ease-in-out infinite alternate; }
-  @keyframes urlIndet { from { margin-inline-start:0; } to { margin-inline-start:60%; } }
-  .url-row.done  .url-row-status { color: var(--success); }
-  .url-row.done  .url-row-bar > div { background: var(--success); }
-  .url-row.error .url-row-status { color: var(--danger); white-space:normal; }
-  .url-row.error .url-row-bar > div { background: var(--danger); }
-  .url-row.cancel .url-row-status { color: var(--warn); }
-  @media (max-width: 520px) {
-    .url-row-top { flex-direction:column; gap:2px; }
-    .url-btn { flex:1 1 auto; }
-  }
+  #lock-btn:disabled, #lock-input:disabled { opacity:.5; cursor:not-allowed; }
 </style>
 </head>
 <body>
+
+<!-- شاشة القفل -->
+<div id="app-lock" role="dialog" aria-modal="true" aria-label="الأداة مقفولة">
+  <div id="lock-card">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">الأداة مقفولة</div>
+    <div class="lock-sub">اكتب الرمز للدخول</div>
+    <input id="lock-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
+           autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="رمز الدخول" autofocus>
+    <div id="lock-msg" role="alert" aria-live="assertive"></div>
+    <button id="lock-btn" type="button">🔓 فتح</button>
+  </div>
+</div>
+
 
 <div class="container">
 
   <header>
     <div class="version-badge" id="version-badge" title="سيتم تحديث الرقم هنا تلقائيًا مع كل تعديل جديد على التطبيق">Ver <b id="app-version">1.1.0</b></div>
     <button class="theme-toggle" id="theme-toggle" title="تبديل الوضع الليلي/النهاري" aria-label="تبديل الوضع الليلي/النهاري" onclick="toggleTheme()">🌙</button>
+    <button class="lock-toggle" id="lock-toggle" title="قفل الأداة" aria-label="قفل الأداة" type="button">🔒</button>
     <button class="shortcuts-toggle" title="اختصارات الكيبورد" aria-label="عرض اختصارات الكيبورد" onclick="openShortcutsModal()">⌨️</button>
     <div class="logo">
       <div class="logo-icon">🏥</div>
@@ -1104,35 +1089,6 @@
     <div class="drop-title">أو اسحب وأفلت الملفات هنا</div>
     <span class="drop-badge">.dcm / .dicom / فولدر الحالة</span>
   </div>
-  <!-- استيراد من رابط ويب -->
-  <div class="url-import" id="url-import">
-    <div class="url-head">
-      <span class="url-title">🔗 استيراد من رابط ويب</span>
-      <span class="url-sub">الصق رابط مباشر لملف DICOM أو ZIP فيه الصور — تقدر تحط أكتر من رابط (كل رابط في سطر). الصور بتنزل على جهازك وبتتضاف للقائمة تحت، وبعدها بتحوّلها PDF أو فيديو عادي.</span>
-    </div>
-    <textarea id="url-input" rows="3" spellcheck="false" autocomplete="off" autocapitalize="off"
-      aria-label="روابط صور المريض"
-      placeholder="https://example.com/study/image.dcm&#10;https://example.com/study.zip"></textarea>
-    <div class="url-actions">
-      <button class="url-btn primary" id="url-load-btn" type="button">⬇ تحميل الصور</button>
-      <button class="url-btn" id="url-paste-btn" type="button">📋 لصق</button>
-      <button class="url-btn danger" id="url-cancel-btn" type="button" style="display:none">✖ إيقاف</button>
-    </div>
-    <label class="url-check">
-      <input type="checkbox" id="url-auto-export">
-      افتح شاشة تصدير PDF تلقائيًا بعد انتهاء التحميل
-    </label>
-    <details class="url-adv">
-      <summary>⚙️ إعدادات متقدمة (لو السيرفر بيرفض التحميل من المتصفح)</summary>
-      <div class="url-adv-body">
-        <div class="url-sub">بعض السيرفرات مابتسمحش للمتصفح يحمّل منها مباشرة (CORS). لو ده حصل وعندك Proxy بتاعك، اكتب عنوانه هنا — <code dir="ltr">{url}</code> هيتبدل بالرابط. بيتجرّب تلقائيًا بس لو التحميل المباشر فشل.</div>
-        <input type="text" id="url-proxy" placeholder="https://my-proxy.example.com/?target={url}" autocomplete="off" spellcheck="false" aria-label="عنوان Proxy">
-        <div class="url-warn">⚠️ الـ Proxy بيعدّي عليه محتوى الصور، فاستخدم Proxy بتاعك أنت أو مركزك فقط — ماتستخدمش خدمات عامة لبيانات المرضى.</div>
-      </div>
-    </details>
-    <div id="url-progress" aria-live="polite"></div>
-  </div>
-
   <!-- Shared settings — apply whether exporting to PDF or Video -->
   <div class="options-bar">
     <div class="opt-group">
@@ -1990,6 +1946,12 @@ function applyBrightnessContrast(ctx, w, h, brightness, contrastFactor) {
   ctx.putImageData(imgData, 0, 0);
 }
 
+// ===================== HTML ESCAPE =====================
+// أسماء الملفات/الفولدرات وقيم الـ Tags جاية من ملفات خارجية — لازم escape قبل innerHTML.
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+}
+
 // ===================== STATE =====================
 let files = []; // {file, id, status, dcm, thumb}
 let idCounter = 0;
@@ -2009,8 +1971,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
-//   3.1.0 — استيراد من رابط ويب: خانة لصق رابط/روابط (DICOM مباشر أو ZIP أو صفحة فهرس) + شريط تقدم + إيقاف + Proxy اختياري؛
-//           الصور بتتضاف لنفس القائمة (معاينة/عارض/PDF/فيديو). حماية: escape لأسماء الملفات وقيم الـ Tags، ومنع كاش الـ Service Worker لطلبات الروابط الخارجية
+//   3.2.0 — قفل الأداة برمز عند الفتح (+ زرار 🔒 للقفل اليدوي، وإيقاف مؤقت بعد 5 محاولات غلط)؛ escape لأسماء الملفات وقيم الـ Tags
 //   2.9.0 — العارض: مؤشر متزامن (🎯) — نفس المنطقة بتظهر في كل السيكونس والوضعيات (Axial/Coronal/Sagittal) بالإحداثيات الحقيقية للمريض،
 //           مع تمرير تلقائي للشاشات الأخرى لأقرب شريحة وقراءة قيمة الإشارة في كل سيكونس
 //   2.8.0 — العارض (Viewer): صور أكبر (fit-to-screen) + قياس الطول والزوايا والكثافة (ROI) + قراءة قيمة أي نقطة (Cursor Point)
@@ -2022,7 +1983,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.2.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -2250,397 +2211,6 @@ function addFileGroups(groups) {
 function addFiles(fList) {
   addFileGroups([{ key: '', files: fList }]);
 }
-
-// ===================== HTML ESCAPE =====================
-// أي اسم ملف/فولدر/قيمة Tag جاية من مصدر خارجي لازم تتعمل لها escape قبل ما تتحط في innerHTML.
-function escHtml(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-}
-
-// ===================== URL IMPORT (استيراد من رابط ويب) =====================
-// بيحمّل ملفات DICOM (أو ZIP فيه DICOM، أو صفحة فهرس فيها روابط .dcm/.zip) من لينك ويب،
-// وبيضيفها لنفس قائمة الملفات اللي بتشتغل عليها كل أدوات التطبيق (معاينة / عارض / PDF / فيديو).
-// التحميل بيتم مباشرة من المتصفح لجهازك — مفيش أي رفع لأي سيرفر تاني.
-const URL_PROXY_KEY = 'dicom2pdf-url-proxy';
-const URL_CONCURRENCY = 3;                 // عدد الروابط اللي بتتحمّل في نفس الوقت
-const URL_PAGE_CONCURRENCY = 4;            // عدد الملفات المتحمّلة بالتوازي من صفحة فهرس
-const URL_IDLE_TIMEOUT_MS = 60000;         // مهلة عدم وصول بيانات (مش مهلة التحميل الكلي)
-const URL_MAX_LINKS_FROM_PAGE = 2000;
-let urlImportCtrl = null;
-
-class UrlImportError extends Error {
-  constructor(code, extra) { super(code); this.code = code; this.extra = extra; }
-}
-
-function urlSafeName(s) {
-  return String(s || '').replace(/[\u0000-\u001f\u200e\u200f<>:"\\\/|?*]/g, '_').trim().slice(0, 120);
-}
-
-// يقسّم النص لروابط (واحد في كل سطر أو مفصولة بمسافات) ويتأكد إنها http/https
-function urlParseList(text) {
-  const seen = new Set(), ok = [], bad = [];
-  for(let raw of String(text || '').split(/\s+/)) {
-    raw = raw.replace(/^[<"'(\[]+|[>"')\],;]+$/g, '');
-    if(!raw) continue;
-    if(!/^[a-z][a-z0-9+.-]*:/i.test(raw) && /^[\w-]+(\.[\w-]+)+(\/|$)/.test(raw)) raw = 'https://' + raw; // example.com/x.dcm
-    let u;
-    try { u = new URL(raw); } catch(e) { bad.push(raw); continue; }
-    if(u.protocol !== 'http:' && u.protocol !== 'https:') { bad.push(raw); continue; }
-    if(seen.has(u.href)) continue;
-    seen.add(u.href); ok.push(u.href);
-  }
-  return { ok, bad };
-}
-
-// روابط المشاركة الشائعة → رابط تحميل مباشر
-function urlNormalize(href) {
-  try {
-    const u = new URL(href);
-    const h = u.hostname.toLowerCase();
-    if(h === 'www.dropbox.com' || h === 'dropbox.com') {
-      u.searchParams.delete('raw'); u.searchParams.set('dl', '1');
-      return u.href;
-    }
-    if(h === 'drive.google.com') {
-      const m = u.pathname.match(/\/file\/d\/([^/]+)/);
-      const id = m ? m[1] : u.searchParams.get('id');
-      if(id) return 'https://drive.google.com/uc?export=download&id=' + encodeURIComponent(id);
-    }
-    return u.href;
-  } catch(e) { return href; }
-}
-
-function urlViaProxy(href, tpl) {
-  tpl = (tpl || '').trim();
-  if(!/^https?:\/\//i.test(tpl)) return null;
-  return tpl.includes('{url}') ? tpl.replace('{url}', encodeURIComponent(href)) : tpl + encodeURIComponent(href);
-}
-
-// تحميل مع شريط تقدم + مهلة خمول + إمكانية الإيقاف. بيرجّع Blob.
-async function urlFetchBlob(href, onProgress, globalSignal) {
-  if(globalSignal.aborted) throw new UrlImportError('cancel');
-  const rc = new AbortController();
-  let idle = null, reason = '';
-  const arm = () => { clearTimeout(idle); idle = setTimeout(() => { reason = 'timeout'; rc.abort(); }, URL_IDLE_TIMEOUT_MS); };
-  const onGlobalAbort = () => { reason = 'cancel'; rc.abort(); };
-  globalSignal.addEventListener('abort', onGlobalAbort);
-  try {
-    arm();
-    let res;
-    try {
-      res = await fetch(href, {
-        signal: rc.signal,
-        credentials: 'omit',          // مابنبعتش كوكيز
-        cache: 'no-store',            // مانخزّنش صور المريض في كاش المتصفح
-        referrerPolicy: 'no-referrer' // مانكشفش عنوان التطبيق للسيرفر
-      });
-    } catch(e) {
-      throw new UrlImportError(reason || 'network');
-    }
-    if(!res.ok) throw new UrlImportError('http', res.status);
-    const total = parseInt(res.headers.get('content-length'), 10) || 0;
-    const chunks = [];
-    let got = 0;
-    if(res.body && res.body.getReader) {
-      const reader = res.body.getReader();
-      for(;;) {
-        let r;
-        try { r = await reader.read(); } catch(e) { throw new UrlImportError(reason || 'network'); }
-        if(r.done) break;
-        chunks.push(r.value); got += r.value.length;
-        arm(); onProgress(got, total);
-      }
-    } else {
-      const b = await res.blob(); chunks.push(b); got = b.size; onProgress(got, got);
-    }
-    return {
-      blob: new Blob(chunks),
-      type: res.headers.get('content-type') || '',
-      disp: res.headers.get('content-disposition') || '',
-      finalUrl: res.url || href
-    };
-  } finally {
-    clearTimeout(idle);
-    globalSignal.removeEventListener('abort', onGlobalAbort);
-  }
-}
-
-// يعرف نوع الملف من محتواه الفعلي (مش من الامتداد)
-async function urlSniff(blob) {
-  const head = new Uint8Array(await blob.slice(0, 2048).arrayBuffer());
-  const n = head.length;
-  if(n >= 132 && head[128] === 0x44 && head[129] === 0x49 && head[130] === 0x43 && head[131] === 0x4D) return 'dicom';
-  if(n >= 4 && head[0] === 0x50 && head[1] === 0x4B && ((head[2] === 3 && head[3] === 4) || (head[2] === 5 && head[3] === 6))) return 'zip';
-  if(n >= 3 && head[0] === 0xFF && head[1] === 0xD8 && head[2] === 0xFF) return 'jpeg';
-  if(n >= 4 && head[0] === 0x89 && head[1] === 0x50 && head[2] === 0x4E && head[3] === 0x47) return 'png';
-  let txt = '';
-  for(let i = 0; i < Math.min(n, 512); i++) txt += String.fromCharCode(head[i]);
-  if(/^(\xEF\xBB\xBF)?\s*<(!doctype|html|head|body|\?xml)/i.test(txt)) return 'html';
-  return 'unknown';
-}
-
-function urlFileName(href, disp, fallback) {
-  let name = '';
-  try {
-    const m1 = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(disp || '');
-    const m2 = /filename\s*=\s*"?([^";]+)"?/i.exec(disp || '');
-    if(m1) name = decodeURIComponent(m1[1]); else if(m2) name = m2[1];
-  } catch(e) {}
-  if(!name) {
-    try { name = decodeURIComponent(new URL(href).pathname.split('/').filter(Boolean).pop() || ''); } catch(e) {}
-  }
-  return urlSafeName(name) || fallback;
-}
-
-// فك ZIP → مجموعات { key, files } بنفس منطق "رفع فولدر": كل سيكونس/فولدر فرعي مجموعة لوحده
-async function urlExtractZip(blob, zipBase, onStatus, signal) {
-  if(typeof JSZip === 'undefined') throw new UrlImportError('nozip');
-  let zip;
-  try { zip = await JSZip.loadAsync(await blob.arrayBuffer()); } catch(e) { throw new UrlImportError('badzip'); }
-  const entries = [];
-  zip.forEach((path, entry) => { if(!entry.dir) entries.push(entry); });
-  const groups = new Map();
-  for(let i = 0; i < entries.length; i++) {
-    if(signal.aborted) throw new UrlImportError('cancel');
-    const entry = entries[i];
-    const parts = entry.name.split('/').filter(Boolean);
-    const base = parts[parts.length - 1] || '';
-    if(!base || base.startsWith('.') || parts[0] === '__MACOSX' || /^DICOMDIR$/i.test(base)) continue;
-    const hasDot = base.includes('.');
-    const ext = hasDot ? base.split('.').pop().toLowerCase() : '';
-    const dicomExt = ['dcm', 'dicom', 'ima'].includes(ext);
-    // امتداد معروف إنه مش DICOM (jpg/txt/xml/exe/...) → تجاهل. بدون امتداد أو امتداده رقم (UID) → نتأكد من المحتوى.
-    if(hasDot && !dicomExt && !/^\d+$/.test(ext)) continue;
-    const u8 = await entry.async('uint8array');
-    if(!dicomExt) {
-      const isDcm = u8.length >= 132 && u8[128] === 0x44 && u8[129] === 0x49 && u8[130] === 0x43 && u8[131] === 0x4D;
-      if(!isDcm) continue;
-    }
-    const dirs = parts.slice(0, -1).map(urlSafeName);
-    const key = dirs.length >= 2 ? dirs[1] : (dirs[0] || zipBase);
-    if(!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(new File([u8], urlSafeName(base) || ('image_' + (i + 1)), { type: 'application/dicom' }));
-    if(i % 20 === 0) { onStatus('فك الضغط ' + (i + 1) + ' / ' + entries.length); await sleep(0); }
-  }
-  return Array.from(groups, ([key, files]) => ({ key, files }));
-}
-
-// صفحة فهرس (زي Apache/nginx index) → روابط .dcm/.dicom/.zip اللي فيها
-function urlScanPage(html, baseHref) {
-  const out = [], seen = new Set();
-  const re = /href\s*=\s*["']([^"'#]+)["']/gi;
-  let m;
-  while((m = re.exec(html)) && out.length < URL_MAX_LINKS_FROM_PAGE) {
-    let u;
-    try { u = new URL(m[1].replace(/&amp;/g, '&'), baseHref); } catch(e) { continue; }
-    if(u.protocol !== 'http:' && u.protocol !== 'https:') continue;
-    if(!/\.(dcm|dicom|zip)$/i.test(u.pathname)) continue;
-    if(seen.has(u.href)) continue;
-    seen.add(u.href); out.push(u.href);
-  }
-  return out;
-}
-
-async function urlPool(items, limit, fn) {
-  let next = 0;
-  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
-    while(next < items.length) { const it = items[next++]; await fn(it); }
-  });
-  await Promise.all(workers);
-}
-
-// يعالج رابط واحد → مصفوفة مجموعات { key, files }
-async function urlProcessOne(href, row, ctx, depth) {
-  const target = urlNormalize(href);
-  const onProg = (got, total) => row.progress(got, total);
-  let fetched, viaProxy = false;
-  try {
-    fetched = await urlFetchBlob(target, onProg, ctx.signal);
-  } catch(e) {
-    // فشل شبكة/CORS → جرّب Proxy المستخدم (لو مظبوط)
-    const proxied = (e instanceof UrlImportError && e.code === 'network') ? urlViaProxy(target, ctx.proxy) : null;
-    if(!proxied) throw e;
-    row.status('جاري المحاولة عبر الـ Proxy...');
-    fetched = await urlFetchBlob(proxied, onProg, ctx.signal);
-    viaProxy = true;
-  }
-  if(!fetched.blob.size) throw new UrlImportError('empty');
-
-  let kind = await urlSniff(fetched.blob);
-  if(kind === 'unknown') {
-    // DICOM بدون preamble: نقبله بس لو الرابط/النوع بيقول إنه DICOM
-    if(/\.(dcm|dicom)$/i.test(new URL(target).pathname) || /dicom/i.test(fetched.type)) kind = 'dicom';
-  }
-
-  if(kind === 'dicom') {
-    const name = urlFileName(href, fetched.disp, 'image_' + row.n + '.dcm');
-    return [{ key: '', files: [new File([fetched.blob], name, { type: 'application/dicom' })] }];
-  }
-  if(kind === 'zip') {
-    const base = urlFileName(href, fetched.disp, 'study_' + row.n).replace(/\.zip$/i, '');
-    row.status('جاري فك الضغط...');
-    return await urlExtractZip(fetched.blob, base, t => row.status(t), ctx.signal);
-  }
-  if(kind === 'html') {
-    if(depth > 0 || fetched.blob.size > 5 * 1024 * 1024) throw new UrlImportError('page');
-    const links = urlScanPage(await fetched.blob.text(), viaProxy ? target : fetched.finalUrl);
-    if(!links.length) throw new UrlImportError('page');
-    const all = [];
-    let done = 0, failed = 0;
-    row.status('الصفحة فيها ' + links.length + ' ملف — جاري التحميل...');
-    await urlPool(links, URL_PAGE_CONCURRENCY, async (l) => {
-      try {
-        const sub = { n: row.n, status() {}, progress() {}, pct() {} };
-        const g = await urlProcessOne(l, sub, ctx, depth + 1);
-        for(const x of g) all.push(x);
-      } catch(e) {
-        if(e && e.code === 'cancel') throw e;
-        failed++;
-      }
-      done++;
-      row.pct(done / links.length * 100);
-      row.status('تحميل ' + done + ' / ' + links.length);
-    });
-    if(failed) toast('⚠️ ' + failed + ' ملف من الصفحة مانزلش', 'warn');
-    return all;
-  }
-  if(kind === 'jpeg' || kind === 'png') throw new UrlImportError('image');
-  throw new UrlImportError('unknown');
-}
-
-function urlErrorMessage(e, href) {
-  const code = e && e.code;
-  const mixed = location.protocol === 'https:' && /^http:/i.test(href);
-  switch(code) {
-    case 'cancel':  return 'تم الإيقاف';
-    case 'timeout': return 'انتهت المهلة — السيرفر مابعتش بيانات لمدة دقيقة';
-    case 'network': return mixed
-      ? 'الرابط http والتطبيق شغال على https — المتصفح بيمنع كده. استخدم رابط https'
-      : 'تعذّر التحميل — غالبًا السيرفر مابيسمحش للمتصفح (CORS) أو مفيش اتصال. جرّب الإعدادات المتقدمة';
-    case 'http':
-      if(e.extra === 401 || e.extra === 403) return 'الرابط محتاج تسجيل دخول أو منتهي الصلاحية (HTTP ' + e.extra + ')';
-      if(e.extra === 404) return 'الرابط مش موجود (404)';
-      return 'السيرفر رجّع خطأ HTTP ' + e.extra;
-    case 'page':    return 'الرابط ده صفحة ويب (Viewer) مش ملف مباشر — محتاج رابط تحميل مباشر لملف DICOM أو ZIP';
-    case 'image':   return 'الرابط ده صورة عادية (JPG/PNG) مش DICOM — التطبيق ده بيدعم DICOM بس';
-    case 'unknown': return 'نوع الملف مش مدعوم — المطلوب DICOM أو ZIP فيه DICOM';
-    case 'empty':   return 'الملف فاضي';
-    case 'nodicom': return 'ماتلقيتش ملفات DICOM في الرابط ده';
-    case 'badzip':  return 'ملف الـ ZIP تالف أو ناقص';
-    case 'nozip':   return 'مكتبة فك الـ ZIP مش متحمّلة — أعد تحميل الصفحة وأنت متصل بالإنترنت';
-    default:        return 'حصل خطأ غير متوقع';
-  }
-}
-
-// ── واجهة المستخدم ───────────────────────────────────
-function urlFmtMB(b) { return (b / 1048576).toFixed(b < 10485760 ? 1 : 0) + ' MB'; }
-
-function urlShort(href) {
-  try { const u = new URL(href); const last = decodeURIComponent(u.pathname.split('/').filter(Boolean).pop() || ''); return u.hostname + (last ? ' › ' + last : ''); }
-  catch(e) { return href; }
-}
-
-function urlMakeRow(host, href, n) {
-  const el = document.createElement('div');
-  el.className = 'url-row';
-  const top = document.createElement('div'); top.className = 'url-row-top';
-  const nm = document.createElement('span'); nm.className = 'url-row-name'; nm.textContent = urlShort(href); nm.title = href;
-  const st = document.createElement('span'); st.className = 'url-row-status'; st.textContent = 'في الانتظار';
-  top.append(nm, st);
-  const bar = document.createElement('div'); bar.className = 'url-row-bar';
-  const fill = document.createElement('div'); bar.appendChild(fill);
-  el.append(top, bar);
-  host.appendChild(el);
-  let last = 0;
-  return {
-    n,
-    status(t, cls) { st.textContent = t; if(cls !== undefined) el.className = 'url-row ' + cls; },
-    progress(got, total) {
-      const now = performance.now();
-      if(now - last < 120 && !(total && got >= total)) return;   // لا نزحم الـ DOM
-      last = now;
-      fill.classList.toggle('indet', !total);
-      if(total) fill.style.width = Math.min(100, got / total * 100) + '%';
-      st.textContent = total ? urlFmtMB(got) + ' / ' + urlFmtMB(total) : urlFmtMB(got);
-    },
-    pct(p) { fill.classList.remove('indet'); fill.style.width = Math.max(0, Math.min(100, p)) + '%'; }
-  };
-}
-
-function urlSetBusy(busy) {
-  document.getElementById('url-load-btn').disabled = busy;
-  document.getElementById('url-cancel-btn').style.display = busy ? '' : 'none';
-  document.getElementById('url-input').readOnly = busy;
-}
-
-async function urlImportStart() {
-  if(urlImportCtrl) return;
-  const input = document.getElementById('url-input');
-  const { ok, bad } = urlParseList(input.value);
-  if(!ok.length) { toast(bad.length ? '❌ الرابط غير صالح — لازم يبدأ بـ https://' : '⚠️ الصق رابط الأول', 'warn'); return; }
-  if(bad.length) toast('⚠️ تم تجاهل ' + bad.length + ' رابط غير صالح', 'warn');
-  const proxy = (document.getElementById('url-proxy').value || '').trim();
-  if(proxy && !/^https?:\/\//i.test(proxy)) { toast('❌ عنوان الـ Proxy لازم يبدأ بـ https://', 'warn'); return; }
-  try { localStorage.setItem(URL_PROXY_KEY, proxy); } catch(e) {}
-
-  urlImportCtrl = new AbortController();
-  const ctrl = urlImportCtrl;
-  const ctx = { signal: ctrl.signal, proxy };
-  urlSetBusy(true);
-  const host = document.getElementById('url-progress');
-  host.textContent = '';
-  const rows = ok.map((h, i) => urlMakeRow(host, h, i + 1));
-  let added = 0;
-
-  await urlPool(ok.map((_, i) => i), URL_CONCURRENCY, async (i) => {
-    const row = rows[i];
-    try {
-      row.status('جاري التحميل...', '');
-      const groups = await urlProcessOne(ok[i], row, ctx, 0);
-      const count = groups.reduce((s, g) => s + g.files.length, 0);
-      if(!count) throw new UrlImportError('nodicom');
-      addFileGroups(groups);     // نفس مسار الرفع العادي — بيبدأ الـ parse والمعاينة فورًا
-      added += count;
-      row.pct(100);
-      row.status('✅ تمت إضافة ' + count + ' ملف', 'done');
-    } catch(e) {
-      if(!(e instanceof UrlImportError)) console.error(e);
-      row.status('❌ ' + urlErrorMessage(e, ok[i]), e && e.code === 'cancel' ? 'cancel' : 'error');
-    }
-  });
-
-  const wasCancelled = ctrl.signal.aborted;
-  urlImportCtrl = null;
-  urlSetBusy(false);
-  if(added) {
-    toast('✅ تم تحميل ' + added + ' ملف من الروابط', 'success');
-    if(!wasCancelled && document.getElementById('url-auto-export').checked) openPreConvertPreview('pdf');
-  }
-}
-
-function urlImportCancel() { if(urlImportCtrl) urlImportCtrl.abort(); }
-
-(function initUrlImport() {
-  const input = document.getElementById('url-input');
-  const proxyEl = document.getElementById('url-proxy');
-  if(!input) return;
-  document.getElementById('url-load-btn').addEventListener('click', urlImportStart);
-  document.getElementById('url-cancel-btn').addEventListener('click', urlImportCancel);
-  document.getElementById('url-paste-btn').addEventListener('click', async () => {
-    try {
-      const t = await navigator.clipboard.readText();
-      if(!t.trim()) { toast('⚠️ الحافظة فاضية', 'warn'); return; }
-      input.value = input.value.trim() ? input.value.replace(/\s*$/, '\n') + t.trim() : t.trim();
-    } catch(e) { toast('⚠️ المتصفح مارضيش يقرا الحافظة — الصق الرابط يدويًا', 'warn'); }
-  });
-  input.addEventListener('keydown', e => { if(e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); urlImportStart(); } });
-  try { proxyEl.value = localStorage.getItem(URL_PROXY_KEY) || ''; } catch(e) {}
-  // فتح التطبيق بـ ?url=... بيجهّز الروابط في الخانة (بدون تحميل تلقائي — أنت اللي بتدوس تحميل)
-  try {
-    const pre = new URLSearchParams(location.search).getAll('url');
-    if(pre.length) { input.value = pre.join('\n'); setTimeout(() => toast('🔗 الرابط جاهز — دوس "تحميل الصور"', ''), 800); }
-  } catch(e) {}
-})();
 
 // ===================== PARSE =====================
 // Parsing/rendering many DICOM files at once (hundreds of images). The
@@ -5486,8 +5056,6 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')) {
       self.addEventListener('activate', e => self.clients.claim());
       self.addEventListener('fetch', e => {
         if(e.request.method !== 'GET') return;
-        if(new URL(e.request.url).origin !== new URL(self.registration.scope).origin) return; // صور المرضى من روابط خارجية: مانخزّنهاش في الكاش
-        if(e.request.headers.has('range')) return;
         e.respondWith(
           caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
             const clone = res.clone();
@@ -5580,6 +5148,132 @@ document.addEventListener('keydown', (e) => {
       break;
   }
 });
+</script>
+
+<script>
+// ===================== APP LOCK (قفل الأداة بالرمز) =====================
+// تنبيه صريح: ده قفل واجهة (Client-side) جوه ملف HTML — بيمنع الدخول العادي/الفضول،
+// لكن مش حماية حقيقية ضد حد بيعرف يفتح كود الصفحة. الرمز نفسه مش مكتوب في الملف، المحفوظ بصمته (SHA-256) فقط.
+// لتغيير الرمز: افتح الأداة → Console (F12) → اكتب  lockHash('الرمز_الجديد')  → انسخ الناتج وحطه مكان LOCK_HASH → عدّل LOCK_LEN لو الطول اتغير.
+const LOCK_LEN   = 4;
+const LOCK_HASH  = '43bb0daa5c2f0959d0b6e2ffd5d603897ba0546e0bc67d0928e11e6b80a0e814';
+const LOCK_MAX_FAILS = 5;                 // بعد كام محاولة غلط يتقفل مؤقتًا
+const LOCK_PAUSE_S   = 30;                // مدة الإيقاف المؤقت (ثانية)
+const LOCK_SS_KEY = 'dicom2pdf-unlocked'; // بيفضل مفتوح طول ما التبويب/التطبيق شغال، ويتسأل تاني بعد إغلاقه
+const LOCK_LS_KEY = 'dicom2pdf-lockstate';
+
+// SHA-256 متزامن (مش محتاج HTTPS زي crypto.subtle)
+function sha256Hex(str) {
+  const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+  const bytes = new TextEncoder().encode(str);
+  const l = bytes.length, total = (((l + 8) >> 6) + 1) << 6;
+  const m = new Uint8Array(total); m.set(bytes); m[l] = 0x80;
+  const dv = new DataView(m.buffer);
+  dv.setUint32(total - 8, Math.floor(l * 8 / 4294967296)); dv.setUint32(total - 4, (l * 8) >>> 0);
+  const H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+  const w = new Uint32Array(64);
+  const rr = (x, n) => (x >>> n) | (x << (32 - n));
+  for(let o = 0; o < total; o += 64) {
+    for(let i = 0; i < 16; i++) w[i] = dv.getUint32(o + i * 4);
+    for(let i = 16; i < 64; i++) {
+      const s0 = rr(w[i-15],7) ^ rr(w[i-15],18) ^ (w[i-15] >>> 3);
+      const s1 = rr(w[i-2],17) ^ rr(w[i-2],19) ^ (w[i-2] >>> 10);
+      w[i] = (w[i-16] + s0 + w[i-7] + s1) >>> 0;
+    }
+    let [a,b,c,d,e,f,g,h] = H;
+    for(let i = 0; i < 64; i++) {
+      const S1 = rr(e,6) ^ rr(e,11) ^ rr(e,25), ch = (e & f) ^ (~e & g);
+      const t1 = (h + S1 + ch + K[i] + w[i]) >>> 0;
+      const S0 = rr(a,2) ^ rr(a,13) ^ rr(a,22), mj = (a & b) ^ (a & c) ^ (b & c);
+      const t2 = (S0 + mj) >>> 0;
+      h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    H[0] = (H[0]+a)>>>0; H[1] = (H[1]+b)>>>0; H[2] = (H[2]+c)>>>0; H[3] = (H[3]+d)>>>0;
+    H[4] = (H[4]+e)>>>0; H[5] = (H[5]+f)>>>0; H[6] = (H[6]+g)>>>0; H[7] = (H[7]+h)>>>0;
+  }
+  return H.map(x => x.toString(16).padStart(8, '0')).join('');
+}
+function lockHash(pin) { return sha256Hex('dicom2pdf|' + String(pin)); }
+
+(function initAppLock() {
+  const overlay = document.getElementById('app-lock');
+  if(!overlay) return;
+  const input = document.getElementById('lock-input');
+  const msg   = document.getElementById('lock-msg');
+  const btn   = document.getElementById('lock-btn');
+  const card  = document.getElementById('lock-card');
+  let locked = false, pauseTimer = null;
+
+  const appNodes = () => Array.from(document.body.children).filter(n => n !== overlay && n.tagName !== 'SCRIPT');
+  const readState = () => { try { return JSON.parse(localStorage.getItem(LOCK_LS_KEY)) || { fails: 0, until: 0 }; } catch(e) { return { fails: 0, until: 0 }; } };
+  const writeState = s => { try { localStorage.setItem(LOCK_LS_KEY, JSON.stringify(s)); } catch(e) {} };
+
+  function showLock() {
+    locked = true;
+    appNodes().forEach(n => { n.inert = true; n.setAttribute('aria-hidden', 'true'); });
+    overlay.style.display = 'flex';
+    input.value = ''; msg.textContent = '';
+    tickPause();
+    setTimeout(() => { if(!input.disabled) input.focus(); }, 50);
+  }
+  function unlock() {
+    locked = false;
+    try { sessionStorage.setItem(LOCK_SS_KEY, '1'); } catch(e) {}
+    writeState({ fails: 0, until: 0 });
+    overlay.style.display = 'none';
+    appNodes().forEach(n => { n.inert = false; n.removeAttribute('aria-hidden'); });
+    input.value = '';
+  }
+  function setBusy(busy) { input.disabled = busy; btn.disabled = busy; }
+
+  function tickPause() {
+    clearInterval(pauseTimer);
+    const left = Math.ceil((readState().until - Date.now()) / 1000);
+    if(left <= 0) { setBusy(false); return; }
+    setBusy(true);
+    const upd = () => {
+      const s = Math.ceil((readState().until - Date.now()) / 1000);
+      if(s <= 0) { clearInterval(pauseTimer); setBusy(false); msg.textContent = ''; input.focus(); return; }
+      msg.textContent = '⏳ محاولات كتير غلط — استنى ' + s + ' ثانية';
+    };
+    upd(); pauseTimer = setInterval(upd, 500);
+  }
+
+  function attempt() {
+    if(!locked || input.disabled) return;
+    const v = input.value.trim();
+    if(!v) return;
+    if(lockHash(v) === LOCK_HASH) { unlock(); return; }
+    const st = readState(); st.fails = (st.fails || 0) + 1;
+    if(st.fails >= LOCK_MAX_FAILS) { st.fails = 0; st.until = Date.now() + LOCK_PAUSE_S * 1000; }
+    writeState(st);
+    input.value = '';
+    msg.textContent = '❌ الرمز غلط';
+    card.classList.remove('shake'); void card.offsetWidth; card.classList.add('shake');
+    if(st.until > Date.now()) tickPause(); else input.focus();
+  }
+
+  input.addEventListener('input', () => {
+    input.value = input.value.replace(/\D/g, '');          // أرقام فقط (بيحوّل الأرقام العربية كمان)
+    if(input.value.length >= LOCK_LEN) attempt();
+  });
+  input.addEventListener('keydown', e => { if(e.key === 'Enter') { e.preventDefault(); attempt(); } });
+  btn.addEventListener('click', attempt);
+
+  // أثناء القفل: امنع اختصارات الكيبورد بتاعة التطبيق، ومنع فتح الملفات بالسحب والإفلات على الصفحة
+  document.addEventListener('keydown', e => {
+    if(locked && !overlay.contains(e.target)) { e.stopImmediatePropagation(); e.preventDefault(); }
+  }, true);
+  ['dragover', 'drop'].forEach(t => overlay.addEventListener(t, e => e.preventDefault()));
+
+  // قفل يدوي من الهيدر
+  const lockBtn = document.getElementById('lock-toggle');
+  if(lockBtn) lockBtn.addEventListener('click', () => { try { sessionStorage.removeItem(LOCK_SS_KEY); } catch(e) {} showLock(); });
+
+  let already = false;
+  try { already = sessionStorage.getItem(LOCK_SS_KEY) === '1'; } catch(e) {}
+  if(already) { overlay.style.display = 'none'; } else { showLock(); }
+})();
 </script>
 </body>
 </html>
