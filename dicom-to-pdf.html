@@ -316,7 +316,8 @@
 
 
   /* ===== مجلدات السيريز (زجاجية) في الصفحة الرئيسية ===== */
-  #file-list { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); align-items:start; }
+  #file-list { grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); align-items:start; max-width:100%; }
+  .sfolder { min-width:0; max-width:100%; }
   #sf-top { grid-column:1/-1; display:none; align-items:center; gap:10px; flex-wrap:wrap; font-size:.82rem; color:var(--muted); }
   #sf-top.show { display:flex; }
   #sf-top .sf-txt { flex:1; min-width:140px; }
@@ -340,13 +341,17 @@
   .sfolder:hover { border-color:var(--accent2); }
   .sfolder.open { grid-column:1/-1; }
   .sfolder.warn { border-color:rgba(255,149,0,.45); }
-  .sf-head { display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; user-select:none; }
+  .sf-head { display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px; padding:10px 12px; cursor:pointer; user-select:none; }
+  .sf-chk { display:flex; align-items:center; justify-content:center; width:30px; height:30px; flex-shrink:0; cursor:pointer; }
+  .sf-chk input { width:20px; height:20px; accent-color:var(--accent); cursor:pointer; margin:0; }
+  .sfolder.sel { border-color:var(--accent); box-shadow:0 0 0 2px rgba(0,212,255,.35), 0 6px 22px rgba(0,0,0,.18); }
+  #sf-top .sf-sel { color:var(--accent); font-weight:700; }
   .sf-cover { position:relative; width:70px; height:56px; flex-shrink:0; }
   .sf-cover span { position:absolute; width:46px; height:46px; border-radius:7px; background:#0a0f18 center/cover no-repeat; border:2px solid rgba(255,255,255,.55); box-shadow:0 3px 8px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
   .sf-cover span:nth-child(1) { right:0; top:8px; transform:rotate(7deg); }
   .sf-cover span:nth-child(2) { right:11px; top:4px; transform:rotate(-3deg); }
   .sf-cover span:nth-child(3) { right:22px; top:0; transform:rotate(-9deg); }
-  .sf-title { flex:1; min-width:0; }
+  .sf-title { flex:1 1 110px; min-width:0; }
   .sf-title b { display:block; font-size:.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .sf-title small { display:block; color:var(--muted); font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
   .sf-count { background:rgba(0,212,255,.16); color:var(--accent); font-weight:700; font-size:.78rem; padding:3px 10px; border-radius:14px; font-family:'JetBrains Mono',monospace; flex-shrink:0; }
@@ -359,6 +364,15 @@
   .sf-body { display:none; padding:4px 12px 14px; max-height:360px; overflow:auto; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; }
   .sfolder.open .sf-body { display:grid; }
   .sf-body .file-card { background:rgba(0,0,0,.18); }
+  @media (max-width:600px) {
+    #file-list { grid-template-columns:1fr; }
+    .sf-title { flex-basis:50px; } .sf-chev { display:none; } .sf-btn { width:30px; height:30px; } .sf-head { gap:8px; }
+    .sf-head { padding:9px 10px; }
+    .sf-cover { width:60px; height:50px; } .sf-cover span { width:38px; height:38px; }
+    .sf-btn { width:32px; height:32px; }
+    .sf-body { grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:8px; padding:4px 8px 12px; }
+    .sf-title b { font-size:.82rem; }
+  }
   .sf-body .file-info { padding:5px 7px 7px; }
   .sf-body .file-name { font-size:.68rem; }
   .sf-body .file-meta { font-size:.62rem; }
@@ -755,7 +769,7 @@
   @media(max-width:480px) {
     .btn-row { flex-direction:column; }
     .options-bar { grid-template-columns:1fr; }
-    #file-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap:10px; }
+    /* (file-list columns handled by series folders) */
   }
 
   /* ── Source Tabs ── */
@@ -1298,11 +1312,11 @@
   <!-- Upload -->
   <div class="upload-row">
     <div class="upload-btn-wrap">
-      <input type="file" id="file-input" accept=".dcm,.dicom,application/dicom" multiple style="display:none">
+      <input type="file" id="file-input" accept=".dcm,.dicom,application/dicom,image/*,.jpg,.jpeg,.png,.webp,.bmp" multiple style="display:none">
       <button class="upload-btn files-btn" onclick="document.getElementById('file-input').click()">
         <span class="upload-btn-icon">🗂️</span>
         <span class="upload-btn-title">رفع ملفات</span>
-        <span class="upload-btn-sub">.dcm / .dicom</span>
+        <span class="upload-btn-sub">.dcm / .dicom / jpg / png</span>
       </button>
     </div>
     <div class="upload-btn-wrap">
@@ -2272,6 +2286,9 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   3.8.0 — رفع صور JPG/PNG: بتتفتح في العارض بألوانها (سطوع/تباين/عكس/لف/قلب/فلاتر/قياس) وبتتحفظ بحجمها الأصلي بعد التعديل
+//   3.7.0 — مربع تحديد على كل فولدر سيريز: لو حددت سيريز/أكتر التحويل (PDF/فيديو) بيشمل المحدد بس
+//   3.6.1 — إصلاح فولدرات السيريز على الموبايل (كانت بتعدّي عرض الشاشة)
 //   3.6.0 — العارض: خلفية متدرجة سماوية + شريط الأدوات مقسّم لمجموعات بعناوين
 //   3.5.0 — الصفحة الرئيسية: كل سيريز في فولدر زجاجي بغلاف وعدد (بدون سكرول طويل) + فتح/طي الكل
 //   3.4.1 — الـ Viewer بيقسم الحالة لكل سيكونس (SeriesInstanceUID) حتى لو في فولدر واحد، وبيخفي كائنات من غير صور، وبيقبل ملفات DICOM بأسماء فيها نقط
@@ -2289,7 +2306,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.6.0';
+const APP_VERSION = '3.8.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -2495,9 +2512,11 @@ function addFileGroups(groups) {
   const newIds = [];
   for(const group of groups) {
     const arr = Array.isArray(group.files) ? group.files : Array.from(group.files);
+    const imgQueue = [];
     for(const f of arr) {
       if(!f) continue;
       const ext = f.name.split('.').pop().toLowerCase();
+      if(IMG_EXT.includes(ext) || (f.type && f.type.startsWith('image/'))) { imgQueue.push(f); continue; }   // صور عادية → بتتحوّل لعنصر يتفتح في العارض
       const bad = ['jpg','jpeg','png','gif','bmp','txt','pdf','xml','json','html','htm','zip','exe','dll','ini','log','csv','js','css','mp4','avi','mov','docx','xlsx','db','tmp','url','lnk'];
       const isDicom = ['dcm','dicom'].includes(ext) || f.type === 'application/dicom' || !f.name.includes('.') || (!bad.includes(ext) && f.name.toUpperCase() !== 'DICOMDIR' && f.name.toUpperCase() !== 'DICOMDIR.');
       if(!isDicom) continue; // skip non-DICOM files from folders
@@ -2506,6 +2525,7 @@ function addFileGroups(groups) {
       newIds.push(id);
       renderCard(id, frag);
     }
+    if(imgQueue.length) addImageFiles(group.key || 'صور', imgQueue);
   }
   if(newIds.length) {
     sfHold().appendChild(frag);
@@ -2517,6 +2537,71 @@ function addFileGroups(groups) {
 // Backward-compatible helper for any other call sites.
 function addFiles(fList) {
   addFileGroups([{ key: '', files: fList }]);
+}
+
+
+// ===================== صور JPG / PNG → عنصر يتفتح في العارض =====================
+// الصورة بتتغلّف جوه ملف DICOM بسيط (JPEG مضغوط — البايتات الأصلية زي ما هي) فتشتغل عليها كل أدوات العارض والتصدير.
+const IMG_EXT = ['jpg', 'jpeg', 'png', 'webp', 'bmp', 'gif'];
+function dcmEl(g, e, vr, val) {
+  let b = typeof val === 'string' ? new TextEncoder().encode(val) : val;
+  if(b.length & 1) { const n = new Uint8Array(b.length + 1); n.set(b); n[b.length] = (vr === 'UI') ? 0 : 32; b = n; }
+  const long = (vr === 'OB' || vr === 'OW');
+  const h = new DataView(new ArrayBuffer(long ? 12 : 8));
+  h.setUint16(0, g, true); h.setUint16(2, e, true); h.setUint8(4, vr.charCodeAt(0)); h.setUint8(5, vr.charCodeAt(1));
+  if(long) h.setUint32(8, b.length, true); else h.setUint16(6, b.length, true);
+  const out = new Uint8Array(h.byteLength + b.length); out.set(new Uint8Array(h.buffer)); out.set(b, h.byteLength); return out;
+}
+function dcmUS(g, e, v) { const b = new Uint8Array(2); new DataView(b.buffer).setUint16(0, v, true); return dcmEl(g, e, 'US', b); }
+async function imageFileToDicom(f, seriesUid, idx) {
+  let bmp;
+  try { bmp = await createImageBitmap(f); } catch(e) { return null; }
+  const w = bmp.width, h = bmp.height;
+  let bytes;
+  const ext = f.name.split('.').pop().toLowerCase();
+  if(['jpg', 'jpeg', 'png', 'webp'].includes(ext) && (f.type === '' || f.type.startsWith('image/'))) bytes = new Uint8Array(await f.arrayBuffer());
+  else {      // bmp / gif / غيره → JPEG عالي الجودة
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const cx = cv.getContext('2d'); cx.fillStyle = '#fff'; cx.fillRect(0, 0, w, h); cx.drawImage(bmp, 0, 0);
+    const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.95));
+    if(!blob) return null; bytes = new Uint8Array(await blob.arrayBuffer());
+  }
+  if(bmp.close) bmp.close();
+  const uid = '1.2.826.0.1.3680043.8.498.' + Date.now() + '.' + idx + '.' + Math.floor(Math.random() * 1e6);
+  const parts = [
+    dcmEl(0x0002, 0x0002, 'UI', '1.2.840.10008.5.1.4.1.1.7'), dcmEl(0x0002, 0x0003, 'UI', uid), dcmEl(0x0002, 0x0010, 'UI', '1.2.840.10008.1.2.4.50')
+  ];
+  const metaLen = parts.reduce((t, x) => t + x.length, 0);
+  const meta = [dcmEl(0x0002, 0x0000, 'UL', (() => { const b = new Uint8Array(4); new DataView(b.buffer).setUint32(0, metaLen, true); return b; })()), ...parts];
+  const ds = [
+    dcmEl(0x0008, 0x0016, 'UI', '1.2.840.10008.5.1.4.1.1.7'), dcmEl(0x0008, 0x0018, 'UI', uid),
+    dcmEl(0x0008, 0x0060, 'CS', 'OT'), dcmEl(0x0008, 0x0064, 'CS', 'WSD'), dcmEl(0x0008, 0x103e, 'LO', 'Photos'),
+    dcmEl(0x0010, 0x0010, 'PN', 'IMAGE'),
+    dcmEl(0x0020, 0x000e, 'UI', seriesUid), dcmEl(0x0020, 0x0011, 'IS', '1'), dcmEl(0x0020, 0x0013, 'IS', String(idx + 1)),
+    dcmUS(0x0028, 0x0002, 3), dcmEl(0x0028, 0x0004, 'CS', 'YBR_FULL_422'), dcmUS(0x0028, 0x0010, h), dcmUS(0x0028, 0x0011, w),
+    dcmUS(0x0028, 0x0100, 8), dcmUS(0x0028, 0x0101, 8), dcmUS(0x0028, 0x0102, 7), dcmUS(0x0028, 0x0103, 0)
+  ];
+  const frag = bytes.length & 1 ? (() => { const n = new Uint8Array(bytes.length + 1); n.set(bytes); return n; })() : bytes;
+  const pdh = new DataView(new ArrayBuffer(12 + 8 + 8));
+  pdh.setUint16(0, 0x7fe0, true); pdh.setUint16(2, 0x0010, true); pdh.setUint8(4, 79); pdh.setUint8(5, 66); pdh.setUint32(8, 0xFFFFFFFF, true);
+  pdh.setUint16(12, 0xFFFE, true); pdh.setUint16(14, 0xE000, true); pdh.setUint32(16, 0, true);          // Basic Offset Table فاضي
+  pdh.setUint16(20, 0xFFFE, true); pdh.setUint16(22, 0xE000, true); pdh.setUint32(24, frag.length, true);
+  const tail = new DataView(new ArrayBuffer(8)); tail.setUint16(0, 0xFFFE, true); tail.setUint16(2, 0xE0DD, true);
+  const all = [new Uint8Array(128), new TextEncoder().encode('DICM'), ...meta, ...ds, new Uint8Array(pdh.buffer), frag, new Uint8Array(tail.buffer)];
+  const total = all.reduce((t, x) => t + x.length, 0), out = new Uint8Array(total); let o = 0;
+  for(const x of all) { out.set(x, o); o += x.length; }
+  const base = f.name.replace(/\.[^.]+$/, '') || 'image';
+  return new File([out], base + '.dcm', { type: 'application/dicom' });
+}
+async function addImageFiles(key, imgs) {
+  const sUid = '1.2.826.0.1.3680043.8.498.' + Date.now() + '.' + Math.floor(Math.random() * 1e6);
+  imgs.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  const out = []; let bad = 0;
+  for(let i = 0; i < imgs.length; i++) {
+    try { const f = await imageFileToDicom(imgs[i], sUid, i); if(f) out.push(f); else bad++; } catch(e) { bad++; }
+  }
+  if(bad) toast(`⚠️ ${bad} صورة مش مدعومة أو تالفة`, 'warn');
+  if(out.length) addFileGroups([{ key, files: out }]);
 }
 
 // ===================== PARSE =====================
@@ -2570,15 +2655,22 @@ function sfTop() {
   let t = document.getElementById('sf-top');
   if(!t || !t.isConnected) {
     t = document.createElement('div'); t.id = 'sf-top';
-    t.innerHTML = '<span class="sf-txt"></span><button type="button" data-a="open">فتح الكل</button><button type="button" data-a="close">طي الكل</button>';
+    t.innerHTML = '<span class="sf-txt"></span><button type="button" data-a="open">فتح الكل</button><button type="button" data-a="close">طي الكل</button><button type="button" data-a="clrsel" style="display:none">إلغاء التحديد</button>';
     t.addEventListener('click', e => {
       const a = e.target.dataset && e.target.dataset.a; if(!a) return;
+      if(a === 'clrsel') { sfMap.forEach(sf => { const c = sf.el.querySelector('.sf-chk input'); if(c) c.checked = false; sf.el.classList.remove('sel'); }); sfSchedule(); return; }
       sfMap.forEach(sf => { if(sf.el.isConnected) { sf.el.classList.toggle('open', a === 'open'); sf.touched = true; } });
     });
     const h = document.createElement('div'); h.className = 'sf-hold'; h.id = 'sf-hold';
     fileList.prepend(h); fileList.prepend(t);
   }
   return t;
+}
+// الملفات اللي هتتحول: لو في سيريز متعلّم عليه ✔ → المحدد بس، وإلا الكل
+function convFiles() {
+  const ids = new Set();
+  document.querySelectorAll('.sfolder.sel .file-card').forEach(c => ids.add(+c.id.slice(5)));
+  return ids.size ? files.filter(f => ids.has(f.id)) : files;
 }
 function sfHold() { sfTop(); sfSchedule(); return document.getElementById('sf-hold'); }
 function sfSchedule() { if(!sfTimer) sfTimer = setTimeout(sfFlush, 160); }
@@ -2597,14 +2689,15 @@ function sfPlace(item) {
   let sf = sfMap.get(inf.key);
   if(!sf || !sf.el.isConnected) {
     const el = document.createElement('div'); el.className = 'sfolder' + (inf.warn ? ' warn' : '');
-    el.innerHTML = '<div class="sf-head"><div class="sf-cover"><span>🩻</span></div><div class="sf-title"><b></b><small></small></div><span class="sf-count">0</span>'
+    el.innerHTML = '<div class="sf-head"><label class="sf-chk" title="حدّد السيريز ده للتحويل (لو في سيريز محدد، التحويل بيشمل المحدد بس)"><input type="checkbox" aria-label="تحويل هذا السيريز فقط"></label><div class="sf-cover"><span>🩻</span></div><div class="sf-title"><b></b><small></small></div><span class="sf-count">0</span>'
       + '<button type="button" class="sf-btn view" title="عرض السيريز">👁</button><button type="button" class="sf-btn del" title="حذف السيريز">×</button><span class="sf-chev">▼</span></div><div class="sf-body"></div>';
     sf = { el, body: el.querySelector('.sf-body'), key: inf.key, touched: false };
     el.querySelector('b').textContent = inf.label; el.querySelector('small').textContent = inf.sub;
     el.querySelector('.sf-head').addEventListener('click', e => {
-      if(e.target.closest('.sf-btn')) return;
+      if(e.target.closest('.sf-btn') || e.target.closest('.sf-chk')) return;
       el.classList.toggle('open'); sf.touched = true;
     });
+    el.querySelector('.sf-chk input').addEventListener('change', e => { el.classList.toggle('sel', e.target.checked); sfDirty.add(el); sfSchedule(); });
     el.querySelector('.view').addEventListener('click', () => { const c = sf.body.firstElementChild; if(c) openViewer(+c.id.slice(5)); });
     el.querySelector('.del').addEventListener('click', () => {
       const ids = new Set(Array.from(sf.body.children).map(c => +c.id.slice(5)));
@@ -2645,7 +2738,11 @@ function sfFlush() {
   const pend = hold ? hold.children.length : 0, total = live.reduce((t, s) => t + s.body.children.length, 0);
   const top = sfTop(); top.classList.toggle('show', files.length > 0);
   top.querySelector('.sf-txt').textContent = pend ? `⏳ جارٍ قراءة الملفات… (${total} / ${total + pend})` : `📚 ${live.length} سيكونس · ${total} صورة`;
-  top.querySelectorAll('button').forEach(b => b.style.display = live.length > 1 ? '' : 'none');
+  const selF = live.filter(s => s.el.classList.contains('sel')), selN = selF.reduce((t, s) => t + s.body.children.length, 0);
+  top.querySelector('.sf-txt').innerHTML = '';
+  top.querySelector('.sf-txt').append(document.createTextNode(pend ? `⏳ جارٍ قراءة الملفات… (${total} / ${total + pend})` : `📚 ${live.length} سيكونس · ${total} صورة`));
+  if(selF.length) { const sp = document.createElement('span'); sp.className = 'sf-sel'; sp.textContent = `  ·  ☑ التحويل للمحدد بس: ${selF.length} سيريز (${selN} صورة)`; top.querySelector('.sf-txt').appendChild(sp); }
+  top.querySelectorAll('button').forEach(b => b.style.display = b.dataset.a === 'clrsel' ? (selF.length ? '' : 'none') : (live.length > 1 ? '' : 'none'));
   if(live.length === 1 && !live[0].touched) live[0].el.classList.add('open');
   if(pend) sfSchedule();
 }
@@ -2815,6 +2912,7 @@ function drawVideoSeriesCard(ctx, W, H, name, no, total, count) {
 }
 
 async function convertAll() {
+  const files = convFiles();
   if(files.length === 0) return;
 
   cancelRequested = false;
@@ -3340,6 +3438,7 @@ async function ensureParsed(item) {
 }
 
 async function convertToVideo() {
+  const files = convFiles();
   if(files.length === 0) return;
 
   if(!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) {
@@ -3681,6 +3780,7 @@ document.getElementById('preview-modal').addEventListener('click', e => {
 
 // ===================== PRE-CONVERT PREVIEW (check W/L before full export) =====================
 async function openPreConvertPreview(kind) {
+  const files = convFiles();
   if(files.length === 0) return;
 
   const mode = document.getElementById('opt-mode').value;
@@ -4124,8 +4224,11 @@ async function vwGetPixels(item) {
     const id = tmp.getContext('2d').getImageData(0, 0, tmp.width, tmp.height).data;
     const n = tmp.width * tmp.height;
     const data = new Uint8Array(n);
-    for(let i = 0; i < n; i++) data[i] = id[i*4];
+    let colored = false;
+    for(let i = 0, st = Math.max(1, (n / 4000) | 0); i < n && !colored; i += st) { const q = i * 4; if(Math.abs(id[q] - id[q+1]) > 10 || Math.abs(id[q+1] - id[q+2]) > 10) colored = true; }
+    for(let i = 0; i < n; i++) data[i] = colored ? Math.round((id[i*4] * 299 + id[i*4+1] * 587 + id[i*4+2] * 114) / 1000) : id[i*4];
     px = { data, rows: tmp.height, cols: tmp.width, slope: 1, inter: 0, min: 0, max: 255, raw: false, bcDone: true };
+    if(colored) px.rgb = id;             // صورة ملوّنة (JPG/PNG مثلاً): العارض يعرضها بألوانها
   } else {
     const rows = parseInt(dcm.getTag('(0028,0010)')) || 0;
     const cols = parseInt(dcm.getTag('(0028,0011)')) || 0;
@@ -4773,6 +4876,11 @@ class VwPort {
       for(let i = 0; i < n; i++) gray[i] = lut[data[i] - mn];
       gray = vwFilterGray(gray, cols, rows, this.filt);
     }
+    if(px.rgb) {                                       // صورة ملوّنة: نفس الـ LUT (سطوع/تباين/عكس) على كل قناة + الفلتر لو متفعّل
+      const src = px.rgb, ch = [0, 1, 2].map(c => { const a = new Uint8Array(n); for(let i = 0; i < n; i++) a[i] = lut[src[i*4+c] - mn]; return this.filt !== 'none' ? vwFilterGray(a, cols, rows, this.filt) : a; });
+      for(let i = 0, p = 0; i < n; i++, p += 4) { out[p] = ch[0][i]; out[p+1] = ch[1][i]; out[p+2] = ch[2][i]; out[p+3] = 255; }
+      octx.putImageData(img, 0, 0); return;
+    }
     const cm = this.cmap !== 'gray' ? vwCmap(this.cmap) : null;
     for(let i = 0, p = 0; i < n; i++, p += 4) {
       const g = gray ? gray[i] : lut[data[i] - mn];
@@ -5267,6 +5375,7 @@ async function vwFillThumb(th, item) {
     for(let y = 0, q = 0; y < h; y++) for(let x = 0; x < w; x++, q += 4) {
       const v = px.data[Math.min(px.rows - 1, y * step) * px.cols + Math.min(px.cols - 1, x * step)] * px.slope + px.inter;
       const g = Math.max(0, Math.min(255, Math.round((v - lo) * k)));
+      if(px.rgb) { const si = (Math.min(px.rows - 1, y * step) * px.cols + Math.min(px.cols - 1, x * step)) * 4; o[q] = px.rgb[si]; o[q+1] = px.rgb[si+1]; o[q+2] = px.rgb[si+2]; o[q+3] = 255; continue; }
       o[q] = o[q + 1] = o[q + 2] = g; o[q + 3] = 255;
     }
     cx.putImageData(img, 0, 0);
@@ -5526,6 +5635,21 @@ async function shareViewerImage() {
   const p = vwActive;
   if(!p || !p.px) { toast('⚠️ مفيش صورة معروضة', 'warn'); return; }
   p.draw();
+  if(p.item && p.item.dcm && p.item.dcm.getTag('(0008,0064)') === 'WSD') {       // صورة عادية (JPG/PNG): نحفظها بحجمها الأصلي بكل التعديلات
+    vwCaptureLooks();
+    const cv = document.createElement('canvas');
+    if(await p.item.dcm.renderPixels(cv, 'viewer')) {
+      cv.toBlob(async blob => {
+        if(!blob) return;
+        const base = (p.item.file.name || 'image').replace(/\.dcm$/i, '');
+        const file = new File([blob], `${base}_edited.jpg`, { type: 'image/jpeg' });
+        try { if(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: base }); return; } } catch(err) { if(err && err.name === 'AbortError') return; }
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = file.name; a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      }, 'image/jpeg', 0.95);
+      return;
+    }
+  }
   const name = ((p.item && p.item.dcm && p.item.dcm.getTag('(0010,0010)')) || 'DICOM').trim().replace(/\s+/g, '_');
   p.canvas.toBlob(async blob => {
     if(!blob) return;
