@@ -1014,7 +1014,10 @@
   @keyframes lockShake { 20%{transform:translateX(-9px)} 40%{transform:translateX(9px)} 60%{transform:translateX(-6px)} 80%{transform:translateX(6px)} }
   .lock-icon { font-size:2.6rem; margin-bottom:6px; }
   .lock-title { font-size:1.15rem; font-weight:700; margin-bottom:4px; }
-  .lock-sub { color: var(--muted); font-size:.85rem; margin-bottom:18px; }
+  .lock-sub { color: var(--muted); font-size:.85rem; margin-bottom:6px; }
+  .lock-phone { display:inline-block; margin-bottom:18px; font-family:'JetBrains Mono', monospace; font-size:1.05rem; font-weight:700; letter-spacing:.06em; color: var(--accent); text-decoration:none; }
+  .lock-phone:hover { text-decoration:underline; }
+  #lock-input::placeholder { font-family:'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif; font-size:.9rem; letter-spacing:0; text-indent:0; color: var(--muted); opacity:.8; }
   #lock-input {
     width:100%; text-align:center; direction:ltr;
     font-family:'JetBrains Mono', monospace; font-size:1.7rem; letter-spacing:.5em; text-indent:.5em;
@@ -1030,6 +1033,144 @@
     border:1px solid rgba(0,212,255,.5); color: var(--accent);
   }
   #lock-btn:disabled, #lock-input:disabled { opacity:.5; cursor:not-allowed; }
+
+  /* ===== Viewer — Philips-style (v3.3) ===== */
+  #viewer-modal {
+    --vw-bg:#15171a; --vw-bg2:#1c1f23; --vw-line:#2c3036; --vw-text:#d7dbe1; --vw-dim:#8a919b;
+    --vw-blue:#2d93e6; --vw-blue-d:#1a6fb8; --vw-sel:rgba(45,147,230,.22);
+    background:#000; color:var(--vw-text);
+    font-family:'Segoe UI', Roboto, system-ui, -apple-system, Arial, sans-serif;
+  }
+  .vw-sprite { position:absolute; width:0; height:0; overflow:hidden; }
+  .i { width:21px; height:21px; fill:none; stroke:currentColor; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  .vw-btn .i { width:18px; height:18px; }
+
+  /* patient banner */
+  .vw-header {
+    background:linear-gradient(180deg,#22262b,#1a1d21); border-bottom:1px solid var(--vw-line);
+    border-top:2px solid var(--vw-blue); padding:5px 10px;
+  }
+  .vw-info { direction:ltr; text-align:left; }
+  .vw-patient, .vw-meta { direction:ltr; text-align:left; justify-content:flex-start; unicode-bidi:plaintext; }
+  .vw-patient { font-size:.92rem; font-weight:600; color:#fff; display:flex; flex-wrap:wrap; gap:4px 8px; align-items:baseline; }
+  .vw-patient b { font-weight:700; letter-spacing:.2px; }
+  .vw-meta { font-family:inherit; font-size:.72rem; color:var(--vw-dim); display:flex; flex-wrap:wrap; gap:2px 10px; align-items:center; margin-top:2px; }
+  .vw-chip { font-size:.68rem; font-weight:500; color:#c3c9d1; background:rgba(255,255,255,.07); border:1px solid var(--vw-line); border-radius:4px; padding:0 6px; line-height:1.5; }
+  .vw-mod { font-size:.68rem; font-weight:700; color:#fff; background:var(--vw-blue-d); border-radius:4px; padding:0 6px; line-height:1.5; }
+  .vw-btn { border-radius:6px; width:34px; height:32px; background:transparent; border:1px solid transparent; color:#c3c9d1; transition:background .15s, color .15s; }
+  .vw-btn:hover { background:rgba(255,255,255,.1); color:#fff; }
+  .vw-btn:active { background:rgba(255,255,255,.18); }
+
+  /* toolbars */
+  .vw-toolbar { background:var(--vw-bg2); border-bottom:1px solid var(--vw-line); gap:2px; padding:3px 8px; }
+  .vw-tool {
+    min-width:46px; padding:4px 6px 3px; border:1px solid transparent; border-radius:5px; background:transparent;
+    color:#aab1ba; font-size:.6rem; gap:1px; position:relative;
+    transition:background .12s, color .12s;
+  }
+  .vw-tool .ic { height:24px; display:flex; align-items:center; font-size:inherit; }
+  .vw-tool:hover { background:rgba(255,255,255,.08); color:#fff; }
+  .vw-tool:active { background:rgba(255,255,255,.16); }
+  .vw-tool.active { background:var(--vw-sel); color:#fff; border-color:rgba(45,147,230,.55); box-shadow:inset 0 -2px 0 var(--vw-blue); }
+  .vw-tool.active .i { color:#5db4ff; }
+  .vw-sep { background:var(--vw-line); height:30px; margin:0 4px; }
+  .vw-select { background:#23272d; border:1px solid #3a3f47; border-radius:5px; color:var(--vw-text); }
+
+  /* viewports */
+  .vw-main { flex:1; min-height:0; display:flex; position:relative; }
+  .vw-stage { background:#2a2e34; gap:2px; }
+  .vp.active { outline:2px solid var(--vw-blue); }
+  .vp.drop { outline:2px dashed #5db4ff; }
+
+  /* corner annotations */
+  .vp-tl, .vp-tr, .vp-bl, .vp-br {
+    font-family:'Segoe UI', Roboto, system-ui, Arial, sans-serif; font-size:.7rem; line-height:1.4;
+    color:#e8ebef; font-variant-numeric:tabular-nums; padding:6px 8px;
+    text-shadow:0 0 2px #000, 0 1px 3px #000, 0 0 5px #000;
+  }
+  .vp-tl { pointer-events:none; }
+  .vp-tr { right:16px; }
+  .vp-br { right:16px; color:#e8ebef; }
+  .vp-bl { color:#e8ebef; }
+  .vp-tli { margin-top:4px; white-space:pre; color:#e8ebef; }
+  .vp-folder {
+    pointer-events:auto; background:rgba(20,22,26,.78); color:#cfe6fb; border:1px solid rgba(45,147,230,.45);
+    border-radius:4px; font-size:.68rem; padding:2px 4px; font-family:inherit; max-width:44vw;
+  }
+  #viewer-modal.no-hud .vp-tli { display:none; }
+
+  /* slice scroll bar (right edge of each viewport) */
+  .vp-scroll { position:absolute; right:2px; top:52px; bottom:52px; width:14px; z-index:3; cursor:pointer; touch-action:none; }
+  .vp-scroll::before { content:''; position:absolute; left:6px; width:2px; top:0; bottom:0; background:rgba(255,255,255,.22); border-radius:1px; }
+  .vp-scroll-thumb { position:absolute; left:1px; right:1px; height:14px; background:var(--vw-blue); border:1px solid rgba(255,255,255,.65); border-radius:3px; box-shadow:0 0 4px rgba(0,0,0,.8); }
+  .vp-scroll:hover .vp-scroll-thumb { background:#5db4ff; }
+
+  /* series panel */
+  #vw-series {
+    width:136px; flex-shrink:0; background:var(--vw-bg); border-right:1px solid var(--vw-line);
+    overflow-y:auto; padding:6px; display:flex; flex-direction:column; gap:6px; scrollbar-width:thin;
+  }
+  #vw-series.hide { display:none; }
+  .vws-card { position:relative; border:2px solid transparent; border-radius:5px; background:#0b0c0e; cursor:pointer; overflow:hidden; flex-shrink:0; user-select:none; }
+  .vws-card:hover { border-color:#3f4650; }
+  .vws-card.shown { border-color:#3b6a94; }
+  .vws-card.on { border-color:var(--vw-blue); box-shadow:0 0 0 1px rgba(45,147,230,.4); }
+  .vws-thumb { aspect-ratio:1/1; background:#000; display:flex; align-items:center; justify-content:center; color:#4b525c; }
+  .vws-thumb canvas { width:100%; height:100%; object-fit:contain; image-rendering:auto; display:block; }
+  .vws-thumb img { width:100%; height:100%; object-fit:contain; pointer-events:none; -webkit-user-drag:none; }
+  .vws-badge { position:absolute; top:3px; left:3px; font-size:.62rem; font-weight:700; color:#fff; background:rgba(0,0,0,.65); border-radius:3px; padding:0 4px; }
+  .vws-mod { position:absolute; top:3px; right:3px; font-size:.58rem; font-weight:700; color:#fff; background:var(--vw-blue-d); border-radius:3px; padding:0 4px; }
+  .vws-count { position:absolute; right:3px; bottom:30px; font-size:.62rem; color:#fff; background:rgba(0,0,0,.65); border-radius:3px; padding:0 4px; }
+  .vws-label { font-size:.64rem; color:#c3c9d1; padding:3px 5px 4px; line-height:1.25; max-height:2.6em; overflow:hidden; direction:rtl; text-align:right; word-break:break-word; }
+
+  @media (max-width: 760px) {
+    .vw-main { flex-direction:column; }
+    #vw-series { width:auto; height:92px; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:0; border-bottom:1px solid var(--vw-line); padding:4px 6px; }
+    .vws-card { width:74px; }
+    .vws-label { display:none; }
+    .vws-count { bottom:3px; }
+  }
+
+  /* bottom bar */
+  .vw-footer { background:var(--vw-bg2); border-top:1px solid var(--vw-line); }
+  .vw-counter, .vw-wl-info { color:var(--vw-dim); font-family:inherit; }
+  .vw-wl-info { color:#7fbdf0; }
+  .vw-slider { accent-color:var(--vw-blue); }
+  .vw-thumb.active { border-color:var(--vw-blue); }
+  .vw-wl-overlay { color:#7fbdf0; border-color:rgba(45,147,230,.4); font-family:inherit; }
+  .vwt-tag { color:#7fbdf0; }
+  .vwt-chip.active { background:var(--vw-sel); border-color:var(--vw-blue); color:#9fd0f7; }
+
+  /* ===== MPR + 3D ===== */
+  #vw-mprbar { display:none; }
+  .mpr-on #vw-mprbar { display:flex; }
+  .mpr-on #vw-toolbar, .mpr-on #vw-toolbar2, .mpr-on .vw-footer, .mpr-on #vw-series, .mpr-on #vw-stage { display:none !important; }
+  #vw-mpr { flex:1; min-width:0; min-height:0; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:2px; background:#2a2e34; position:relative; }
+  #vw-mpr.hide { display:none; }
+  #vw-mpr.single { grid-template-columns:1fr; grid-template-rows:1fr; }
+  #vw-mpr.single .mv:not(.mx) { display:none; }
+  .mv { position:relative; overflow:hidden; background:#000; min-width:0; min-height:0; outline:2px solid transparent; outline-offset:-2px; }
+  .mv.active { outline-color:var(--vw-blue); }
+  .mv canvas { position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+  .mv .mv-gl { pointer-events:none; }
+  .mv-tl, .mv-tr, .mv-bl, .mv-br { position:absolute; z-index:3; padding:6px 8px; font-size:.7rem; line-height:1.4; color:#e8ebef; white-space:pre; pointer-events:none; font-variant-numeric:tabular-nums; text-shadow:0 0 2px #000, 0 1px 3px #000; }
+  .mv-tl { top:0; left:0; font-weight:700; letter-spacing:.5px; }
+  .mv-tr { top:0; right:34px; text-align:right; }
+  .mv-bl { bottom:0; left:0; }
+  .mv-br { bottom:0; right:0; text-align:right; }
+  .mv-max { position:absolute; top:4px; right:4px; z-index:4; width:26px; height:26px; border-radius:5px; border:1px solid rgba(255,255,255,.2); background:rgba(20,22,26,.7); color:#cbd2da; cursor:pointer; display:flex; align-items:center; justify-content:center; padding:0; }
+  .mv-max .i { width:15px; height:15px; }
+  .mv-msg { display:none; position:absolute; inset:0; z-index:5; align-items:center; justify-content:center; text-align:center; padding:16px; color:#ffb4a8; font-size:.8rem; background:rgba(0,0,0,.7); direction:rtl; }
+  #mpr-loading { display:none; position:absolute; inset:0; z-index:60; background:rgba(8,10,14,.92); align-items:center; justify-content:center; flex-direction:column; gap:12px; color:#d7dbe1; padding:20px; text-align:center; }
+  #mpr-loading.show { display:flex; }
+  .mpr-bar { width:min(320px,80vw); height:6px; background:#2c3036; border-radius:3px; overflow:hidden; }
+  .mpr-bar > div { height:100%; width:0; background:var(--vw-blue); transition:width .1s; }
+  .mpr-cancel { padding:8px 20px; border-radius:6px; border:1px solid #3a3f47; background:#23272d; color:#d7dbe1; cursor:pointer; font-family:inherit; }
+  #mpr-vrpanel { display:none; position:absolute; z-index:50; top:104px; right:10px; width:min(300px,92vw); max-height:calc(100% - 200px); overflow-y:auto; background:rgba(24,27,31,.97); border:1px solid #343841; border-radius:8px; padding:8px 12px 12px; direction:rtl; box-shadow:0 8px 28px rgba(0,0,0,.55); }
+  #mpr-vrpanel.show { display:block; }
+  .mpr-ph { display:flex; align-items:center; justify-content:space-between; font-size:.8rem; font-weight:700; color:#9fd0f7; padding:6px 0 4px; }
+  .mpr-row { display:grid; grid-template-columns:120px 1fr; gap:8px; align-items:center; font-size:.72rem; color:#c3c9d1; padding:3px 0; }
+  .mpr-row input[type=range] { width:100%; accent-color:var(--vw-blue); }
 </style>
 </head>
 <body>
@@ -1039,9 +1180,10 @@
   <div id="lock-card">
     <div class="lock-icon">🔒</div>
     <div class="lock-title">الأداة مقفولة</div>
-    <div class="lock-sub">اكتب الرمز للدخول</div>
+    <div class="lock-sub">تواصل مع المركز لإرسال كود الفتح</div>
+    <a class="lock-phone" href="tel:01002529452" dir="ltr">01002529452</a>
     <input id="lock-input" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="12"
-           autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="رمز الدخول" autofocus>
+           autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="رمز الدخول" placeholder="اكتب الرمز للدخول" autofocus>
     <div id="lock-msg" role="alert" aria-live="assertive"></div>
     <button id="lock-btn" type="button">🔓 فتح</button>
   </div>
@@ -1364,34 +1506,71 @@
 
 <!-- ═══════════════ VIEWER MODAL ═══════════════ -->
 <div id="viewer-modal" role="dialog" aria-modal="true" aria-label="عارض الصور">
+  <svg class="vw-sprite" width="0" height="0" aria-hidden="true" focusable="false">
+    <symbol id="i-scroll" viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5Z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5"/></symbol>
+    <symbol id="i-wl" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17Z" fill="currentColor"/></symbol>
+    <symbol id="i-pan" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><path d="m9 6 3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/></symbol>
+    <symbol id="i-zoom" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5.5 5.5M10.5 8v5M8 10.5h5"/></symbol>
+    <symbol id="i-len" viewBox="0 0 24 24"><path d="M3 17 17 3l4 4L7 21Z"/><path d="m7 13 2 2M10 10l1.5 1.5M13 7l2 2"/></symbol>
+    <symbol id="i-ang" viewBox="0 0 24 24"><path d="M4 20h16M4 20 15 5"/><path d="M11 20a7 7 0 0 0-2.5-5.3"/></symbol>
+    <symbol id="i-roi" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="6.5" stroke-dasharray="3 2.5"/></symbol>
+    <symbol id="i-pt" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></symbol>
+    <symbol id="i-mag" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><circle cx="10" cy="10" r="2.5"/><path d="m14.5 14.5 6.5 6.5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+    <symbol id="i-auto" viewBox="0 0 24 24"><path d="M5 4v6a4 4 0 0 0 4 4h10"/><path d="m15 10 4 4-4 4"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+    <symbol id="i-thumbs" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 5v14M16 5v14M3 9h5M3 15h5M16 9h5M16 15h5"/></symbol>
+    <symbol id="i-series" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></symbol>
+    <symbol id="i-invert" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 4h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6Z" fill="currentColor"/></symbol>
+    <symbol id="i-fliph" viewBox="0 0 24 24"><path d="M12 3v18" stroke-dasharray="2 2.5"/><path d="M9 7 3 17h6Z"/><path d="m15 7 6 10h-6Z" fill="currentColor"/></symbol>
+    <symbol id="i-flipv" viewBox="0 0 24 24"><g transform="rotate(90 12 12)"><path d="M12 3v18" stroke-dasharray="2 2.5"/><path d="M9 7 3 17h6Z"/><path d="m15 7 6 10h-6Z" fill="currentColor"/></g></symbol>
+    <symbol id="i-rotl" viewBox="0 0 24 24"><path d="M3 4v5h5"/><path d="M3.5 9A9 9 0 1 1 5 17"/></symbol>
+    <symbol id="i-rotr" viewBox="0 0 24 24"><path d="M21 4v5h-5"/><path d="M20.5 9A9 9 0 1 0 19 17"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5Z" fill="currentColor"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1" fill="currentColor"/><rect x="14" y="4.5" width="4" height="15" rx="1" fill="currentColor"/></symbol>
+    <symbol id="i-pp" viewBox="0 0 24 24"><path d="M4 8h14M14 4l4 4-4 4M20 16H6M10 12l-4 4 4 4"/></symbol>
+    <symbol id="i-ref" viewBox="0 0 24 24"><path d="M12 2v6M12 16v6M2 12h6M16 12h6"/><circle cx="12" cy="12" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-hud" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h6M7 13h10M7 16h4"/></symbol>
+    <symbol id="i-tags" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6Z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/></symbol>
+    <symbol id="i-full" viewBox="0 0 24 24"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v8h14v-8"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 2.5 3.5 7v10L12 21.5 20.5 17V7Z"/><path d="M3.5 7 12 11.5 20.5 7M12 11.5v10"/></symbol>
+    <symbol id="i-cross" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="3.2"/></symbol>
+    <symbol id="i-exit" viewBox="0 0 24 24"><path d="M9 4H5v16h4M16 8l4 4-4 4M20 12H9"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
+  </svg>
   <div class="vw-header">
     <div class="vw-info">
       <div class="vw-patient" id="vw-patient">—</div>
       <div class="vw-meta" id="vw-meta">—</div>
     </div>
     <div class="vw-actions">
-      <button class="vw-btn" onclick="vwReset()" title="إعادة ضبط (Space)" aria-label="إعادة ضبط">↺</button>
-      <button class="vw-btn" onclick="vwToggleFullscreen()" title="ملء الشاشة" aria-label="ملء الشاشة">⛶</button>
-      <button class="vw-btn" onclick="shareViewerImage()" title="حفظ / مشاركة الصورة (مع القياسات)" aria-label="مشاركة الصورة">📤</button>
-      <button class="vw-btn" onclick="closeViewer()" title="إغلاق" aria-label="إغلاق العارض">✕</button>
+      <button class="vw-btn" onclick="vwReset()" title="إعادة ضبط (Space)" aria-label="إعادة ضبط"><svg class="i" aria-hidden="true"><use href="#i-reset"/></svg></button>
+      <button class="vw-btn" onclick="vwToggleFullscreen()" title="ملء الشاشة" aria-label="ملء الشاشة"><svg class="i" aria-hidden="true"><use href="#i-full"/></svg></button>
+      <button class="vw-btn" onclick="shareViewerImage()" title="حفظ / مشاركة الصورة (مع القياسات)" aria-label="مشاركة الصورة"><svg class="i" aria-hidden="true"><use href="#i-share"/></svg></button>
+      <button class="vw-btn" onclick="closeViewer()" title="إغلاق" aria-label="إغلاق العارض"><svg class="i" aria-hidden="true"><use href="#i-close"/></svg></button>
     </div>
   </div>
 
   <div class="vw-toolbar" id="vw-toolbar">
-    <button class="vw-tool active" data-tool="nav"  onclick="vwSetTool('nav')"  title="تصفح (N)"><span class="ic">🧭</span>تصفح</button>
-    <button class="vw-tool" data-tool="wl"   onclick="vwSetTool('wl')"   title="Window/Level (W)"><span class="ic">🔆</span>W/L</button>
-    <button class="vw-tool" data-tool="pan"  onclick="vwSetTool('pan')"  title="تحريك (P)"><span class="ic">✋</span>تحريك</button>
-    <button class="vw-tool" data-tool="zoom" onclick="vwSetTool('zoom')" title="تكبير (Z)"><span class="ic">🔍</span>تكبير</button>
+    <button class="vw-tool active" data-tool="nav"  onclick="vwSetTool('nav')"  title="تصفح (N)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-scroll"/></svg></span>تصفح</button>
+    <button class="vw-tool" data-tool="wl"   onclick="vwSetTool('wl')"   title="Window/Level (W)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-wl"/></svg></span>W/L</button>
+    <button class="vw-tool" data-tool="pan"  onclick="vwSetTool('pan')"  title="تحريك (P)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pan"/></svg></span>تحريك</button>
+    <button class="vw-tool" data-tool="zoom" onclick="vwSetTool('zoom')" title="تكبير (Z)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-zoom"/></svg></span>تكبير</button>
     <span class="vw-sep"></span>
-    <button class="vw-tool" data-tool="len" onclick="vwSetTool('len')" title="قياس الطول (L)"><span class="ic">📏</span>طول</button>
-    <button class="vw-tool" data-tool="ang" onclick="vwSetTool('ang')" title="قياس الزاوية (A)"><span class="ic">∠</span>زاوية</button>
-    <button class="vw-tool" data-tool="roi" onclick="vwSetTool('roi')" title="قياس الكثافة ROI (R)"><span class="ic">⭕</span>كثافة</button>
-    <button class="vw-tool" data-tool="pt"  onclick="vwSetTool('pt')"  title="قراءة قيمة نقطة (T)"><span class="ic">📍</span>نقطة</button>
-    <button class="vw-tool" data-tool="mag" onclick="vwSetTool('mag')" title="عدسة مكبّرة 3× (M)"><span class="ic">🔎</span>عدسة</button>
-    <button class="vw-tool" data-tool="link" onclick="vwSetTool('link')" title="مؤشر متزامن — نفس المنطقة في كل السيكونس والوضعيات (C)"><span class="ic">🎯</span>متزامن</button>
-    <button class="vw-tool active" id="vw-auto-btn" onclick="vwToggleAuto()" title="تمرير الشاشات الأخرى تلقائيًا لنفس مكان المؤشر"><span class="ic">⤵</span>تمرير تلقائي</button>
-    <button class="vw-tool" onclick="vwUndo()" title="تراجع (Ctrl+Z)"><span class="ic">↶</span>تراجع</button>
-    <button class="vw-tool" onclick="vwClearMeasurements()" title="مسح قياسات الصورة الحالية"><span class="ic">🗑</span>مسح</button>
+    <button class="vw-tool" data-tool="len" onclick="vwSetTool('len')" title="قياس الطول (L)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-len"/></svg></span>طول</button>
+    <button class="vw-tool" data-tool="ang" onclick="vwSetTool('ang')" title="قياس الزاوية (A)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-ang"/></svg></span>زاوية</button>
+    <button class="vw-tool" data-tool="roi" onclick="vwSetTool('roi')" title="قياس الكثافة ROI (R)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-roi"/></svg></span>كثافة</button>
+    <button class="vw-tool" data-tool="pt"  onclick="vwSetTool('pt')"  title="قراءة قيمة نقطة (T)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pt"/></svg></span>نقطة</button>
+    <button class="vw-tool" data-tool="mag" onclick="vwSetTool('mag')" title="عدسة مكبّرة 3× (M)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-mag"/></svg></span>عدسة</button>
+    <button class="vw-tool" data-tool="link" onclick="vwSetTool('link')" title="مؤشر متزامن — نفس المنطقة في كل السيكونس والوضعيات (C)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-link"/></svg></span>متزامن</button>
+    <button class="vw-tool active" id="vw-auto-btn" onclick="vwToggleAuto()" title="تمرير الشاشات الأخرى تلقائيًا لنفس مكان المؤشر"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-auto"/></svg></span>تمرير تلقائي</button>
+    <button class="vw-tool" onclick="vwUndo()" title="تراجع (Ctrl+Z)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-undo"/></svg></span>تراجع</button>
+    <button class="vw-tool" onclick="vwClearMeasurements()" title="مسح قياسات الصورة الحالية"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-trash"/></svg></span>مسح</button>
     <span class="vw-sep"></span>
     <select class="vw-select" id="vw-layout" onchange="vwBuildLayout()" aria-label="تقسيم الشاشة">
       <option value="auto">📁 فولدر لكل شاشة</option>
@@ -1399,8 +1578,27 @@
       <option value="2">▢▢ شاشتين</option>
       <option value="4">▦ 4 شاشات</option>
     </select>
-    <button class="vw-tool active" id="vw-sync-btn" onclick="vwToggleSync()" title="مزامنة التمرير بين الشاشات"><span class="ic">🔗</span>مزامنة</button>
-    <button class="vw-tool" id="vw-thumbs-btn" onclick="vwToggleThumbs()" title="شريط الصور المصغرة"><span class="ic">🎞</span>شريط</button>
+    <button class="vw-tool active" id="vw-sync-btn" onclick="vwToggleSync()" title="مزامنة التمرير بين الشاشات"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-sync"/></svg></span>مزامنة</button>
+    <button class="vw-tool" id="vw-thumbs-btn" onclick="vwToggleThumbs()" title="شريط الصور المصغرة"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-thumbs"/></svg></span>شريط</button>
+    <button class="vw-tool" id="vw-series-btn" onclick="vwToggleSeries()" title="قائمة السيريز (اسحب سيريز على أي شاشة)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-series"/></svg></span>سيريز</button>
+    <button class="vw-tool" id="vw-mpr-btn" onclick="mprEnter()" title="MPR + عرض 3D (محوري / تاجي / سهمي / VR)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-cube"/></svg></span>MPR/3D</button>
+  </div>
+
+  <div class="vw-toolbar" id="vw-mprbar">
+    <button class="vw-tool" data-mtool="cross" onclick="mprSetTool('cross')" title="انقل نقطة التقاطع / لف الخطوط للقطع المائل"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-cross"/></svg></span>تقاطع</button>
+    <button class="vw-tool" data-mtool="wl" onclick="mprSetTool('wl')" title="Window/Level"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-wl"/></svg></span>W/L</button>
+    <button class="vw-tool" data-mtool="pan" onclick="mprSetTool('pan')" title="تحريك"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pan"/></svg></span>تحريك</button>
+    <button class="vw-tool" data-mtool="zoom" onclick="mprSetTool('zoom')" title="تكبير"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-zoom"/></svg></span>تكبير</button>
+    <span class="vw-sep"></span>
+    <select class="vw-select" id="mpr-wl" onchange="mprApplyWL(this.value)" aria-label="Window"></select>
+    <select class="vw-select" id="mpr-slab" onchange="mprSetSlab(this.value)" aria-label="سمك Slab"><option value="0">Slab: بدون</option><option value="3">3 mm</option><option value="5">5 mm</option><option value="10">10 mm</option><option value="20">20 mm</option><option value="40">40 mm</option></select>
+    <select class="vw-select" id="mpr-slabmode" onchange="mprSetSlabMode(this.value)" aria-label="نوع Slab"><option value="mip">MIP</option><option value="avg">Average</option><option value="min">MinIP</option></select>
+    <button class="vw-tool" id="mpr-inv" onclick="mprToggleInv()" title="عكس الألوان"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-invert"/></svg></span>عكس</button>
+    <span class="vw-sep"></span>
+    <select class="vw-select" id="mpr-vrpreset" onchange="mprSetVRPreset(this.value)" aria-label="ألوان الـ 3D"></select>
+    <button class="vw-tool" onclick="mprToggleVRPanel()" title="ضبط العرض 3D"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-sliders"/></svg></span>ضبط 3D</button>
+    <button class="vw-tool" onclick="mprReset()" title="إعادة ضبط (Space)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-reset"/></svg></span>ريست</button>
+    <button class="vw-tool" onclick="mprExit()" title="رجوع للعارض العادي (Esc)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-exit"/></svg></span>خروج</button>
   </div>
 
   <div class="vw-toolbar" id="vw-toolbar2">
@@ -1441,13 +1639,13 @@
       <option value="edge">حواف Edge</option>
     </select>
     <span class="vw-sep"></span>
-    <button class="vw-tool" id="vw-inv-btn" onclick="vwToggleInvert()" title="عكس الألوان — نيجاتيف (I)"><span class="ic">◐</span>عكس</button>
-    <button class="vw-tool" onclick="vwFlip('h')" title="قلب أفقي (H)"><span class="ic">⇋</span>قلب</button>
-    <button class="vw-tool" onclick="vwFlip('v')" title="قلب رأسي (V)"><span class="ic">⇅</span>قلب</button>
-    <button class="vw-tool" onclick="vwRotate(-1)" title="لف 90° عكس عقارب الساعة ( [ )"><span class="ic">⟲</span>لف</button>
-    <button class="vw-tool" onclick="vwRotate(1)" title="لف 90° مع عقارب الساعة ( ] )"><span class="ic">⟳</span>لف</button>
+    <button class="vw-tool" id="vw-inv-btn" onclick="vwToggleInvert()" title="عكس الألوان — نيجاتيف (I)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-invert"/></svg></span>عكس</button>
+    <button class="vw-tool" onclick="vwFlip('h')" title="قلب أفقي (H)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-fliph"/></svg></span>قلب</button>
+    <button class="vw-tool" onclick="vwFlip('v')" title="قلب رأسي (V)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-flipv"/></svg></span>قلب</button>
+    <button class="vw-tool" onclick="vwRotate(-1)" title="لف 90° عكس عقارب الساعة ( [ )"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-rotl"/></svg></span>لف</button>
+    <button class="vw-tool" onclick="vwRotate(1)" title="لف 90° مع عقارب الساعة ( ] )"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-rotr"/></svg></span>لف</button>
     <span class="vw-sep"></span>
-    <button class="vw-tool" id="vw-cine-btn" onclick="vwToggleCine()" title="تشغيل / إيقاف السينما (K)"><span class="ic">▶</span>سينما</button>
+    <button class="vw-tool" id="vw-cine-btn" onclick="vwToggleCine()" title="تشغيل / إيقاف السينما (K)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg></span>سينما</button>
     <select class="vw-select" id="vw-fps" onchange="vwSetFps(this.value)" aria-label="سرعة السينما">
       <option value="2">2 fps</option>
       <option value="5">5 fps</option>
@@ -1457,18 +1655,24 @@
       <option value="20">20 fps</option>
       <option value="30">30 fps</option>
     </select>
-    <button class="vw-tool" id="vw-pp-btn" onclick="vwTogglePingPong()" title="السينما رايح جاي بدل التكرار"><span class="ic">⇄</span>رايح جاي</button>
+    <button class="vw-tool" id="vw-pp-btn" onclick="vwTogglePingPong()" title="السينما رايح جاي بدل التكرار"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pp"/></svg></span>رايح جاي</button>
     <span class="vw-sep"></span>
-    <button class="vw-tool active" id="vw-ref-btn" onclick="vwToggleRef()" title="خطوط مرجعية: مكان الشريحة الحالية على الوضعيات التانية (G)"><span class="ic">✛</span>خطوط</button>
-    <button class="vw-tool active" id="vw-hud-btn" onclick="vwToggleHud()" title="إظهار / إخفاء البيانات والمسطرة واتجاهات الجسم (O)"><span class="ic">🏷</span>بيانات</button>
-    <button class="vw-tool" onclick="vwOpenTags()" title="كل بيانات الـ DICOM مع بحث (D)"><span class="ic">🧾</span>Tags</button>
+    <button class="vw-tool active" id="vw-ref-btn" onclick="vwToggleRef()" title="خطوط مرجعية: مكان الشريحة الحالية على الوضعيات التانية (G)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-ref"/></svg></span>خطوط</button>
+    <button class="vw-tool active" id="vw-hud-btn" onclick="vwToggleHud()" title="إظهار / إخفاء البيانات والمسطرة واتجاهات الجسم (O)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-hud"/></svg></span>بيانات</button>
+    <button class="vw-tool" onclick="vwOpenTags()" title="كل بيانات الـ DICOM مع بحث (D)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-tags"/></svg></span>Tags</button>
   </div>
 
-  <div class="vw-stage" id="vw-stage" data-tool="nav"></div>
+  <div class="vw-main">
+    <div id="vw-series" class="hide" aria-label="السيريز"></div>
+    <div class="vw-stage" id="vw-stage" data-tool="nav"></div>
+    <div id="vw-mpr" class="hide"></div>
+  </div>
 
   <div class="vw-wl-overlay" id="vw-wl-overlay"></div>
   <div class="vw-hint" id="vw-hint"></div>
 
+  <div id="mpr-loading"><div class="mpr-ltxt">...</div><div class="mpr-bar"><div></div></div><button class="mpr-cancel" id="mpr-cancel" type="button">إلغاء</button></div>
+  <div id="mpr-vrpanel"></div>
   <div class="vw-footer">
     <div class="vw-counter" id="vw-counter">1 / 1</div>
     <input type="range" class="vw-slider" id="vw-slider" min="1" max="1" value="1" aria-label="التنقل بين الصور">
@@ -1971,6 +2175,8 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   3.4.0 — MPR (محوري/تاجي/سهمي + خطوط مرجعية متزامنة + قطع مائل + Slab MIP/Avg/MinIP) + عرض حجمي 3D (WebGL2 ray-casting) بألوان جاهزة وقص وإضاءة
+//   3.3.0 — العارض بتصميم Philips-style: بانر بيانات المريض، أيقونات SVG، قائمة سيريز جانبية (كليك أو سحب على الشاشة)، شريط تمرير شرائح لكل شاشة، وبيانات الأركان الأربعة
 //   3.2.0 — قفل الأداة برمز عند الفتح (+ زرار 🔒 للقفل اليدوي، وإيقاف مؤقت بعد 5 محاولات غلط)؛ escape لأسماء الملفات وقيم الـ Tags
 //   2.9.0 — العارض: مؤشر متزامن (🎯) — نفس المنطقة بتظهر في كل السيكونس والوضعيات (Axial/Coronal/Sagittal) بالإحداثيات الحقيقية للمريض،
 //           مع تمرير تلقائي للشاشات الأخرى لأقرب شريحة وقراءة قيمة الإشارة في كل سيكونس
@@ -1983,7 +2189,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.2.0';
+const APP_VERSION = '3.4.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -4009,7 +4215,7 @@ function vwToggleHud() {
 function vwCineUI() {
   const b = document.getElementById('vw-cine-btn');
   b.classList.toggle('active', vwCine.on);
-  b.querySelector('.ic').textContent = vwCine.on ? '⏸' : '▶';
+  b.querySelector('.ic').innerHTML = '<svg class="i" aria-hidden="true"><use href="#i-' + (vwCine.on ? 'pause' : 'play') + '"/></svg>';
 }
 function vwStartCine() {
   const p = vwActive;
@@ -4163,7 +4369,7 @@ class VwPort {
   build() {
     const el = document.createElement('div');
     el.className = 'vp';
-    el.innerHTML = '<canvas></canvas><div class="vp-tl"><select class="vp-folder" aria-label="اختيار الفولدر"></select></div><div class="vp-tr"></div><div class="vp-bl"></div><div class="vp-br"></div>';
+    el.innerHTML = '<canvas></canvas><div class="vp-tl"><select class="vp-folder" aria-label="اختيار الفولدر"></select><div class="vp-tli"></div></div><div class="vp-tr"></div><div class="vp-bl"></div><div class="vp-br"></div><div class="vp-scroll" aria-hidden="true"><div class="vp-scroll-thumb"></div></div>';
     this.el = el; el._vp = this;
     this.canvas = el.querySelector('canvas');
     this.ctx = this.canvas.getContext('2d');
@@ -4171,6 +4377,9 @@ class VwPort {
     this.trEl = el.querySelector('.vp-tr');
     this.blEl = el.querySelector('.vp-bl');
     this.brEl = el.querySelector('.vp-br');
+    this.tliEl = el.querySelector('.vp-tli');
+    this.scEl = el.querySelector('.vp-scroll');
+    this.scThumb = el.querySelector('.vp-scroll-thumb');
     this.fillSelect();
     this.selEl.addEventListener('change', () => {
       const g = vwGroups[parseInt(this.selEl.value, 10)];
@@ -4178,6 +4387,30 @@ class VwPort {
     });
     this.selEl.addEventListener('pointerdown', e => e.stopPropagation());
     el.addEventListener('pointerdown', () => vwSetActive(this), true);
+
+    // شريط تمرير الشرائح (يمين كل شاشة) — اسحب أو اضغط
+    const scGo = e => {
+      const n = this.group.items.length; if(n < 2) return;
+      const r = this.scEl.getBoundingClientRect();
+      const f = Math.max(0, Math.min(1, (e.clientY - r.top) / Math.max(1, r.height)));
+      vwGoto(this, Math.round(f * (n - 1)));
+    };
+    this.scEl.addEventListener('pointerdown', e => { e.preventDefault(); e.stopPropagation(); this.scEl.setPointerCapture(e.pointerId); this._scDrag = true; scGo(e); });
+    this.scEl.addEventListener('pointermove', e => { if(this._scDrag) scGo(e); });
+    const scEnd = e => { this._scDrag = false; try { this.scEl.releasePointerCapture(e.pointerId); } catch(_) {} };
+    this.scEl.addEventListener('pointerup', scEnd); this.scEl.addEventListener('pointercancel', scEnd);
+
+    // سحب سيريز من القائمة على الشاشة
+    el.addEventListener('dragover', e => { if(e.dataTransfer && Array.from(e.dataTransfer.types).includes('text/plain')) { e.preventDefault(); el.classList.add('drop'); } });
+    el.addEventListener('dragleave', () => el.classList.remove('drop'));
+    el.addEventListener('drop', e => {
+      el.classList.remove('drop');
+      const t = (e.dataTransfer && e.dataTransfer.getData('text/plain')) || '';
+      const m = /^vwg:(\d+)$/.exec(t); if(!m) return;
+      e.preventDefault();
+      const g = vwGroups[parseInt(m[1], 10)];
+      if(g) { vwSetActive(this); this.setGroup(g); }
+    });
 
     const c = this.canvas;
     c.addEventListener('pointerdown', e => this.onDown(e));
@@ -4218,6 +4451,7 @@ class VwPort {
     this.scale = 1; this.panX = 0; this.panY = 0; this.draft = null;
     this.rot = 0; this.fh = false; this.fv = false;
     this.fillSelect();
+    vwMarkSeries();
     this.load(0);
     if(this === vwActive) vwUpdateChrome(true);
   }
@@ -4383,13 +4617,36 @@ class VwPort {
 
   updateHud() {
     const n = this.group.items.length;
-    let tr = `${this.idx + 1} / ${n}`;
     const dcm = this.item && this.item.dcm;
+    const g = t => { const v = dcm && dcm.getTag(t); return v ? String(v).trim() : ''; };
+    const L = [];
     if(dcm) {
-      const loc = parseFloat(dcm.getTag('(0020,1041)'));
-      if(isFinite(loc)) tr += `\nLoc ${loc.toFixed(1)} mm`;
+      if(g('(0008,0080)')) L.push(g('(0008,0080)'));
+      const dt = [vwFmtDate(g('(0008,0020)')), vwFmtTime(g('(0008,0030)'))].filter(Boolean).join('  ');
+      if(dt) L.push(dt);
+      const sd = [g('(0020,0011)') && 'S' + g('(0020,0011)'), g('(0008,103e)')].filter(Boolean).join(': ');
+      if(sd) L.push(sd);
     }
-    this.trEl.textContent = tr;
+    L.push(`Im: ${this.idx + 1}/${n}`);
+    if(dcm) {
+      const loc = parseFloat(dcm.getTag('(0020,1041)')), th = parseFloat(dcm.getTag('(0018,0050)'));
+      if(isFinite(loc)) L.push(`Loc: ${loc.toFixed(1)} mm`);
+      if(isFinite(th)) L.push(`Th: ${th.toFixed(1)} mm`);
+    }
+    this.trEl.textContent = L.join('\n');
+    if(this.tliEl) {
+      const T = [];
+      if(dcm) {
+        const nm = g('(0010,0010)').replace(/\^+/g, ' ').trim(); if(nm) T.push(nm);
+        if(g('(0010,0020)')) T.push('ID: ' + g('(0010,0020)'));
+        const sx = [g('(0010,0040)'), g('(0010,1010)')].filter(Boolean).join('  ·  '); if(sx) T.push(sx);
+      }
+      this.tliEl.textContent = T.join('\n');
+    }
+    if(this.scEl) {
+      this.scEl.style.display = n > 1 ? '' : 'none';
+      this.scThumb.style.top = `calc((100% - 14px) * ${n > 1 ? this.idx / (n - 1) : 0})`;
+    }
     if(this.px) {
       const sp = this.px.spacing;
       this.blEl.textContent = `W ${Math.round(this.ww)}  L ${Math.round(this.wc)}\n×${this.scale.toFixed(2)}  ` +
@@ -4795,17 +5052,93 @@ function vwSetActive(p) {
   if(p) p.updateHud();
 }
 
+// ── Series panel (قائمة السيريز) ─────────────────────
+let vwSeriesOn = true;
+function vwFmtDate(s) { s = String(s || '').trim(); const m = /^(\d{4})(\d{2})(\d{2})$/.exec(s); return m ? `${m[1]}-${m[2]}-${m[3]}` : s; }
+function vwFmtTime(s) { s = String(s || '').trim(); const m = /^(\d{2})(\d{2})(\d{2})?/.exec(s); return m ? `${m[1]}:${m[2]}` : ''; }
+async function vwFillThumb(th, item) {
+  try {
+    const px = await vwGetPixels(item);
+    if(!px || !px.data) return;
+    const step = Math.max(1, Math.ceil(Math.max(px.cols, px.rows) / 128));
+    const w = Math.ceil(px.cols / step), h = Math.ceil(px.rows / step);
+    let wc = null, ww = null;
+    const dcm = item.dcm;
+    if(px.raw && dcm) { const c = parseFloat(dcm.getTag('(0028,1050)')), x = parseFloat(dcm.getTag('(0028,1051)')); if(x > 0 && isFinite(c)) { wc = c; ww = x; } }
+    if(wc == null) { const a = px.min * px.slope + px.inter, b = px.max * px.slope + px.inter; wc = (a + b) / 2; ww = Math.abs(b - a) || 1; }
+    const lo = wc - ww / 2, k = 255 / ww;
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const cx = cv.getContext('2d'), img = cx.createImageData(w, h), o = img.data;
+    for(let y = 0, q = 0; y < h; y++) for(let x = 0; x < w; x++, q += 4) {
+      const v = px.data[Math.min(px.rows - 1, y * step) * px.cols + Math.min(px.cols - 1, x * step)] * px.slope + px.inter;
+      const g = Math.max(0, Math.min(255, Math.round((v - lo) * k)));
+      o[q] = o[q + 1] = o[q + 2] = g; o[q + 3] = 255;
+    }
+    cx.putImageData(img, 0, 0);
+    th.textContent = ''; th.appendChild(cv);
+  } catch(e) { /* بيفضل الـ placeholder */ }
+}
+function vwBuildSeries() {
+  const host = document.getElementById('vw-series');
+  host.textContent = '';
+  vwGroups.forEach((g, i) => {
+    const mid = g.items[Math.floor(g.items.length / 2)] || g.items[0];
+    const dcm = mid && mid.dcm;
+    const tag = t => { const v = dcm && dcm.getTag(t); return v ? String(v).trim() : ''; };
+    const card = document.createElement('div');
+    card.className = 'vws-card'; card.draggable = true; card.dataset.i = i;
+    const th = document.createElement('div'); th.className = 'vws-thumb';
+    th.textContent = '🩻'; if(mid) vwFillThumb(th, mid);
+    const num = document.createElement('span'); num.className = 'vws-badge'; num.textContent = tag('(0020,0011)') || String(i + 1);
+    const cnt = document.createElement('span'); cnt.className = 'vws-count'; cnt.textContent = g.items.length;
+    card.append(th, num, cnt);
+    if(tag('(0008,0060)')) { const md = document.createElement('span'); md.className = 'vws-mod'; md.textContent = tag('(0008,0060)'); card.appendChild(md); }
+    const lb = document.createElement('div'); lb.className = 'vws-label';
+    lb.textContent = tag('(0008,103e)') || g.key || 'بدون اسم';
+    card.appendChild(lb);
+    card.title = (g.key || '') + ' — ' + g.items.length;
+    card.addEventListener('click', () => { if(vwActive) { vwActive.setGroup(g); vwMarkSeries(); } });
+    card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', 'vwg:' + i); e.dataTransfer.effectAllowed = 'copy'; });
+    host.appendChild(card);
+  });
+  vwSeriesOn = window.innerWidth > 760 && vwGroups.length > 1;
+  vwApplySeries();
+  vwMarkSeries();
+}
+function vwApplySeries() {
+  document.getElementById('vw-series').classList.toggle('hide', !vwSeriesOn);
+  const b = document.getElementById('vw-series-btn'); if(b) b.classList.toggle('active', vwSeriesOn);
+}
+function vwToggleSeries() { vwSeriesOn = !vwSeriesOn; vwApplySeries(); }
+function vwMarkSeries() {
+  const cards = document.querySelectorAll('#vw-series .vws-card');
+  if(!cards.length) return;
+  const shown = new Set(vwPorts.map(p => p.group));
+  cards.forEach((c, i) => {
+    const g = vwGroups[i];
+    c.classList.toggle('on', !!vwActive && vwActive.group === g);
+    c.classList.toggle('shown', shown.has(g) && !(vwActive && vwActive.group === g));
+  });
+}
+
 function vwUpdateChrome(rebuildThumbs) {
   const p = vwActive;
   if(!p) return;
   vwSyncViewUI(p);
   const dcm = p.item && p.item.dcm;
   if(dcm) {
-    const g = t => dcm.getTag(t) || '';
-    document.getElementById('vw-patient').textContent =
-      [g('(0010,0010)') || '—', g('(0010,0020)') && `ID: ${g('(0010,0020)')}`, g('(0010,0040)'), g('(0010,1010)')].filter(Boolean).join('  ·  ');
-    document.getElementById('vw-meta').textContent =
-      [g('(0008,0060)'), g('(0008,0020)'), g('(0018,0015)'), g('(0008,103e)')].filter(Boolean).join('  ·  ');
+    const g = t => { const v = dcm.getTag(t); return v ? String(v).trim() : ''; };
+    const P = document.getElementById('vw-patient'), M = document.getElementById('vw-meta');
+    P.textContent = ''; M.textContent = '';
+    const add = (host, tag, cls, txt) => { if(!txt) return; const e = document.createElement(tag); if(cls) e.className = cls; e.textContent = txt; host.appendChild(e); };
+    add(P, 'b', '', g('(0010,0010)').replace(/\^+/g, ' ') || '—');
+    add(P, 'span', 'vw-chip', g('(0010,0020)') && 'ID: ' + g('(0010,0020)'));
+    add(P, 'span', 'vw-chip', g('(0010,0040)'));
+    add(P, 'span', 'vw-chip', g('(0010,1010)'));
+    add(M, 'span', 'vw-mod', g('(0008,0060)'));
+    add(M, 'span', '', vwFmtDate(g('(0008,0020)')));
+    add(M, 'span', '', g('(0018,0015)'));
+    add(M, 'span', '', g('(0008,103e)'));
   }
   const n = p.group.items.length;
   document.getElementById('vw-counter').textContent = `${p.group.key ? '📁 ' + p.group.key + '  ·  ' : ''}${p.idx + 1} / ${n}`;
@@ -4815,6 +5148,7 @@ function vwUpdateChrome(rebuildThumbs) {
     if(rebuildThumbs || vwThumbGroup !== p.group) vwBuildThumbs();
     else vwMarkThumb();
   }
+  vwMarkSeries();
 }
 
 function vwBuildThumbs() {
@@ -4962,6 +5296,7 @@ async function openViewer(startId) {
   vwStartItem = startItem;
   vwPorts.forEach(p => p.destroy()); vwPorts = [];
   vwBuildLayout();
+  vwBuildSeries();
   window.addEventListener('resize', vwOnResize);
   vwSetTool('nav');
 }
@@ -5148,6 +5483,938 @@ document.addEventListener('keydown', (e) => {
       break;
   }
 });
+
+// ===================== MPR + VR (عرض متعدد المستويات + عرض حجمي 3D) =====================
+// الفكرة: بنجمّع شرائح السيريز في حجم 3D واحد (متنظّم على محاور المريض LPS: x=يسار, y=خلف, z=فوق)،
+// وبعدين: MPR = قطع أي مستوى (محوري/تاجي/سهمي + دوران مائل + Slab) على الـ CPU، و VR = Ray-casting على الـ GPU (WebGL2).
+const MPR_MAXV = (window.innerWidth < 760 || (navigator.deviceMemory && navigator.deviceMemory <= 4)) ? 30e6 : 64e6;
+window.mprOn = false;
+var mprOn = false;
+const mpr = {
+  vol: null, volGroup: null, token: null,
+  c: [0, 0, 0], E: [[1,0,0],[0,1,0],[0,0,1]],      // مركز التقاطع + محاور الإطار (بتدور في الدوران المائل)
+  wc: 40, ww: 400, inv: false, tool: 'cross',
+  slabMm: 0, slabMode: 'mip', views: [], active: 0, max: -1,
+  lowUntil: 0, refineT: 0, vr: null, vrFail: ''
+};
+const MPR_COL = { ax: '#3da5ff', co: '#37d67a', sa: '#ffd23f', vr: '#c792ea' };
+const MPR_NAME = { ax: 'AXIAL', co: 'CORONAL', sa: 'SAGITTAL', vr: '3D VR' };
+const mv = {
+  dot: (a, b) => a[0]*b[0] + a[1]*b[1] + a[2]*b[2],
+  cross: (a, b) => [a[1]*b[2]-a[2]*b[1], a[2]*b[0]-a[0]*b[2], a[0]*b[1]-a[1]*b[0]],
+  mul: (a, s) => [a[0]*s, a[1]*s, a[2]*s],
+  add: (a, b) => [a[0]+b[0], a[1]+b[1], a[2]+b[2]],
+  norm: a => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0]/l, a[1]/l, a[2]/l]; },
+  rot: (v, k, ang) => {                                  // Rodrigues: لف v حوالين المحور k بزاوية ang
+    const c = Math.cos(ang), s = Math.sin(ang), kv = mv.cross(k, v), kd = mv.dot(k, v) * (1 - c);
+    return [v[0]*c + kv[0]*s + k[0]*kd, v[1]*c + kv[1]*s + k[1]*kd, v[2]*c + kv[2]*s + k[2]*kd];
+  }
+};
+const mprSleep = () => new Promise(r => setTimeout(r, 0));
+
+// ── بناء الحجم من شرائح السيريز ──────────────────────
+async function mprBuildVolume(group, onProg, token) {
+  const cand = [];
+  for(const it of group.items) {
+    if(!it.dcm) continue;
+    const g = vwGeo(it); if(!g) continue;
+    const d = it.dcm;
+    const rows = parseInt(d.getTag('(0028,0010)')) || 0, cols = parseInt(d.getTag('(0028,0011)')) || 0;
+    if(!rows || !cols || (parseInt(d.getTag('(0028,0008)')) || 1) > 1) continue;
+    cand.push({ it, g, rows, cols });
+  }
+  if(cand.length < 5) throw new Error('geo');
+  // أكبر مجموعة بنفس الاتجاه والأبعاد (لو الفولدر فيه أكتر من سيكونس)
+  const clusters = [];
+  for(const c of cand) {
+    let hit = null;
+    for(const k of clusters) {
+      const r = k.rep;
+      if(r.rows === c.rows && r.cols === c.cols && vwSameFOR(r.g.FOR, c.g.FOR) && mv.dot(r.g.row, c.g.row) > 0.998 && mv.dot(r.g.col, c.g.col) > 0.998) { hit = k; break; }
+    }
+    if(hit) hit.list.push(c); else clusters.push({ rep: c, list: [c] });
+  }
+  clusters.sort((a, b) => b.list.length - a.list.length);
+  const g0 = clusters[0].rep.g, rows = clusters[0].rep.rows, cols = clusters[0].rep.cols;
+  const n0 = mv.norm(mv.cross(g0.row, g0.col));
+  const list = clusters[0].list;
+  list.forEach(c => { c.pos = mv.dot(c.g.ipp, n0); });
+  list.sort((a, b) => a.pos - b.pos);
+  const sl = [list[0]];
+  for(let i = 1; i < list.length; i++) if(list[i].pos - sl[sl.length - 1].pos > 0.05) sl.push(list[i]);
+  if(sl.length < 5) throw new Error('geo');
+  const diffs = []; for(let i = 1; i < sl.length; i++) diffs.push(sl[i].pos - sl[i-1].pos);
+  const sd = diffs.slice().sort((a, b) => a - b), sz = sd[sd.length >> 1];
+  if(!(sz > 0.01)) throw new Error('geo');
+  const irregular = diffs.some(d => Math.abs(d - sz) > 0.25 * sz);
+
+  // ترتيب المحاور على LPS
+  const vecs = [g0.row, g0.col, n0];
+  let map = vecs.map(v => { let m = 0; for(let q = 1; q < 3; q++) if(Math.abs(v[q]) > Math.abs(v[m])) m = q; return { m, s: v[m] >= 0 ? 1 : -1, a: Math.abs(v[m]) }; });
+  const canon = map.every(x => x.a >= 0.9) && new Set(map.map(x => x.m)).size === 3;
+  if(!canon) map = [0, 1, 2].map(a => ({ m: a, s: 1, a: 1 }));
+
+  const K = sl.length;
+  let f = 1; while(Math.floor(cols / f) * Math.floor(rows / f) * K > MPR_MAXV && f < 8) f++;
+  const Na = [Math.floor(cols / f), Math.floor(rows / f), K];
+  const Sa = [g0.dc * f, g0.dr * f, sz];
+  const N = [0, 0, 0], S = [0, 0, 0];
+  map.forEach((x, a) => { N[x.m] = Na[a]; S[x.m] = Sa[a]; });
+  const NX = N[0], NY = N[1], NZ = N[2];
+  const strideM = [1, NX, NX * NY];
+  const stride = map.map(x => x.s * strideM[x.m]);
+  const baseAll = map.reduce((t, x, a) => t + (x.s > 0 ? 0 : (Na[a] - 1) * strideM[x.m]), 0);
+
+  const px0 = await vwGetPixels(sl[0].it);
+  if(!px0) throw new Error('px');
+  const signed = px0.modality === 'CT' || px0.inter < 0 || (px0.data instanceof Int16Array);
+  const data = signed ? new Int16Array(NX * NY * NZ) : new Uint16Array(NX * NY * NZ);
+  const cLo = signed ? -32768 : 0, cHi = signed ? 32767 : 65535;
+  let vmin = Infinity, vmax = -Infinity;
+  const sI = stride[0], sJ = stride[1];
+
+  for(let k = 0; k < K; k++) {
+    if(token.cancel) throw new Error('cancel');
+    const px = await vwGetPixels(sl[k].it);
+    if(px && px.cols === cols && px.rows === rows) {
+      const slope = px.slope, inter = px.inter, raw = px.data;
+      const a1 = px.min * slope + inter, a2 = px.max * slope + inter;
+      vmin = Math.min(vmin, a1, a2); vmax = Math.max(vmax, a1, a2);
+      const o0 = baseAll + k * stride[2];
+      if(f === 1) {
+        if(slope === 1 && Number.isInteger(inter)) {
+          for(let j = 0; j < rows; j++) { let o = o0 + j * sJ; const p = j * cols; for(let i = 0; i < cols; i++, o += sI) data[o] = raw[p + i] + inter; }
+        } else {
+          for(let j = 0; j < rows; j++) { let o = o0 + j * sJ; const p = j * cols; for(let i = 0; i < cols; i++, o += sI) { const v = Math.round(raw[p + i] * slope + inter); data[o] = v < cLo ? cLo : v > cHi ? cHi : v; } }
+        }
+      } else {
+        const ff = f * f;
+        for(let jj = 0; jj < Na[1]; jj++) {
+          let o = o0 + jj * sJ;
+          for(let ii = 0; ii < Na[0]; ii++, o += sI) {
+            let sum = 0;
+            for(let dj = 0; dj < f; dj++) { const p = (jj * f + dj) * cols + ii * f; for(let di = 0; di < f; di++) sum += raw[p + di]; }
+            const v = Math.round(sum / ff * slope + inter);
+            data[o] = v < cLo ? cLo : v > cHi ? cHi : v;
+          }
+        }
+      }
+    }
+    onProg(k + 1, K);
+    if(k % 6 === 5) await mprSleep();
+  }
+  if(!isFinite(vmin)) { vmin = 0; vmax = 1; }
+  vmin = Math.max(vmin, cLo); vmax = Math.min(vmax, cHi);
+  if(vmax <= vmin) vmax = vmin + 1;
+
+  // percentiles (للـ Window التلقائي و الـ VR على غير CT)
+  const range = vmax - vmin, nb = Math.min(4096, Math.ceil(range) + 1), hist = new Uint32Array(nb);
+  const stp = Math.max(1, Math.floor(data.length / 1.5e6)); let cnt = 0;
+  for(let i = 0; i < data.length; i += stp) { let b = Math.floor((data[i] - vmin) / range * (nb - 1)); if(b < 0) b = 0; else if(b >= nb) b = nb - 1; hist[b]++; cnt++; }
+  const pct = p => { let acc = 0, t = cnt * p; for(let b = 0; b < nb; b++) { acc += hist[b]; if(acc >= t) return vmin + b / (nb - 1) * range; } return vmax; };
+  const p2 = pct(0.02), p995 = pct(0.995);
+
+  const mid = sl[sl.length >> 1].it.dcm;
+  const tc = parseFloat(mid.getTag('(0028,1050)')), tw = parseFloat(mid.getTag('(0028,1051)'));
+  let auto;
+  if(tw > 0 && isFinite(tc)) auto = { wc: tc, ww: tw };
+  else if(px0.modality === 'CT') auto = { wc: 40, ww: 400 };
+  else auto = { wc: (p2 + p995) / 2, ww: Math.max(1, p995 - p2) };
+
+  const lab = [0, 1, 2].map(m => {
+    if(canon) return { pos: 'LPS'[m], neg: 'RAI'[m] };
+    const v = vecs[m]; let d = 0; for(let i = 1; i < 3; i++) if(Math.abs(v[i]) > Math.abs(v[d])) d = i;
+    const sg = v[d] >= 0;
+    return { pos: sg ? 'LPS'[d] : 'RAI'[d], neg: sg ? 'RAI'[d] : 'LPS'[d] };
+  });
+  return {
+    NX, NY, NZ, S, data, signed, vmin, vmax, p2, p995, auto, lab, canon, irregular, f,
+    ext: [NX * S[0], NY * S[1], NZ * S[2]],
+    mod: px0.modality || '', unit: px0.unit || 'SI', isCT: px0.modality === 'CT'
+  };
+}
+
+// ── MPR: المستويات والرسم ─────────────────────────────
+// الأساس (u,v) لكل شاشة بيتخزن لوحده: لما نلف خط، الشاشة اللي بنلف فيها بتفضل ثابتة والمستويين التانيين بس بيميلوا
+function mprInitB() { mpr.B = { ax: { u: [1,0,0], v: [0,1,0] }, co: { u: [1,0,0], v: [0,0,-1] }, sa: { u: [0,1,0], v: [0,0,-1] } }; }
+function mprPlane(kind) {
+  const [ex, ey, ez] = mpr.E, b = mpr.B[kind];
+  return { n: kind === 'ax' ? ez : kind === 'co' ? ey : ex, u: b.u, v: b.v };
+}
+function mprFov(kind) { const e = mpr.vol.ext; return kind === 'ax' ? [e[0], e[1]] : kind === 'co' ? [e[0], e[2]] : [e[1], e[2]]; }
+function mprLetters(w) {                                   // اتجاه الشاشة → حروف تشريحية
+  const lab = mpr.vol.lab, o = [0, 1, 2].map(m => ({ a: Math.abs(w[m]), l: w[m] >= 0 ? lab[m].pos : lab[m].neg }));
+  return o.filter(x => x.a > 0.25).sort((p, q) => q.a - p.a).slice(0, 2).map(x => x.l).join('');
+}
+function mprMinStep() { const S = mpr.vol.S; return Math.min(S[0], S[1], S[2]); }
+function mprClampC() { const e = mpr.vol.ext; for(let i = 0; i < 3; i++) mpr.c[i] = Math.max(0, Math.min(e[i], mpr.c[i])); }
+
+// تحويل نقطة على الشاشة → مكان (mm) في الحجم، على مستوى الـ view
+function mprPtToMm(v, sx, sy) {
+  const pl = mprPlane(v.kind), a = (sx - v.cw / 2 - v.panX) / v.ppm - v.cu, b = (sy - v.ch / 2 - v.panY) / v.ppm - v.cv;
+  return [mpr.c[0] + a*pl.u[0] + b*pl.v[0], mpr.c[1] + a*pl.u[1] + b*pl.v[1], mpr.c[2] + a*pl.u[2] + b*pl.v[2]];
+}
+function mprValueAtMm(P) {
+  const vol = mpr.vol, S = vol.S;
+  return mprTri(vol, P[0] / S[0] - 0.5, P[1] / S[1] - 0.5, P[2] / S[2] - 0.5);
+}
+function mprTri(vol, X, Y, Z) {
+  const NX = vol.NX, NY = vol.NY, NZ = vol.NZ;
+  if(X < -0.5 || Y < -0.5 || Z < -0.5 || X > NX - 0.5 || Y > NY - 0.5 || Z > NZ - 0.5) return NaN;
+  let x0 = Math.floor(X), y0 = Math.floor(Y), z0 = Math.floor(Z);
+  const fx = X - x0, fy = Y - y0, fz = Z - z0;
+  let x1 = x0 + 1, y1 = y0 + 1, z1 = z0 + 1;
+  if(x0 < 0) x0 = 0; if(y0 < 0) y0 = 0; if(z0 < 0) z0 = 0;
+  if(x1 > NX - 1) x1 = NX - 1; if(y1 > NY - 1) y1 = NY - 1; if(z1 > NZ - 1) z1 = NZ - 1;
+  const D = vol.data, sy = NX, sz = NX * NY;
+  const a = z0 * sz + y0 * sy, b = z0 * sz + y1 * sy, c = z1 * sz + y0 * sy, d = z1 * sz + y1 * sy;
+  const c00 = D[a + x0] * (1 - fx) + D[a + x1] * fx, c10 = D[b + x0] * (1 - fx) + D[b + x1] * fx;
+  const c01 = D[c + x0] * (1 - fx) + D[c + x1] * fx, c11 = D[d + x0] * (1 - fx) + D[d + x1] * fx;
+  return (c00 * (1 - fy) + c10 * fy) * (1 - fz) + (c01 * (1 - fy) + c11 * fy) * fz;
+}
+
+function mprRenderImage(v, q) {
+  const vol = mpr.vol, S = vol.S, NX = vol.NX, NY = vol.NY, NZ = vol.NZ, D = vol.data;
+  const pl = mprPlane(v.kind);
+  const W = Math.max(16, Math.round(v.cw * q)), H = Math.max(16, Math.round(v.ch * q));
+  if(v.off.width !== W || v.off.height !== H) { v.off.width = W; v.off.height = H; v.img = null; }
+  if(!v.img) { v.img = v.offctx.createImageData(W, H); v.u32 = new Uint32Array(v.img.data.buffer); }
+  const u32 = v.u32, ppm = v.ppm * q;
+  const cxr = W / 2 + v.panX * q, cyr = H / 2 + v.panY * q;
+  const iS = [1 / S[0], 1 / S[1], 1 / S[2]];
+  // نقطة (0,0) في فراغ الفوكسل (مركز الفوكسل = رقم صحيح)
+  const ou = cxr / ppm + v.cu, ov = cyr / ppm + v.cv;
+  const X0 = (mpr.c[0] - ou * pl.u[0] - ov * pl.v[0]) * iS[0] - 0.5;
+  const Y0 = (mpr.c[1] - ou * pl.u[1] - ov * pl.v[1]) * iS[1] - 0.5;
+  const Z0 = (mpr.c[2] - ou * pl.u[2] - ov * pl.v[2]) * iS[2] - 0.5;
+  const ux = pl.u[0] / ppm * iS[0], uy = pl.u[1] / ppm * iS[1], uz = pl.u[2] / ppm * iS[2];
+  const vx = pl.v[0] / ppm * iS[0], vy = pl.v[1] / ppm * iS[1], vz = pl.v[2] / ppm * iS[2];
+  // Slab
+  const step = mprMinStep(), slab = mpr.slabMm, mode = mpr.slabMode;
+  let ns = 1; if(slab > step * 1.5) ns = Math.min(q < 1 ? 14 : 48, Math.round(slab / step) + 1);
+  const offs = [];
+  if(ns > 1) { const dt = slab / (ns - 1); for(let t = 0; t < ns; t++) offs.push((t - (ns - 1) / 2) * dt); }
+  const nx = pl.n[0] * iS[0], ny = pl.n[1] * iS[1], nz = pl.n[2] * iS[2];
+  const lo = mpr.wc - mpr.ww / 2, sc = 255 / mpr.ww, inv = mpr.inv;
+  const sy = NX, sz = NX * NY, mx = NX - 0.5, my = NY - 0.5, mz = NZ - 0.5;
+
+  const smp = (X, Y, Z) => {
+    if(X < -0.5 || Y < -0.5 || Z < -0.5 || X > mx || Y > my || Z > mz) return NaN;
+    let x0 = Math.floor(X), y0 = Math.floor(Y), z0 = Math.floor(Z);
+    const fx = X - x0, fy = Y - y0, fz = Z - z0;
+    let x1 = x0 + 1, y1 = y0 + 1, z1 = z0 + 1;
+    if(x0 < 0) x0 = 0; if(y0 < 0) y0 = 0; if(z0 < 0) z0 = 0;
+    if(x1 >= NX) x1 = NX - 1; if(y1 >= NY) y1 = NY - 1; if(z1 >= NZ) z1 = NZ - 1;
+    const a = z0 * sz + y0 * sy, b = z0 * sz + y1 * sy, c = z1 * sz + y0 * sy, d = z1 * sz + y1 * sy;
+    const c00 = D[a + x0] + (D[a + x1] - D[a + x0]) * fx, c10 = D[b + x0] + (D[b + x1] - D[b + x0]) * fx;
+    const c01 = D[c + x0] + (D[c + x1] - D[c + x0]) * fx, c11 = D[d + x0] + (D[d + x1] - D[d + x0]) * fx;
+    const c0 = c00 + (c10 - c00) * fy, c1 = c01 + (c11 - c01) * fy;
+    return c0 + (c1 - c0) * fz;
+  };
+
+  for(let y = 0; y < H; y++) {
+    let X = X0 + y * vx, Y = Y0 + y * vy, Z = Z0 + y * vz;
+    let o = y * W;
+    for(let x = 0; x < W; x++, X += ux, Y += uy, Z += uz, o++) {
+      let val;
+      if(ns === 1) val = smp(X, Y, Z);
+      else {
+        let acc = mode === 'min' ? Infinity : mode === 'mip' ? -Infinity : 0, cnt = 0;
+        for(let t = 0; t < ns; t++) {
+          const s = smp(X + offs[t] * nx, Y + offs[t] * ny, Z + offs[t] * nz);
+          if(s !== s) continue;
+          cnt++;
+          if(mode === 'mip') { if(s > acc) acc = s; } else if(mode === 'min') { if(s < acc) acc = s; } else acc += s;
+        }
+        val = cnt ? (mode === 'avg' ? acc / cnt : acc) : NaN;
+      }
+      if(val !== val) { u32[o] = 0xFF000000; continue; }
+      let g = (val - lo) * sc;
+      g = g < 0 ? 0 : g > 255 ? 255 : g | 0;
+      if(inv) g = 255 - g;
+      u32[o] = 0xFF000000 | (g << 16) | (g << 8) | g;
+    }
+  }
+  v.offctx.putImageData(v.img, 0, 0);
+}
+
+function mprDrawMpr(v) {
+  if(!v.cw || !v.ch || !mpr.vol) return;
+  const fov = mprFov(v.kind);
+  v.ppm = Math.min(v.cw / fov[0], v.ch / fov[1]) * 0.94 * v.zoom;
+  const now = performance.now(), low = now < mpr.lowUntil;
+  if(v.dirty) { mprRenderImage(v, low ? 0.5 : 1); v.dirty = false; }
+  const ctx = v.ctx, dpr = v.dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, v.cw, v.ch);
+  ctx.imageSmoothingEnabled = true;
+  ctx.drawImage(v.off, 0, 0, v.cw, v.ch);
+  mprDrawOverlay(v, ctx);
+  mprUpdateHud(v);
+}
+
+function mprDrawOverlay(v, ctx) {
+  const pl = mprPlane(v.kind), cx = v.cw / 2 + v.panX + v.cu * v.ppm, cy = v.ch / 2 + v.panY + v.cv * v.ppm;
+  v.ctr = { x: cx, y: cy }; v.lines = [];
+  // خطوط مرجعية للمستويين التانيين
+  const others = ['ax', 'co', 'sa'].filter(k => k !== v.kind);
+  const Lmax = Math.hypot(v.cw, v.ch);
+  ctx.save();
+  ctx.lineCap = 'round';
+  for(const k of others) {
+    const d = mv.cross(pl.n, mprPlane(k).n);
+    let dx = mv.dot(d, pl.u), dy = mv.dot(d, pl.v); const l = Math.hypot(dx, dy);
+    if(l < 1e-6) continue;
+    dx /= l; dy /= l;
+    v.lines.push({ k, dx, dy });
+    const hot = v.hot === k, gap = 14;
+    ctx.strokeStyle = MPR_COL[k]; ctx.lineWidth = hot ? 2.4 : 1.3; ctx.globalAlpha = hot ? 1 : 0.85;
+    ctx.shadowColor = 'rgba(0,0,0,.9)'; ctx.shadowBlur = 3;
+    ctx.beginPath();
+    ctx.moveTo(cx - dx * Lmax, cy - dy * Lmax); ctx.lineTo(cx - dx * gap, cy - dy * gap);
+    ctx.moveTo(cx + dx * gap, cy + dy * gap); ctx.lineTo(cx + dx * Lmax, cy + dy * Lmax);
+    ctx.stroke();
+    // مقبض الدوران على الطرف
+    const hr = Math.min(v.cw, v.ch) * 0.42, hx = cx + dx * hr, hy = cy + dy * hr;
+    ctx.fillStyle = MPR_COL[k]; ctx.beginPath(); ctx.arc(hx, hy, hot ? 5 : 3.5, 0, 6.2832); ctx.fill();
+  }
+  ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+  ctx.strokeStyle = MPR_COL[v.kind]; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(cx, cy, 7, 0, 6.2832); ctx.stroke();
+  // حروف الاتجاهات
+  ctx.font = '700 13px "Segoe UI", Arial, sans-serif'; ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.fillStyle = 'rgba(255,214,10,.95)';
+  const put = (t, x, y, al, bl) => { if(!t) return; ctx.textAlign = al; ctx.textBaseline = bl; ctx.strokeText(t, x, y); ctx.fillText(t, x, y); };
+  put(mprLetters(pl.u), v.cw - 22, v.ch / 2, 'right', 'middle');
+  put(mprLetters(mv.mul(pl.u, -1)), 8, v.ch / 2, 'left', 'middle');
+  put(mprLetters(mv.mul(pl.v, -1)), v.cw / 2, 6, 'center', 'top');
+  put(mprLetters(pl.v), v.cw / 2, v.ch - 6, 'center', 'bottom');
+  ctx.restore();
+}
+
+function mprUpdateHud(v) {
+  const vol = mpr.vol;
+  v.tl.textContent = MPR_NAME[v.kind]; v.tl.style.color = MPR_COL[v.kind];
+  const t = [];
+  const E = mpr.E, I = [[1,0,0],[0,1,0],[0,0,1]];
+  let tilt = 0; for(let i = 0; i < 3; i++) tilt = Math.max(tilt, Math.acos(Math.max(-1, Math.min(1, Math.abs(mv.dot(E[i], I[i]))))) * 57.2958);
+  if(tilt < 0.3) {
+    const m = v.kind === 'ax' ? 2 : v.kind === 'co' ? 1 : 0, N = [vol.NX, vol.NY, vol.NZ][m];
+    t.push(`Im: ${Math.max(1, Math.min(N, Math.floor(mpr.c[m] / vol.S[m]) + 1))}/${N}`);
+  } else t.push(`Oblique ${tilt.toFixed(1)}°`);
+  if(mpr.slabMm > mprMinStep() * 1.5) t.push(`Slab ${mpr.slabMm}mm ${mpr.slabMode.toUpperCase()}`);
+  v.tr.textContent = t.join('\n');
+  v.bl.textContent = `W ${Math.round(mpr.ww)}  L ${Math.round(mpr.wc)}\n×${v.zoom.toFixed(2)}`;
+  const P = v.hover ? mprPtToMm(v, v.hover.x, v.hover.y) : mpr.c, val = mprValueAtMm(P);
+  v.br.textContent = val === val ? `${Math.round(val)} ${vol.unit === 'HU' ? 'HU' : ''}` : '';
+}
+
+// ── طلب إعادة الرسم ──
+function mprReq(v) {
+  if(!v || v.raf) return;
+  v.raf = requestAnimationFrame(() => { v.raf = 0; if(!mprOn) return; if(v.kind === 'vr') mprVRDraw(v); else mprDrawMpr(v); });
+}
+function mprDirtyAll(low) {
+  if(!mpr.vol) return;
+  if(low) {
+    mpr.lowUntil = performance.now() + 220;
+    clearTimeout(mpr.refineT);
+    mpr.refineT = setTimeout(() => { mpr.views.forEach(v => { if(v.kind !== 'vr') { v.dirty = true; mprReq(v); } }); }, 240);
+  }
+  mpr.views.forEach(v => { if(v.kind !== 'vr') { v.dirty = true; mprReq(v); } });
+}
+
+// ── تفاعل المستخدم على view ──
+function mprHit(v, p) {
+  if(!v.ctr) return { t: 'move' };
+  const dc = Math.hypot(p.x - v.ctr.x, p.y - v.ctr.y), tol = v.ptype === 'touch' ? 18 : 9;
+  for(const L of v.lines) {
+    const dist = Math.abs((p.x - v.ctr.x) * L.dy - (p.y - v.ctr.y) * L.dx);
+    if(dist < tol && dc > 16) return { t: 'rot', k: L.k };
+  }
+  return { t: 'move' };
+}
+// تحريك نقطة التقاطع: كل شاشة بتحتفظ بصورتها ثابتة في مستواها، والتقاطع هو اللي بيتحرك عليها (والشرايح بس بتتغير)
+function mprMoveC(P) {
+  const e = mpr.vol.ext, Q = [0, 1, 2].map(i => Math.max(0, Math.min(e[i], P[i])));
+  const d = [Q[0] - mpr.c[0], Q[1] - mpr.c[1], Q[2] - mpr.c[2]];
+  for(const w of mpr.views) if(w.kind !== 'vr') { const pl = mprPlane(w.kind); w.cu += mv.dot(d, pl.u); w.cv += mv.dot(d, pl.v); }
+  mpr.c = Q; mprDirtyAll(true);
+}
+function mprSetCenterFromView(v, p) { mprMoveC(mprPtToMm(v, p.x, p.y)); }
+function mprScrollBy(v, steps) {
+  const pl = mprPlane(v.kind), st = mprMinStep() * steps;
+  mprMoveC(mv.add(mpr.c, mv.mul(pl.n, st)));
+}
+function mprBindMprView(v) {
+  const c = v.canvas, rel = e => { const r = c.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  v.ptrs = new Map(); v.mode = null;
+  c.addEventListener('contextmenu', e => e.preventDefault());
+  c.addEventListener('pointerdown', e => {
+    mprSetActive(v.idx);
+    c.setPointerCapture(e.pointerId);
+    const p = rel(e); v.ptype = e.pointerType;
+    v.ptrs.set(e.pointerId, p);
+    if(v.ptrs.size === 2) {
+      const [a, b] = [...v.ptrs.values()];
+      v.pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, zoom: v.zoom, px: v.panX, py: v.panY, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 };
+      v.mode = 'pinch'; return;
+    }
+    if(v.ptrs.size > 2) return;
+    const btn = e.pointerType === 'mouse' ? e.button : 0;
+    let tool = mpr.tool;
+    if(btn === 2) tool = 'wl'; else if(btn === 1) tool = 'pan';
+    v.start = p; v.last = p; v.acc = 0;
+    if(tool === 'cross') {
+      const h = mprHit(v, p);
+      if(h.t === 'rot') {
+        const pl = mprPlane(v.kind);
+        v.mode = 'rot'; v.rot0 = { E: mpr.E.map(a => a.slice()), B: JSON.parse(JSON.stringify(mpr.B)), n: pl.n.slice(), th: Math.atan2(p.y - v.ctr.y, p.x - v.ctr.x),
+          sg: Math.sign(mv.dot(mv.cross(pl.u, pl.v), pl.n)) || 1 };
+      } else { v.mode = 'move'; mprSetCenterFromView(v, p); }
+    } else v.mode = tool;
+  });
+  c.addEventListener('pointermove', e => {
+    const p = rel(e);
+    if(!v.ptrs.has(e.pointerId)) {
+      if(e.pointerType === 'mouse') {
+        v.hover = p; v.ptype = 'mouse';
+        const h = mpr.tool === 'cross' ? mprHit(v, p) : { t: 'move' };
+        c.style.cursor = h.t === 'rot' ? 'grab' : (mpr.tool === 'cross' ? 'crosshair' : '');
+        v.hot = h.t === 'rot' ? h.k : null;
+        mprReq(v);
+      }
+      return;
+    }
+    v.ptrs.set(e.pointerId, p);
+    v.hover = e.pointerType === 'mouse' ? p : null;
+    if(v.mode === 'pinch' && v.ptrs.size >= 2) {
+      const [a, b] = [...v.ptrs.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y), cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
+      const nz = Math.max(0.3, Math.min(20, v.pinch.zoom * d / v.pinch.d)), k = nz / v.pinch.zoom;
+      const fx = v.pinch.cx - v.cw / 2, fy = v.pinch.cy - v.ch / 2;
+      v.panX = fx - (fx - v.pinch.px) * k + (cx - v.pinch.cx); v.panY = fy - (fy - v.pinch.py) * k + (cy - v.pinch.cy);
+      v.zoom = nz; v.dirty = true; mprReq(v); return;
+    }
+    if(v.ptrs.size !== 1 || !v.mode) return;
+    const dx = p.x - v.last.x, dy = p.y - v.last.y; v.last = p;
+    switch(v.mode) {
+      case 'move': mprSetCenterFromView(v, p); break;
+      case 'rot': {
+        const th = Math.atan2(p.y - v.ctr.y, p.x - v.ctr.x), phi = v.rot0.sg * (th - v.rot0.th);
+        mpr.E = v.rot0.E.map(a => mv.norm(mv.rot(a, v.rot0.n, phi)));
+        for(const k of ['ax', 'co', 'sa']) {
+          const b0 = v.rot0.B[k];
+          mpr.B[k] = k === v.kind ? { u: b0.u.slice(), v: b0.v.slice() } : { u: mv.norm(mv.rot(b0.u, v.rot0.n, phi)), v: mv.norm(mv.rot(b0.v, v.rot0.n, phi)) };
+        }
+        mprDirtyAll(true); break;
+      }
+      case 'wl': { const k = Math.max(mpr.ww, 20) / 220; mpr.ww = Math.max(1, mpr.ww + dx * k * 2); mpr.wc += dy * k * 2; mprDirtyAll(true); const s = document.getElementById('mpr-wl'); if(s) s.value = ''; break; }
+      case 'pan': v.panX += dx; v.panY += dy; v.dirty = true; mprReq(v); break;
+      case 'zoom': { const f = Math.exp(-dy * 0.01), nz = Math.max(0.3, Math.min(20, v.zoom * f)), k = nz / v.zoom; v.panX *= k; v.panY *= k; v.zoom = nz; v.dirty = true; mprReq(v); break; }
+    }
+  });
+  const up = e => {
+    v.ptrs.delete(e.pointerId);
+    try { c.releasePointerCapture(e.pointerId); } catch(_) {}
+    if(v.ptrs.size === 0) { v.mode = null; mprDirtyAll(true); }
+    else if(v.ptrs.size === 1 && v.mode === 'pinch') v.mode = null;
+  };
+  c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
+  c.addEventListener('pointerleave', e => { if(e.pointerType === 'mouse') { v.hover = null; v.hot = null; mprReq(v); } });
+  c.addEventListener('wheel', e => {
+    e.preventDefault(); mprSetActive(v.idx);
+    if(e.ctrlKey || mpr.tool === 'zoom') {
+      const r = c.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top;
+      const nz = Math.max(0.3, Math.min(20, v.zoom * Math.exp(-e.deltaY * 0.0015))), k = nz / v.zoom;
+      const fx = sx - v.cw / 2, fy = sy - v.ch / 2;
+      v.panX = fx - (fx - v.panX) * k; v.panY = fy - (fy - v.panY) * k; v.zoom = nz;
+      v.dirty = true; mprReq(v);
+    } else mprScrollBy(v, (e.deltaY > 0 ? -1 : 1) * (e.shiftKey ? 5 : 1));
+  }, { passive: false });
+  c.addEventListener('dblclick', () => mprToggleMax(v.idx));
+}
+
+// ── VR: Ray-casting على الـ GPU (WebGL2) ─────────────
+const MPR_VS = `#version 300 es
+void main(){ vec2 p = vec2(float((gl_VertexID << 1) & 2), float(gl_VertexID & 2)); gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0); }`;
+const MPR_FS = `#version 300 es
+precision highp float; precision highp sampler3D; precision highp sampler2D;
+uniform sampler3D uVol; uniform sampler2D uTF;
+uniform vec2 uRes; uniform mat3 uV2M; uniform vec3 uHalf; uniform vec3 uVox;
+uniform float uTanH; uniform float uZoom; uniform float uDist; uniform vec2 uPan;
+uniform float uStep; uniform float uK; uniform float uShade; uniform int uMode; uniform vec2 uWin;
+uniform vec3 uCmin; uniform vec3 uCmax;
+out vec4 fragColor;
+float rnd(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+void main(){
+  vec3 bg = vec3(0.035, 0.043, 0.062);
+  vec2 ndc = (gl_FragCoord.xy / uRes) * 2.0 - 1.0;
+  float asp = uRes.x / uRes.y;
+  vec3 rdv = normalize(vec3(ndc.x * asp * uTanH / uZoom, ndc.y * uTanH / uZoom, -1.0));
+  vec3 ro = uV2M * vec3(uPan, uDist);
+  vec3 rd = uV2M * rdv;
+  vec3 inv = 1.0 / rd;
+  vec3 t0 = (-uHalf - ro) * inv, t1 = (uHalf - ro) * inv;
+  vec3 tmn = min(t0, t1), tmx = max(t0, t1);
+  float tn = max(max(tmn.x, tmn.y), max(tmn.z, 0.0));
+  float tfar = min(min(tmx.x, tmx.y), tmx.z);
+  if(tfar <= tn){ fragColor = vec4(bg, 1.0); return; }
+  float t = tn + rnd(gl_FragCoord.xy) * uStep;
+  vec3 C = vec3(0.0); float A = 0.0; float smax = 0.0;
+  vec3 voxM = 2.0 * uHalf * uVox;
+  for(int i = 0; i < 4096; i++){
+    if(t > tfar) break;
+    vec3 p = ro + rd * t;
+    vec3 uvw = (p + uHalf) / (2.0 * uHalf);
+    t += uStep;
+    if(any(lessThan(uvw, uCmin)) || any(greaterThan(uvw, uCmax))) continue;
+    float s = textureLod(uVol, uvw, 0.0).r;
+    if(uMode == 1){ smax = max(smax, s); continue; }
+    vec4 tf = textureLod(uTF, vec2(s, 0.5), 0.0);
+    if(tf.a < 0.004) continue;
+    vec3 col = tf.rgb;
+    if(uShade > 0.0){
+      float gx = textureLod(uVol, uvw + vec3(uVox.x, 0.0, 0.0), 0.0).r - textureLod(uVol, uvw - vec3(uVox.x, 0.0, 0.0), 0.0).r;
+      float gy = textureLod(uVol, uvw + vec3(0.0, uVox.y, 0.0), 0.0).r - textureLod(uVol, uvw - vec3(0.0, uVox.y, 0.0), 0.0).r;
+      float gz = textureLod(uVol, uvw + vec3(0.0, 0.0, uVox.z), 0.0).r - textureLod(uVol, uvw - vec3(0.0, 0.0, uVox.z), 0.0).r;
+      vec3 g = vec3(gx, gy, gz) / (2.0 * voxM);
+      float gl = length(g);
+      if(gl > 1e-4){
+        vec3 N = -g / gl; vec3 L = -rd;
+        float dif = abs(dot(N, L));
+        float w = smoothstep(2.0, 30.0, gl) * uShade;
+        col = col * mix(1.0, 0.30 + 0.80 * dif, w) + vec3(pow(dif, 22.0) * 0.30 * w);
+      }
+    }
+    float a = 1.0 - exp(-tf.a * uK * uStep);
+    C += (1.0 - A) * a * col; A += (1.0 - A) * a;
+    if(A > 0.985) break;
+  }
+  if(uMode == 1){ float g = clamp((smax - uWin.x) / max(uWin.y - uWin.x, 1e-4), 0.0, 1.0); fragColor = vec4(vec3(g), 1.0); return; }
+  fragColor = vec4(C + (1.0 - A) * bg, 1.0);
+}`;
+
+const MPR_VR_PRESETS = {
+  ct: {
+    skin:  { label: 'جلد + أنسجة', pts: [[-1024,0,0,0,0],[-420,0,.70,.45,.35],[-300,.06,.78,.50,.40],[-100,.08,.85,.58,.47],[30,.12,.88,.62,.50],[120,.20,.90,.66,.55],[200,.35,.95,.90,.80],[500,.80,1,.97,.92],[3071,1,1,1,1]] },
+    bone:  { label: 'عظام', pts: [[-1024,0,1,1,1],[130,0,.90,.82,.70],[220,.06,.93,.86,.74],[400,.35,.97,.93,.85],[900,.80,1,.98,.94],[3071,1,1,1,1]] },
+    angio: { label: 'أوعية دموية', pts: [[-1024,0,0,0,0],[100,0,.55,.05,.05],[170,.12,.80,.15,.10],[300,.45,.95,.40,.25],[500,.85,1,.75,.55],[900,.95,1,.95,.85],[3071,1,1,1,1]] },
+    lung:  { label: 'رئة / مجرى هوائي', pts: [[-1024,0,.2,.3,.5],[-960,0,.4,.6,.9],[-900,.04,.5,.7,.95],[-750,.10,.7,.85,1],[-500,.12,.85,.9,1],[-350,0,1,1,1],[3071,0,1,1,1]] },
+    mip:   { label: 'MIP (أقصى كثافة)', mip: true, win: [100, 650] }
+  },
+  rel: {
+    generic: { label: 'عام', pts: [[0,0,0,0,0],[.12,0,.70,.50,.40],[.30,.10,.85,.62,.50],[.55,.30,.95,.80,.70],[.80,.60,1,.95,.90],[1,.90,1,1,1]] },
+    bright:  { label: 'المناطق الساطعة', pts: [[0,0,0,0,0],[.45,0,.8,.6,.5],[.60,.20,.95,.70,.50],[.80,.70,1,.90,.80],[1,.95,1,1,1]] },
+    mip:     { label: 'MIP (أقصى كثافة)', mip: true, win: [.25, .92] }
+  }
+};
+function mprVRPresetSet() { return mpr.vol.isCT ? MPR_VR_PRESETS.ct : MPR_VR_PRESETS.rel; }
+
+function mprToHalf01(f) {
+  if(f <= 0) return 0; if(f >= 1) return 0x3C00;
+  if(f < 6.103515625e-5) return Math.round(f * 16777216);
+  const e = Math.floor(Math.log2(f)); let m = Math.round((f / Math.pow(2, e) - 1) * 1024), he = e + 15;
+  if(m === 1024) { m = 0; he++; }
+  return (he << 10) | m;
+}
+
+function mprVRInit(v) {
+  const vr = mpr.vr = {
+    ok: false, gl: null, rot: [[1,0,0],[0,0,1],[0,-1,0]],     // model → view  (بنبص على المريض من قدّام، S فوق)
+    zoom: 1.25, pan: [0, 0], preset: '', level: 0, opacity: 1, shade: 0.85, qual: 1,
+    clipMin: [0, 0, 0], clipMax: [1, 1, 1], lowUntil: 0, refineT: 0
+  };
+  const vol = mpr.vol;
+  try {
+    const gl = v.glcv.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: true, powerPreference: 'high-performance' });
+    if(!gl) throw new Error('نسخة WebGL2 مش مدعومة في المتصفح ده');
+    vr.gl = gl;
+    const mx = gl.getParameter(gl.MAX_3D_TEXTURE_SIZE);
+    if(Math.max(vol.NX, vol.NY, vol.NZ) > mx) throw new Error('أبعاد الحجم أكبر من اللي كرت الشاشة يدعمه (' + mx + ')');
+    const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error('Shader: ' + gl.getShaderInfoLog(s)); return s; };
+    const prog = gl.createProgram();
+    gl.attachShader(prog, sh(gl.VERTEX_SHADER, MPR_VS)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, MPR_FS));
+    gl.linkProgram(prog);
+    if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error('Link: ' + gl.getProgramInfoLog(prog));
+    vr.prog = prog; vr.u = {};
+    for(const n of ['uVol','uTF','uRes','uV2M','uHalf','uVox','uTanH','uZoom','uDist','uPan','uStep','uK','uShade','uMode','uWin','uCmin','uCmax']) vr.u[n] = gl.getUniformLocation(prog, n);
+    // الحجم → texture 3D (half float مفلتر) — بنرفعه شريحة شريحة عشان منعملش نسخة ضخمة في الذاكرة
+    const range = vol.vmax - vol.vmin, lut = new Uint16Array(Math.ceil(range) + 1);
+    for(let i = 0; i < lut.length; i++) lut[i] = mprToHalf01(i / range);
+    vr.tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_3D, vr.tex);
+    gl.pixelStorei(gl.UNPACK_ALIGNMENT, 1);
+    gl.texStorage3D(gl.TEXTURE_3D, 1, gl.R16F, vol.NX, vol.NY, vol.NZ);
+    const sl = new Uint16Array(vol.NX * vol.NY), per = vol.NX * vol.NY, D = vol.data, vmin = vol.vmin, lm = lut.length - 1;
+    for(let z = 0; z < vol.NZ; z++) {
+      const o = z * per;
+      for(let i = 0; i < per; i++) { let q = D[o + i] - vmin; q = q < 0 ? 0 : q > lm ? lm : q; sl[i] = lut[q]; }
+      gl.texSubImage3D(gl.TEXTURE_3D, 0, 0, 0, z, vol.NX, vol.NY, 1, gl.RED, gl.HALF_FLOAT, sl);
+    }
+    gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_3D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    for(const w of [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T, gl.TEXTURE_WRAP_R]) gl.texParameteri(gl.TEXTURE_3D, w, gl.CLAMP_TO_EDGE);
+    vr.tf = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, vr.tf);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, 1024, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(1024 * 4));
+    if(gl.getError() !== gl.NO_ERROR) throw new Error('GPU: فشل رفع الحجم (ذاكرة كرت الشاشة؟)');
+    vr.ok = true;
+    vr.vao = gl.createVertexArray();
+    const set = mprVRPresetSet(); vr.preset = vol.isCT ? 'skin' : 'generic'; if(!set[vr.preset]) vr.preset = Object.keys(set)[0];
+    mprVRBuildTF();
+    mprBindVRView(v);
+  } catch(e) {
+    console.warn('VR:', e);
+    vr.ok = false; mpr.vrFail = String(e.message || e);
+    v.msg.textContent = '⚠️ العرض 3D مش متاح: ' + mpr.vrFail; v.msg.style.display = 'flex';
+  }
+}
+
+function mprVRBuildTF() {
+  const vr = mpr.vr, vol = mpr.vol; if(!vr || !vr.ok) return;
+  const P = mprVRPresetSet()[vr.preset]; if(!P) return;
+  const gl = vr.gl, NB = 1024, out = new Uint8Array(NB * 4), range = vol.vmax - vol.vmin;
+  vr.mip = !!P.mip;
+  const shiftAbs = vr.level / 100 * (vol.isCT ? 600 : (vol.p995 - vol.p2) * 0.3);   // إزاحة بنفس وحدات الحجم
+  if(P.mip) {
+    const lo = vol.isCT ? P.win[0] : vol.p2 + (vol.p995 - vol.p2) * P.win[0];
+    const hi = vol.isCT ? P.win[1] : vol.p2 + (vol.p995 - vol.p2) * P.win[1];
+    vr.win = [(lo + shiftAbs - vol.vmin) / range, (hi + shiftAbs - vol.vmin) / range];
+  } else {
+    const pts = P.pts;
+    for(let b = 0; b < NB; b++) {
+      const val = vol.vmin + (b + 0.5) / NB * range - shiftAbs;
+      const x = vol.isCT ? val : (val - vol.p2) / Math.max(1e-6, vol.p995 - vol.p2);
+      let r = 0, g = 0, bl = 0, a = 0;
+      if(x <= pts[0][0]) { a = pts[0][1]; r = pts[0][2]; g = pts[0][3]; bl = pts[0][4]; }
+      else if(x >= pts[pts.length - 1][0]) { const q = pts[pts.length - 1]; a = q[1]; r = q[2]; g = q[3]; bl = q[4]; }
+      else for(let i = 1; i < pts.length; i++) if(x <= pts[i][0]) {
+        const A = pts[i - 1], B = pts[i], t = (x - A[0]) / Math.max(1e-9, B[0] - A[0]);
+        a = A[1] + (B[1] - A[1]) * t; r = A[2] + (B[2] - A[2]) * t; g = A[3] + (B[3] - A[3]) * t; bl = A[4] + (B[4] - A[4]) * t; break;
+      }
+      a = Math.min(1, a * vr.opacity);
+      out[b*4] = r * 255; out[b*4+1] = g * 255; out[b*4+2] = bl * 255; out[b*4+3] = a * 255;
+    }
+  }
+  gl.bindTexture(gl.TEXTURE_2D, vr.tf);
+  gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, NB, 1, gl.RGBA, gl.UNSIGNED_BYTE, out);
+  mprReq(mpr.views[3]);
+}
+
+function mprVRDraw(v) {
+  const vr = mpr.vr; if(!vr || !vr.ok || !v.cw || !v.ch) return;
+  const gl = vr.gl, vol = mpr.vol;
+  const low = performance.now() < vr.lowUntil;
+  const dpr = Math.min(v.dpr, 1.5), sc = low ? 0.5 : 1;
+  const W = Math.max(8, Math.round(v.cw * dpr * sc)), H = Math.max(8, Math.round(v.ch * dpr * sc));
+  if(v.glcv.width !== W || v.glcv.height !== H) { v.glcv.width = W; v.glcv.height = H; }
+  gl.viewport(0, 0, W, H);
+  gl.useProgram(vr.prog); gl.bindVertexArray(vr.vao);
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_3D, vr.tex); gl.uniform1i(vr.u.uVol, 0);
+  gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, vr.tf); gl.uniform1i(vr.u.uTF, 1);
+  const mxe = Math.max(vol.ext[0], vol.ext[1], vol.ext[2]), half = [vol.ext[0] / mxe / 2, vol.ext[1] / mxe / 2, vol.ext[2] / mxe / 2];
+  const tanH = Math.tan(15 * Math.PI / 180), R = Math.hypot(half[0], half[1], half[2]), dist = R / Math.sin(15 * Math.PI / 180);
+  const vs = Math.min(half[0] * 2 / vol.NX, half[1] * 2 / vol.NY, half[2] * 2 / vol.NZ);
+  const step = vs * (low ? 2.4 : 1) * (vr.qual || 1);
+  const Rm = vr.rot;                                       // model→view؛ المطلوب view→model = transpose
+  // GLSL mat3 column-major: العمود j = (Rm[0][j], Rm[1][j], Rm[2][j]) ... هنا v2m = Rm^T فالعمود j = الصف j من Rm
+  const v2m = new Float32Array([Rm[0][0], Rm[0][1], Rm[0][2], Rm[1][0], Rm[1][1], Rm[1][2], Rm[2][0], Rm[2][1], Rm[2][2]]);
+  gl.uniformMatrix3fv(vr.u.uV2M, false, v2m);
+  gl.uniform2f(vr.u.uRes, W, H); gl.uniform3f(vr.u.uHalf, half[0], half[1], half[2]);
+  gl.uniform3f(vr.u.uVox, 1 / vol.NX, 1 / vol.NY, 1 / vol.NZ);
+  gl.uniform1f(vr.u.uTanH, tanH); gl.uniform1f(vr.u.uZoom, vr.zoom); gl.uniform1f(vr.u.uDist, dist);
+  gl.uniform2f(vr.u.uPan, vr.pan[0], vr.pan[1]);
+  gl.uniform1f(vr.u.uStep, step); gl.uniform1f(vr.u.uK, 200); gl.uniform1f(vr.u.uShade, vr.shade);
+  gl.uniform1i(vr.u.uMode, vr.mip ? 1 : 0); gl.uniform2f(vr.u.uWin, (vr.win || [0, 1])[0], (vr.win || [0, 1])[1]);
+  gl.uniform3f(vr.u.uCmin, vr.clipMin[0], vr.clipMin[1], vr.clipMin[2]); gl.uniform3f(vr.u.uCmax, vr.clipMax[0], vr.clipMax[1], vr.clipMax[2]);
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  mprVRGizmo(v);
+  v.tl.textContent = MPR_NAME.vr; v.tl.style.color = MPR_COL.vr;
+  v.tr.textContent = (mprVRPresetSet()[vr.preset] || {}).label || '';
+  v.bl.textContent = `×${vr.zoom.toFixed(2)}`; v.br.textContent = '';
+}
+function mprVRRefine() { const vr = mpr.vr; if(!vr) return; vr.lowUntil = 0; mprReq(mpr.views[3]); }
+function mprVRLow() { const vr = mpr.vr; if(!vr) return; vr.lowUntil = performance.now() + 220; clearTimeout(vr.refineT); vr.refineT = setTimeout(mprVRRefine, 240); }
+
+// مؤشر الاتجاهات (L R A P S I) على الـ 3D
+function mprVRGizmo(v) {
+  const vr = mpr.vr, ctx = v.ovctx, dpr = v.dpr; if(!ctx) return;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, v.cw, v.ch);
+  const R = vr.rot, cx = 42, cy = v.ch - 48, L = 26, lab = mpr.vol.lab;
+  ctx.save(); ctx.font = '700 11px "Segoe UI", Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const axes = [];
+  for(let m = 0; m < 3; m++) for(const sg of [1, -1]) {
+    const vx = sg * R[0][m], vy = sg * R[1][m], vz = sg * R[2][m];   // إحداثيات المحور في فراغ الشاشة
+    axes.push({ x: cx + vx * L, y: cy - vy * L, z: vz, t: sg > 0 ? lab[m].pos : lab[m].neg, p: sg > 0 });
+  }
+  axes.sort((a, b) => a.z - b.z);
+  for(const a of axes) {
+    ctx.globalAlpha = a.z > 0 ? 1 : 0.45;
+    if(a.p) { ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(a.x, a.y); ctx.stroke(); }
+    ctx.fillStyle = a.p ? '#2d93e6' : '#4a5260'; ctx.beginPath(); ctx.arc(a.x, a.y, 8, 0, 6.2832); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.fillText(a.t, a.x, a.y + 0.5);
+  }
+  ctx.restore();
+}
+
+function mprBindVRView(v) {
+  const c = v.ovcv, vr = mpr.vr, ptrs = new Map();
+  const rel = e => { const r = c.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+  let mode = null, last = null, pinch = null;
+  const rotate = (dx, dy) => {
+    const k = 0.0075, ay = dx * k, ax = dy * k;
+    const cy_ = Math.cos(ay), sy_ = Math.sin(ay), cx_ = Math.cos(ax), sx_ = Math.sin(ax);
+    const Ry = [[cy_, 0, sy_], [0, 1, 0], [-sy_, 0, cy_]], Rx = [[1, 0, 0], [0, cx_, -sx_], [0, sx_, cx_]];
+    const mm = (A, B) => A.map(r => [0, 1, 2].map(j => r[0]*B[0][j] + r[1]*B[1][j] + r[2]*B[2][j]));
+    vr.rot = mm(mm(Rx, Ry), vr.rot);
+  };
+  const panBy = (dx, dy) => {
+    const tanH = Math.tan(15 * Math.PI / 180), vol = mpr.vol, mxe = Math.max(...vol.ext);
+    const half = [vol.ext[0] / mxe / 2, vol.ext[1] / mxe / 2, vol.ext[2] / mxe / 2], R = Math.hypot(...half), dist = R / Math.sin(15 * Math.PI / 180);
+    const k = (2 * tanH * dist / vr.zoom) / Math.max(1, v.ch);
+    vr.pan[0] -= dx * k; vr.pan[1] += dy * k;
+  };
+  c.addEventListener('contextmenu', e => e.preventDefault());
+  c.addEventListener('pointerdown', e => {
+    mprSetActive(v.idx); c.setPointerCapture(e.pointerId);
+    ptrs.set(e.pointerId, rel(e)); last = rel(e);
+    if(ptrs.size === 2) { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, zoom: vr.zoom, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 }; mode = 'pinch'; return; }
+    const btn = e.pointerType === 'mouse' ? e.button : 0;
+    mode = btn === 2 || btn === 1 || e.shiftKey ? 'pan' : (mpr.tool === 'pan' ? 'pan' : mpr.tool === 'zoom' ? 'zoom' : 'rot');
+  });
+  c.addEventListener('pointermove', e => {
+    if(!ptrs.has(e.pointerId)) return;
+    const p = rel(e); ptrs.set(e.pointerId, p);
+    if(mode === 'pinch' && ptrs.size >= 2) {
+      const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y), cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
+      vr.zoom = Math.max(0.3, Math.min(12, pinch.zoom * d / pinch.d)); panBy(cx - pinch.cx, cy - pinch.cy); pinch.cx = cx; pinch.cy = cy;
+    } else if(ptrs.size === 1) {
+      const dx = p.x - last.x, dy = p.y - last.y; last = p;
+      if(mode === 'rot') rotate(dx, dy); else if(mode === 'pan') panBy(dx, dy); else if(mode === 'zoom') vr.zoom = Math.max(0.3, Math.min(12, vr.zoom * Math.exp(-dy * 0.01)));
+    }
+    mprVRLow(); mprReq(v);
+  });
+  const up = e => { ptrs.delete(e.pointerId); try { c.releasePointerCapture(e.pointerId); } catch(_) {} if(!ptrs.size) { mode = null; mprVRRefine(); } else if(ptrs.size === 1) mode = null; };
+  c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
+  c.addEventListener('wheel', e => { e.preventDefault(); mprSetActive(v.idx); vr.zoom = Math.max(0.3, Math.min(12, vr.zoom * Math.exp(-e.deltaY * 0.0015))); mprVRLow(); mprReq(v); }, { passive: false });
+  c.addEventListener('dblclick', () => mprToggleMax(v.idx));
+}
+
+// ── واجهة MPR/3D: دخول/خروج وربط الأزرار ─────────────
+function mprSetActive(i) {
+  mpr.active = i;
+  mpr.views.forEach((v, k) => v.el.classList.toggle('active', k === i));
+}
+function mprToggleMax(i) {
+  mpr.max = mpr.max === i ? -1 : i;
+  const host = document.getElementById('vw-mpr');
+  host.classList.toggle('single', mpr.max >= 0);
+  mpr.views.forEach((v, k) => v.el.classList.toggle('mx', mpr.max === k));
+  setTimeout(() => mpr.views.forEach(v => mprResizeView(v)), 30);
+}
+function mprResizeView(v) {
+  const r = v.el.getBoundingClientRect();
+  if(r.width < 2 || r.height < 2) return;
+  v.cw = Math.floor(r.width); v.ch = Math.floor(r.height); v.dpr = window.devicePixelRatio || 1;
+  const cv = v.kind === 'vr' ? v.ovcv : v.canvas;
+  const w = Math.round(v.cw * v.dpr), h = Math.round(v.ch * v.dpr);
+  if(cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
+  if(v.kind !== 'vr') v.dirty = true;
+  mprReq(v);
+}
+function mprMakeView(kind, idx) {
+  const el = document.createElement('div'); el.className = 'mv'; el.dataset.kind = kind;
+  const v = { kind, idx, el, zoom: 1, panX: 0, panY: 0, cu: 0, cv: 0, cw: 0, ch: 0, dpr: 1, dirty: true, raf: 0, hover: null, hot: null, lines: [], ctr: null };
+  el.innerHTML = (kind === 'vr' ? '<canvas class="mv-gl"></canvas><canvas class="mv-ov"></canvas>' : '<canvas class="mv-cv"></canvas>') +
+    '<div class="mv-tl"></div><div class="mv-tr"></div><div class="mv-bl"></div><div class="mv-br"></div>' +
+    '<button class="mv-max" type="button" title="تكبير / تصغير الشاشة (ضغطتين)"><svg class="i"><use href="#i-full"/></svg></button><div class="mv-msg"></div>';
+  v.tl = el.querySelector('.mv-tl'); v.tr = el.querySelector('.mv-tr'); v.bl = el.querySelector('.mv-bl'); v.br = el.querySelector('.mv-br');
+  v.msg = el.querySelector('.mv-msg');
+  el.querySelector('.mv-max').addEventListener('click', e => { e.stopPropagation(); mprToggleMax(idx); });
+  el.addEventListener('pointerdown', () => mprSetActive(idx), true);
+  if(kind === 'vr') { v.glcv = el.querySelector('.mv-gl'); v.ovcv = el.querySelector('.mv-ov'); v.ovctx = v.ovcv.getContext('2d'); }
+  else {
+    v.canvas = el.querySelector('.mv-cv'); v.ctx = v.canvas.getContext('2d');
+    v.off = document.createElement('canvas'); v.offctx = v.off.getContext('2d');
+    mprBindMprView(v);
+  }
+  return v;
+}
+
+async function mprEnter() {
+  if(mprOn || !vwActive) return;
+  const group = vwActive.group;
+  vwStopCine(); vwCloseTags();
+  const ld = document.getElementById('mpr-loading'), bar = ld.querySelector('.mpr-bar > div'), txt = ld.querySelector('.mpr-ltxt');
+  mpr.token = { cancel: false };
+  let vol = mpr.volGroup === group ? mpr.vol : null;
+  if(!vol) {
+    ld.classList.add('show'); txt.textContent = 'جاري تجميع الشرائح في حجم 3D...'; bar.style.width = '0%';
+    try {
+      vol = await mprBuildVolume(group, (k, n) => { bar.style.width = (k / n * 100) + '%'; txt.textContent = `جاري تجميع الشرائح ${k} / ${n}`; }, mpr.token);
+    } catch(e) {
+      ld.classList.remove('show');
+      if(e.message === 'cancel') return;
+      toast(e.message === 'geo' ? '⚠️ السيريز ده مش مناسب لـ MPR — محتاج 5 شرائح على الأقل بنفس الاتجاه ومعاها ImagePositionPatient و PixelSpacing' : '⚠️ تعذّر بناء الحجم: ' + (e.message || e), 'warn');
+      return;
+    }
+    ld.classList.remove('show');
+    mpr.vol = vol; mpr.volGroup = group;
+  }
+  if(vol.irregular) toast('⚠️ تباعد الشرائح مش منتظم — القياسات في الاتجاه ده تقريبية', 'warn');
+  if(!vol.canon) toast('ℹ️ السيريز ده مايل (مش على محاور المريض) — الحروف تقريبية', '');
+  if(vol.f > 1) toast(`ℹ️ الحجم كبير — اتصغّر ×${vol.f} في المستوى عشان الذاكرة`, '');
+
+  mprOn = true; window.mprOn = true;
+  mpr.E = [[1,0,0],[0,1,0],[0,0,1]]; mprInitB(); mpr.c = vol.ext.map(x => x / 2);
+  mpr.wc = vol.auto.wc; mpr.ww = vol.auto.ww; mpr.inv = false; mpr.slabMm = 0; mpr.slabMode = 'mip'; mpr.max = -1; mpr.tool = 'cross';
+  vwModal.classList.add('mpr-on');
+  const host = document.getElementById('vw-mpr'); host.textContent = ''; host.classList.remove('single', 'hide');
+  mpr.views = ['ax', 'co', 'sa', 'vr'].map((k, i) => mprMakeView(k, i));
+  mpr.views.forEach(v => host.appendChild(v.el));
+  mprVRInit(mpr.views[3]);
+  mprBuildBarOptions();
+  mprSyncBar();
+  mprSetActive(0);
+  if(!mpr.ro) mpr.ro = new ResizeObserver(en => { for(const x of en) if(x.target._mv) mprResizeView(x.target._mv); });
+  mpr.views.forEach(v => { v.el._mv = v; mpr.ro.observe(v.el); });
+  requestAnimationFrame(() => { mpr.views.forEach(mprResizeView); mprDirtyAll(false); });
+}
+function mprExit(silent) {
+  if(!mprOn) return;
+  mprOn = false; window.mprOn = false;
+  clearTimeout(mpr.refineT);
+  if(mpr.token) mpr.token.cancel = true;
+  mpr.views.forEach(v => { if(mpr.ro) mpr.ro.unobserve(v.el); if(v.raf) cancelAnimationFrame(v.raf); });
+  try { const vr = mpr.vr; if(vr && vr.gl) { const x = vr.gl.getExtension('WEBGL_lose_context'); if(x) x.loseContext(); } } catch(_) {}
+  mpr.vr = null; mpr.views = [];
+  const host = document.getElementById('vw-mpr'); host.textContent = ''; host.classList.add('hide');
+  document.getElementById('mpr-vrpanel').classList.remove('show');
+  vwModal.classList.remove('mpr-on');
+  if(!silent) setTimeout(() => { vwPorts.forEach(p => p.resize()); }, 30);
+}
+
+// ── شريط الأدوات ──
+function mprBuildBarOptions() {
+  const vol = mpr.vol, wl = document.getElementById('mpr-wl'), vp = document.getElementById('mpr-vrpreset');
+  wl.textContent = '';
+  const add = (sel, val, txt, parent) => { const o = document.createElement('option'); o.value = val; o.textContent = txt; (parent || sel).appendChild(o); };
+  add(wl, '', '🔆 Window'); add(wl, 'auto', 'Auto (من الملف)'); add(wl, 'full', 'Full range');
+  if(vol.isCT) {
+    const g = document.createElement('optgroup'); g.label = 'CT'; wl.appendChild(g);
+    [['soft','Soft tissue'],['lung','Lung'],['bone','Bone'],['brain','Brain'],['liver','Liver'],['subdural','Subdural'],['stroke','Stroke'],['spine','Spine'],['angio','Angio'],['chest','Chest'],['abdomen','Abdomen']].forEach(([k, t]) => add(wl, k, t, g));
+  } else {
+    const g = document.createElement('optgroup'); g.label = 'MRI'; wl.appendChild(g);
+    [['mri_brain','MRI Brain'],['mri_spine','MRI Spine'],['mri_soft','MRI Soft']].forEach(([k, t]) => add(wl, k, t, g));
+  }
+  vp.textContent = '';
+  const set = mprVRPresetSet();
+  for(const k of Object.keys(set)) add(vp, k, '🧊 ' + set[k].label);
+}
+function mprSyncBar() {
+  document.querySelectorAll('#vw-mprbar [data-mtool]').forEach(b => b.classList.toggle('active', b.dataset.mtool === mpr.tool));
+  document.getElementById('mpr-inv').classList.toggle('active', mpr.inv);
+  document.getElementById('mpr-slab').value = String(mpr.slabMm);
+  document.getElementById('mpr-slabmode').value = mpr.slabMode;
+  document.getElementById('mpr-wl').value = 'auto';
+  if(mpr.vr) document.getElementById('mpr-vrpreset').value = mpr.vr.preset;
+}
+function mprSetTool(t) { mpr.tool = t; mprSyncBar(); mpr.views.forEach(v => { if(v.canvas) v.canvas.style.cursor = t === 'cross' ? 'crosshair' : ''; }); }
+function mprApplyWL(key) {
+  if(!key || !mpr.vol) return;
+  const vol = mpr.vol;
+  if(key === 'auto') { mpr.wc = vol.auto.wc; mpr.ww = vol.auto.ww; }
+  else if(key === 'full') { mpr.wc = (vol.vmin + vol.vmax) / 2; mpr.ww = vol.vmax - vol.vmin; }
+  else if(VW_PRESETS[key]) { mpr.wc = VW_PRESETS[key].wc; mpr.ww = VW_PRESETS[key].ww; }
+  mprDirtyAll(false);
+}
+function mprToggleInv() { mpr.inv = !mpr.inv; mprSyncBar(); mprDirtyAll(false); }
+function mprSetSlab(v) { mpr.slabMm = parseFloat(v) || 0; mprDirtyAll(false); }
+function mprSetSlabMode(v) { mpr.slabMode = v; mprDirtyAll(false); }
+function mprReset() {
+  if(!mprOn) return;
+  mpr.E = [[1,0,0],[0,1,0],[0,0,1]]; mprInitB(); mpr.c = mpr.vol.ext.map(x => x / 2);
+  mpr.views.forEach(v => { v.zoom = 1; v.panX = 0; v.panY = 0; v.cu = 0; v.cv = 0; });
+  mprApplyWL('auto'); mpr.inv = false; mpr.slabMm = 0; mprSyncBar();
+  const vr = mpr.vr;
+  if(vr && vr.ok) { vr.rot = [[1,0,0],[0,0,1],[0,-1,0]]; vr.zoom = 1.25; vr.pan = [0, 0]; vr.clipMin = [0,0,0]; vr.clipMax = [1,1,1]; vr.level = 0; vr.opacity = 1; vr.shade = 0.85; vr.qual = 1; mprVRPanelSync(); mprVRBuildTF(); }
+  mprDirtyAll(false);
+}
+function mprSetVRPreset(k) { const vr = mpr.vr; if(!vr || !vr.ok) return; vr.preset = k; mprVRBuildTF(); }
+
+// لوحة ضبط الـ 3D
+function mprToggleVRPanel() {
+  const pn = document.getElementById('mpr-vrpanel');
+  if(!pn.dataset.built) mprBuildVRPanel();
+  pn.classList.toggle('show'); mprVRPanelSync();
+}
+function mprBuildVRPanel() {
+  const pn = document.getElementById('mpr-vrpanel'); pn.dataset.built = '1'; pn.textContent = '';
+  const row = (id, label, min, max, step, fn) => {
+    const d = document.createElement('label'); d.className = 'mpr-row';
+    const s = document.createElement('span'); s.textContent = label;
+    const i = document.createElement('input'); i.type = 'range'; i.id = id; i.min = min; i.max = max; i.step = step;
+    i.addEventListener('input', () => { const vr = mpr.vr; if(!vr || !vr.ok) return; fn(parseFloat(i.value), vr); mprVRLow(); mprReq(mpr.views[3]); });
+    d.append(s, i); pn.appendChild(d);
+  };
+  const h = document.createElement('div'); h.className = 'mpr-ph'; h.textContent = '🧊 ضبط العرض 3D';
+  const x = document.createElement('button'); x.type = 'button'; x.className = 'vw-btn'; x.innerHTML = '<svg class="i"><use href="#i-close"/></svg>'; x.onclick = mprToggleVRPanel; h.appendChild(x); pn.appendChild(h);
+  row('mpr-lv', 'الكثافة (Level)', -100, 100, 1, (val, vr) => { vr.level = val; mprVRBuildTF(); });
+  row('mpr-op', 'الشفافية (Opacity)', 0.2, 3, 0.05, (val, vr) => { vr.opacity = val; mprVRBuildTF(); });
+  row('mpr-sh', 'الإضاءة (Shading)', 0, 1, 0.05, (val, vr) => { vr.shade = val; });
+  row('mpr-ql', 'الجودة (أعلى = أبطأ)', 0.5, 2.5, 0.1, (val, vr) => { vr.qual = 3 - val; });
+  const c = document.createElement('div'); c.className = 'mpr-ph'; c.textContent = '✂️ قص (Crop)'; pn.appendChild(c);
+  [['x', 'يمين ↔ يسار', 0], ['y', 'أمام ↔ خلف', 1], ['z', 'أسفل ↔ أعلى', 2]].forEach(([k, lab, ax]) => {
+    row('mpr-c' + k + 'a', lab + ' (من)', 0, 100, 1, (val, vr) => { vr.clipMin[ax] = Math.min(val / 100, vr.clipMax[ax] - 0.02); });
+    row('mpr-c' + k + 'b', lab + ' (إلى)', 0, 100, 1, (val, vr) => { vr.clipMax[ax] = Math.max(val / 100, vr.clipMin[ax] + 0.02); });
+  });
+}
+function mprVRPanelSync() {
+  const vr = mpr.vr, pn = document.getElementById('mpr-vrpanel'); if(!vr || !pn.dataset.built) return;
+  const set = (id, v) => { const e = document.getElementById(id); if(e) e.value = v; };
+  set('mpr-lv', vr.level); set('mpr-op', vr.opacity); set('mpr-sh', vr.shade); set('mpr-ql', 3 - vr.qual);
+  ['x', 'y', 'z'].forEach((k, ax) => { set('mpr-c' + k + 'a', vr.clipMin[ax] * 100); set('mpr-c' + k + 'b', vr.clipMax[ax] * 100); });
+}
+
+// حفظ / مشاركة الـ view النشط
+function mprExport() {
+  const v = mpr.views[mpr.active]; if(!v) return;
+  const cv = v.kind === 'vr' ? v.glcv : v.canvas;
+  if(v.kind !== 'vr') mprDrawMpr(v); else mprVRDraw(v);
+  cv.toBlob(async blob => {
+    if(!blob) return;
+    const name = `${MPR_NAME[v.kind].replace(' ', '_')}.jpg`, file = new File([blob], name, { type: 'image/jpeg' });
+    try { if(navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file] }); return; } } catch(e) { if(e && e.name === 'AbortError') return; }
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+  }, 'image/jpeg', 0.92);
+}
+
+// ربط أزرار الهيدر القديمة (إعادة ضبط / مشاركة / إغلاق) بوضع الـ MPR
+(function mprHook() {
+  const _reset = window.vwReset, _share = window.shareViewerImage, _close = window.closeViewer;
+  window.vwReset = function() { if(mprOn) mprReset(); else _reset(); };
+  window.shareViewerImage = function() { if(mprOn) return mprExport(); return _share.apply(this, arguments); };
+  window.closeViewer = function() { if(mprOn) mprExit(true); mpr.vol = null; mpr.volGroup = null; _close(); };
+})();
+document.getElementById('mpr-cancel').addEventListener('click', () => { if(mpr.token) mpr.token.cancel = true; });
+
+// كيبورد (capture: بنمنع اختصارات العارض العادي لما MPR شغال)
+document.addEventListener('keydown', e => {
+  if(!mprOn) return;
+  const tag = (e.target.tagName || '').toLowerCase();
+  if(tag === 'input' || tag === 'select' || tag === 'textarea') return;
+  const v = mpr.views[mpr.active];
+  let handled = true;
+  switch(e.key) {
+    case 'Escape': mprExit(); break;
+    case 'ArrowUp': case 'PageUp': if(v && v.kind !== 'vr') mprScrollBy(v, e.key === 'PageUp' ? 5 : 1); break;
+    case 'ArrowDown': case 'PageDown': if(v && v.kind !== 'vr') mprScrollBy(v, e.key === 'PageDown' ? -5 : -1); break;
+    case ' ': mprReset(); break;
+    default: handled = false;
+  }
+  if(handled || !e.ctrlKey) { e.stopImmediatePropagation(); if(handled) e.preventDefault(); }
+}, true);
+
 </script>
 
 <script>
