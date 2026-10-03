@@ -968,7 +968,8 @@
   .vw-stage[data-tool="wl"] .vp canvas { cursor:ns-resize; }
   .vw-stage[data-tool="len"] .vp canvas, .vw-stage[data-tool="ang"] .vp canvas,
   .vw-stage[data-tool="roi"] .vp canvas, .vw-stage[data-tool="pt"] .vp canvas,
-  .vw-stage[data-tool="link"] .vp canvas { cursor:crosshair; }
+  .vw-stage[data-tool="link"] .vp canvas, .vw-stage[data-tool="crop"] .vp canvas, .vw-stage[data-tool="arrow"] .vp canvas, .vw-stage[data-tool="ctr"] .vp canvas, .vw-stage[data-tool="cobb"] .vp canvas, .vw-stage[data-tool="acet"] .vp canvas { cursor:crosshair; }
+  .vw-stage[data-tool="text"] .vp canvas { cursor:text; }
 
   .vp-tl, .vp-tr, .vp-bl, .vp-br {
     position:absolute; z-index:2; padding:4px 6px;
@@ -1616,6 +1617,13 @@
     <symbol id="i-len" viewBox="0 0 24 24"><path d="M3 17 17 3l4 4L7 21Z"/><path d="m7 13 2 2M10 10l1.5 1.5M13 7l2 2"/></symbol>
     <symbol id="i-ang" viewBox="0 0 24 24"><path d="M4 20h16M4 20 15 5"/><path d="M11 20a7 7 0 0 0-2.5-5.3"/></symbol>
     <symbol id="i-roi" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="6.5" stroke-dasharray="3 2.5"/></symbol>
+    <symbol id="i-ctr" viewBox="0 0 24 24"><path d="M3 18h18M3 8h18M8 4v8M16 4v8"/></symbol>
+    <symbol id="i-cobb" viewBox="0 0 24 24"><path d="M4 20L9 4M20 20L15 7"/></symbol>
+    <symbol id="i-acet" viewBox="0 0 24 24"><path d="M3 15h18M6 17L15 6"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 19L19 5M19 5h-8M19 5v8"/></symbol>
+    <symbol id="i-text" viewBox="0 0 24 24"><path d="M5 6h14M12 6v13M9 19h6"/></symbol>
+    <symbol id="i-crop" viewBox="0 0 24 24"><path d="M7 3v14h14M3 7h14v14"/></symbol>
+    <symbol id="i-restore" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v4h4"/></symbol>
     <symbol id="i-pt" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/></symbol>
     <symbol id="i-mag" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><circle cx="10" cy="10" r="2.5"/><path d="m14.5 14.5 6.5 6.5"/></symbol>
     <symbol id="i-link" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
@@ -1676,6 +1684,17 @@
     <button class="vw-tool" onclick="vwUndo()" title="تراجع (Ctrl+Z)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-undo"/></svg></span>تراجع</button>
     <button class="vw-tool" onclick="vwClearMeasurements()" title="مسح قياسات الصورة الحالية"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-trash"/></svg></span>مسح</button>
     </div><div class="vw-grp-cap">قياس وأدوات</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
+    <button class="vw-tool" data-tool="crop" onclick="vwSetTool('crop')" title="قص الصورة (للصور JPG/PNG)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-crop"/></svg></span>قص</button>
+    <button class="vw-tool" data-tool="text" onclick="vwSetTool('text')" title="كتابة نص على الصورة"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-text"/></svg></span>نص</button>
+    <button class="vw-tool" data-tool="arrow" onclick="vwSetTool('arrow')" title="رسم سهم"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>سهم</button>
+    <button class="vw-tool" onclick="vwRestoreOriginal()" title="الرجوع للصورة الأصلية قبل القص"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-restore"/></svg></span>الأصل</button>
+    </div><div class="vw-grp-cap">تحرير الصورة</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
+    <button class="vw-tool" data-tool="ctr" onclick="vwSetTool('ctr')" title="نسبة القلب للصدر CTR — اسحب عرض القلب ثم عرض الصدر"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-ctr"/></svg></span>CTR</button>
+    <button class="vw-tool" data-tool="cobb" onclick="vwSetTool('cobb')" title="زاوية Cobb للعمود الفقري — اسحب خط الفقرة العليا ثم السفلى"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-cobb"/></svg></span>Cobb</button>
+    <button class="vw-tool" data-tool="acet" onclick="vwSetTool('acet')" title="زاوية سقف الحُق (Acetabular index) — اسحب خط Hilgenreiner ثم خط سقف الحُق"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-acet"/></svg></span>مفصل الحوض</button>
+    </div><div class="vw-grp-cap">قياسات الأطفال والعظام</div></div>
     <div class="vw-grp"><div class="vw-grp-row">
     <select class="vw-select" id="vw-layout" onchange="vwBuildLayout()" aria-label="تقسيم الشاشة">
       <option value="auto">📁 فولدر لكل شاشة</option>
@@ -1744,6 +1763,7 @@
       <option value="sharpen">حدّة Sharpen</option>
       <option value="smooth">تنعيم Smooth</option>
       <option value="edge">حواف Edge</option>
+      <option value="clahe">CLAHE تحسين تباين</option>
     </select>
     </div><div class="vw-grp-cap">الألوان والفلاتر</div></div>
     <div class="vw-grp"><div class="vw-grp-row">
@@ -2217,8 +2237,9 @@ function vwApplyLook(canvas, L) {
   let ctx = canvas.getContext('2d');
   if(L.inv || L.cmap !== 'gray' || L.filt !== 'none') {
     const id = ctx.getImageData(0, 0, w, h), d = id.data;
-    if(L.cmap === 'gray' && L.filt === 'none') {                       // عكس بس: نحافظ على ألوان الصورة لو ملوّنة
-      for(let i = 0; i < n; i++) { const p = i * 4; d[p] = 255 - d[p]; d[p+1] = 255 - d[p+1]; d[p+2] = 255 - d[p+2]; }
+    if(L.cmap === 'gray' && (L.filt === 'none' || L.filt === 'clahe')) {      // عكس (و/أو CLAHE): نحافظ على ألوان الصورة لو ملوّنة
+      if(L.inv) for(let i = 0; i < n; i++) { const p = i * 4; d[p] = 255 - d[p]; d[p+1] = 255 - d[p+1]; d[p+2] = 255 - d[p+2]; }
+      if(L.filt === 'clahe') vwClaheRgba(d, w, h);
     } else {
       let g = new Uint8Array(n);
       for(let i = 0; i < n; i++) { const p = i * 4; g[i] = (d[p] * 299 + d[p+1] * 587 + d[p+2] * 114) / 1000; }
@@ -2293,6 +2314,9 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   3.10.0 — قياسات الأطفال والعظام: CTR + زاوية Cobb + زاوية سقف الحُق، وتعديل/حذف النص بالضغط عليه بأداة النص (وبتتحرق في الصورة المحفوظة)
+//   3.9.0 — تحرير الصور: قص (مع رجوع للأصل) + نص + سهم (بيتحرقوا في الصورة المحفوظة) + فلتر CLAHE لتحسين التباين
+//   3.8.2 — ضغطة تانية على أداة القياس/التحريك/التكبير... بتلغي تفعيلها وترجع لوضع التصفح
 //   3.8.1 — الصور العادية بتتعرض بنفس تباينها الأصلي (من غير سطوع/تباين الـ DICOM العام ولا Window جاهز)
 //   3.8.0 — رفع صور JPG/PNG: بتتفتح في العارض بألوانها (سطوع/تباين/عكس/لف/قلب/فلاتر/قياس) وبتتحفظ بحجمها الأصلي بعد التعديل
 //   3.7.0 — مربع تحديد على كل فولدر سيريز: لو حددت سيريز/أكتر التحويل (PDF/فيديو) بيشمل المحدد بس
@@ -2314,7 +2338,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.8.1';
+const APP_VERSION = '3.10.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -4177,6 +4201,7 @@ const VW_PRESETS = {
   chest:{wc:-500,ww:1500}, abdomen:{wc:60,ww:400}, angio:{wc:300,ww:600},
   mri_brain:{wc:500,ww:1200}, mri_spine:{wc:400,ww:900}, mri_soft:{wc:600,ww:1400}
 };
+const VW_MP = { ang: 3, ctr: 4, cobb: 4, acet: 4 };           // عدد النقط اللازمة لكل أداة متعددة النقط
 const VW_HINTS = {
   nav:  '↕ تمرير للصور · ↔ تفتيح/تغميق · 🤏 تكبير · ضغطتين = إعادة ضبط  |  ماوس: سحب = تحريك · كليك يمين = W/L · عجلة = تمرير',
   wl:   'اسحب لتغيير الـ Window/Level',
@@ -4186,6 +4211,12 @@ const VW_HINTS = {
   ang:  '∠ اضغط 3 نقاط: طرف ← رأس الزاوية ← الطرف التاني',
   roi:  '⭕ اسحب لرسم دائرة/بيضاوي وقياس الكثافة (Mean / SD / Min / Max)',
   pt:   '📍 اضغط أو اسحب لقراءة قيمة البكسل',
+  ctr:  '❤️ CTR: اسحب خط عرض القلب (أوسع نقطة) ثم اسحب خط عرض الصدر (أوسع نقطة داخل الأضلاع)',
+  cobb: '🦴 Cobb: اسحب خط على حافة الفقرة العليا المائلة ثم خط على حافة الفقرة السفلى المائلة',
+  acet: '🦴 مفصل الحوض: اسحب خط Hilgenreiner (بين غضروفي Y) ثم خط سقف الحُق',
+  crop: '✂️ اسحب لتحديد المنطقة اللي عايز تقصها (للصور JPG/PNG)',
+  text: '🔤 اضغط على المكان وهتكتب النص',
+  arrow:'➚ اسحب من الذيل لرأس السهم',
   link: '🎯 مرّر الماوس أو اضغط على المنطقة — هتظهر في باقي السيكونس/الوضعيات. اضغط لتثبيت المؤشر · Esc لإلغائه'
 };
 
@@ -4453,7 +4484,96 @@ function vwCmap(name) {
 }
 
 // ── 3×3 filters on the displayed gray image (القياسات بتفضل على البيانات الأصلية) ──
+
+// ── CLAHE: تحسين تباين تكيّفي (بلاطات 8×8 + قص هيستوجرام + استيفاء) ──
+function vwClahe(src, w, h) {
+  const T = 8, CLIP = 3, tw = Math.ceil(w / T), th = Math.ceil(h / T), luts = [];
+  for(let ty = 0; ty < T; ty++) for(let tx = 0; tx < T; tx++) {
+    const x0 = tx * tw, x1 = Math.min(w, x0 + tw), y0 = ty * th, y1 = Math.min(h, y0 + th);
+    const hist = new Float32Array(256); let n = 0;
+    for(let y = y0; y < y1; y++) for(let x = x0; x < x1; x++) { hist[src[y * w + x]]++; n++; }
+    const lut = new Uint8Array(256);
+    if(n) {
+      const lim = Math.max(1, CLIP * n / 256); let ex = 0;
+      for(let i = 0; i < 256; i++) if(hist[i] > lim) { ex += hist[i] - lim; hist[i] = lim; }
+      const add = ex / 256; let acc = 0;
+      for(let i = 0; i < 256; i++) { acc += hist[i] + add; lut[i] = Math.min(255, Math.round(acc * 255 / n)); }
+    } else for(let i = 0; i < 256; i++) lut[i] = i;
+    luts.push(lut);
+  }
+  const out = new Uint8Array(src.length);
+  for(let y = 0; y < h; y++) {
+    const fy = (y + 0.5) / th - 0.5, ty0 = Math.max(0, Math.min(T - 1, Math.floor(fy))), ty1 = Math.min(T - 1, ty0 + 1), b = Math.max(0, Math.min(1, fy - ty0));
+    for(let x = 0; x < w; x++) {
+      const fx = (x + 0.5) / tw - 0.5, tx0 = Math.max(0, Math.min(T - 1, Math.floor(fx))), tx1 = Math.min(T - 1, tx0 + 1), a = Math.max(0, Math.min(1, fx - tx0));
+      const v = src[y * w + x];
+      const top = luts[ty0 * T + tx0][v] * (1 - a) + luts[ty0 * T + tx1][v] * a;
+      const bot = luts[ty1 * T + tx0][v] * (1 - a) + luts[ty1 * T + tx1][v] * a;
+      out[y * w + x] = top * (1 - b) + bot * b;
+    }
+  }
+  return out;
+}
+function vwClaheRgba(d, w, h) {                  // على الإضاءة بس عشان الألوان تفضل زي ما هي
+  const n = w * h, lum = new Uint8Array(n);
+  for(let i = 0; i < n; i++) { const q = i * 4; lum[i] = (d[q] * 299 + d[q+1] * 587 + d[q+2] * 114) / 1000; }
+  const g = vwClahe(lum, w, h);
+  for(let i = 0; i < n; i++) {
+    const q = i * 4, l = lum[i];
+    if(l < 1) { d[q] = d[q+1] = d[q+2] = g[i]; continue; }
+    const r = g[i] / l;
+    d[q] = Math.min(255, d[q] * r); d[q+1] = Math.min(255, d[q+1] * r); d[q+2] = Math.min(255, d[q+2] * r);
+  }
+}
+// ── رسم السهم والنص (شاشة أو صورة بحجمها الأصلي) ──
+function vwDrawArrow(ctx, a, b, lw, col) {
+  const ang = Math.atan2(b.y - a.y, b.x - a.x), hl = Math.max(12, lw * 5);
+  ctx.save(); ctx.strokeStyle = col; ctx.fillStyle = col; ctx.lineWidth = lw; ctx.lineCap = 'round';
+  ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = lw * 1.5;
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x - Math.cos(ang) * hl * 0.6, b.y - Math.sin(ang) * hl * 0.6); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - hl * Math.cos(ang - 0.42), b.y - hl * Math.sin(ang - 0.42));
+  ctx.lineTo(b.x - hl * Math.cos(ang + 0.42), b.y - hl * Math.sin(ang + 0.42)); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function vwDrawText(ctx, p, text, fs, col) {
+  ctx.save(); ctx.font = `700 ${fs}px "IBM Plex Sans Arabic", Arial, sans-serif`; ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+  ctx.lineJoin = 'round'; ctx.lineWidth = Math.max(2, fs / 5); ctx.strokeStyle = '#000'; ctx.fillStyle = col;
+  String(text).split('\n').forEach((ln, i) => { ctx.strokeText(ln, p.x, p.y + i * fs * 1.2); ctx.fillText(ln, p.x, p.y + i * fs * 1.2); });
+  ctx.restore();
+}
+function vwPedLabel(type, q) {
+  const d = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+  if(type === 'ctr') {
+    const r = d(q[0], q[1]) / (d(q[2], q[3]) || 1);
+    return [`CTR ${r.toFixed(2)}  (${Math.round(r * 100)}%)`, 'Ref: <= 0.50 child/adult, <= 0.60 newborn'];
+  }
+  const ux = q[1].x - q[0].x, uy = q[1].y - q[0].y, vx = q[3].x - q[2].x, vy = q[3].y - q[2].y;
+  const c = Math.abs(ux * vx + uy * vy) / ((Math.hypot(ux, uy) * Math.hypot(vx, vy)) || 1);
+  const a = Math.acos(Math.min(1, c)) * 180 / Math.PI;
+  return type === 'cobb' ? [`Cobb ${a.toFixed(1)}°`, a >= 10 ? '>= 10° : Scoliosis' : '< 10°'] : [`AI ${a.toFixed(1)}°`, 'Interpret by age (high = possible dysplasia)'];
+}
+// حرق السهم والنص في الصورة المصدّرة بحجمها الأصلي (مع مراعاة اللف/القلب)
+function vwBurnAnnotations(cv, item, L, w0, h0) {
+  const list = (item._vwMeas || []).filter(m => ['arrow', 'text', 'ctr', 'cobb', 'acet'].includes(m.type)); if(!list.length) return;
+  L = L || {}; const rot = (L.rot | 0) & 3, fx = L.fh ? -1 : 1, fy = L.fv ? -1 : 1, ang = rot * Math.PI / 2, co = Math.round(Math.cos(ang)), si = Math.round(Math.sin(ang));
+  const nw = cv.width, nh = cv.height, ctx = cv.getContext('2d'), lw = Math.max(3, Math.round(Math.max(w0, h0) / 350));
+  const T = q => { const dx = q.x - w0 / 2, dy = q.y - h0 / 2; return { x: co * fx * dx - si * fy * dy + nw / 2, y: si * fx * dx + co * fy * dy + nh / 2 }; };
+  for(const m of list) {
+    if(m.type === 'arrow') vwDrawArrow(ctx, T(m.p[0]), T(m.p[1]), lw, '#ff3b30');
+    else if(m.type === 'text') vwDrawText(ctx, T(m.p[0]), m.text, m.size, '#ffffff');
+    else {
+      const P = m.p.map(T), cols = m.type === 'ctr' ? ['#ff9f0a', '#00e5ff'] : ['#bf5af2', '#bf5af2'];
+      ctx.save(); ctx.lineWidth = lw; ctx.lineCap = 'round';
+      for(let i = 0; i + 1 < P.length; i += 2) { ctx.strokeStyle = cols[i >> 1]; ctx.beginPath(); ctx.moveTo(P[i].x, P[i].y); ctx.lineTo(P[i+1].x, P[i+1].y); ctx.stroke(); }
+      ctx.restore();
+      const fs = Math.max(14, Math.round(Math.max(w0, h0) / 45)), lab = vwPedLabel(m.type, m.p)[0];
+      vwDrawText(ctx, { x: (P[0].x + P[1].x + P[2].x + P[3].x) / 4 + lw * 3, y: (P[0].y + P[1].y + P[2].y + P[3].y) / 4 + lw * 3 }, lab, fs, cols[0]);
+    }
+  }
+}
 function vwFilterGray(src, w, h, mode) {
+  if(mode === 'clahe') return vwClahe(src, w, h);
   const out = new Uint8Array(src.length);
   for(let y = 0; y < h; y++) {
     const y0 = Math.max(0, y - 1) * w, y1 = y * w, y2 = Math.min(h - 1, y + 1) * w;
@@ -4886,8 +5006,9 @@ class VwPort {
       gray = vwFilterGray(gray, cols, rows, this.filt);
     }
     if(px.rgb) {                                       // صورة ملوّنة: نفس الـ LUT (سطوع/تباين/عكس) على كل قناة + الفلتر لو متفعّل
-      const src = px.rgb, ch = [0, 1, 2].map(c => { const a = new Uint8Array(n); for(let i = 0; i < n; i++) a[i] = lut[src[i*4+c] - mn]; return this.filt !== 'none' ? vwFilterGray(a, cols, rows, this.filt) : a; });
+      const src = px.rgb, ch = [0, 1, 2].map(c => { const a = new Uint8Array(n); for(let i = 0; i < n; i++) a[i] = lut[src[i*4+c] - mn]; return (this.filt !== 'none' && this.filt !== 'clahe') ? vwFilterGray(a, cols, rows, this.filt) : a; });
       for(let i = 0, p = 0; i < n; i++, p += 4) { out[p] = ch[0][i]; out[p+1] = ch[1][i]; out[p+2] = ch[2][i]; out[p+3] = 255; }
+      if(this.filt === 'clahe') vwClaheRgba(out, cols, rows);
       octx.putImageData(img, 0, 0); return;
     }
     const cm = this.cmap !== 'gray' ? vwCmap(this.cmap) : null;
@@ -5018,8 +5139,8 @@ class VwPort {
 
   drawShape(ctx, m, draft) {
     const px = this.px, W = this.cw, H = this.ch;
-    const col = { len:'#ffd60a', ang:'#00e5ff', roi:'#34d399', pt:'#ff6bd6' }[m.type];
-    const pts = m.type === 'ang' && draft ? [...m.pts, m.live].slice(0, 3) : m.p;
+    const col = { len:'#ffd60a', ang:'#00e5ff', roi:'#34d399', pt:'#ff6bd6', arrow:'#ff3b30', text:'#ffffff', crop:'#ffffff', ctr:'#ff9f0a', cobb:'#bf5af2', acet:'#30d158' }[m.type];
+    const pts = VW_MP[m.type] && draft ? [...m.pts, m.live].slice(0, VW_MP[m.type]) : m.p;
     const P = pts.map(q => this.toScreen(q.x, q.y));
     ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     ctx.strokeStyle = col; ctx.fillStyle = col;
@@ -5029,6 +5150,34 @@ class VwPort {
       ctx.lineWidth = 2; ctx.strokeStyle = col;
     };
 
+    if(m.type === 'arrow' && P.length >= 2) { vwDrawArrow(ctx, P[0], P[1], 3, col); ctx.lineWidth = 2; return; }
+    if(m.type === 'text') { vwDrawText(ctx, P[0], m.text, Math.max(9, m.size * this.ds()), col); ctx.lineWidth = 2; return; }
+    if(m.type === 'crop' && P.length >= 2) {
+      const x = Math.min(P[0].x, P[1].x), y = Math.min(P[0].y, P[1].y), w = Math.abs(P[1].x - P[0].x), h = Math.abs(P[1].y - P[0].y);
+      ctx.save(); ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.rect(x, y, w, h); ctx.fill('evenodd');
+      ctx.setLineDash([6, 4]); ctx.lineWidth = 2; ctx.strokeStyle = '#fff'; ctx.strokeRect(x, y, w, h); ctx.restore();
+      vwLabel(ctx, [`${Math.round(Math.abs(pts[1].x - pts[0].x))} × ${Math.round(Math.abs(pts[1].y - pts[0].y))} px`], x + 6, y + 6, '#fff', W, H);
+      return;
+    }
+    if((m.type === 'ctr' || m.type === 'cobb' || m.type === 'acet') && P.length >= 2) {
+      const cols = m.type === 'ctr' ? ['#ff9f0a', '#00e5ff'] : [col, col];
+      for(let i = 0; i + 1 < P.length; i += 2) {
+        ctx.strokeStyle = cols[i >> 1]; ctx.beginPath(); ctx.moveTo(P[i].x, P[i].y); ctx.lineTo(P[i+1].x, P[i+1].y); ctx.stroke();
+        if(m.type !== 'ctr') {   // امتداد منقّط للخط
+          const dx = P[i+1].x - P[i].x, dy = P[i+1].y - P[i].y, L = Math.hypot(dx, dy) || 1;
+          ctx.save(); ctx.setLineDash([5, 5]); ctx.globalAlpha = .6; ctx.beginPath();
+          ctx.moveTo(P[i].x - dx / L * 60, P[i].y - dy / L * 60); ctx.lineTo(P[i+1].x + dx / L * 60, P[i+1].y + dy / L * 60); ctx.stroke(); ctx.restore();
+        }
+        ctx.fillStyle = cols[i >> 1]; dot(P[i]); dot(P[i+1]);
+      }
+      ctx.strokeStyle = col;
+      if(pts.length >= 4) {
+        const lines = vwPedLabel(m.type, pts);
+        const mx = (P[0].x + P[1].x + P[2].x + P[3].x) / 4, my = (P[0].y + P[1].y + P[2].y + P[3].y) / 4;
+        vwLabel(ctx, lines, mx + 10, my + 10, col, W, H);
+      }
+      ctx.lineWidth = 2; return;
+    }
     if(m.type === 'len' && P.length >= 2) {
       ctx.beginPath(); ctx.moveTo(P[0].x, P[0].y); ctx.lineTo(P[1].x, P[1].y); ctx.stroke();
       dot(P[0]); dot(P[1]);
@@ -5176,6 +5325,18 @@ class VwPort {
     if(v !== null) vwLabel(ctx, [`${vwFmtVal(v)} ${this.px.unit}`], cx - 34, cy + R + 4, '#00d4ff', this.cw, this.ch);
   }
 
+  hitText(p) {
+    const ctx = this.ctx;
+    for(const m of ((this.item && this.item._vwMeas) || []).slice().reverse()) {
+      if(m.type !== 'text') continue;
+      const s = this.toScreen(m.p[0].x, m.p[0].y), fs = Math.max(9, m.size * this.ds()), lines = m.text.split('\n');
+      ctx.save(); ctx.font = `700 ${fs}px "IBM Plex Sans Arabic", Arial, sans-serif`;
+      const w = Math.max(...lines.map(l => ctx.measureText(l).width)); ctx.restore();
+      if(p.x >= s.x - 6 && p.x <= s.x + w + 6 && p.y >= s.y - 6 && p.y <= s.y + lines.length * fs * 1.2 + 6) return m;
+    }
+    return null;
+  }
+
   cancelDraft() { if(this.draft) { this.draft = null; this.req(false); } }
 
   commit(shape) {
@@ -5216,9 +5377,9 @@ class VwPort {
     if(tool === 'link') { vwSetLink(this, p, true, true); return; }
 
     const q = this.toImage(p.x, p.y);
-    if(tool === 'len' || tool === 'roi') this.draft = { type: tool, p: [q, q] };
+    if(tool === 'len' || tool === 'roi' || tool === 'arrow' || tool === 'crop') this.draft = { type: tool, p: [q, q] };
     else if(tool === 'pt') this.draft = { type: 'pt', p: [q] };
-    else if(tool === 'ang' && !this.draft) this.draft = { type: 'ang', pts: [], live: q, startPt: q };
+    else if(VW_MP[tool] && !this.draft) this.draft = { type: tool, pts: [], live: q, startPt: q };
     this.req(false);
   }
 
@@ -5227,7 +5388,7 @@ class VwPort {
     if(!this.ptrs.has(e.pointerId)) {            // hover (ماوس بدون ضغط)
       if(e.pointerType === 'mouse') this.cursor = p;
       if(vwTool === 'link' && e.pointerType === 'mouse' && this.px && !(vwLink && vwLink.pin)) vwSetLink(this, p, false, false);
-      if(this.draft && this.draft.type === 'ang' && this.px) this.draft.live = this.toImage(p.x, p.y);
+      if(this.draft && VW_MP[this.draft.type] && this.px) this.draft.live = this.toImage(p.x, p.y);
       this.req(false);
       return;
     }
@@ -5279,11 +5440,11 @@ class VwPort {
       this.req(false);
     } else if(tool === 'link') {
       vwSetLink(this, p, true, true);
-    } else if((tool === 'len' || tool === 'roi') && this.draft) {
+    } else if((tool === 'len' || tool === 'roi' || tool === 'arrow' || tool === 'crop') && this.draft) {
       this.draft.p[1] = this.toImage(p.x, p.y); this.req(false);
     } else if(tool === 'pt' && this.draft) {
       this.draft.p[0] = this.toImage(p.x, p.y); this.req(false);
-    } else if(tool === 'ang' && this.draft) {
+    } else if(VW_MP[tool] && this.draft) {
       this.draft.live = this.toImage(p.x, p.y); this.req(false);
     }
   }
@@ -5300,18 +5461,35 @@ class VwPort {
     const p = this.rel(e), tool = this.mode;
     const dist = Math.hypot(p.x - this.start.x, p.y - this.start.y);
 
-    if((tool === 'len' || tool === 'roi') && this.draft) {
+    if((tool === 'len' || tool === 'roi' || tool === 'arrow') && this.draft) {
       const d = this.draft; this.draft = null;
       if(dist > 5) { d.p[1] = this.toImage(p.x, p.y); this.commit({ type: d.type, p: d.p }); }
+    } else if(tool === 'crop' && this.draft) {
+      const d = this.draft;
+      if(dist > 8) { d.p[1] = this.toImage(p.x, p.y); this.req(false); setTimeout(() => vwCropPrompt(this, d), 30); }
+      else this.draft = null;
+    } else if(tool === 'text' && this.px && dist < 8) {
+      const q = this.toImage(p.x, p.y), hit = this.hitText(p);
+      if(hit) { setTimeout(() => {
+        const t = prompt('عدّل النص (سيبه فاضي لحذفه):', hit.text);
+        if(t === null) return;
+        if(t.trim()) hit.text = t.trim(); else this.item._vwMeas.splice(this.item._vwMeas.indexOf(hit), 1);
+        vwPorts.forEach(o => { if(o.item === this.item) o.req(false); });
+      }, 20); return; }
+      setTimeout(() => {
+        const t = prompt('اكتب النص اللي هيظهر على الصورة:');
+        if(t && t.trim()) this.commit({ type: 'text', p: [q], text: t.trim(), size: Math.max(14, Math.round(Math.max(this.px.cols, this.px.rows) / 40)) });
+      }, 20);
     } else if(tool === 'pt' && this.draft) {
       const d = this.draft; this.draft = null;
       d.p[0] = this.toImage(p.x, p.y);
       this.commit({ type: 'pt', p: [d.p[0]] });
-    } else if(tool === 'ang' && this.draft) {
-      const q = this.toImage(p.x, p.y), d = this.draft;
+    } else if(VW_MP[tool] && this.draft) {
+      const q = this.toImage(p.x, p.y), d = this.draft, N = VW_MP[tool];
       if(d.pts.length === 0) { d.pts.push(d.startPt); if(dist > 6) d.pts.push(q); }
+      else if(N === 4 && d.pts.length === 2 && dist > 6) { d.pts.push(this.toImage(this.start.x, this.start.y)); d.pts.push(q); }   // الخط التاني بالسحب
       else d.pts.push(q);
-      if(d.pts.length >= 3) { this.draft = null; this.commit({ type: 'ang', p: d.pts.slice(0, 3) }); }
+      if(d.pts.length >= N) { this.draft = null; this.commit({ type: tool, p: d.pts.slice(0, N) }); }
       else d.live = q;
     } else if(tool === 'nav' && !this.moved && e.pointerType !== 'mouse') {
       const now = Date.now();
@@ -5502,12 +5680,68 @@ document.getElementById('vw-slider').addEventListener('input', e => vwGoto(vwAct
 
 // ── Tools ────────────────────────────────────────────
 function vwSetTool(t) {
+  if(t === vwTool && t !== 'nav') t = 'nav';          // ضغطة تانية على الأداة المفعّلة = إلغاء التفعيل والرجوع للتصفح
   vwTool = t;
   vwStage.dataset.tool = t;
   document.querySelectorAll('#vw-toolbar .vw-tool[data-tool]').forEach(b => b.classList.toggle('active', b.dataset.tool === t));
   vwPorts.forEach(p => p.cancelDraft());
   vwHint.textContent = VW_HINTS[t] || '';
   showHint();
+}
+
+// ── قص الصورة (JPG/PNG) والرجوع للأصل ──
+function vwIsPhoto(item) { return !!(item && item.dcm && item.dcm.getTag('(0008,0064)') === 'WSD'); }
+async function vwReloadItem(item) {
+  item.dcm = null; delete item._vwPx;
+  const i = vwPxCache.indexOf(item); if(i >= 0) vwPxCache.splice(i, 1);
+  await ensureParsed(item);
+  try {                                                      // نحدّث الصورة المصغّرة في الصفحة الرئيسية
+    const cvs = document.createElement('canvas');
+    if(item.dcm && await item.dcm.renderPixels(cvs, 'auto')) {
+      item.thumb = cvs.toDataURL('image/jpeg', 0.6);
+      const el = document.getElementById(`card-${item.id}`), w = el && el.querySelector('.thumb-img-wrap');
+      if(w) w.innerHTML = `<img src="${item.thumb}" alt="thumb">`;
+    }
+  } catch(_) {}
+  vwPorts.forEach(o => { if(o.item === item || (o.group && o.group.items.includes(item))) { o.dims = ''; o.load(o.idx); } });
+  vwBuildSeries();
+}
+async function vwCropPrompt(port, d) {
+  try {
+    const item = port.item;
+    if(!vwIsPhoto(item)) { toast('✂️ القص متاح للصور العادية (JPG / PNG) فقط', 'warn'); return; }
+    if(!confirm('قص الصورة للمنطقة المحددة؟\n(تقدر ترجع للأصل بزر "الأصل")')) return;
+    await vwCropItem(item, d.p[0], d.p[1]);
+  } finally { port.draft = null; port.req(false); }
+}
+async function vwCropItem(item, a, b) {
+  const px = await vwGetPixels(item); if(!px) return;
+  const x0 = Math.max(0, Math.floor(Math.min(a.x, b.x))), y0 = Math.max(0, Math.floor(Math.min(a.y, b.y)));
+  const x1 = Math.min(px.cols, Math.ceil(Math.max(a.x, b.x))), y1 = Math.min(px.rows, Math.ceil(Math.max(a.y, b.y)));
+  const w = x1 - x0, h = y1 - y0;
+  if(w < 8 || h < 8) { toast('⚠️ المنطقة صغيرة جدًا', 'warn'); return; }
+  const pd = item.dcm.tags['PixelData'];
+  const bmp = await createImageBitmap(new Blob([new Uint8Array(item.dcm.buf.buffer, pd.offset, pd.length)]));
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+  cv.getContext('2d').drawImage(bmp, x0, y0, w, h, 0, 0, w, h);
+  if(bmp.close) bmp.close();
+  const blob = await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.95)); if(!blob) return;
+  const base = (item.file.name || 'image').replace(/\.[^.]+$/, '');
+  const suid = item.dcm.getTag('(0020,000e)') || '1.2.3', idx = (parseInt(item.dcm.getTag('(0020,0013)')) || 1) - 1;
+  const nf = await imageFileToDicom(new File([blob], base + '.jpg', { type: 'image/jpeg' }), suid, idx); if(!nf) return;
+  if(!item._orig) item._orig = { file: item.file };
+  item.file = nf;
+  (item._vwMeas || []).forEach(m => { m.p = m.p.map(q => ({ x: q.x - x0, y: q.y - y0 })); delete m.stat; });
+  await vwReloadItem(item);
+  toast(`✂️ تم القص (${w} × ${h})`, '');
+}
+async function vwRestoreOriginal() {
+  const p = vwActive, item = p && p.item;
+  if(!item) return;
+  if(!item._orig) { toast('الصورة دي مفيهاش قص يتراجع عنه', 'warn'); return; }
+  item.file = item._orig.file; delete item._orig; item._vwMeas = [];
+  await vwReloadItem(item);
+  toast('↩ رجعت الصورة الأصلية', '');
 }
 function vwUndo() {
   const p = vwActive;
@@ -5648,6 +5882,7 @@ async function shareViewerImage() {
     vwCaptureLooks();
     const cv = document.createElement('canvas');
     if(await p.item.dcm.renderPixels(cv, 'viewer')) {
+      vwBurnAnnotations(cv, p.item, vwGetLook(p.item.dcm), p.px.cols, p.px.rows);
       cv.toBlob(async blob => {
         if(!blob) return;
         const base = (p.item.file.name || 'image').replace(/\.dcm$/i, '');
@@ -6660,7 +6895,7 @@ function mprSyncBar() {
   document.getElementById('mpr-wl').value = 'auto';
   if(mpr.vr) document.getElementById('mpr-vrpreset').value = mpr.vr.preset;
 }
-function mprSetTool(t) { mpr.tool = t; mprSyncBar(); mpr.views.forEach(v => { if(v.canvas) v.canvas.style.cursor = t === 'cross' ? 'crosshair' : ''; }); }
+function mprSetTool(t) { if(t === mpr.tool && t !== 'cross') t = 'cross'; mpr.tool = t; mprSyncBar(); mpr.views.forEach(v => { if(v.canvas) v.canvas.style.cursor = t === 'cross' ? 'crosshair' : ''; }); }
 function mprApplyWL(key) {
   if(!key || !mpr.vol) return;
   const vol = mpr.vol;
