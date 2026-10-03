@@ -2065,7 +2065,8 @@ class DicomParser {
     // that render too dark or too bright, applied on top of any windowing.
     const brightness = getBrightnessAdjust();
     const contrastFactor = getContrastFactor();
-    const bcActive = brightness !== 0 || contrastFactor !== 1;
+    const isPhoto = this.getTag('(0008,0064)') === 'WSD';           // صورة عادية JPG/PNG: بتتعرض زي ما هي (من غير سطوع/تباين الـ DICOM العام)
+    const bcActive = !isPhoto && (brightness !== 0 || contrastFactor !== 1);
 
     if(pd.encapsulated) {
       // JPEG / JPEG2000 / JPEG-LS - let browser decode it
@@ -2081,6 +2082,12 @@ class DicomParser {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0);
             if(bcActive) applyBrightnessContrast(ctx, canvas.width, canvas.height, brightness, contrastFactor);
+            if(isPhoto && look && look.ww > 0 && (Math.abs(look.wc - 127.5) > 0.5 || Math.abs(look.ww - 255) > 0.5)) {   // W/L اللي ظبطته في العارض
+              const id = ctx.getImageData(0, 0, canvas.width, canvas.height), d = id.data, lo = look.wc - look.ww / 2, k = 255 / look.ww;
+              const lut = new Uint8Array(256); for(let i = 0; i < 256; i++) lut[i] = Math.max(0, Math.min(255, Math.round((i - lo) * k)));
+              for(let i = 0; i < d.length; i += 4) { d[i] = lut[d[i]]; d[i+1] = lut[d[i+1]]; d[i+2] = lut[d[i+2]]; }
+              ctx.putImageData(id, 0, 0);
+            }
             if(look) vwApplyLook(canvas, look);
             URL.revokeObjectURL(url);
             resolve(true);
@@ -2286,6 +2293,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   3.8.1 — الصور العادية بتتعرض بنفس تباينها الأصلي (من غير سطوع/تباين الـ DICOM العام ولا Window جاهز)
 //   3.8.0 — رفع صور JPG/PNG: بتتفتح في العارض بألوانها (سطوع/تباين/عكس/لف/قلب/فلاتر/قياس) وبتتحفظ بحجمها الأصلي بعد التعديل
 //   3.7.0 — مربع تحديد على كل فولدر سيريز: لو حددت سيريز/أكتر التحويل (PDF/فيديو) بيشمل المحدد بس
 //   3.6.1 — إصلاح فولدرات السيريز على الموبايل (كانت بتعدّي عرض الشاشة)
@@ -2306,7 +2314,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.8.0';
+const APP_VERSION = '3.8.1';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -4779,6 +4787,7 @@ class VwPort {
   initWL(forceKey) {
     const px = this.px, dcm = this.item && this.item.dcm;
     if(!px) return;
+    if(dcm && dcm.getTag('(0008,0064)') === 'WSD') { this.wc = 127.5; this.ww = 255; return; }
     const key = forceKey || (document.getElementById('opt-window') || {}).value || 'auto';
     let wc = null, ww = null;
     if(key !== 'auto' && VW_PRESETS[key]) { wc = VW_PRESETS[key].wc; ww = VW_PRESETS[key].ww; }
