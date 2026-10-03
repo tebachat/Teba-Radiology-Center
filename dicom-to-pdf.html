@@ -314,6 +314,57 @@
   .file-card.error { border-color: var(--danger); }
   .file-card.processing { border-color: var(--warn); }
 
+
+  /* ===== مجلدات السيريز (زجاجية) في الصفحة الرئيسية ===== */
+  #file-list { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); align-items:start; }
+  #sf-top { grid-column:1/-1; display:none; align-items:center; gap:10px; flex-wrap:wrap; font-size:.82rem; color:var(--muted); }
+  #sf-top.show { display:flex; }
+  #sf-top .sf-txt { flex:1; min-width:140px; }
+  #sf-top button { font-family:inherit; font-size:.76rem; padding:5px 12px; border-radius:16px; border:1px solid var(--border); background:var(--surface); color:var(--text); cursor:pointer; }
+  #sf-top button:hover { border-color:var(--accent); color:var(--accent); }
+  .sf-hold { display:none; }
+  .sfolder {
+    position:relative; margin-top:10px;
+    background: rgba(255,255,255,.045);
+    background: color-mix(in srgb, var(--surface) 55%, transparent);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    border:1px solid rgba(120,160,210,.28); border-radius:6px 16px 16px 16px;
+    box-shadow:0 6px 22px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.07);
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .sfolder::before { /* لسان الفولدر */
+    content:''; position:absolute; top:-9px; right:0; width:92px; height:10px;
+    background:inherit; border:1px solid rgba(120,160,210,.28); border-bottom:none; border-radius:9px 9px 0 0;
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  }
+  .sfolder:hover { border-color:var(--accent2); }
+  .sfolder.open { grid-column:1/-1; }
+  .sfolder.warn { border-color:rgba(255,149,0,.45); }
+  .sf-head { display:flex; align-items:center; gap:10px; padding:10px 12px; cursor:pointer; user-select:none; }
+  .sf-cover { position:relative; width:70px; height:56px; flex-shrink:0; }
+  .sf-cover span { position:absolute; width:46px; height:46px; border-radius:7px; background:#0a0f18 center/cover no-repeat; border:2px solid rgba(255,255,255,.55); box-shadow:0 3px 8px rgba(0,0,0,.45); display:flex; align-items:center; justify-content:center; font-size:1.2rem; overflow:hidden; }
+  .sf-cover span:nth-child(1) { right:0; top:8px; transform:rotate(7deg); }
+  .sf-cover span:nth-child(2) { right:11px; top:4px; transform:rotate(-3deg); }
+  .sf-cover span:nth-child(3) { right:22px; top:0; transform:rotate(-9deg); }
+  .sf-title { flex:1; min-width:0; }
+  .sf-title b { display:block; font-size:.88rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sf-title small { display:block; color:var(--muted); font-size:.72rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+  .sf-count { background:rgba(0,212,255,.16); color:var(--accent); font-weight:700; font-size:.78rem; padding:3px 10px; border-radius:14px; font-family:'JetBrains Mono',monospace; flex-shrink:0; }
+  .sf-count.alldone { background:rgba(0,229,160,.2); color:var(--success); }
+  .sf-btn { width:30px; height:30px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--muted); cursor:pointer; font-size:.95rem; padding:0; flex-shrink:0; }
+  .sf-btn:hover { color:var(--accent); border-color:var(--accent); }
+  .sf-btn.del:hover { color:var(--danger); border-color:var(--danger); }
+  .sf-chev { color:var(--muted); transition:transform .2s; font-size:.8rem; }
+  .sfolder.open .sf-chev { transform:rotate(180deg); }
+  .sf-body { display:none; padding:4px 12px 14px; max-height:360px; overflow:auto; grid-template-columns:repeat(auto-fill,minmax(105px,1fr)); gap:10px; }
+  .sfolder.open .sf-body { display:grid; }
+  .sf-body .file-card { background:rgba(0,0,0,.18); }
+  .sf-body .file-info { padding:5px 7px 7px; }
+  .sf-body .file-name { font-size:.68rem; }
+  .sf-body .file-meta { font-size:.62rem; }
+  .sf-body .file-info .file-meta + .file-meta { display:none; }
+  .sf-body .file-thumb { font-size:1.6rem; }
+
   .file-thumb {
     position:relative;
     width:100%; aspect-ratio: 1 / 1;
@@ -1076,6 +1127,43 @@
   .vw-sep { background:var(--vw-line); height:30px; margin:0 4px; }
   .vw-select { background:#23272d; border:1px solid #3a3f47; border-radius:5px; color:var(--vw-text); }
 
+
+  /* ===== Sky theme + grouped toolbars (v3.6) ===== */
+  #viewer-modal {
+    --vw-bg:rgba(8,48,84,.55); --vw-bg2:rgba(255,255,255,.10); --vw-line:rgba(255,255,255,.22); --vw-text:#eef7ff; --vw-dim:#b9dcf5;
+    --vw-blue:#ffffff; --vw-blue-d:#0f6aa6; --vw-sel:rgba(255,255,255,.26);
+    background:linear-gradient(165deg,#0a3556 0%,#0f6aa6 38%,#2f9fda 72%,#7fd0f5 100%) fixed;
+  }
+  #viewer-modal .vw-header { background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06)); border-bottom:1px solid var(--vw-line); border-top:2px solid #bfeaff; backdrop-filter:blur(8px); }
+  #viewer-modal .vw-toolbar { background:rgba(6,40,70,.38); border-bottom:1px solid var(--vw-line); backdrop-filter:blur(8px); gap:8px; padding:6px 10px; align-items:stretch; }
+  #viewer-modal #vw-toolbar2 { border-top:0; }
+  .vw-grp { display:flex; flex-direction:column; align-items:stretch; flex-shrink:0; background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.22); border-radius:11px; padding:3px 5px 2px; box-shadow:inset 0 1px 0 rgba(255,255,255,.18); }
+  .vw-grp-row { display:flex; align-items:center; gap:2px; flex:1; }
+  .vw-grp-row > * { flex-shrink:0; }
+  #viewer-modal .vw-grp .vw-select { max-width:none !important; width:auto; }
+  .vw-grp-cap { text-align:center; font-size:.58rem; letter-spacing:.3px; color:#cfeaff; opacity:.85; padding-top:1px; white-space:nowrap; }
+  #viewer-modal .vw-tool { color:#e4f3ff; }
+  #viewer-modal .vw-tool:hover { background:rgba(255,255,255,.2); color:#fff; }
+  #viewer-modal .vw-tool.active { background:rgba(255,255,255,.3); color:#fff; border-color:rgba(255,255,255,.65); box-shadow:inset 0 -2px 0 #fff, 0 0 10px rgba(190,235,255,.45); }
+  #viewer-modal .vw-tool.active .i { color:#fff; }
+  #viewer-modal .vw-btn { color:#e4f3ff; }
+  #viewer-modal .vw-btn:hover { background:rgba(255,255,255,.22); }
+  #viewer-modal .vw-select { background:rgba(4,36,64,.55); border:1px solid rgba(255,255,255,.3); color:#fff; }
+  #viewer-modal .vw-select option, #viewer-modal .vw-select optgroup { background:#0c3a5e; color:#fff; }
+  #viewer-modal .vw-chip { color:#e4f3ff; background:rgba(255,255,255,.14); border-color:rgba(255,255,255,.28); }
+  #viewer-modal .vw-stage, #viewer-modal #vw-mpr { background:#16415f; }
+  #viewer-modal .vw-footer { background:rgba(6,40,70,.45); border-top:1px solid var(--vw-line); backdrop-filter:blur(8px); }
+  #viewer-modal .vw-counter { color:#d6eeff; } #viewer-modal .vw-wl-info { color:#fff; }
+  #viewer-modal .vw-slider, #viewer-modal .mpr-row input[type=range] { accent-color:#fff; }
+  #viewer-modal #vw-series { background:rgba(6,40,70,.4); border-right:1px solid var(--vw-line); backdrop-filter:blur(8px); }
+  #viewer-modal .vws-card.on { border-color:#fff; box-shadow:0 0 0 1px rgba(255,255,255,.6), 0 0 12px rgba(190,235,255,.5); }
+  #viewer-modal .vp.active, #viewer-modal .mv.active { outline-color:#bfeaff; }
+  #viewer-modal .vp-scroll-thumb { background:#bfeaff; }
+  #viewer-modal .vwt-chip.active { color:#fff; }
+  #viewer-modal .mpr-bar > div { background:#bfeaff; }
+  @media (min-width:761px) { #viewer-modal .vw-toolbar { flex-wrap:wrap; overflow:visible; } }
+  @media (max-width:760px) { #viewer-modal .vw-toolbar { gap:5px; padding:4px 6px; } .vw-grp-cap { font-size:.52rem; } }
+
   /* viewports */
   .vw-main { flex:1; min-height:0; display:flex; position:relative; }
   .vw-stage { background:#2a2e34; gap:2px; }
@@ -1557,11 +1645,13 @@
   </div>
 
   <div class="vw-toolbar" id="vw-toolbar">
+    <div class="vw-grp"><div class="vw-grp-row">
     <button class="vw-tool active" data-tool="nav"  onclick="vwSetTool('nav')"  title="تصفح (N)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-scroll"/></svg></span>تصفح</button>
     <button class="vw-tool" data-tool="wl"   onclick="vwSetTool('wl')"   title="Window/Level (W)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-wl"/></svg></span>W/L</button>
     <button class="vw-tool" data-tool="pan"  onclick="vwSetTool('pan')"  title="تحريك (P)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pan"/></svg></span>تحريك</button>
     <button class="vw-tool" data-tool="zoom" onclick="vwSetTool('zoom')" title="تكبير (Z)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-zoom"/></svg></span>تكبير</button>
-    <span class="vw-sep"></span>
+    </div><div class="vw-grp-cap">تصفح</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
     <button class="vw-tool" data-tool="len" onclick="vwSetTool('len')" title="قياس الطول (L)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-len"/></svg></span>طول</button>
     <button class="vw-tool" data-tool="ang" onclick="vwSetTool('ang')" title="قياس الزاوية (A)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-ang"/></svg></span>زاوية</button>
     <button class="vw-tool" data-tool="roi" onclick="vwSetTool('roi')" title="قياس الكثافة ROI (R)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-roi"/></svg></span>كثافة</button>
@@ -1571,7 +1661,8 @@
     <button class="vw-tool active" id="vw-auto-btn" onclick="vwToggleAuto()" title="تمرير الشاشات الأخرى تلقائيًا لنفس مكان المؤشر"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-auto"/></svg></span>تمرير تلقائي</button>
     <button class="vw-tool" onclick="vwUndo()" title="تراجع (Ctrl+Z)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-undo"/></svg></span>تراجع</button>
     <button class="vw-tool" onclick="vwClearMeasurements()" title="مسح قياسات الصورة الحالية"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-trash"/></svg></span>مسح</button>
-    <span class="vw-sep"></span>
+    </div><div class="vw-grp-cap">قياس وأدوات</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
     <select class="vw-select" id="vw-layout" onchange="vwBuildLayout()" aria-label="تقسيم الشاشة">
       <option value="auto">📁 فولدر لكل شاشة</option>
       <option value="1">▢ شاشة واحدة</option>
@@ -1582,6 +1673,7 @@
     <button class="vw-tool" id="vw-thumbs-btn" onclick="vwToggleThumbs()" title="شريط الصور المصغرة"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-thumbs"/></svg></span>شريط</button>
     <button class="vw-tool" id="vw-series-btn" onclick="vwToggleSeries()" title="قائمة السيريز (اسحب سيريز على أي شاشة)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-series"/></svg></span>سيريز</button>
     <button class="vw-tool" id="vw-mpr-btn" onclick="mprEnter()" title="MPR + عرض 3D (محوري / تاجي / سهمي / VR)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-cube"/></svg></span>MPR/3D</button>
+    </div><div class="vw-grp-cap">الشاشة والعرض</div></div>
   </div>
 
   <div class="vw-toolbar" id="vw-mprbar">
@@ -1602,6 +1694,7 @@
   </div>
 
   <div class="vw-toolbar" id="vw-toolbar2">
+    <div class="vw-grp"><div class="vw-grp-row">
     <select class="vw-select" id="vw-preset" onchange="vwApplyPreset(this.value)" aria-label="Window جاهز">
       <option value="">🔆 Window جاهز</option>
       <option value="auto">Auto (من الملف)</option>
@@ -1638,13 +1731,15 @@
       <option value="smooth">تنعيم Smooth</option>
       <option value="edge">حواف Edge</option>
     </select>
-    <span class="vw-sep"></span>
+    </div><div class="vw-grp-cap">الألوان والفلاتر</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
     <button class="vw-tool" id="vw-inv-btn" onclick="vwToggleInvert()" title="عكس الألوان — نيجاتيف (I)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-invert"/></svg></span>عكس</button>
     <button class="vw-tool" onclick="vwFlip('h')" title="قلب أفقي (H)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-fliph"/></svg></span>قلب</button>
     <button class="vw-tool" onclick="vwFlip('v')" title="قلب رأسي (V)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-flipv"/></svg></span>قلب</button>
     <button class="vw-tool" onclick="vwRotate(-1)" title="لف 90° عكس عقارب الساعة ( [ )"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-rotl"/></svg></span>لف</button>
     <button class="vw-tool" onclick="vwRotate(1)" title="لف 90° مع عقارب الساعة ( ] )"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-rotr"/></svg></span>لف</button>
-    <span class="vw-sep"></span>
+    </div><div class="vw-grp-cap">تحويل الصورة</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
     <button class="vw-tool" id="vw-cine-btn" onclick="vwToggleCine()" title="تشغيل / إيقاف السينما (K)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg></span>سينما</button>
     <select class="vw-select" id="vw-fps" onchange="vwSetFps(this.value)" aria-label="سرعة السينما">
       <option value="2">2 fps</option>
@@ -1656,10 +1751,12 @@
       <option value="30">30 fps</option>
     </select>
     <button class="vw-tool" id="vw-pp-btn" onclick="vwTogglePingPong()" title="السينما رايح جاي بدل التكرار"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-pp"/></svg></span>رايح جاي</button>
-    <span class="vw-sep"></span>
+    </div><div class="vw-grp-cap">سينما</div></div>
+    <div class="vw-grp"><div class="vw-grp-row">
     <button class="vw-tool active" id="vw-ref-btn" onclick="vwToggleRef()" title="خطوط مرجعية: مكان الشريحة الحالية على الوضعيات التانية (G)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-ref"/></svg></span>خطوط</button>
     <button class="vw-tool active" id="vw-hud-btn" onclick="vwToggleHud()" title="إظهار / إخفاء البيانات والمسطرة واتجاهات الجسم (O)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-hud"/></svg></span>بيانات</button>
     <button class="vw-tool" onclick="vwOpenTags()" title="كل بيانات الـ DICOM مع بحث (D)"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-tags"/></svg></span>Tags</button>
+    </div><div class="vw-grp-cap">معلومات</div></div>
   </div>
 
   <div class="vw-main">
@@ -2079,7 +2176,7 @@ function vwSnapshotLook(p) {
            rot: p.rot | 0, fh: !!p.fh, fv: !!p.fv, raw: !!(p.px && p.px.raw) };
 }
 function vwCaptureLooks() {
-  for(const p of vwPorts) if(p && p.px && p.group) vwFolderLooks.set(p.group.key || '', vwSnapshotLook(p));
+  for(const p of vwPorts) if(p && p.px && p.group) vwFolderLooks.set(p.group.folder !== undefined ? p.group.folder : (p.group.key || ''), vwSnapshotLook(p));
 }
 function vwFolderOf(dcm) {
   if(!vwDcmFolder.has(dcm)) for(const it of files) if(it.dcm) vwDcmFolder.set(it.dcm, it.folderKey || '');
@@ -2175,6 +2272,9 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   3.6.0 — العارض: خلفية متدرجة سماوية + شريط الأدوات مقسّم لمجموعات بعناوين
+//   3.5.0 — الصفحة الرئيسية: كل سيريز في فولدر زجاجي بغلاف وعدد (بدون سكرول طويل) + فتح/طي الكل
+//   3.4.1 — الـ Viewer بيقسم الحالة لكل سيكونس (SeriesInstanceUID) حتى لو في فولدر واحد، وبيخفي كائنات من غير صور، وبيقبل ملفات DICOM بأسماء فيها نقط
 //   3.4.0 — MPR (محوري/تاجي/سهمي + خطوط مرجعية متزامنة + قطع مائل + Slab MIP/Avg/MinIP) + عرض حجمي 3D (WebGL2 ray-casting) بألوان جاهزة وقص وإضاءة
 //   3.3.0 — العارض بتصميم Philips-style: بانر بيانات المريض، أيقونات SVG، قائمة سيريز جانبية (كليك أو سحب على الشاشة)، شريط تمرير شرائح لكل شاشة، وبيانات الأركان الأربعة
 //   3.2.0 — قفل الأداة برمز عند الفتح (+ زرار 🔒 للقفل اليدوي، وإيقاف مؤقت بعد 5 محاولات غلط)؛ escape لأسماء الملفات وقيم الـ Tags
@@ -2189,7 +2289,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '3.4.0';
+const APP_VERSION = '3.6.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -2398,7 +2498,8 @@ function addFileGroups(groups) {
     for(const f of arr) {
       if(!f) continue;
       const ext = f.name.split('.').pop().toLowerCase();
-      const isDicom = ['dcm','dicom'].includes(ext) || f.type === 'application/dicom' || !f.name.includes('.');
+      const bad = ['jpg','jpeg','png','gif','bmp','txt','pdf','xml','json','html','htm','zip','exe','dll','ini','log','csv','js','css','mp4','avi','mov','docx','xlsx','db','tmp','url','lnk'];
+      const isDicom = ['dcm','dicom'].includes(ext) || f.type === 'application/dicom' || !f.name.includes('.') || (!bad.includes(ext) && f.name.toUpperCase() !== 'DICOMDIR' && f.name.toUpperCase() !== 'DICOMDIR.');
       if(!isDicom) continue; // skip non-DICOM files from folders
       const id = ++idCounter;
       files.push({ file:f, id, status:'pending', dcm:null, thumb:null, folderKey: group.key || '' });
@@ -2407,7 +2508,7 @@ function addFileGroups(groups) {
     }
   }
   if(newIds.length) {
-    fileList.appendChild(frag);
+    sfHold().appendChild(frag);
     for(const id of newIds) enqueueParse(id);
     updateUI();
   }
@@ -2433,7 +2534,7 @@ function pumpParseQueue() {
   while(parseActive < PARSE_CONCURRENCY && parseQueue.length) {
     const id = parseQueue.shift();
     parseActive++;
-    parseDicom(id).catch(()=>{}).finally(() => { parseActive--; pumpParseQueue(); });
+    parseDicom(id).catch(() => { const it = files.find(f => f.id === id); if(it) sfPlace(it); }).finally(() => { parseActive--; pumpParseQueue(); });
   }
 }
 
@@ -2444,6 +2545,7 @@ async function parseDicom(id) {
   const parser = new DicomParser(buf);
   parser.parse();
   item.dcm = parser;
+  sfPlace(item);
 
   // Render thumbnail
   const cvs = document.createElement('canvas');
@@ -2455,7 +2557,97 @@ async function parseDicom(id) {
       const thumb = el.querySelector('.thumb-img-wrap');
       thumb.innerHTML = `<img src="${item.thumb}" alt="thumb">`;
     }
+    sfDirtyOf(el);
   }
+}
+
+
+// ===================== مجلدات السيريز (الصفحة الرئيسية) =====================
+// كل سيريز بيتحط جوه "فولدر زجاجي" بغلافه وعدده؛ بيتفتح بضغطة وجواه الصور في مساحة بتسكرول جوّاها (الصفحة ما بتطولش).
+const sfMap = new Map();
+let sfTimer = 0; const sfDirty = new Set();
+function sfTop() {
+  let t = document.getElementById('sf-top');
+  if(!t || !t.isConnected) {
+    t = document.createElement('div'); t.id = 'sf-top';
+    t.innerHTML = '<span class="sf-txt"></span><button type="button" data-a="open">فتح الكل</button><button type="button" data-a="close">طي الكل</button>';
+    t.addEventListener('click', e => {
+      const a = e.target.dataset && e.target.dataset.a; if(!a) return;
+      sfMap.forEach(sf => { if(sf.el.isConnected) { sf.el.classList.toggle('open', a === 'open'); sf.touched = true; } });
+    });
+    const h = document.createElement('div'); h.className = 'sf-hold'; h.id = 'sf-hold';
+    fileList.prepend(h); fileList.prepend(t);
+  }
+  return t;
+}
+function sfHold() { sfTop(); sfSchedule(); return document.getElementById('sf-hold'); }
+function sfSchedule() { if(!sfTimer) sfTimer = setTimeout(sfFlush, 160); }
+function sfDirtyOf(node) { const f = node && (node.classList && node.classList.contains('sfolder') ? node : node.closest && node.closest('.sfolder')); if(f) { sfDirty.add(f); sfSchedule(); } }
+function sfInfo(item) {
+  const d = item.dcm, f = item.folderKey || '';
+  if(!d) return { key: f + '\u0001bad', label: 'ملفات غير مقروءة', sub: f, warn: true };
+  const t = x => { const v = d.getTag(x); return v ? String(v).trim() : ''; };
+  if(!d.tags['PixelData']) return { key: f + '\u0001noimg', label: 'كائنات بدون صور', sub: (f ? f + ' · ' : '') + (t('(0008,103e)') || 'Presentation State / SR'), warn: true };
+  const num = t('(0020,0011)'), desc = t('(0008,103e)'), mod = t('(0008,0060)');
+  return { key: f + '\u0001' + (t('(0020,000e)') || num), label: (num ? 'S' + num + ' · ' : '') + (desc || f || 'Series'), sub: [f, mod, t('(0018,0050)') ? t('(0018,0050)') + 'mm' : ''].filter(Boolean).join(' · ') };
+}
+function sfPlace(item) {
+  const card = document.getElementById('card-' + item.id); if(!card) return;
+  const inf = sfInfo(item);
+  let sf = sfMap.get(inf.key);
+  if(!sf || !sf.el.isConnected) {
+    const el = document.createElement('div'); el.className = 'sfolder' + (inf.warn ? ' warn' : '');
+    el.innerHTML = '<div class="sf-head"><div class="sf-cover"><span>🩻</span></div><div class="sf-title"><b></b><small></small></div><span class="sf-count">0</span>'
+      + '<button type="button" class="sf-btn view" title="عرض السيريز">👁</button><button type="button" class="sf-btn del" title="حذف السيريز">×</button><span class="sf-chev">▼</span></div><div class="sf-body"></div>';
+    sf = { el, body: el.querySelector('.sf-body'), key: inf.key, touched: false };
+    el.querySelector('b').textContent = inf.label; el.querySelector('small').textContent = inf.sub;
+    el.querySelector('.sf-head').addEventListener('click', e => {
+      if(e.target.closest('.sf-btn')) return;
+      el.classList.toggle('open'); sf.touched = true;
+    });
+    el.querySelector('.view').addEventListener('click', () => { const c = sf.body.firstElementChild; if(c) openViewer(+c.id.slice(5)); });
+    el.querySelector('.del').addEventListener('click', () => {
+      const ids = new Set(Array.from(sf.body.children).map(c => +c.id.slice(5)));
+      if(ids.size > 20 && !confirm(`حذف ${ids.size} صورة من السيريز ده؟`)) return;
+      files = files.filter(f => !ids.has(f.id)); el.remove(); sfMap.delete(sf.key); updateUI(); sfFlush();
+    });
+    // الفولدرات تتحط بعد شريط الأدوات و مخزن الانتظار
+    fileList.appendChild(el);
+    sfMap.set(inf.key, sf);
+  }
+  sf.body.appendChild(card); sf.sorted = false;
+  sfDirty.add(sf.el); sfSchedule();
+}
+function sfFlush() {
+  sfTimer = 0;
+  const hold = document.getElementById('sf-hold');
+  const live = [...sfMap.values()].filter(s => s.el.isConnected);
+  const byId = new Map(files.map(f => [f.id, f]));
+  for(const sf of live) {
+    if(!sfDirty.has(sf.el)) continue;
+    const cards = Array.from(sf.body.children);
+    if(!cards.length) { sf.el.remove(); sfMap.delete(sf.key); continue; }
+    const items = cards.map(c => byId.get(+c.id.slice(5))).filter(Boolean);
+    if(!sf.sorted && items.length > 1 && !(hold && hold.children.length)) {      // ترتيب الصور داخل السيريز بعد ما القراءة تخلص
+      const ord = sortItemsByInstanceNumber(items.slice());
+      if(ord.some((it, i) => it !== items[i])) { const fr = document.createDocumentFragment(); ord.forEach(it => fr.appendChild(document.getElementById('card-' + it.id))); sf.body.appendChild(fr); }
+      sf.sorted = true;
+      items.splice(0, items.length, ...ord);
+    }
+    const n = cards.length, done = sf.body.querySelectorAll('.file-card.done').length;
+    const cnt = sf.el.querySelector('.sf-count'); cnt.textContent = done ? `${done}/${n}` : n; cnt.classList.toggle('alldone', done === n);
+    const pick = [items[0], items[items.length >> 1], items[items.length - 1]].filter((x, i, a) => x && a.indexOf(x) === i);
+    const spans = sf.el.querySelectorAll('.sf-cover span');
+    spans.forEach((sp, i) => { const it = pick[i]; sp.style.display = it || i === 0 ? '' : 'none'; sp.style.backgroundImage = it && it.thumb ? `url(${it.thumb})` : ''; sp.textContent = it && it.thumb ? '' : '🩻'; });
+    if(spans.length < 3) { for(let i = spans.length; i < 3; i++) sf.el.querySelector('.sf-cover').appendChild(document.createElement('span')); sfDirty.add(sf.el); }
+  }
+  sfDirty.clear();
+  const pend = hold ? hold.children.length : 0, total = live.reduce((t, s) => t + s.body.children.length, 0);
+  const top = sfTop(); top.classList.toggle('show', files.length > 0);
+  top.querySelector('.sf-txt').textContent = pend ? `⏳ جارٍ قراءة الملفات… (${total} / ${total + pend})` : `📚 ${live.length} سيكونس · ${total} صورة`;
+  top.querySelectorAll('button').forEach(b => b.style.display = live.length > 1 ? '' : 'none');
+  if(live.length === 1 && !live[0].touched) live[0].el.classList.add('open');
+  if(pend) sfSchedule();
 }
 
 // ===================== RENDER CARD =====================
@@ -2481,7 +2673,7 @@ function renderCard(id, targetFrag) {
   `;
   card.querySelector('.file-thumb').addEventListener('click', () => showPreview(id));
   if(targetFrag) targetFrag.appendChild(card);
-  else fileList.appendChild(card);
+  else sfHold().appendChild(card);
 }
 
 function setStatus(id, status, text) {
@@ -2491,12 +2683,15 @@ function setStatus(id, status, text) {
   el.className = `file-status ${status}`;
   el.textContent = text;
   card.className = `file-card ${status}`;
+  sfDirtyOf(card);
 }
 
 function removeFile(id) {
   files = files.filter(f=>f.id!==id);
   const el = document.getElementById(`card-${id}`);
+  const sfEl = el && el.closest('.sfolder');
   if(el) el.remove();
+  if(sfEl) sfDirtyOf(sfEl);
   updateUI();
 }
 
@@ -2512,7 +2707,7 @@ function updateUI() {
 
 clearBtn.addEventListener('click', () => {
   files = [];
-  fileList.innerHTML = '';
+  fileList.innerHTML = ''; sfMap.clear();
   updateUI();
   progWrap.style.display='none';
   progBar.style.width='0%';
@@ -4433,7 +4628,7 @@ class VwPort {
     vwGroups.forEach((g, i) => {
       const o = document.createElement('option');
       o.value = i;
-      o.textContent = `📁 ${g.key || 'بدون فولدر'} (${g.items.length})`;
+      o.textContent = `📁 ${g.label || g.key || 'بدون فولدر'} (${g.items.length})`;
       if(g === this.group) o.selected = true;
       this.selEl.appendChild(o);
     });
@@ -5094,9 +5289,9 @@ function vwBuildSeries() {
     card.append(th, num, cnt);
     if(tag('(0008,0060)')) { const md = document.createElement('span'); md.className = 'vws-mod'; md.textContent = tag('(0008,0060)'); card.appendChild(md); }
     const lb = document.createElement('div'); lb.className = 'vws-label';
-    lb.textContent = tag('(0008,103e)') || g.key || 'بدون اسم';
+    lb.textContent = tag('(0008,103e)') || g.label || g.key || 'بدون اسم';
     card.appendChild(lb);
-    card.title = (g.key || '') + ' — ' + g.items.length;
+    card.title = (g.label || g.key || '') + ' — ' + g.items.length;
     card.addEventListener('click', () => { if(vwActive) { vwActive.setGroup(g); vwMarkSeries(); } });
     card.addEventListener('dragstart', e => { e.dataTransfer.setData('text/plain', 'vwg:' + i); e.dataTransfer.effectAllowed = 'copy'; });
     host.appendChild(card);
@@ -5141,7 +5336,7 @@ function vwUpdateChrome(rebuildThumbs) {
     add(M, 'span', '', g('(0008,103e)'));
   }
   const n = p.group.items.length;
-  document.getElementById('vw-counter').textContent = `${p.group.key ? '📁 ' + p.group.key + '  ·  ' : ''}${p.idx + 1} / ${n}`;
+  document.getElementById('vw-counter').textContent = `${(p.group.label || p.group.key) ? '📁 ' + (p.group.label || p.group.key) + '  ·  ' : ''}${p.idx + 1} / ${n}`;
   const sl = document.getElementById('vw-slider');
   sl.max = n; sl.min = 1; sl.value = p.idx + 1;
   if(vwThumbsOn) {
@@ -5226,13 +5421,27 @@ function vwToggleFullscreen() {
 
 // ── Layout ───────────────────────────────────────────
 function vwComputeGroups() {
+  // التجميع بالسيريز الحقيقي (SeriesInstanceUID) جوه كل فولدر، مش بالفولدر بس
   const order = [], map = new Map();
   for(const it of files) {
-    const k = it.folderKey || '';
-    if(!map.has(k)) { map.set(k, []); order.push(k); }
-    map.get(k).push(it);
+    const d = it.dcm;
+    if(d && !d.tags['PixelData']) continue;            // كائنات من غير صور (Presentation State / SR ...) متظهرش
+    const f = it.folderKey || '';
+    const uid = d ? String(d.getTag('(0020,000e)') || d.getTag('(0020,0011)') || '').trim() : '';
+    const k = f + '\u0001' + uid;
+    if(!map.has(k)) { map.set(k, { folder: f, uid, items: [] }); order.push(k); }
+    map.get(k).items.push(it);
   }
-  return order.map(k => ({ key: k, items: sortItemsByInstanceNumber(map.get(k)) }));
+  const gs = order.map(k => map.get(k));
+  return gs.map(g => {
+    const items = sortItemsByInstanceNumber(g.items);
+    const d = (items[Math.floor(items.length / 2)] || items[0] || {}).dcm;
+    const t = x => { const v = d && d.getTag(x); return v ? String(v).trim() : ''; };
+    const desc = t('(0008,103e)'), num = t('(0020,0011)');
+    const multi = gs.filter(x => x.folder === g.folder).length > 1;
+    const label = multi ? ((num ? num + ' · ' : '') + (desc || g.folder || 'Series')) : (g.folder || desc || 'Series');
+    return { key: g.folder, folder: g.folder, uid: g.uid, label, items };
+  });
 }
 
 function vwApplyGrid() {
