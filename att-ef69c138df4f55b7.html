@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b2545">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Attendance Report</title>
+<style>
+:root{--bg:#eaf4fb;--fg:#0b2545;--card:#fff;--bd:#cfe3f1;--navy:#0b2545;--ac:#1e5aa8;--sky:#8ecae6;--sky2:#d6ecf9;--or:#fb8500;--or2:#b85c00;--bad:#d62828;--ok:#0f8f6b;--mut:#587089;--soft:#eaf5fc;--sh:0 2px 10px rgba(11,37,69,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07162b;--fg:#e6f1fb;--card:#0e2340;--bd:#1d3a5f;--navy:#1b4f93;--ac:#4aa3e8;--sky:#2d6a9a;--sky2:#17395e;--or:#ffa02e;--or2:#ffb347;--bad:#ff7b7b;--ok:#4fd1a5;--mut:#8fa8c2;--soft:#12304f;--sh:0 2px 10px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#07162b;--fg:#e6f1fb;--card:#0e2340;--bd:#1d3a5f;--navy:#1b4f93;--ac:#4aa3e8;--sky:#2d6a9a;--sky2:#17395e;--or:#ffa02e;--or2:#ffb347;--bad:#ff7b7b;--ok:#4fd1a5;--mut:#8fa8c2;--soft:#12304f;--sh:0 2px 10px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.55 Tahoma,Arial,sans-serif}
+.hdr{background:linear-gradient(135deg,#0b2545 0%,#13315c 55%,#1e5aa8 100%);color:#fff;border-bottom:4px solid var(--or);padding:calc(12px + env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right)) 12px max(14px,env(safe-area-inset-left));display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ttl{display:flex;align-items:center;gap:10px;min-width:0}.logo{font-size:24px}
+h1{font-size:16px;line-height:1.35;margin:0;color:#fff}
+.lg{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:999px;min-height:38px;padding:4px 14px;font-weight:600;flex:none}
+.wrap{max-width:900px;margin:0 auto;padding:12px max(12px,env(safe-area-inset-right)) 24px max(12px,env(safe-area-inset-left))}
+h2{font-size:16px;margin:0 0 10px;padding-inline-start:10px;border-inline-start:4px solid var(--or);color:var(--fg)}h3{font-size:15px;margin:12px 0 6px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
+.sc{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px}
+table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:13px}
+th,td{border-bottom:1px solid var(--bd);padding:7px 8px;text-align:start}th{background:var(--navy);color:#fff;font-weight:600}
+tbody tr:nth-child(even) td,table tr:nth-child(even) td{background:var(--soft)}
+tr.tt td{font-weight:700;background:var(--sky2)!important;border-top:2px solid var(--or)}
+input,select,button{font:inherit;font-size:16px;color:var(--fg);background:var(--card);border:1.5px solid var(--bd);border-radius:12px;padding:6px 10px;min-height:44px;max-width:100%}
+input:focus,select:focus{outline:3px solid rgba(251,133,0,.35);border-color:var(--or)}
+input[type=checkbox]{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--or)}
+button{cursor:pointer;background:var(--ac);color:#fff;border:0;padding:9px 16px;font-weight:600;transition:transform .08s}
+button:active{transform:scale(.97)}button:disabled{opacity:.5}
+button.s{background:var(--card);color:var(--ac);border:1.5px solid var(--sky)}
+button.d{background:var(--card);color:var(--bad);border:1.5px solid var(--bd)}
+button.o{background:var(--or);color:#0b2545}
+button.sm{min-height:36px;padding:4px 14px;border-radius:999px;white-space:nowrap}
+.tabs{display:flex;gap:6px;margin-bottom:12px;background:var(--card);padding:6px;border-radius:16px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;background:transparent;color:var(--mut);border:0;border-radius:12px;padding:6px 2px;font-size:12px;min-height:54px;line-height:1.25}
+.tabs .ic{font-size:19px}.tabs button.on{background:var(--navy);color:#fff;box-shadow:inset 0 -3px 0 var(--or)}
+@media (max-width:700px){.tabs{position:fixed;left:0;right:0;bottom:0;margin:0;z-index:20;border-radius:18px 18px 0 0;border-width:1px 0 0;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px))}.wrap{padding-bottom:104px}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:8px;align-items:end}
+.g2>*,.g3>*{min-width:0}.g2 input,.g2 select,.g3 input,.g3 select{width:100%}
+label.f{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--mut)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ex button{flex:1 1 150px}
+.mut{color:var(--mut);font-size:13px}.bad{color:var(--bad);font-weight:bold}.ok{color:var(--ok)}
+.ec{border:1px solid var(--bd);border-inline-start:5px solid var(--sky);border-radius:14px;padding:12px;margin-bottom:10px;background:var(--card)}
+.ec.c-mri{border-inline-start-color:#1e5aa8}.ec.c-ct{border-inline-start-color:var(--or)}.ec.c-sec{border-inline-start-color:#38b6e8}.ec.c-cash{border-inline-start-color:#13315c}.ec.c-in{border-inline-start-color:var(--ok)}.ec.c-out{border-inline-start-color:var(--ac)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#ffb347;display:grid;place-items:center;font-weight:700;flex:none}
+.nm{flex:1 1 150px;min-width:0}
+.st{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:8px;margin:8px 0}
+.st div{background:var(--soft);border-radius:12px;padding:8px 10px;border-inline-start:4px solid var(--sky)}
+.st div:nth-child(5){border-inline-start-color:var(--or)}.st div:nth-child(10){border-inline-start-color:var(--bad)}
+.st span{display:block;font-size:12px;color:var(--mut)}.st b{font-size:18px}
+.dr{display:grid;grid-template-columns:1fr 1fr;grid-template-areas:"l h" "s e";gap:6px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px dashed var(--bd)}
+.dr label{grid-area:l;display:flex;gap:8px;align-items:center;font-weight:600}
+.dr>input:nth-of-type(1){grid-area:s}.dr>input:nth-of-type(2){grid-area:e}.dr>input:nth-of-type(3){grid-area:h}
+.dr input.c,.g3q input{width:100%;font-size:15px;min-height:42px;min-width:0;padding:4px 8px}
+.g3q{display:grid;grid-template-columns:1fr 1fr auto;gap:6px;margin-bottom:10px}
+input[type=time]::-webkit-calendar-picker-indicator{display:none}
+bdi{unicode-bidi:isolate}
+.mr .mt{white-space:pre-wrap;word-break:break-word;margin:6px 0;font-size:16px}.mr label{display:flex;gap:6px;align-items:center}
+.mb{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:6px}
+.mb button{min-height:36px;padding:2px 4px;font-size:13px;border-radius:10px;line-height:1.2;white-space:nowrap}
+.mb .g2c{grid-column:span 2}
+#t4 input,#t4 select{min-height:38px;font-size:15px;padding:4px 10px}#t4 input[type=checkbox]{min-height:0;font-size:inherit}
+#t4 .g2{gap:6px;margin-bottom:6px}#t4 label.f{font-size:11px;gap:0}#t4 #mstat{font-size:12px;margin-bottom:4px!important}
+.hlp summary{cursor:pointer;font-size:13px;margin-bottom:6px}
+.mb .w{grid-column:1/-1}
+.mb .asg{display:flex;gap:6px;align-items:stretch}.mb .asg select{flex:1 1 0;min-width:0;min-height:38px;font-size:14px;border-radius:10px;padding:4px 8px}.mb .asg button{flex:none}
+.swi{border:1px solid var(--bd);border-inline-start:5px solid var(--or);border-radius:12px;padding:8px 10px;margin-bottom:8px;background:var(--soft)}
+.swi h3{margin:0 0 4px;font-size:15px}.swi .dd{padding:6px 0;border-top:1px dashed var(--bd)}.swi .dd:first-of-type{border-top:0}
+.swi .tl{max-height:220px;overflow:auto;margin-top:6px;border:1px solid var(--bd);border-radius:10px;background:var(--card)}
+.swi .tm{padding:6px 8px;border-bottom:1px dashed var(--bd);font-size:14px;white-space:pre-wrap;word-break:break-word}.swi .tm:last-child{border-bottom:0}
+.swi .tm.me{background:rgba(251,133,0,.10)}
+.ec.fg{border-inline-start-color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,var(--card))}.ec.fr{border-inline-start-color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--card))}
+.emp0{text-align:center;padding:18px 8px;color:var(--mut);font-weight:600}
+.gh{background:linear-gradient(90deg,var(--navy),var(--ac));color:#fff;border-radius:12px;padding:8px 12px;margin:16px 0 8px;font-size:14px}.gh span{font-weight:normal;font-size:12px;color:#ffd29c;display:block}
+.chip{display:inline-block;padding:1px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.chip.late{background:rgba(251,133,0,.18);color:var(--or2)}.chip.ok{background:rgba(15,143,107,.16);color:var(--ok)}.chip.miss{background:rgba(214,40,40,.15);color:var(--bad)}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+.cal .ch{font-style:normal;font-size:11px;text-align:center;color:var(--mut);overflow:hidden;white-space:nowrap}
+.cd{aspect-ratio:1/1;min-height:42px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:14px;line-height:1.15;background:var(--soft);color:var(--mut);border:1.5px solid transparent;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.cd small{font-size:11px}
+.cd.ok{background:rgba(15,143,107,.18);color:var(--ok);font-weight:700}
+.cd.late{background:rgba(251,133,0,.22);color:var(--or2);font-weight:700}
+.cd.miss{background:rgba(214,40,40,.16);color:var(--bad);font-weight:700}
+.cd.off{opacity:.55}
+.cd.inc{border-color:var(--ac);border-style:dashed}
+.cd.blank{visibility:hidden;cursor:default}
+.lgd{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-bottom:6px}
+.lgd i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-2px;margin-inline-end:4px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dashed var(--bd)}.kv span{color:var(--mut)}
+.rv{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;cursor:pointer;padding:8px 12px;margin-bottom:6px}
+.dnw{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.dn{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;flex:none}
+.dn>div{width:84px;height:84px;border-radius:50%;background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15}
+.dn b{font-size:22px}.dn span{font-size:11px;color:var(--mut)}
+.dnl{display:grid;gap:6px;flex:1 1 140px}
+.dnl div{background:var(--soft);border-radius:12px;padding:6px 10px;border-inline-start:4px solid var(--sky)}
+.dnl span{display:block;font-size:12px;color:var(--mut)}.dnl b{font-size:18px}
+.bars{display:flex;gap:3px;align-items:flex-end;overflow-x:auto;padding-bottom:2px;margin-bottom:6px}
+.bc{flex:1 0 16px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.bs{width:100%;height:100px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:6px;overflow:hidden;background:var(--soft)}
+.bs i{display:block;width:100%}
+.bc small{font-size:10px;color:var(--mut)}
+.dg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.dc{background:var(--soft);border-radius:12px;padding:10px;border-inline-start:4px solid var(--or)}
+.dc span{display:block;font-size:12px;color:var(--mut)}.dc b{font-size:24px}.dc small{display:block;font-size:11px;color:var(--mut)}
+.tgw{overflow-x:auto;border:1px solid var(--bd);border-radius:12px;margin-bottom:8px;-webkit-overflow-scrolling:touch}
+.tg{display:grid;width:max-content;min-width:100%}
+.tg>div{height:30px;display:flex;align-items:center;justify-content:center;font-size:11px;border-bottom:1px solid var(--bd);background:var(--card)}
+.tg .nm{position:sticky;inset-inline-start:0;z-index:2;justify-content:flex-start;padding:0 8px;overflow:hidden;white-space:nowrap;font-size:12px;border-inline-end:1px solid var(--bd)}
+.tg .hd{background:var(--navy);color:#fff;font-weight:600}
+.tg .gc{grid-column:1/-1;background:var(--sky2);font-weight:700;justify-content:flex-start;padding:0 8px;font-size:12px}
+.tg .gc span{position:sticky;inset-inline-start:8px}
+.tg .g{cursor:pointer;margin:2px;height:26px;border-radius:6px;font-weight:700;background:var(--soft);color:var(--mut);border-bottom:0;opacity:.6}
+.tg .g.ok{background:rgba(15,143,107,.3);color:var(--ok);opacity:1}
+.tg .g.late{background:rgba(251,133,0,.35);color:var(--or2);opacity:1}
+.tg .g.miss{background:rgba(214,40,40,.3);color:var(--bad);opacity:1}
+.hb{display:flex;gap:8px;flex:none}
+.gdd{border:1px solid var(--bd);border-radius:14px;margin-bottom:8px;background:var(--card);overflow:hidden}
+.gdd summary{cursor:pointer;padding:12px 14px;font-weight:700;background:var(--soft);list-style:none}
+.gdd summary::-webkit-details-marker{display:none}
+.gdd[open] summary{border-bottom:1px solid var(--bd)}
+.gi{padding:9px 14px;border-bottom:1px dashed var(--bd)}.gi:last-child{border-bottom:0}
+.gi b{display:block}.gi div{color:var(--mut);font-size:13px;margin-top:2px}
+.cd.noin{background:rgba(214,40,40,.1);color:var(--bad);border-color:var(--bad);border-style:dashed;font-weight:700}
+.tg .g.noin{background:rgba(214,40,40,.12);color:var(--bad);opacity:1;outline:1.5px dashed var(--bad);outline-offset:-2px}
+.dp{cursor:pointer;direction:ltr;text-align:center}
+#dpov .cd{background:var(--soft);color:var(--fg);font-weight:600}
+#dpov .cd.today{border-color:var(--or)}
+#dpov .cd.sel{background:var(--ac);color:#fff}
+.hdr{flex-wrap:wrap;gap:8px}.hb{flex-wrap:wrap;justify-content:flex-end}.hb .lg{padding:4px 11px}
+#bkbtn.dirty::after{content:'●';color:#ff6b6b;margin-inline-start:6px}
+body.u #bkbtn{display:none!important}
+.bkc{border-inline-start:4px solid var(--ok)}.bkc.w{border-inline-start-color:var(--or)}.bkc.b{border-inline-start-color:var(--bad)}
+.pager{display:flex;gap:10px;justify-content:center;align-items:center;margin:8px 0}.pager span{background:var(--sky2);color:var(--fg);border-radius:999px;padding:4px 14px;font-weight:700}
+@media (min-width:701px){.tabs button{flex-direction:row;justify-content:center;gap:8px;font-size:14px}}
+.scroll{overflow-x:auto}@media(max-width:700px){#esum thead{display:none}#esum table,#esum tbody,#esum tr,#esum td{display:block;width:100%}#esum tr{border:1px solid #9ccbe8;border-radius:10px;margin:8px 0;padding:6px 10px;background:rgba(255,255,255,.65)}#esum td{border:0!important;display:flex;justify-content:space-between;gap:10px;padding:3px 0;text-align:end}#esum td::before{content:attr(data-label);font-weight:bold;color:#13315c;text-align:start}}h3.fold{cursor:pointer;user-select:none;background:rgba(155,203,232,.25);padding:9px 12px;border-radius:10px;border:1px solid #9ccbe8;display:flex;justify-content:space-between;align-items:center}h3.fold::after{content:'◀'}h3.fold.open::after{content:'▼'}details.gp{margin:8px 0;border:1px solid var(--bd);border-radius:10px;background:var(--card);overflow:hidden}
+details.gp>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;padding:10px 12px;font-weight:700}
+details.gp>summary::-webkit-details-marker{display:none}
+details.gp>summary>span::before{content:'\25B8';display:inline-block;margin-inline-end:8px}
+html[dir=rtl] details.gp>summary>span::before{content:'\25C2'}
+details.gp[open]>summary>span::before,html[dir=rtl] details.gp[open]>summary>span::before{content:'\25BE'}
+details.gp[open]>summary{border-bottom:1px solid var(--bd)}
+details.gp>.ec{margin:6px 8px}
+.stl{margin:8px 0}.stl.w{border-inline-start-color:var(--or);background:color-mix(in srgb,var(--or) 10%,var(--card))}
+.hint{font-size:12.5px;color:var(--or2);margin:4px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rvbar{margin:6px 0 10px}.rvbar input{width:100%;margin-bottom:6px}
+h4.dh{margin:12px 0 4px;display:flex;justify-content:space-between;align-items:center;color:var(--navy)}
+details.eg{border:1px solid var(--bd);border-inline-start:5px solid var(--or);border-radius:14px;margin:6px 8px;background:var(--card)}
+details.eg>summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer;padding:10px 12px}
+details.eg>summary::-webkit-details-marker{display:none}
+details.eg[open]>summary{border-bottom:1px solid var(--bd)}
+details.eg>.ec,details.eg>.hint{margin:6px 8px}
+.au{color:#5a7d9a}
+.rv>span:first-child{flex:1 1 0;min-width:0}
+#gmt{width:100%;min-height:190px;font:inherit;font-size:15px;line-height:1.6;border:1.5px solid var(--bd);border-radius:12px;padding:10px;background:var(--card);color:var(--fg)}
+/* ===== button system v2 ===== */
+button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:8px 16px;border-radius:12px;font-size:14.5px;line-height:1.25;text-align:center}
+button.o{background:var(--or);color:#0b2545;box-shadow:0 1px 0 rgba(0,0,0,.12)}
+button.s{background:var(--card);color:var(--ac);border:1.5px solid var(--sky)}
+button.d{background:color-mix(in srgb,var(--bad) 8%,var(--card));color:var(--bad);border:1.5px solid color-mix(in srgb,var(--bad) 35%,var(--bd))}
+button.sm{min-height:36px;padding:4px 12px;border-radius:10px;font-size:13.5px;white-space:nowrap}
+.row>button:not(.sm){flex:1 1 140px}
+.row>button.sm{flex:0 0 auto}
+.row.eq>button,.chips.eq>button{flex:1 1 0}
+.chips button.sm{border-radius:999px}
+.chips.seg{flex-wrap:nowrap;gap:0;background:var(--sky2);padding:3px;border-radius:999px}
+.chips.seg>button{flex:1 1 0;min-width:0;border:0;background:transparent;color:var(--ac);border-radius:999px;min-height:36px;padding:4px 6px;box-shadow:none}
+.chips.seg>button.o{background:var(--or);color:#0b2545;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.row.tags{gap:6px}.row.tags>button.sm{min-height:32px;font-weight:500;background:var(--card);color:var(--ac);border:1px dashed var(--sky);flex:0 0 auto}
+.hrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:14px 0 6px}.hrow h3{margin:0}
+.acts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0 0}
+.acts>button{width:100%}.acts>.o,.acts>button:last-child:nth-child(odd){grid-column:1/-1}
+.rvbar .chips:not(.seg){flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin-bottom:6px;scrollbar-width:none}.rvbar .chips:not(.seg)::-webkit-scrollbar{display:none}.rvbar .chips:not(.seg)>button{flex:0 0 auto}
+</style></head><body>
+<script>
+const AC=(()=>{
+const P=[];for(let n=2;P.length<64;n++){let ok=1;for(let d=2;d*d<=n;d++)if(n%d==0){ok=0;break}if(ok)P.push(n)}
+const fr=x=>Math.floor((x-Math.floor(x))*4294967296)>>>0;
+const K=new Uint32Array(P.map(p=>fr(Math.cbrt(p))));
+const H0=P.slice(0,8).map(p=>fr(Math.sqrt(p))|0);
+function sha(m){
+ const l=m.length,n=((l+9+63)>>6)<<6,b=new Uint8Array(n);b.set(m);b[l]=128;
+ const dv=new DataView(b.buffer);dv.setUint32(n-8,Math.floor(l/536870912));dv.setUint32(n-4,(l<<3)>>>0);
+ let h=H0.slice();const w=new Int32Array(64);
+ for(let o=0;o<n;o+=64){
+  for(let i=0;i<16;i++)w[i]=dv.getUint32(o+i*4);
+  for(let i=16;i<64;i++){const a=w[i-15],c=w[i-2];w[i]=(w[i-16]+(((a>>>7)|(a<<25))^((a>>>18)|(a<<14))^(a>>>3))+w[i-7]+(((c>>>17)|(c<<15))^((c>>>19)|(c<<13))^(c>>>10)))|0}
+  let a=h[0],b2=h[1],c=h[2],d=h[3],e=h[4],f=h[5],g=h[6],hh=h[7];
+  for(let i=0;i<64;i++){
+   const t1=(hh+(((e>>>6)|(e<<26))^((e>>>11)|(e<<21))^((e>>>25)|(e<<7)))+((e&f)^(~e&g))+K[i]+w[i])|0;
+   const t2=((((a>>>2)|(a<<30))^((a>>>13)|(a<<19))^((a>>>22)|(a<<10)))+((a&b2)^(a&c)^(b2&c)))|0;
+   hh=g;g=f;f=e;e=(d+t1)|0;d=c;c=b2;b2=a;a=(t1+t2)|0}
+  h=[h[0]+a|0,h[1]+b2|0,h[2]+c|0,h[3]+d|0,h[4]+e|0,h[5]+f|0,h[6]+g|0,h[7]+hh|0];
+ }
+ const out=new Uint8Array(32),ov=new DataView(out.buffer);h.forEach((x,i)=>ov.setUint32(i*4,x>>>0));return out;
+}
+function hmac(k,m){
+ if(k.length>64)k=sha(k);
+ const ip=new Uint8Array(64+m.length),op=new Uint8Array(96);
+ for(let i=0;i<64;i++){const c=i<k.length?k[i]:0;ip[i]=c^54;op[i]=c^92}
+ ip.set(m,64);op.set(sha(ip),64);return sha(op);
+}
+function pbkdf2(pw,salt,it,len){
+ const out=new Uint8Array(len);
+ for(let bl=1,o=0;o<len;bl++,o+=32){
+  const s=new Uint8Array(salt.length+4);s.set(salt);s[salt.length+3]=bl;
+  let u=hmac(pw,s),t=u.slice();
+  for(let i=1;i<it;i++){u=hmac(pw,u);for(let j=0;j<32;j++)t[j]^=u[j]}
+  out.set(t.subarray(0,Math.min(32,len-o)),o);
+ }
+ return out;
+}
+const SB=new Uint8Array(256);
+(()=>{const r=(x,s)=>((x<<s)|(x>>(8-s)))&255;let p=1,q=1;do{p=(p^(p<<1)^((p&128)?283:0))&255;q^=q<<1;q^=q<<2;q^=q<<4;q&=255;if(q&128)q^=9;SB[p]=(q^r(q,1)^r(q,2)^r(q,3)^r(q,4)^99)&255}while(p!==1);SB[0]=99})();
+const X2=new Uint8Array(256);for(let i=0;i<256;i++)X2[i]=((i<<1)^((i&128)?27:0))&255;
+function expand(key){
+ const w=new Uint8Array(240);w.set(key);let rc=1;
+ for(let i=32;i<240;i+=4){
+  let t0=w[i-4],t1=w[i-3],t2=w[i-2],t3=w[i-1];
+  if(i%32==0){const x=t0;t0=SB[t1]^rc;t1=SB[t2];t2=SB[t3];t3=SB[x];rc=X2[rc]}
+  else if(i%32==16){t0=SB[t0];t1=SB[t1];t2=SB[t2];t3=SB[t3]}
+  w[i]=w[i-32]^t0;w[i+1]=w[i-31]^t1;w[i+2]=w[i-30]^t2;w[i+3]=w[i-29]^t3;
+ }
+ return w;
+}
+function block(w,s){
+ for(let i=0;i<16;i++)s[i]^=w[i];
+ const t=new Uint8Array(16);
+ for(let r=1;r<=14;r++){
+  for(let c=0;c<4;c++)for(let k=0;k<4;k++)t[c*4+k]=SB[s[((c+k)&3)*4+k]];
+  if(r<14){for(let c=0;c<4;c++){const a=t[c*4],b=t[c*4+1],d=t[c*4+2],e=t[c*4+3],x=a^b^d^e;
+   s[c*4]=a^x^X2[a^b];s[c*4+1]=b^x^X2[b^d];s[c*4+2]=d^x^X2[d^e];s[c*4+3]=e^x^X2[e^a]}}
+  else s.set(t);
+  for(let i=0;i<16;i++)s[i]^=w[r*16+i];
+ }
+}
+function ctr(w,nonce,data){
+ const out=new Uint8Array(data.length),cb=new Uint8Array(16),ks=new Uint8Array(16);
+ for(let o=0,n=0;o<data.length;o+=16,n++){
+  cb.set(nonce);cb[12]=n>>>24;cb[13]=n>>>16;cb[14]=n>>>8;cb[15]=n;ks.set(cb);block(w,ks);
+  const m=Math.min(16,data.length-o);for(let i=0;i<m;i++)out[o+i]=data[o+i]^ks[i];
+ }
+ return out;
+}
+const te=new TextEncoder(),td=new TextDecoder();
+const b64=u=>{let s='';for(let i=0;i<u.length;i+=32768)s+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(s)};
+const unb64=s=>{const r=atob(s),u=new Uint8Array(r.length);for(let i=0;i<r.length;i++)u[i]=r.charCodeAt(i);return u};
+let EK=null,MK=null,LK=null;
+function unlock(pin,salt,it){const d=pbkdf2(te.encode(pin),te.encode(salt),it||20000,64);EK=expand(d.subarray(0,32));MK=d.slice(32,64);LK={EK,MK}}
+function useKey(m){const u=unb64(m);EK=expand(u.subarray(0,32));MK=u.slice(32,64)}
+function enc(str){
+ const nonce=new Uint8Array(12);crypto.getRandomValues(nonce);
+ const ct=ctr(EK,nonce,te.encode(str)),body=new Uint8Array(12+ct.length);body.set(nonce);body.set(ct,12);
+ const mac=hmac(MK,body),out=new Uint8Array(body.length+32);out.set(body);out.set(mac,body.length);return b64(out);
+}
+function dec(s){
+ const u=unb64(s),body=u.subarray(0,u.length-32),mac=u.subarray(u.length-32),m2=hmac(MK,body);
+ let d=0;for(let i=0;i<32;i++)d|=mac[i]^m2[i];if(d)throw new Error('bad');
+ return td.decode(ctr(EK,body.subarray(0,12),body.subarray(12)));
+}
+function decLegacy(s){const E0=EK,M0=MK;EK=LK.EK;MK=LK.MK;try{return dec(s)}finally{EK=E0;MK=M0}}
+function decWithPin(s,pin,salt,w){const E0=EK,M0=MK,L0=LK;try{unlock(pin,salt);useKey(dec(w));return dec(s)}finally{EK=E0;MK=M0;LK=L0}}
+return {unlock,useKey,decLegacy,decWithPin,enc,dec,_t:{sha,hmac,pbkdf2,expand,ctr}};
+})();
+
+const PSALT="c9cad16df91cb103020fddc39a1a8345",WA="pl9oFFVrHx4sYWhpdiBl6unr9v7IvwEZhCkXe265NwT5PQ9YuWE5hNClgm4EFjmg62RyRzSovG14EeogXr94XK+BV2q/8FRo6rPRxMAyTaOviP3mcCBO4jVesx5Wsk7kf5kA6Syn088hJ+Mj2OyofNjTS9YJ27vXkP5Cc6jl+KNDwEW4";
+</script>
+<style>body.u .tabs,body.u #t5,body.u .ex,body.u button[onclick^="findTxt"]{display:none!important}@media print{body.u *{display:none!important}}</style>
+
+<header class="hdr"><div class="ttl"><span class="logo">🏥</span><h1 data-i="title"></h1></div><div class="hb"><button class="lg" id="bkbtn" onclick="openBackup()" data-i="bk_btn"></button><button class="lg" onclick="openGuide()" data-i="gd_btn"></button><button class="lg" id="lg" onclick="setLang()"></button></div></header>
+<div class="wrap">
+<div class="tabs"><button id="b1" onclick="showTab(1)"><span class="ic">👥</span><span data-i="t1"></span></button><button id="b2" onclick="showTab(2)"><span class="ic">💬</span><span data-i="t2"></span></button><button id="b3" onclick="showTab(3)"><span class="ic">📊</span><span data-i="t3"></span></button><button id="b4" onclick="showTab(4)"><span class="ic">📝</span><span data-i="t4"></span></button><button id="b5" onclick="showTab(5)"><span class="ic">🚩</span><span data-i="t5"></span></button></div>
+
+<div id="t1">
+<div class="card"><h2 data-i="h1"></h2>
+<p class="mut" data-i="n1"></p>
+<div class="row" style="margin:0 0 10px"><button class="s" id="grpbtn" onclick="toggleGrp()"></button><button class="s" id="expb" onclick="foldAll(0)" data-i="expall"></button><button class="s" id="colb" onclick="foldAll(1)" data-i="colall"></button></div>
+<div id="emp"></div>
+<div class="row"><button onclick="addEmp()" data-i="add"></button><button class="d" onclick="delSel()" data-i="delsel"></button><button class="s" onclick="resetDef()" data-i="reset"></button><button class="o" onclick="showSum()" data-i="esum"></button></div>
+<div id="esum"></div>
+<div class="row"><button class="o" onclick="saveFile()" data-i="save"></button><button class="s" onclick="$('#lf').click()" data-i="load"></button><input type="file" id="lf" accept=".json" hidden onchange="loadFile(this)"><span id="sv" class="ok"></span></div>
+<datalist id="names"></datalist></div>
+<div class="card"><h2 data-i="swh"></h2><p class="mut" data-i="swn"></p>
+<div class="g2"><label class="f"><span data-i="from"></span><input type="text" readonly autocomplete="off" class="dp" id="swf"></label><label class="f"><span data-i="swto"></span><input type="text" readonly autocomplete="off" class="dp" data-clr="1" id="swt"></label></div>
+<div class="g2"><select id="swa"></select><select id="swb"></select></div>
+<div class="row"><button class="o" onclick="swAdd()" data-i="swgo"></button></div>
+<div id="swlist"></div></div>
+</div>
+
+<div id="t2" style="display:none">
+<div class="card"><h2 data-i="fh"></h2>
+<p class="mut" data-i="fn"></p>
+<div id="files"></div>
+<div class="row"><button onclick="$('#f').click()" data-i="addfile"></button><input type="file" id="f" accept=".zip,.txt" multiple hidden><button class="s" id="unk" onclick="addUnk()"></button><button class="s" id="difbtn" style="display:none" onclick="impShowLast()" data-i="imp_last"></button></div>
+<div id="fmsg" class="mut" data-i="hint"></div></div>
+</div>
+
+<div id="t3" style="display:none">
+<div class="card" id="nodata"><span data-i="nodata"></span></div>
+<div class="card" id="rep" style="display:none"><h2 data-i="dd_h"></h2><div id="dash"></div><hr style="border:0;border-top:1px dashed var(--bd);margin:14px 0"><h2 data-i="h3"></h2>
+<div class="g2"><label class="f"><span data-i="from"></span><input type="text" readonly autocomplete="off" class="dp" id="from"></label><label class="f"><span data-i="to"></span><input type="text" readonly autocomplete="off" class="dp" id="to"></label></div>
+<div class="chips eq"><button class="s sm" onclick="setRange('all')" data-i="allr"></button><button class="s sm" onclick="setRange('year')" data-i="ty"></button><button class="s sm" onclick="setRange('month')" data-i="tm"></button><button class="s sm" onclick="setRange('last')" data-i="lmo"></button></div>
+<div class="row" style="margin:0 0 8px"><button class="s sm" id="eyebtn" onclick="togHN()"></button><button class="o" onclick="openReview()">✅ <span data-i="rv_btn"></span></button></div>
+<div class="g3"><select id="view"></select><select id="cat"></select><select id="grp"></select><label class="f"><span data-i="grace"></span><input type="number" id="gr" value="60" min="0"></label></div>
+<div id="vo"><div id="team"></div><h3 data-i="bp" id="h_ptab" class="fold" onclick="togSec('ptab')"></h3><div class="sc" id="sec_ptab" style="display:none"><table id="ptab"></table></div><h3 data-i="empsum" id="h_sum" class="fold" onclick="togSec('sum')"></h3><div id="sum" style="display:none"></div></div>
+<div id="ve"><div class="row"><select id="who"></select></div><div id="est"></div><div id="cal"></div><div class="sc"><table id="det"></table></div><div id="srcleg"></div></div>
+<p class="mut" data-i="n3"></p>
+<div class="row ex"><button class="o" onclick="pdfAll()" data-i="xo"></button><button class="o" onclick="pdfEmp()" data-i="xe"></button><button class="o" onclick="pdfEach()" data-i="xa"></button></div>
+</div>
+</div>
+
+<div id="t5" style="display:none">
+<div class="card"><h2>🚩 <span data-i="t5"></span></h2>
+<p class="mut" id="flgrng"></p>
+<div class="row" style="margin:0 0 8px"><button class="o" onclick="togRank()">🏆 <span data-i="rank"></span></button></div>
+<div id="rankbox"></div>
+<h3 style="color:var(--ok)" data-i="flg_g"></h3><div id="flg_green"></div>
+<h3 style="color:var(--bad)" data-i="flg_r"></h3><div id="flg_red"></div>
+</div></div>
+
+<div id="t4" style="display:none">
+<div class="card"><button class="o" id="bkrep" style="display:none;margin-bottom:8px" onclick="showTab(3)"></button><h2 data-i="mh"></h2>
+<details class="mut hlp"><summary data-i="hlp"></summary><p data-i="mn" style="margin:6px 0 0"></p></details>
+<input id="mq" data-ph="search" style="width:100%;margin-bottom:8px">
+<div class="g2"><select id="ms"></select><select id="mst"></select></div>
+<div class="g2"><label class="f"><span data-i="from"></span><input type="text" readonly autocomplete="off" class="dp" id="mf"></label><label class="f"><span data-i="to"></span><input type="text" readonly autocomplete="off" class="dp" id="mt"></label></div>
+<div class="mb">
+<button class="s" onclick="selAll()" data-i="b_all" data-t="selall"></button><button class="s" onclick="clrSel()" data-i="b_clr" data-t="clr"></button><button class="d" onclick="bulkDel(1)" data-i="b_del" data-t="m_del"></button><button class="s" onclick="bulkDel(0)" data-i="b_rest" data-t="restm"></button>
+<button class="g2c" onclick="bulkMark('i')" data-i="b_in" data-t="mkin"></button><button class="g2c" onclick="bulkMark('o')" data-i="b_out" data-t="mkout"></button><button class="s w" onclick="autoMark()" data-i="b_auto" data-t="auto"></button>
+<div class="w asg"><select id="mas" class="nm"></select><button class="o" onclick="bulkAsg()" data-i="b_asg" data-t="m_as"></button></div>
+</div>
+<div id="mswp"></div>
+<div class="mut" id="mstat" style="margin-bottom:8px"></div>
+<div id="mlist"></div>
+<div class="pager"><button class="s" onclick="pg(-1)" data-i="prev"></button><span id="mpg"></span><button class="s" onclick="pg(1)" data-i="next"></button></div>
+<div class="row ex"><button class="o" onclick="pdfTxt(0)" data-i="xl1"></button><button class="o" onclick="pdfTxt(1)" data-i="xl2"></button></div>
+</div></div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+const DEF=[];
+const DEFX={"sw":[],"tf":{},"man":{},"grace":15};
+const I={en:{showall:'Show all',showless:'Show less',hlp:'ℹ️ Help',b_all:'☑ All',b_clr:'✖ Clear',b_del:'🗑 Delete',b_rest:'↩ Restore',b_in:'✔ Check-in',b_out:'✔ Check-out',b_auto:'🪄 Auto-detect',b_asg:'👤 Assign',nsh:'🚫',extra:'Stayed extra',nosign:'No check-in signed',earlybtn:'Early arrival',earlyoff:'Remove early arrival',earlyin:'Early arrival',minu:'min',notxt:'No texts',swi_h:'Check-in / check-out (location)',swi_in:'In',swi_out:'Out',swi_noloc:'no location',swi_pick:'Select messages or pick a date to see this employee\'s in and out times.',swi_txts:'Texts of this day',swi_notx:'No texts on this day',swi_more:'more days not shown',swh:'🔄 Shift swap',swn:'When two employees swap shifts on a day (or several days): pick the dates and both employees. Each one is then calculated on the other\'s schedule for those days only. Other days stay as they are.',swto:'To (optional)',swpick:'Select employee…',swgo:'Apply swap',swnone:'No swaps yet.',swmiss:'Pick the date and both employees.',swsame:'Pick two different employees.',swdate:'End date is before start date.',swdup:'One of these employees already has a swap in this period.',swcd:'Delete this swap?',swok:'Swap applied ✓',swb:'Swap',dd_h:'📊 Dashboard',dd_day:'Latest day',dd_week:'Week',dd_mon:'Month',dd_ok:'Complete',dd_inc:'No check-out',dd_rev:'Needs review',dd_exp:'Expand all',dd_col:'Collapse all',dd_clean:'✓ Nothing needs review',dd_note:'Absence is counted once the day is over.',dd_more:'more — narrow the range or open the report.',dd_offl:'Day off',dd_incl:'No out-time',dd_sch:'Shift',dd_raw:'Recorded messages',dd_pr:'Text sign (in / out)',dd_msgs:'💬 Day messages',dd_off:'Day off',dd_na:'No data',dd_cal:'Month',dd_all:'All',cf_h:'⚠️ Record conflicts',cf_card:'Conflicts',cf_oib:'Out before in',cf_oonly:'Out without any in',cf_dupI:'Two ins in a row',cf_dupO:'Two outs in a row',cf_both:'One message marked both in and out',cf_many:'More than 2 punches - needs review',s_rev:'Review',cf_fixm:'Open the day, check the raw punches, then use Manual edit to set the correct in/out.',cf_long:'Span longer than 16 hours',cf_none:'✓ No conflicts',dd_rate:'Attendance rate',dd_ontime:'On time',dd_chart:'Attendance by day',dd_dept:'Departments',dd_in:'Logged in',tg_h:'Team monthly grid',tg_pres:'Present',gd_btn:'Features',gd_h:'Features guide',gd_s:'Search features…',gd_none:'No results',dp_today:'Today',dp_clear:'Clear',src_loc:'Live location',src_txt:'Approved text message',src_man:'Manual edit',man_btn:'Manual edit',man_hint:'Enter the correct check-in and/or check-out time. It replaces the recorded times for this day only and is shown as the source (manual edit).',man_note:'Note (optional)',man_save:'Save',man_del:'Remove edit',man_nt:'Note',cf_outside:'Time is outside the employee\'s shift',bk_r_man:'Manual edits',
+imp_h:'🧪 Import preview',imp_new:'New',imp_dup:'Duplicate',imp_rej:'Rejected',imp_row_ev:'Location punches',imp_row_tx:'Text messages',imp_why:'Rejected because',imp_bad:'invalid date or time',imp_future:'date in the future',imp_empty:'empty sender',imp_range:'New dates',imp_unk:'Senders not in the employee list',imp_diff:'Expected changes in reports',imp_nodiff:'No report changes after merging',imp_days:'Days that changed',imp_s_dupfile:'Identical to a file already added. It will be ignored.',imp_s_nonew:'No new records. It will be ignored.',imp_s_empty:'No usable records. It will be ignored.',imp_go:n=>`Merge ${n} file(s)`,imp_none:'Nothing to merge',imp_done:(a,b,c,d)=>`✓ Merged: ${a} new punches and ${b} new messages (${c} duplicates, ${d} rejected)`,imp_last:'📋 Last diff report',imp_read:'Reading files…',
+rn_h:'⚠️ Renaming a WhatsApp name',rn_found:n=>`The new name exists in the chats and links to ${n} recorded days.`,rn_lost:n=>`No sender in the chats has the new name, so this employee's ${n} recorded days will be detached until it matches the WhatsApp sender name.`,rn_sw:n=>`${n} shift swap(s) use the old name.`,rn_tf:n=>`${n} text sign-off mark(s) are credited to the old name.`,rn_man:n=>`${n} manual edit(s) use the old name.`,rn_dup:'Another employee already has this name.',rn_note:'Update links moves swaps, marks and manual edits to the new name. Chat records stay linked by the WhatsApp name only.',rn_upd:'Rename and update links',rn_only:'Rename only',
+rv_btn:'Review before approval',rv_h:'✅ Review before approving the report',rv_ni:'Days with check-out but no check-in',rv_inc:'Days with check-in but no check-out',rv_conf:'Record conflicts',rv_nodata:'Days with no data for anyone (the chat file may not cover them)',rv_norec:'Scheduled employees with no records at all (check the WhatsApp name)',rv_unm:'Messages that look like check-in/out but are not marked',rv_info:(a,b,c)=>`${a} absence days · ${b} manual edits · ${c} chat senders not in the employee list`,rv_appr:'✅ Approve this report',rv_cf:n=>`There are ${n} open issues. Approve anyway?`,rv_same:'Approved and still matches',rv_chg:'Approved, but the data changed afterwards',rv_note:'Approval records the range, the time and a fingerprint of the data, so you can see later if anything changed.',bk_btn:'💾 Backup',bk_h:'🛡️ Data protection',bk_intro:'Your data lives in this device\'s browser only. If you clear browser data or change the device or browser, it is lost. Take a full backup and keep it somewhere else (Drive, or WhatsApp to yourself).',bk_never:'No backup has been saved yet',bk_last:'Last backup',bk_chg:'There are changes since the last backup',bk_same:'No changes since the last backup',bk_now:'Current data',bk_save:'💾 Save full backup',bk_share:'📤 Share backup',bk_restore:'♻️ Restore from a backup',bk_enc:'The backup is encrypted. You need the same program file and the same PIN to open it, so keep them together with the backup.',bk_what:'Includes: employees and schedules, added WhatsApp files (messages and punches), text sign-off marks, shift swaps, manual edits, approvals and settings. The built-in file is not included because it is inside the program file itself.',bk_done:'✓ Backup saved and verified',bk_fail:'⚠️ Backup verification failed. Do not rely on it, try again.',bk_test:'Backup test',bk_c_open:'The file opened and decrypted',bk_c_sum:'Data integrity checked',bk_c_emp:(a,b)=>`${a} employees, ${b} with schedules`,bk_c_files:(f,e,m,r)=>`${f} WhatsApp files · ${e} punches · ${m} messages${r?' · '+r:''}`,bk_partial:'This is a settings-only file (from Save settings). It has no WhatsApp files, so the current files stay as they are.',bk_bad_file:'This file is not a valid backup.',bk_bad_dec:'Cannot open this backup. The PIN or program file is probably different from the one it was made with, or the file is damaged.',bk_bad_sum:'The backup is damaged (integrity check failed).',bk_col_b:'In backup',bk_col_c:'Current',bk_date:'Backup date',bk_r_emp:'Employees',bk_r_sch:'With schedules',bk_r_files:'Added files',bk_r_ev:'Location punches',bk_r_msg:'Text messages',bk_r_tf:'Text sign-off marks',bk_r_sw:'Shift swaps',bk_r_gr:'Grace minutes',bk_pre:'Save a copy of the current data before replacing',bk_apply:'♻️ Run restore',bk_warn:'Restore will replace the current employees, schedules, files, marks and swaps with the backup. Continue?',bk_ok:'✓ Restore completed',bk_rfail:'Restore failed, nothing was changed.',bk_persist:'Persistent browser storage',bk_on:'on',bk_off:'off',bk_space:'Space used',cf_fix:'Open the day messages and fix the in/out marks.',swpt:'Pick the employee who swapped with:',swcan:'Cancel',title:'Attendance Report from WhatsApp Live Locations',t1:'Employees',t2:'WhatsApp files',t3:'Reports',t4:'Text attendance',det:'Daily details',mh:'Text messages from the chat',mn:'Tick messages to select them, then delete the irrelevant ones. Mark each message as proof of check-in or check-out, and choose whose account it counts for (default: the sender, if the sender is in your employees list).',
+search:'Search text or name…',allsend:'All senders',st_all:'All messages',st_un:'Unmarked',st_in:'Check-in proofs',st_out:'Check-out proofs',st_del:'Deleted',
+selall:'Select all',clr:'Clear selection',m_del:'Delete selected',restm:'Restore selected',mkin:'Mark selected: check-in',mkout:'Mark selected: check-out',auto:'Auto-detect by keywords',
+pin:'Check-in proof',pout:'Check-out proof',mstat:(t,d,i,o,f,c)=>`Total ${t} · Deleted ${d} · Check-in ${i} · Check-out ${o} · Counted in reports ${c} · Showing ${f}`,prev:'Previous',next:'Next',
+xl1:'PDF – current list',xl2:'PDF – proofs only',c_mdel:n=>`Apply to ${n} message(s)?`,c_auto:n=>`Auto-mark ${n} message(s) by keywords?`,nosel:'Select messages first.',h1:'Employees & schedules',
+n1:'Name must match the sender name in the WhatsApp group. Open "Schedule" to set work days, start/end time and hours for each day. Display name = the name shown in reports and PDFs (empty = WhatsApp name). Saved automatically in this browser.',
+add:'+ Add employee',delsel:'Delete selected',reset:'Reset defaults',grp:'Group by category',flat:'Flat list',expall:'Expand all',colall:'Collapse all',save:'Save settings (file)',load:'Load settings',saved:'Saved ✔ (file downloaded and kept in this browser)',loadedS:'Settings loaded ✔',bad:'Invalid settings file',
+xname:'Display name (optional)',cat:'Category',all:'All categories',c_mri:'MRI Technicians',c_ct:'CT Technicians',c_sec:'Secretarial',c_cash:'Cashier',c_none:'Unclassified',
+name:'Name',sch:'Schedule',close:'Close',del:'Delete',setall:'Set all working days:',apply:'Apply',works:'Works',start:'Start',end:'End',hours:'Hours',
+dname:'Name (as in WhatsApp)',noday:'No working days',h:'h',am:'AM',pm:'PM',
+c_del:n=>'Delete '+n+'?',c_dels:n=>'Delete '+n+' selected employee(s)?',c_res:'Reset all employees to defaults?',tick:'Tick the employees you want to delete first.',thisemp:'this employee',
+fh:'WhatsApp export files',fn:'Files are merged (duplicates ignored). From each file the sender names, live-location times and text messages are kept (no media). New files are stored in this browser.',
+hint:'Export the chat <b>without media</b> from WhatsApp, then add the .zip (or .txt).',addfile:'+ Add another export (zip/txt)',builtin:'built-in',use:'Use',rm:'Remove',
+fcnt:(n,s,a,b,x)=>`${n} live locations · ${x} text messages · ${s} senders · ${a} → ${b}`,unkb:n=>`Add ${n} sender(s) not in employees list`,nounk:'All senders are in the employees list',unkd:n=>`Added ${n} employee(s) – set their schedules in the Employees tab`,
+nolive:'No "live location shared" lines found. Check the export language/format.',err:'Could not read the file: ',added:n=>`File added: ${n} live locations.`,quota:'Browser storage is full – the file will be lost on reload.',c_rm:n=>'Remove '+n+'?',
+nodata:'No data yet. Start by: (1) adding employees and their shifts in the Employees tab, (2) importing a WhatsApp chat in the Files tab — or restore a backup with the backup button above.',h3:'Reports',from:'From',to:'To',allr:'All',ty:'This year',tm:'This month',lmo:'Last month',grace:'Grace (min)',
+v_all:'Overall report',v_emp:'Per-employee report',g_day:'By day',g_month:'By month',g_year:'By year',bp:'Totals by period',empsum:'Employees summary',per:'Period',tot:'Total',
+xo:'PDF – overall',xe:'PDF – this employee',xa:'PDF – page per employee',pt_all:'Attendance report – overall',pt_emp:'Attendance report – employee',pt_each:'Attendance report – all employees',pt_txt:'Text attendance',bycat:'By category',ecount:'Employees',gen:'Generated',sender:'Sender',text:'Text',forEmp:'For employee',m_as:'Assign selected to employee',same:'Same as sender',eauto:'auto from chat if empty',t5:'Green/Red',flg_g:'🟢 Most committed',flg_r:'🔴 Needs attention',flg_none:'No employees here',flg_att:'Attendance days',flg_abs:'Absent',flg_ni:'No check-in',flg_days:'days',flg_rule:'Red: more than 2 absent days or more than 4 days without check-in. Green: commitment 90%+ with no red flag.',flg_rng:'Period',rank:'Commitment ranking',rpct:'Commitment %',rrk:'Rank',esum:'Employee summary',eno:'Employee no.',eph:'Mobile',ein:'Check-in',eout:'Check-out',ehrs:'Work hours',eoff:'Days off',eprint:'Print',eclose:'Close',eeye:'Hide / show all mobiles',ename:'Name',empn:'Employee',oth:'And others',cnt:'Counts for',nocnt:'Not counted – choose an employee',byyear:'By year',bymonth:'By month',
+n3:'Check-in = first live location of the work day (before 4 AM counts as previous day). Check-out = last one, only if 60+ min after check-in. Worked/Short hours are counted only on days with a check-out. Missed = working day with no live location, counted up to the day before the last date in the data. Schedules apply to all dates. Text proofs marked in the Text attendance tab are merged: check-in = earliest of live location / check-in proofs, check-out = latest of live location / check-out proofs.',
+pres:'Present',full:'In & out',io:'In only',oo:'Out only',ei:'Early in',lo:'Late out',late:'Late',lm:'Total late (min)',avg:'Avg late (min)',early:'Early out',miss:'Missed days',wh:'Worked (h)',sh:'Short (h)',md:'Missed dates',
+d_date:'Date',d_in:'In',d_out:'Out',d_late:'Late',d_early:'Early',d_wk:'Worked',d_sh:'Short',d_st:'Status',
+s_late:'Late',s_ok:'On time',s_miss:'Absent',s_noin:'No check-in',ni:'No check-in days',s_off:'Off',s_na:'-',offday:'Off day',days:['Sun','Mon','Tue','Wed','Thu','Fri','Sat']},
+ar:{showall:'عرض الكل',showless:'عرض أقل',hlp:'ℹ️ تعليمات',b_all:'☑ الكل',b_clr:'✖ إلغاء',b_del:'🗑 حذف',b_rest:'↩ استرجاع',b_in:'✔ إثبات حضور',b_out:'✔ إثبات انصراف',b_auto:'🪄 تحديد تلقائي',b_asg:'👤 تعيين',nsh:'🚫',extra:'قعد زيادة',nosign:'لم يوقّع حضور',earlybtn:'حضور مبكر',earlyoff:'إلغاء الحضور المبكر',earlyin:'حضور مبكر',minu:'دقيقة',notxt:'لا يوجد نصوص',swi_h:'حضور وانصراف (لوكيشن)',swi_in:'جه',swi_out:'مشي',swi_noloc:'مفيش لوكيشن',swi_pick:'حدد رسائل أو اختار تاريخ عشان يظهر حضور وانصراف الموظف.',swi_txts:'نصوص اليوم ده',swi_notx:'لا يوجد نصوص في اليوم ده',swi_more:'أيام تانية مش معروضة',swh:'🔄 تبديل المواعيد',swn:'لما موظفين يبدلوا ميعادهم مع بعض في يوم (أو كذا يوم): اختار التاريخ والموظفين، وكل واحد فيهم هيتحاسب على ميعاد التاني في الأيام دي بس. باقي الأيام زي ما هي.',swto:'إلى (اختياري)',swpick:'اختار موظف…',swgo:'تنفيذ التبديل',swnone:'مفيش تبديلات.',swmiss:'اختار التاريخ والموظفين الاتنين.',swsame:'اختار موظفين مختلفين.',swdate:'تاريخ النهاية قبل البداية.',swdup:'واحد من الموظفين ده عنده تبديل في نفس الفترة دي.',swcd:'تمسح التبديل ده؟',swok:'تم التبديل ✓',swb:'تبديل',dd_h:'📊 لوحة الملخص',dd_day:'آخر يوم',dd_week:'الأسبوع',dd_mon:'الشهر',dd_ok:'حضور مكتمل',dd_inc:'لم يسجّل انصراف',dd_rev:'تحتاج مراجعة',dd_exp:'فرد الكل',dd_col:'طي الكل',dd_clean:'✓ مفيش حاجة تحتاج مراجعة',dd_note:'الغياب بيتحسب بعد ما اليوم يخلص.',dd_more:'كمان — ضيّق الفترة أو افتح التقرير.',dd_offl:'يوم راحة',dd_incl:'من غير انصراف',dd_sch:'الميعاد',dd_raw:'الرسائل المسجلة',dd_pr:'توقيع نصي (دخول / خروج)',dd_msgs:'💬 رسائل اليوم',dd_off:'يوم راحة',dd_na:'مفيش بيانات',dd_cal:'الشهر',dd_all:'الكل',cf_h:'⚠️ تعارضات في التسجيل',cf_card:'تعارضات',cf_oib:'انصراف قبل الحضور',cf_oonly:'انصراف من غير حضور',cf_dupI:'حضور مسجل مرتين ورا بعض',cf_dupO:'انصراف مسجل مرتين ورا بعض',cf_both:'رسالة واحدة معلّمة حضور وانصراف مع بعض',cf_many:'أكتر من بصمتين - محتاج مراجعة',s_rev:'مراجعة',cf_fixm:'افتح اليوم وراجع البصمات الخام، وبعدين استخدم التعديل اليدوي ✏️ وحدد الحضور والانصراف الصح.',cf_long:'المدة أطول من ١٦ ساعة',cf_none:'✓ مفيش تعارضات',dd_rate:'نسبة الحضور',dd_ontime:'في الميعاد',dd_chart:'الحضور على الأيام',dd_dept:'الأقسام',dd_in:'سجّلوا حضورهم',tg_h:'جدول الفريق الشهري',tg_pres:'الحاضرين',gd_btn:'خصائص',gd_h:'دليل الخصائص',gd_s:'ابحث في الخصائص…',gd_none:'مفيش نتايج',dp_today:'النهاردة',dp_clear:'مسح',src_loc:'موقع مباشر',src_txt:'رسالة نصية معتمدة',src_man:'تعديل يدوي',man_btn:'تعديل يدوي',man_hint:'اكتب وقت الحضور و/أو الانصراف الصح. التعديل بيحل محل الأوقات المسجلة لليوم ده بس، وبيظهر كمصدر (تعديل يدوي).',man_note:'ملاحظة (اختياري)',man_save:'حفظ',man_del:'مسح التعديل',man_nt:'ملاحظة',cf_outside:'التوقيت خارج وردية الموظف',bk_r_man:'التعديلات اليدوية',
+imp_h:'🧪 تجربة الاستيراد',imp_new:'جديد',imp_dup:'مكرر',imp_rej:'مرفوض',imp_row_ev:'بصمات اللوكيشن',imp_row_tx:'الرسائل النصية',imp_why:'سبب الرفض',imp_bad:'تاريخ أو وقت غير صالح',imp_future:'تاريخ في المستقبل',imp_empty:'اسم مرسل فاضي',imp_range:'التواريخ الجديدة',imp_unk:'مرسلين مش في قايمة الموظفين',imp_diff:'الفروق المتوقعة في التقارير',imp_nodiff:'مفيش تغيير في أي تقرير بعد الدمج',imp_days:'أيام اتغيرت',imp_s_dupfile:'ملف مطابق لملف اتضاف قبل كده، هيتجاهل.',imp_s_nonew:'مفيهوش سجلات جديدة، هيتجاهل.',imp_s_empty:'مفيهوش سجلات صالحة، هيتجاهل.',imp_go:n=>`دمج ${n} ملف`,imp_none:'مفيش حاجة تتدمج',imp_done:(a,b,c,d)=>`✓ تم الدمج: ${a} بصمة جديدة و${b} رسالة جديدة (${c} مكرر، ${d} مرفوض)`,imp_last:'📋 آخر تقرير فروق',imp_read:'جارٍ قراءة الملفات…',
+rn_h:'⚠️ تغيير اسم واتساب',rn_found:n=>`الاسم الجديد موجود في الشات وهيتربط بـ ${n} يوم مسجل.`,rn_lost:n=>`مفيش مرسل في الشات بالاسم الجديد، فسجلات الموظف ده (${n} يوم) هتنفصل عنه لحد ما الاسم يتطابق مع اسم المرسل في واتساب.`,rn_sw:n=>`${n} تبديل ورديات بيستخدم الاسم القديم.`,rn_tf:n=>`${n} علامة توقيع نصي معمولة باسم الموظف القديم.`,rn_man:n=>`${n} تعديل يدوي بيستخدم الاسم القديم.`,rn_dup:'فيه موظف تاني بنفس الاسم.',rn_note:'تحديث الارتباطات بينقل التبديلات والعلامات والتعديلات اليدوية للاسم الجديد. سجلات الشات بتتربط باسم واتساب بس.',rn_upd:'غيّر الاسم وحدّث الارتباطات',rn_only:'غيّر الاسم بس',
+rv_btn:'مراجعة قبل الاعتماد',rv_h:'✅ مراجعة قبل اعتماد التقرير',rv_ni:'أيام فيها انصراف من غير حضور',rv_inc:'أيام فيها حضور من غير انصراف',rv_conf:'تعارضات في التسجيل',rv_nodata:'أيام من غير بيانات لأي موظف (ممكن الملف ما غطّاهاش)',rv_norec:'موظفين ليهم جدول ومفيش ليهم أي تسجيل (راجع اسم واتساب)',rv_unm:'رسائل شكلها حضور أو انصراف ومش معلّمة',rv_info:(a,b,c)=>`${a} يوم غياب · ${b} تعديل يدوي · ${c} مرسل في الشات مش في قايمة الموظفين`,rv_appr:'✅ اعتماد التقرير',rv_cf:n=>`فيه ${n} مشكلة مفتوحة. تعتمد برضه؟`,rv_same:'معتمد ولسه مطابق',rv_chg:'معتمد بس البيانات اتغيرت بعده',rv_note:'الاعتماد بيسجل الفترة والوقت وبصمة للبيانات، عشان تعرف بعدين لو حاجة اتغيرت.',bk_btn:'💾 نسخ احتياطي',bk_h:'🛡️ حماية البيانات',bk_intro:'البيانات بتتخزن في متصفح الجهاز ده بس. لو مسحت بيانات المتصفح أو غيّرت الجهاز أو المتصفح هتضيع. خد نسخة احتياطية كاملة وخلّيها في مكان تاني (Drive أو واتساب لنفسك).',bk_never:'لسه ما اتحفظتش أي نسخة احتياطية',bk_last:'آخر نسخة',bk_chg:'فيه تغييرات بعد آخر نسخة',bk_same:'مفيش تغييرات بعد آخر نسخة',bk_now:'البيانات الحالية',bk_save:'💾 حفظ نسخة احتياطية كاملة',bk_share:'📤 مشاركة النسخة',bk_restore:'♻️ استعادة من نسخة',bk_enc:'النسخة مشفّرة. محتاج نفس ملف البرنامج ونفس الرقم السري عشان تفتحها، فاحتفظ بيهم مع النسخة.',bk_what:'بتشمل: الموظفين وجداولهم، ملفات واتساب المضافة (الرسائل والبصمات)، علامات التوقيع النصي، تبديلات المواعيد، التعديلات اليدوية، الاعتمادات، والإعدادات. الملف المثبّت في البرنامج مش داخل فيها لأنه جوه ملف البرنامج نفسه.',bk_done:'✓ النسخة اتحفظت واتتحقق منها',bk_fail:'⚠️ فشل التحقق من النسخة. ما تعتمدش عليها وجرّب تاني.',bk_test:'اختبار النسخة',bk_c_open:'الملف اتفتح واتفك تشفيره',bk_c_sum:'سلامة البيانات اتأكدت',bk_c_emp:(a,b)=>`${a} موظف، منهم ${b} بجداول`,bk_c_files:(f,e,m,r)=>`${f} ملف واتساب · ${e} بصمة · ${m} رسالة${r?' · '+r:''}`,bk_partial:'الملف ده إعدادات بس (من زر حفظ الإعدادات). مفيهوش ملفات واتساب، فالملفات الحالية هتفضل زي ما هي.',bk_bad_file:'الملف ده مش نسخة احتياطية صالحة.',bk_bad_dec:'مش قادر يفتح النسخة. غالباً الرقم السري أو ملف البرنامج مختلف عن اللي اتعملت بيه، أو الملف تالف.',bk_bad_sum:'النسخة تالفة (فحص السلامة فشل).',bk_col_b:'في النسخة',bk_col_c:'الحالي',bk_date:'تاريخ النسخة',bk_r_emp:'الموظفين',bk_r_sch:'بجداول',bk_r_files:'الملفات المضافة',bk_r_ev:'بصمات اللوكيشن',bk_r_msg:'الرسائل النصية',bk_r_tf:'علامات التوقيع النصي',bk_r_sw:'تبديلات المواعيد',bk_r_gr:'دقايق السماح',bk_pre:'احفظ نسخة من البيانات الحالية قبل الاستبدال',bk_apply:'♻️ تنفيذ الاستعادة',bk_warn:'الاستعادة هتستبدل الموظفين والجداول والملفات والعلامات والتبديلات الحالية بالنسخة. تكمّل؟',bk_ok:'✓ تمت الاستعادة',bk_rfail:'فشلت الاستعادة ومفيش حاجة اتغيرت.',bk_persist:'تخزين دائم في المتصفح',bk_on:'مفعّل',bk_off:'مش مفعّل',bk_space:'المساحة المستخدمة',cf_fix:'افتح رسائل اليوم وصحّح علامات الحضور والانصراف.',swpt:'اختار الموظف اللي بدّل معاه:',swcan:'إلغاء',title:'تقرير الحضور من الـ Live Location في واتساب',t1:'الموظفين',t2:'ملفات الواتس',t3:'التقارير',t4:'توقيع نصي',det:'تفاصيل الأيام',mh:'الرسائل النصية من الشات',mn:'علّم على الرسائل لتحديدها واحذف اللي مالوش لازمة. علّم كل رسالة كإثبات حضور أو إثبات انصراف، واختار بتدخل في حساب مين (الافتراضي: اللي كتبها لو هو موجود في قايمة الموظفين).',
+search:'ابحث في النص أو الاسم…',allsend:'كل المرسلين',st_all:'كل الرسائل',st_un:'غير معلّمة',st_in:'إثبات حضور',st_out:'إثبات انصراف',st_del:'المحذوفة',
+selall:'تحديد الكل',clr:'إلغاء التحديد',m_del:'حذف المحدد',restm:'استرجاع المحدد',mkin:'تعليم المحدد: إثبات حضور',mkout:'تعليم المحدد: إثبات انصراف',auto:'تحديد تلقائي بالكلمات',
+pin:'إثبات حضور',pout:'إثبات انصراف',mstat:(t,d,i,o,f,c)=>`الإجمالي ${t} · المحذوف ${d} · إثبات حضور ${i} · إثبات انصراف ${o} · داخل في التقارير ${c} · المعروض ${f}`,prev:'السابق',next:'التالي',
+xl1:'PDF – القائمة الحالية',xl2:'PDF – الإثباتات فقط',c_mdel:n=>`تنفيذ على ${n} رسالة؟`,c_auto:n=>`تحديد ${n} رسالة تلقائيًا حسب الكلمات؟`,nosel:'حدد رسائل الأول.',h1:'الموظفين وجداول العمل',
+n1:'الاسم لازم يطابق اسم المرسل في جروب واتساب. افتح "الجدول" لتحديد أيام العمل والحضور والانصراف وعدد الساعات لكل يوم. اسم العرض = الاسم اللي يظهر في التقارير والـ PDF (لو فاضي بيظهر اسم واتساب). بيتحفظ تلقائي في المتصفح.',
+add:'+ إضافة موظف',delsel:'حذف المحدد',reset:'استرجاع الافتراضي',grp:'عرض بالفئات',flat:'عرض عادي',expall:'فتح الكل',colall:'طي الكل',save:'حفظ الإعدادات (ملف)',load:'استرجاع من ملف',saved:'تم الحفظ ✔ (اتنزل ملف وكمان محفوظ في المتصفح)',loadedS:'تم تحميل الإعدادات ✔',bad:'ملف إعدادات غير صالح',
+xname:'اسم العرض (اختياري)',cat:'الفئة',all:'كل الفئات',c_mri:'فنيو الرنين',c_ct:'فنيو المقطعية',c_sec:'سكرتارية',c_cash:'كاشير',c_none:'غير مصنف',
+name:'الاسم',sch:'الجدول',close:'إغلاق',del:'حذف',setall:'تطبيق على كل أيام العمل:',apply:'تطبيق',works:'شغال',start:'الحضور',end:'الانصراف',hours:'الساعات',
+dname:'الاسم (زي واتساب)',noday:'مفيش أيام عمل',h:'س',am:'ص',pm:'م',
+c_del:n=>'حذف '+n+'؟',c_dels:n=>'حذف '+n+' موظف محدد؟',c_res:'استرجاع كل الموظفين للإعدادات الافتراضية؟',tick:'علّم على الموظفين اللي عاوز تحذفهم الأول.',thisemp:'الموظف ده',
+fh:'ملفات تصدير الواتس',fn:'الملفات بتتدمج مع بعض (المكرر بيتتجاهل). من كل ملف بيتحفظ أسماء المرسلين وأوقات الـ live location والرسائل النصية (من غير الصور والملفات). الملفات الجديدة بتتخزن في المتصفح.',
+hint:'اعمل Export للشات من واتساب <b>بدون وسائط</b> وضيف ملف الـ zip (أو txt).',addfile:'+ إضافة ملف تصدير تاني (zip/txt)',builtin:'مثبّت في البرنامج',use:'استخدام',rm:'إزالة',
+fcnt:(n,s,a,b,x)=>`${n} لوكيشن · ${x} رسالة نصية · ${s} مرسل · ${a} ← ${b}`,unkb:n=>`إضافة ${n} مرسل مش في قائمة الموظفين`,nounk:'كل المرسلين موجودين في قائمة الموظفين',unkd:n=>`تمت إضافة ${n} موظف – حدد جداولهم من تاب الموظفين`,
+nolive:'مفيش رسائل "live location shared" في الملف. اتأكد من لغة وصيغة التصدير.',err:'تعذر قراءة الملف: ',added:n=>`تمت إضافة الملف: ${n} لوكيشن.`,quota:'مساحة المتصفح ممتلئة – الملف هيضيع عند إعادة التحميل.',c_rm:n=>'إزالة '+n+'؟',
+nodata:'مفيش بيانات لسه. ابدأ بـ: (1) أضف الموظفين وورديّاتهم من تاب الموظفين، (2) استورد ملف شات الواتس من تاب ملفات الواتس — أو استرجع نسخة احتياطية من زرار النسخ الاحتياطي فوق.',h3:'التقارير',from:'من',to:'إلى',allr:'الكل',ty:'هذا العام',tm:'هذا الشهر',lmo:'الشهر الماضي',grace:'دقايق السماح',
+v_all:'التقرير الشامل',v_emp:'تقرير منفصل لكل موظف',g_day:'بالأيام',g_month:'بالشهور',g_year:'بالسنين',bp:'الإجماليات حسب الفترة',empsum:'ملخص الموظفين',per:'الفترة',tot:'الإجمالي',
+xo:'PDF – الشامل',xe:'PDF – الموظف ده',xa:'PDF – صفحة لكل موظف',pt_all:'تقرير الحضور – الشامل',pt_emp:'تقرير الحضور – موظف',pt_each:'تقرير الحضور – كل الموظفين',pt_txt:'توقيع نصي',bycat:'حسب الفئة',ecount:'عدد الموظفين',gen:'تاريخ الإصدار',sender:'المرسل',text:'النص',forEmp:'عن موظف',m_as:'تعيين المحدد لموظف',same:'نفس المرسل',eauto:'تلقائي من الشات لو فاضي',t5:'أخضر/أحمر',flg_g:'🟢 الأكثر التزاماً',flg_r:'🔴 محتاجين متابعة',flg_none:'مفيش موظفين هنا',flg_att:'أيام الحضور',flg_abs:'غياب',flg_ni:'بدون حضور',flg_days:'يوم',flg_rule:'أحمر: غياب أكتر من يومين أو أكتر من ٤ أيام بدون حضور. أخضر: التزام ٩٠٪ فأكتر ومن غير علامة حمرا.',flg_rng:'الفترة',rank:'ترتيب الالتزام',rpct:'نسبة الالتزام',rrk:'الترتيب',esum:'ملخص الموظفين',eno:'رقم الموظف',eph:'الموبايل',ein:'الحضور',eout:'الانصراف',ehrs:'ساعات العمل',eoff:'الإجازة',eprint:'طباعة',eclose:'إغلاق',eeye:'إخفاء / إظهار كل الموبايلات',ename:'الاسم',empn:'موظف',oth:'و آخرين',cnt:'بيدخل في حساب',nocnt:'مش محسوب – اختار موظف',byyear:'بالسنين',bymonth:'بالشهور',
+n3:'الحضور = أول لوكيشن في يوم العمل (قبل 4 الفجر بيتحسب لليوم اللي قبله). الانصراف = آخر لوكيشن بشرط يكون بعد الحضور بساعة على الأقل. الساعات الفعلية والناقصة بتتحسب بس في الأيام اللي لها انصراف. الغياب = يوم عمل مفيهوش لوكيشن، وبيتحسب لحد اليوم اللي قبل آخر تاريخ في البيانات. الجداول بتتطبق على كل التواريخ. إثباتات الحضور النصية اللي علّمت عليها في تاب توقيع نصي بتتدمج: الحضور = أبكر وقت بين اللوكيشن وإثبات الحضور، والانصراف = آخر وقت بين اللوكيشن وإثبات الانصراف.',
+pres:'أيام الحضور',full:'حضور وانصراف',io:'حضور فقط',oo:'انصراف فقط',ei:'حضور قبل الميعاد',lo:'انصراف بعد الميعاد',late:'تأخير',lm:'إجمالي التأخير (د)',avg:'متوسط التأخير (د)',early:'انصراف قبل الميعاد',miss:'أيام الغياب',wh:'ساعات فعلية',sh:'ساعات ناقصة',md:'تواريخ الغياب',
+d_date:'التاريخ',d_in:'حضور',d_out:'انصراف',d_late:'تأخير',d_early:'مبكر',d_wk:'فعلي',d_sh:'ناقص',d_st:'الحالة',
+s_late:'متأخر',s_ok:'في الميعاد',s_miss:'غياب',s_noin:'بلا حضور',ni:'أيام بلا حضور',s_off:'إجازة',s_na:'-',offday:'إجازة',days:['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت']}};
+Object.assign(I.ar,{
+src_auto:'افتراض: نهاية الوردية',once_lbl:'🕒 بيوقّع مرة واحدة (الانصراف يُحسب عند نهاية الوردية)',
+once_sug:p=>`🕒 ${p}% من أيامه الأخيرة بيبعت لوكيشن مرة واحدة بس — اعتبره "بيوقّع مرة واحدة"؟`,once_on:'فعّلها',
+nw_badge:'🆕 موظف جديد — وردته افتراضية، حدد وردته',nw_ok:'الوردية صح ✔',
+rv_search:'🔍 ابحث بالاسم…',rv_all:'الكل',rv_by_emp:'👤 بالموظف',rv_by_day:'📅 باليوم',rv_none:'مفيش نتائج',
+rv_days:n=>n==1?'يوم':n==2?'يومين':n<=10?n+' أيام':n+' يوم',
+d_came:'حضر',d_left:'انصرف',d_shift:'وردية',d_min:'د',
+ev_h:'🧾 الأدلة من الشات',ev_none:'مفيش رسائل أو لوكيشن لهذا اليوم',
+hint_out:'💡 غالباً ده انصراف — مفيش حضور مسجّل',hint_add:'➕ أضف الحضور يدوياً',
+stale_h:'آخر رسالة مستوردة',stale_ago:d=>d<=0?'النهاردة':d==1?'من يوم':d==2?'من يومين':'من '+d+' أيام',stale_warn:'ممكن البيانات قديمة — استورد آخر نسخة من الشات',
+imp_old:(a,b)=>`⚠️ الملف أقدم من الموجود: آخر رسالة فيه ${a} بينما الموجود لحد ${b}. اتأكد إنه الملف الصحيح.`,
+unk_h:n=>`👤 ${n} اسم في الشات مش في جدول الورديات`,imp_olds:'قبل أكتوبر 2026 (متجاهَل)',bk_pin:'النسخة دي مشفّرة برقم سري. اكتب الرقم السري بتاعها:',unk_add:'إضافة الكل (وردية افتراضية)',unk_ign:'تجاهلهم (مشيوا من المركز)',unk_show:'إظهار الأسماء المتجاهَلة',nw_h:'🆕 موظف وردته افتراضية — حدد وردته',nw_go:'حدد الوردية',
+gm_btn:'📋 رسالة للجروب',gm_h:'رسالة للجروب',gm_copy:'📋 نسخ',gm_wa:'واتساب',gm_copied:'✔ اتنسخت',gm_none:'✓ مفيش حد ناقصه توقيع',
+gm_t:(d,a,b,c)=>`السلام عليكم 👋\nتوقيعات ناقصة ليوم ${d}:\n`+(a.length?`• لم يوقّعوا حضور: ${a.join('، ')}\n`:'')+(b.length?`• لم يوقّعوا انصراف: ${b.join('، ')}\n`:'')+(c.length?`• لم يوقّعوا نهائياً لحد الآن: ${c.join('، ')}\n`:'')+`\nبرجاء إرسال اللوكيشن 🙏`
+});Object.assign(I.en,{
+src_auto:'Assumed: shift end',once_lbl:'🕒 Signs once (check-out assumed at shift end)',
+once_sug:p=>`🕒 ${p}% of their recent days have a single location — treat as "signs once"?`,once_on:'Enable',
+nw_badge:'🆕 New employee — default shift, set their shift',nw_ok:'Shift is right ✔',
+rv_search:'🔍 Search by name…',rv_all:'All',rv_by_emp:'👤 By employee',rv_by_day:'📅 By day',rv_none:'No results',
+rv_days:n=>n+(n==1?' day':' days'),
+d_came:'In',d_left:'Out',d_shift:'Shift',d_min:'m',
+ev_h:'🧾 Evidence from the chat',ev_none:'No messages or locations for this day',
+hint_out:'💡 Probably a check-out — no check-in recorded',hint_add:'➕ Add check-in manually',
+stale_h:'Last imported message',stale_ago:d=>d<=0?'today':d==1?'1 day ago':d+' days ago',stale_warn:'Data may be stale — import the latest chat export',
+imp_old:(a,b)=>`⚠️ This file is older than the existing data: its last message is ${a} while existing data goes to ${b}. Make sure it is the right file.`,
+unk_h:n=>`👤 ${n} chat name(s) not in the shift table`,imp_olds:'before Oct 2026 (ignored)',bk_pin:'This backup is protected by a PIN. Enter its PIN:',unk_add:'Add all (default shift)',unk_ign:'Ignore them (left the center)',unk_show:'Show ignored names',nw_h:'🆕 Employee on default shift — set their shift',nw_go:'Set shift',
+gm_btn:'📋 Group message',gm_h:'Group message',gm_copy:'📋 Copy',gm_wa:'WhatsApp',gm_copied:'✔ Copied',gm_none:'✓ Nobody is missing a sign',
+gm_t:(d,a,b,c)=>`Hello 👋\nMissing sign-ins for ${d}:\n`+(a.length?`• No check-in: ${a.join(', ')}\n`:'')+(b.length?`• No check-out: ${b.join(', ')}\n`:'')+(c.length?`• Nothing signed yet: ${c.join(', ')}\n`:'')+`\nPlease send your location 🙏`
+});
+let lang='ar';try{lang=localStorage.getItem('att_lang')||'ar'}catch(e){}
+const tr=(k,l=lang)=>I[l][k]??k;
+const ORD=[6,0,1,2,3,4,5],CATS=['mri','ct','sec','cash',''];
+const cl=(c,l=lang)=>tr(c?'c_'+c:'c_none',l);
+const $=s=>document.querySelector(s);
+let EMP,DATA={},LAST='',MINK='',R=null,SEL=new Set(),OPEN=new Set(),FILES=[],GRP=localStorage.getItem('att_grp')!=='0',FOLD=new Set((()=>{try{return JSON.parse(localStorage.getItem('att_fold'))||[]}catch(e){return []}})());
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const p2=n=>String(n).padStart(2,'0');
+const toMin=t=>{const [h,m]=(t||'0:0').split(':').map(Number);return h*60+m};
+const fT=(m,l=lang)=>{m%=1440;const h=Math.floor(m/60);return ((h%12)||12)+':'+p2(m%60)+' '+tr(h>=12?'pm':'am',l)};
+const hrs=(s,e)=>{let d=toMin(e)-toMin(s);if(d<0)d+=1440;return +(d/60).toFixed(2)};
+const addT=(s,h)=>{const m=(toMin(s)+Math.round(h*60))%1440;return p2(Math.floor(m/60))+':'+p2(m%60)};
+const dk=d=>d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());
+const isDefShift=e=>!!e.days&&e.days.every((d,i)=>i==5?!d.on:(d.on&&d.s=='09:00'&&d.e=='17:00'));
+const nwChk=e=>e.nw===1||(e.nw===undefined&&!!e.n&&isDefShift(e));
+const mig=e=>e.days?{...e,c:e.c||'',dn:e.dn||''}:{n:e.n,c:e.c||'',dn:e.dn||'',days:[0,1,2,3,4,5,6].map(d=>({on:!(e.off||[]).includes(d),s:e.s,e:e.e,h:hrs(e.s,e.e)}))};
+try{EMP=JSON.parse(localStorage.getItem('att_emp2')||localStorage.getItem('att_emp'))}catch(e){}
+EMP=Array.isArray(EMP)?EMP.map(mig):DEF.map(mig);
+const save=()=>{try{localStorage.setItem('att_emp2',JSON.stringify(EMP))}catch(e){}bkDirty()};
+/* ---------- shift swaps ---------- */
+let EVS=null,CUTSIG='';
+let MAN=JSON.parse(JSON.stringify(DEFX.man));try{const q=localStorage.getItem('att_man');if(q!=null)MAN=JSON.parse(q)||{}}catch(e){}
+if(!MAN||typeof MAN!=='object'||Array.isArray(MAN))MAN={};
+const saveMAN=()=>{try{localStorage.setItem('att_man',JSON.stringify(MAN))}catch(e){}bkDirty()};
+let APPR=[];try{APPR=JSON.parse(localStorage.getItem('att_appr'))||[]}catch(e){}
+if(!Array.isArray(APPR))APPR=[];
+const saveAPPR=()=>{try{localStorage.setItem('att_appr',JSON.stringify(APPR.slice(-30)))}catch(e){}bkDirty()};
+const manMin=(t,n)=>{const m=toMin(t);return m<cutOf(n)?m+1440:m};
+let SW=JSON.parse(JSON.stringify(DEFX.sw));try{const q=localStorage.getItem('att_sw');if(q!=null)SW=JSON.parse(q)||[]}catch(e){}
+if(!Array.isArray(SW))SW=[];
+const saveSW=()=>{try{localStorage.setItem('att_sw',JSON.stringify(SW))}catch(e){}bkDirty()};
+function dayS(e,k,dow){
+ const w=SW.find(s=>k>=s.f&&k<=s.t&&(s.a===e.n||s.b===e.n));
+ if(w){const o=EMP.find(x=>x.n===(w.a===e.n?w.b:w.a));if(o&&o.days[dow])return {...o.days[dow],sw:1}}
+ return e.days[dow];
+}
+function drawSwap(){
+ const b=$('#swlist');if(!b)return;
+ const em=EMP.filter(e=>e.n),opt=em.map(e=>`<option value="${esc(e.n)}">${esc(e.dn||e.n)}</option>`).join('');
+ ['#swa','#swb'].forEach(id=>{const s=$(id),c=s.value;s.innerHTML=`<option value="">${tr('swpick')}</option>`+opt;if(c)s.value=c});
+ if(!$('#swf').value)$('#swf').value=dk(new Date());
+ const nm=n=>(EMP.find(e=>e.n===n)||{}).dn||n;
+ b.innerHTML=SW.length?SW.map((s,i)=>[s,i]).sort((x,y)=>x[0].f<y[0].f?1:-1).map(([s,i])=>{
+  const pv=n=>{if(s.f!==s.t)return '';const o=EMP.find(e=>e.n===n),sc=o&&o.days[new Date(s.f+'T00:00:00').getDay()];return sc?' ('+(sc.on?sc.s+'–'+sc.e:tr('offday'))+')':''};
+  return `<div class="ec"><div class="row" style="margin:0"><b style="flex:1 1 150px;min-width:0"><bdi>${s.f===s.t?s.f:s.f+' → '+s.t}</bdi><div class="mut"><bdi>${esc(nm(s.a))}${esc(pv(s.b))} ⇄ ${esc(nm(s.b))}${esc(pv(s.a))}</bdi></div></b><button class="d sm" onclick="swDel(${i})">${tr('del')}</button></div></div>`}).join(''):`<div class="mut">${tr('swnone')}</div>`;
+}
+function swAdd(){
+ const f=$('#swf').value,t=$('#swt').value||f,a=$('#swa').value,b=$('#swb').value;
+ if(!f||!a||!b){alert(tr('swmiss'));return}
+ if(a===b){alert(tr('swsame'));return}
+ if(t<f){alert(tr('swdate'));return}
+ if(SW.some(s=>!(t<s.f||f>s.t)&&(s.a===a||s.b===a||s.a===b||s.b===b))){alert(tr('swdup'));return}
+ SW.push({f,t,a,b});saveSW();$('#swt').value='';drawSwap();renderReport();flash(tr('swok'));
+}
+function swPick(d,ix){
+ const e=EMP[ix];if(!e)return;
+ const nm=n=>(EMP.find(x=>x.n===n)||{}).dn||n;
+ const ex=SW.findIndex(s=>d>=s.f&&d<=s.t&&(s.a===e.n||s.b===e.n));
+ if(ex>=0){const s=SW[ex];if(confirm(tr('swcd')+'\n'+(s.f===s.t?s.f:s.f+' → '+s.t)+'\n'+nm(s.a)+' ⇄ '+nm(s.b))){SW.splice(ex,1);saveSW();drawSwap();renderReport()}return}
+ const old=document.getElementById('swov');if(old)old.remove();
+ const o=document.createElement('div');o.id='swov';
+ o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px';
+ o.innerHTML=`<div class="card" style="width:min(92vw,380px);margin:0"><h2>${tr('swh')}</h2><div class="mut" style="margin-bottom:8px"><bdi>${d}</bdi> · ${esc(nm(e.n))}</div><div class="mut">${tr('swpt')}</div><select id="swpsel" style="width:100%;margin:6px 0 10px"><option value="">${tr('swpick')}</option>${EMP.filter(x=>x.n&&x.n!==e.n).map(x=>`<option value="${esc(x.n)}">${esc(x.dn||x.n)}</option>`).join('')}</select><div class="row" style="margin:0"><button class="o" id="swpok">${tr('swgo')}</button><button class="s" id="swpno">${tr('swcan')}</button></div></div>`;
+ document.body.appendChild(o);
+ o.onclick=ev=>{if(ev.target===o)o.remove()};
+ document.getElementById('swpno').onclick=()=>o.remove();
+ document.getElementById('swpok').onclick=()=>{
+  const b=document.getElementById('swpsel').value;if(!b){alert(tr('swmiss'));return}
+  if(SW.some(s=>d>=s.f&&d<=s.t&&(s.a===b||s.b===b))){alert(tr('swdup'));return}
+  SW.push({f:d,t:d,a:e.n,b});saveSW();o.remove();drawSwap();renderReport();
+ };
+}
+function swDel(i){if(confirm(tr('swcd'))){SW.splice(i,1);saveSW();drawSwap();renderReport()}}
+const flash=m=>{$('#sv').textContent=m;setTimeout(()=>{$('#sv').textContent=''},4000)};
+
+/* ---------- employees tab ---------- */
+function sumTxt(e,l=lang){
+ const g={},D=I[l].days;ORD.forEach(i=>{const d=e.days[i];if(d.on)(g[d.s+'–'+d.e+' ('+d.h+tr('h',l)+')']??=[]).push(D[i])});
+ return Object.entries(g).map(([k,v])=>v.join(' ')+': '+k).join(' | ')||tr('noday',l);
+}
+function schedHTML(e,i){
+ return `<div class="mut" style="margin-bottom:4px">${tr('setall')}</div><div class="g3q"><input type="time" id="qs${i}" value="09:00"><input type="time" id="qe${i}" value="17:00"><button class="o" onclick="qa(${i})">${tr('apply')}</button></div>`
+ +ORD.map(d=>{const x=e.days[d];
+ return `<div class="dr"><label><input type="checkbox" ${x.on?'checked':''} onchange="sd(${i},${d},'on',this.checked)">${I[lang].days[d]}</label>
+ <input class="c" type="time" aria-label="${tr('start')}" value="${x.s}" onchange="sd(${i},${d},'s',this.value)">
+ <input class="c" type="time" aria-label="${tr('end')}" value="${x.e}" onchange="sd(${i},${d},'e',this.value)">
+ <input class="c" type="number" aria-label="${tr('hours')}" placeholder="${tr('hours')}" min="0" max="24" step="0.25" value="${x.h}" onchange="sd(${i},${d},'h',this.value)"></div>`}).join('');
+}
+function empCard(e,i){return `<div id="emp${i}" class="ec c-${e.c||'none'}"><div class="row"><input type="checkbox" ${SEL.has(i)?'checked':''} onchange="this.checked?SEL.add(${i}):SEL.delete(${i})"><span class="av">${esc((e.dn||e.n||'?').trim().charAt(0).toUpperCase())}</span>
+ <input class="nm" placeholder="${tr('dname')}" value="${esc(e.n)}" list="names" onchange="renameEmp(${i},this)"></div>
+ <div class="g2"><select aria-label="${tr('cat')}" onchange="EMP[${i}].c=this.value;save();drawEmp();renderReport()">${CATS.map(c=>`<option value="${c}" ${(e.c||'')==c?'selected':''}>${cl(c)}</option>`).join('')}</select>
+ <input placeholder="${tr('xname')}" value="${esc(e.dn||'')}" onchange="EMP[${i}].dn=this.value.trim();save();drawEmp();renderReport()"></div>
+ <div class="g2"><input type="tel" inputmode="tel" placeholder="${tr('eph')} (${tr('eauto')})" value="${esc(e.ph||'')}" onchange="EMP[${i}].ph=this.value.trim();save();drawSum()"></div>
+ ${nwChk(e)?`<div class="ec stl w"><b>${tr('nw_badge')}</b> <button class="s sm" onclick="EMP[${i}].nw=0;save();drawEmp();renderReport()">${tr('nw_ok')}</button></div>`:''}
+ <label style="display:flex;gap:10px;align-items:center;margin:8px 0;cursor:pointer"><input type="checkbox" ${e.once?'checked':''} onchange="EMP[${i}].once=this.checked;save();renderReport()"><span>${tr('once_lbl')}</span></label>
+ <div class="mut"><bdi>${esc(sumTxt(e))}</bdi></div>
+ <div class="row" style="margin:8px 0 0"><button class="s" onclick="OPEN.has(${i})?OPEN.delete(${i}):OPEN.add(${i});drawEmp()">${OPEN.has(i)?tr('close'):tr('sch')}</button><button class="d" onclick="del(${i})">${tr('del')}</button></div>
+ ${OPEN.has(i)?`<div style="margin-top:10px">${schedHTML(e,i)}</div>`:''}</div>`}
+const saveFold=()=>{try{localStorage.setItem('att_fold',JSON.stringify([...FOLD]));localStorage.setItem('att_grp',GRP?'1':'0')}catch(e){}};
+function toggleGrp(){GRP=!GRP;saveFold();drawEmp()}
+function foldAll(v){CATS.forEach(c=>v?FOLD.add(c):FOLD.delete(c));saveFold();drawEmp()}
+function foldCat(c){FOLD.has(c)?FOLD.delete(c):FOLD.add(c);saveFold();drawEmp()}
+function drawEmp(){
+ if(typeof drawSum=='function')drawSum();
+ $('#grpbtn').textContent=GRP?tr('flat'):tr('grp');$('#expb').style.display=$('#colb').style.display=GRP?'':'none';
+ if(!GRP)$('#emp').innerHTML=EMP.map(empCard).join('');
+ else $('#emp').innerHTML=CATS.map(c=>{const x=EMP.map((e,i)=>[e,i]).filter(([e])=>(e.c||'')==c);if(!x.length)return '';const f=FOLD.has(c);
+  return `<button class="s" style="width:100%;display:flex;justify-content:space-between;margin:6px 0" onclick="foldCat('${c}')"><b>${cl(c)} (${x.length})</b><span>${f?'◀':'▼'}</span></button>`+(f?'':x.map(([e,i])=>empCard(e,i)).join(''))}).join('');
+ drawSwap();drawFiles();
+}
+function sd(i,d,k,v){
+ const x=EMP[i].days[d];EMP[i].nw=0;
+ if(k=='on')x.on=v;else if(k=='h'){x.h=+v||0;x.e=addT(x.s,x.h)}else{x[k]=v;x.h=hrs(x.s,x.e)}
+ save();drawEmp();renderReport();
+}
+function qa(i){
+ EMP[i].nw=0;const s=$('#qs'+i).value,e=$('#qe'+i).value;
+ EMP[i].days.forEach(x=>{if(x.on){x.s=s;x.e=e;x.h=hrs(s,e)}});save();drawEmp();renderReport();
+}
+
+let ESUM=false,HALL=false;const HPH=new Set();
+const PHN=/(?<![\d.])(?:\+?20[\s-]?)?0?1[0125][\s-]?\d{3,4}[\s-]?\d{4}(?!\d)/;
+function phoneOf(e){
+ if(e.ph)return e.ph;
+ const n=String(e.n||'').trim();
+ if(/^\+?[\d\s\-]{9,}$/.test(n)&&n.replace(/\D/g,'').length>=10)return n;
+ for(const m of (typeof MSG!=='undefined'?MSG:[])){if(m.n!==e.n||/^location:/i.test(m.x||''))continue;const r=PHN.exec(m.x||'');if(r)return r[0].trim()}
+ return '';
+}
+function schedCells(e){
+ const g={},D=I[lang].days,off=[];
+ ORD.forEach(i=>{const d=e.days[i];if(d.on)(g[d.s+'|'+d.e+'|'+d.h]??=[]).push(D[i]);else off.push(D[i])});
+ const ks=Object.keys(g),m=ks.length>1,pre=k=>m?g[k].join(' ')+': ':'';
+ const col=f=>ks.map(k=>{const [s,en,h]=k.split('|');return '<bdi>'+pre(k)+f(s,en,h)+'</bdi>'}).join('<br>')||'-';
+ return {ins:col(s=>s),outs:col((s,en)=>en),hrs:col((s,en,h)=>h+' '+tr('h')),off:off.join(' ')||'-'};
+}
+function esumHTML(pr){
+ const LB=['#',...['ename','eph','cat','ein','eout','ehrs','eoff'].map(h=>tr(h))];
+ const rows=EMP.map((e,i)=>{const c=schedCells(e),hid=HALL||HPH.has(i);
+  const pv=phoneOf(e),ph=pv?(hid?'••••••••••':'<bdi>'+esc(pv)+'</bdi>'):'-';
+  const eye=(!pr&&pv)?` <button class="s sm" onclick="HPH.has(${i})?HPH.delete(${i}):HPH.add(${i});drawSum()">${hid?'🙈':'👁'}</button>`:'';
+  return '<tr>'+[i+1,esc(e.dn||e.n),ph+eye,cl(e.c),c.ins,c.outs,c.hrs,c.off].map((v,k)=>`<td data-label="${LB[k]}">${v}</td>`).join('')+'</tr>'}).join('');
+ return `<table><thead><tr><th>#</th>${['ename','eph','cat','ein','eout','ehrs','eoff'].map(h=>`<th>${tr(h)}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+function drawSum(){
+ const b=$('#esum');if(!ESUM){b.innerHTML='';return}
+ b.innerHTML=`<div class="row"><button class="o" onclick="printDoc(tr('esum'),'<h1>'+esc(tr('esum'))+'</h1>'+esumHTML(true))">🖨 ${tr('eprint')}</button><button class="s" onclick="HALL=!HALL;drawSum()">${HALL?'🙈':'👁'} ${tr('eeye')}</button><button class="s" onclick="showSum()">${tr('eclose')}</button></div><div class="scroll">${esumHTML(false)}</div>`;
+}
+function showSum(){ESUM=!ESUM;drawSum();if(ESUM)$('#esum').scrollIntoView()}
+function addEmp(){FOLD.delete('');EMP.push(mig({n:'',s:'09:00',e:'17:00',off:[5]}));OPEN.add(EMP.length-1);save();drawEmp()}
+function after(){SEL.clear();OPEN.clear();save();drawEmp();renderReport()}
+function del(i){if(confirm(tr('c_del')(EMP[i].n||tr('thisemp')))){EMP.splice(i,1);after()}}
+function delSel(){
+ if(!SEL.size){alert(tr('tick'));return}
+ if(confirm(tr('c_dels')(SEL.size))){EMP=EMP.filter((_,i)=>!SEL.has(i));after()}
+}
+function saveFile(){
+ save();try{localStorage.setItem('att_gr',$('#gr').value)}catch(e){}
+ const b=new Blob([JSON.stringify({v:3,grace:+$('#gr').value||0,emp:EMP,tf:TF,sw:SW,man:MAN},null,1)],{type:'application/json'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(b);a.download='attendance-settings.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);flash(tr('saved'));
+}
+function loadFile(inp){
+ const f=inp.files[0];if(!f)return;
+ f.text().then(t=>{try{const j=JSON.parse(t);if(!Array.isArray(j.emp))throw 0;EMP=j.emp.map(mig);if(Array.isArray(j.sw)){SW=j.sw;saveSW()}if(j.man&&typeof j.man==='object'&&!Array.isArray(j.man)){MAN=j.man;saveMAN()}if(j.grace!=null)$('#gr').value=j.grace;if(j.tf&&typeof j.tf==='object'){TF=Object.assign(TF,j.tf);saveTF()}after();try{buildPR();renderMsgs()}catch(e){}flash(tr('loadedS'))}catch(e){alert(tr('bad'))}inp.value=''});
+}
+function resetDef(){if(confirm(tr('c_res'))){EMP=DEF.map(mig);after()}}
+
+/* ---------- WhatsApp files tab ---------- */
+function parse(txt){
+ const head=/^(\d{1,2})[\/.](\d{1,2})[\/.](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::\d{2})?\s*([AaPpصم]\.?[Mm]?\.?)?\s*-\s*(.*)$/;
+ const raw=[];let cur=null,dm=false,md=false;
+ for(const l0 of txt.split(/\r?\n/)){
+  const l=l0.replace(/[\u200e\u200f\u202a-\u202e]/g,''),m=head.exec(l);
+  if(m){
+   const s=/^([^:]+?): ([\s\S]*)$/.exec(m[7]);
+   if(s){cur={m,n:s[1].trim(),b:s[2]};raw.push(cur);if(+m[1]>12)dm=true;if(+m[2]>12)md=true}else cur=null;
+  }else if(cur)cur.b+='\n'+l;
+ }
+ const dmy=dm&&!md,ev=[],tx=[];
+ for(const r of raw){const m=r.m;
+  let d=+(dmy?m[1]:m[2]),mo=+(dmy?m[2]:m[1]),y=+m[3];if(y<100)y+=2000;
+  let h=+m[4];if(m[6]){const pm=/^[Ppم]/.test(m[6]);h=h%12+(pm?12:0)}
+  const o={n:r.n,y,mo,d,h,mi:+m[5]},lines=r.b.split('\n');let body=r.b.trim();
+  if(/^live location shared/i.test(lines[0].trim())){ev.push(o);body=lines.slice(1).join('\n').trim()}
+  if(!body||/^<?media omitted>?$/i.test(body)||/^(this message was deleted|you deleted this message|null)$/i.test(body)||/\(file attached\)$/i.test(body.split('\n')[0]))continue;
+  tx.push({...o,x:body});
+ }
+ return {ev,tx,dmy};
+}
+const MINV=2610010000;/* بيانات من 2026-10-01 فقط */
+const enc=e=>(e.y%100)*1e8+e.mo*1e6+e.d*1e4+e.h*100+e.mi;
+const dec=(n,v)=>({n,y:2000+Math.floor(v/1e8),mo:Math.floor(v/1e6)%100,d:Math.floor(v/1e4)%100,h:Math.floor(v/100)%100,mi:v%100});
+const vdate=v=>'20'+p2(Math.floor(v/1e8))+'-'+p2(Math.floor(v/1e6)%100)+'-'+p2(Math.floor(v/1e4)%100);
+function loadFiles(){
+ FILES=[];
+ let u=[],us={},mig=false;try{const en=localStorage.getItem('att_files_enc'),old=localStorage.getItem('att_files');if(en){try{u=JSON.parse(AC.dec(en))||[]}catch(e1){try{u=JSON.parse(AC.decLegacy(en))||[];mig=true}catch(e2){}}}else if(old){u=JSON.parse(old)||[];mig=true}us=JSON.parse(localStorage.getItem('att_use'))||{}}catch(e){}
+ u.forEach(f=>FILES.push({...f,use:true,b:0}));FILES.forEach(f=>{if(us[f.id]===false)f.use=false});if(mig||localStorage.getItem('att_files'))saveFiles();
+}
+function saveFiles(){
+ try{localStorage.setItem('att_files_enc',AC.enc(JSON.stringify(FILES.filter(f=>!f.b).map(({id,name,s,e,xs,x})=>({id,name,s,e,xs,x})))));localStorage.removeItem('att_files');
+ localStorage.setItem('att_use',JSON.stringify(Object.fromEntries(FILES.map(f=>[f.id,f.use]))))}catch(e){alert(tr('quota'))}
+ bkDirty();
+}
+function cutOf(n){
+ const e=EMP.find(x=>x.n===n);if(!e||!e.days)return 240;
+ let ne=-1,ds=1e9;
+ e.days.forEach(d=>{if(!d.on)return;const a=toMin(d.s),b=toMin(d.e);if(b<=a)ne=Math.max(ne,b);else ds=Math.min(ds,a)});
+ let c=240;
+ if(ne>=0)c=Math.max(240,ne+120);
+ if(ds<1e9)c=Math.min(c,Math.max(0,ds-30));
+ return Math.max(0,Math.min(c,720));
+}
+const cutSig=()=>EMP.map(e=>(e.n||'')+':'+cutOf(e.n)).join('|');
+function wk(e,cut=240){
+ let y=e.y,mo=e.mo,d=e.d,m=e.h*60+e.mi;
+ if(m<cut){const p=new Date(y,mo-1,d-1);y=p.getFullYear();mo=p.getMonth()+1;d=p.getDate();m+=1440}
+ return [y+'-'+p2(mo)+'-'+p2(d),m];
+}
+function indexOf(ev){
+ const D={},C={};let L='',M='';
+ for(const e of ev){
+  const [k,m]=wk(e,C[e.n]??=cutOf(e.n));
+  ((D[e.n]??={})[k]??=[]).push(m);if(k>L)L=k;if(!M||k<M)M=k;
+ }
+ for(const n in D)for(const k in D[n])D[n][k].sort((a,b)=>a-b);
+ return {DATA:D,LAST:L,MINK:M};
+}
+function computeState(files){
+ const seen=new Set(),ev=[];
+ files.forEach(f=>f.s.forEach((n,i)=>f.e[i].forEach(v=>{if(v<MINV)return;const k=n+'|'+v;if(!seen.has(k)){seen.add(k);ev.push(dec(n,v))}})));
+ const ix=indexOf(ev),sx=new Map(),hk=new Map(),M=[];
+ files.forEach(f=>(f.x||[]).forEach(([i,v,x])=>{
+  if(v<MINV)return;const n=f.xs[i],full=n+'|'+v+'|'+x;if(sx.has(full))return;
+  let k=hsh(full);if(hk.has(k)&&hk.get(k)!==full){let c=1;while(hk.has(k+'~'+c))c++;k=k+'~'+c}
+  hk.set(k,full);sx.set(full,k);M.push({k,n,v,x});
+ }));
+ M.sort((a,b)=>b.v-a.v);
+ return {ev,DATA:ix.DATA,LAST:ix.LAST,MINK:ix.MINK,MSG:M};
+}
+function reidx(){if(EVS&&cutSig()!==CUTSIG){const ix=indexOf(EVS);DATA=ix.DATA;LAST=ix.LAST;MINK=ix.MINK;CUTSIG=cutSig()}}
+function rebuildData(){
+ const st=computeState(FILES.filter(f=>f.use));
+ EVS=st.ev;DATA=st.DATA;LAST=st.LAST;MINK=st.MINK;CUTSIG=cutSig();
+ MSG=st.MSG;fillMsgSel();renderMsgs();
+ $('#names').innerHTML=Object.keys(DATA).map(n=>`<option value="${esc(n)}">`).join('');
+ const f=$('#from').value,t=$('#to').value;
+ if(MINK&&(!f||!t||t<MINK||f>LAST))setRange('month',1);
+ drawFiles();renderReport();
+}
+let IGN=[];try{IGN=JSON.parse(localStorage.getItem('att_ign'))||[]}catch(e){}if(!Array.isArray(IGN))IGN=[];
+const saveIGN=()=>{try{localStorage.setItem('att_ign',JSON.stringify(IGN))}catch(e){}};
+const unk=()=>Object.keys(DATA).filter(n=>!EMP.some(e=>e.n===n)&&!IGN.includes(n));
+function drawFiles(){
+ $('#files').innerHTML=FILES.map((f,i)=>{let n=0,a=1e12,b=0;f.e.forEach(x=>x.forEach(v=>{n++;if(v<a)a=v;if(v>b)b=v}));
+  return `<div class="ec"><div class="row"><input type="checkbox" ${f.use?'checked':''} onchange="FILES[${i}].use=this.checked;saveFiles();rebuildData()" aria-label="${tr('use')}"><b style="flex:1 1 150px;min-width:0;word-break:break-word"><bdi>${esc(f.name)}</bdi></b>${f.b?`<span class="mut">${tr('builtin')}</span>`:`<button class="d" onclick="rmFile(${i})">${tr('rm')}</button>`}</div>
+  <div class="mut"><bdi>${tr('fcnt')(n,f.s.length,n?vdate(a):'-',n?vdate(b):'-',(f.x||[]).length)}</bdi></div></div>`}).join('');
+ const u=unk().length;$('#unk').textContent=u?tr('unkb')(u):tr('nounk');$('#unk').disabled=!u;
+}
+function rmFile(i){if(confirm(tr('c_rm')(FILES[i].name))){FILES.splice(i,1);saveFiles();rebuildData()}}
+function addUnk(){const u=unk();u.forEach(n=>{const x=mig({n,s:'09:00',e:'17:00',off:[5]});x.nw=1;EMP.push(x)});save();drawEmp();renderReport();$('#fmsg').textContent=tr('unkd')(u.length)}
+$('#f').onchange=async ev=>{const fs=[...ev.target.files];ev.target.value='';if(fs.length)impStart(fs)};
+
+/* ---------- report engine ---------- */
+function report(from,to,gr,l=lang){
+ reidx();buildPR();
+ const D=I[l].days,days=[];
+ let [y,m,d]=from.split('-').map(Number);const [y2,m2,d2]=to.split('-').map(Number),end=new Date(y2,m2-1,d2);
+ for(let dt=new Date(y,m-1,d);dt<=end;dt=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()+1))days.push([dk(dt),dt.getDay()]);
+ const emps=[];
+ for(const [ix,e] of EMP.entries()){
+  if(!e.n)continue;
+  const rec=DATA[e.n]||{},pr=PR[e.n]||{},mk0=Object.keys(MAN).filter(x=>x.startsWith(e.n+'|')).map(x=>x.slice(e.n.length+1)),first=[...Object.keys(rec),...Object.keys(pr),...mk0].sort()[0]||'9999',rows=[];
+  for(const [k,dow] of days){
+   const a=rec[k]||[],p=pr[k]||{i:[],o:[]},mn=MAN[e.n+'|'+k],sc=dayS(e,k,dow),tx=(sc.on?sc.s+'–'+sc.e:tr('offday',l))+(sc.sw?' 🔄':'');
+   if(a.length>2&&!(mn&&(mn.i||mn.o)))rows.push([k,D[dow],tx,'-','-',0,0,sc.h,'-',0,'rev',sc.sw?1:0,'','','',0,0,0,0,0]);
+   else if(a.length||p.i.length||p.o.length||(mn&&(mn.i||mn.o))){
+    const st=toMin(sc.s);let en=toMin(sc.e);if(en<=st)en+=1440;
+    const ss=[...(a.length?[a[0]]:[]),...p.i],ee=[...(a.length?[a[a.length-1]]:[]),...p.o];
+    let ci=ss.length?Math.min(...ss):null,lo=ee.length?Math.max(...ee):null;
+    let si=ci==null?'':(a.length&&a[0]===ci?'loc':'txt'),so=lo==null?'':(a.length&&a[a.length-1]===lo?'loc':'txt');
+    if(mn&&mn.i){ci=manMin(mn.i,e.n);si='man'}
+    if(mn&&mn.o){lo=manMin(mn.o,e.n);so='man'}
+    const half=a.length==1&&!p.i.length&&!p.o.length&&!(mn&&(mn.i||mn.o))&&!e.once&&sc.on&&ci!=null&&si=='loc'&&ci>=(st+en)/2;
+    const nsi=ci!=null&&si=='loc'&&sc.on&&(ci>=en||half);if(nsi){ci=null;si=''}
+    let co=lo==null?null:(ci==null||so=='man'||lo-ci>=Math.max(60,sc.h*30)?lo:null);
+    if(e.once&&sc.on&&ci!=null&&co==null&&!(mn&&mn.o)){co=en;so='auto'}
+    const lt=ci!=null?ci-st:0,ea=co!=null?en-co:0,wk2=ci!=null&&co!=null?(co-ci)/60:null,sh=wk2!=null?Math.max(0,sc.h-wk2):0,isL=lt>gr,isE=ea>gr;
+    rows.push([k,D[dow],tx,ci!=null?fT(ci,l):'-',co!=null?fT(co,l):'-',isL?lt:0,ci!=null&&isE?ea:0,sc.h,wk2!=null?+wk2.toFixed(2):'-',+sh.toFixed(2),ci==null?'noin':isL?'late':'ok',sc.sw?1:0,ci!=null?si:'',co!=null?so:'',(mn&&mn.note)||'',mn&&mn.early&&ci!=null&&ci<st?st-ci:0,nsi?1:0,co!=null&&co-en>gr?co-en:0,ci!=null&&st-ci>gr?st-ci:0,isE?ea:0]);
+   }else if(sc.on&&k<LAST&&k>=first)rows.push([k,D[dow],tx,'-','-',0,0,sc.h,'-',0,'miss',sc.sw?1:0]);
+   else rows.push([k,D[dow],tx,'-','-',0,0,0,'-',0,sc.on?'na':'off',sc.sw?1:0]);
+  }
+  emps.push({id:ix,n:e.dn||e.n,c:e.c||'',shift:sumTxt(e,l),rows,t:agg(rows)});
+ }
+ return {emps};
+}
+function agg(rows){
+ const a={p:0,l:0,lm:0,e:0,m:0,ni:0,ns:0,wh:0,sh:0,f:0,io:0,oo:0,ei:0,lo:0,md:[]};
+ for(const r of rows){const s=r[10];
+  if(s=='late'||s=='ok'){a.p++;if(s=='late'){a.l++;a.lm+=r[5]}if(r[8]!=='-'){a.wh+=r[8];a.sh+=r[9]}}
+  else if(s=='miss'){a.m++;a.md.push(r[0])}else if(s=='noin'){if(r[16]){a.ns++;a.p++}else a.ni++}
+  if(s=='late'||s=='ok'||s=='noin'){const hi=r[3]!=='-',ho=r[4]!=='-';
+   if(hi&&ho)a.f++;else if(hi)a.io++;else if(ho)a.oo++;
+   if(r[18])a.ei++;if(r[19])a.e++;if(r[17])a.lo++}}
+ a.avg=a.l?Math.round(a.lm/a.l):0;a.wh=+a.wh.toFixed(1);a.sh=+a.sh.toFixed(1);return a;
+}
+const gkey=(k,g)=>g=='day'?k:g=='month'?k.slice(0,7):k.slice(0,4);
+function groups(rows,g){const m=new Map();rows.forEach(r=>{const k=gkey(r[0],g);if(!m.has(k))m.set(k,[]);m.get(k).push(r)});return [...m.entries()].sort((a,b)=>a[0]<b[0]?-1:1)}
+const filt=a=>{const f=$('#cat').value;return !f||f=='all'?a:a.filter(x=>(x.c||'none')==f)};
+const srt=a=>CATS.flatMap(c=>a.filter(x=>(x.c||'')==c));
+const SCOLS=[['full','f'],['io','io'],['oo','oo'],['ei','ei'],['late','l'],['lm','lm'],['avg','avg'],['lo','lo'],['early','e'],['miss','m'],['wh','wh'],['sh','sh']];
+const COLS=SCOLS.filter(c=>c[1]!='avg'),BAD=new Set(['l','e','m','ni','ns','sh','io','oo']);
+const MH=COLS.map(c=>c[0]);
+const TH=h=>h=='nsh'?`<th title="${esc(tr('nosign'))}">🚫</th>`:`<th>${tr(h)}</th>`;
+function ptable(rows,g,bad=true){
+ const gs=groups(rows,g).map(([k,r])=>[g=='day'?k+' '+r[0][1]:k,agg(r)]).filter(([,a])=>a.p||a.m||a.l||a.ni);
+ const tot=agg(rows);
+ const line=(lb,a,c='')=>`<tr class="${c}"><td><bdi>${lb}</bdi></td>${COLS.map(([,f])=>`<td class="${bad&&BAD.has(f)&&a[f]>0?'bad':''}">${a[f]}</td>`).join('')}</tr>`;
+ return '<tr><th>'+tr('per')+'</th>'+MH.map(TH).join('')+'</tr>'+gs.map(([k,a])=>line(k,a)).join('')+line(tr('tot'),tot,'tt');
+}
+const SRC={loc:'📍',txt:'💬',man:'✏️',auto:'🕒'};
+const srcIco=x=>x&&SRC[x]?` <span title="${tr('src_'+x)}">${SRC[x]}</span>`:'';
+const srcLegend=()=>`<div class="mut" style="margin:6px 0">📍 ${tr('src_loc')} · 💬 ${tr('src_txt')} · ✏️ ${tr('src_man')} · 🕒 ${tr('src_auto')}</div>`;
+function dtable(rows,btn,ix){
+ const H=['d_date','d_in','d_out','d_late','d_early','d_wk','d_sh','d_st'];
+ return '<tr>'+H.map(h=>`<th>${tr(h)}</th>`).join('')+'</tr>'+rows.filter(r=>r[10]!='off'&&r[10]!='na').map(r=>{
+  const st=r[10],c=st=='late'||st=='miss'?'bad':st=='ok'?'ok':'';
+  return `<tr><td${btn&&ix!=null?` style="cursor:pointer;text-decoration:underline dotted" onclick="dayOpen(${ix},'${r[0]}')"`:''}><bdi>${r[0]}</bdi> ${r[1]}${r[11]?' 🔄':''}${btn&&ix!=null&&EMP[ix]&&confl(EMP[ix].n,r[0]).length?' ⚠️':''}</td><td><bdi>${r[3]}</bdi>${srcIco(r[12])}</td><td class="${r[13]=='auto'?'au':''}"><bdi>${r[4]}</bdi>${srcIco(r[13])}${r[17]?' ➕':''}</td><td class="${r[5]||r[16]?'bad':''}">${r[16]?`<span title="${esc(tr('nosign'))}">🚫</span>`:r[5]}</td><td>${r[6]}</td><td>${r[8]}</td><td class="${r[9]>0?'bad':''}">${r[9]}</td><td><span class="chip ${st=='late'||st=='noin'||st=='rev'?'late':st=='miss'?'miss':'ok'}">${tr('s_'+st)}</span>${btn&&(st=='late'||st=='miss'||st=='noin')?` <button class="s sm" onclick="findTxt('${r[0]}')">🔍 ${tr('pt_txt')}</button>`:''}${btn&&ix!=null&&(st=='late'||st=='miss'||st=='noin'||r[11]||String(r[2]).startsWith(tr('offday')))?` <button class="s sm" onclick="swPick('${r[0]}',${ix})">🔄 ${tr('swb')}</button>`:''}</td></tr>`}).join('');
+}
+function cards(a,md=true){
+ const K=SCOLS;
+ return `<div class="st">`+K.map(([lb,f])=>`<div${lb=='nsh'?` title="${esc(tr('nosign'))}"`:''}><span>${tr(lb)}</span><b class="${BAD.has(f)&&a[f]>0?'bad':''}">${a[f]}</b></div>`).join('')+`</div>`
+  +(md&&a.md.length&&a.md.length<=31?`<div class="mut">${tr('md')}: <bdi>${a.md.map(k=>k.slice(5)).join(', ')}</bdi></div>`:'');
+}
+function renderReport(){
+ const has=Object.keys(DATA).length;$('#rep').style.display=has?'':'none';$('#nodata').style.display=has?'none':'';
+ if(!has)return;
+ const f=$('#from').value,t=$('#to').value;if(!f||!t||f>t)return;
+ R=report(f,t,+$('#gr').value||0);$('#eyebtn').textContent=window.HN?'🙈':'👁';drawRank();drawDash();
+ const vw=$('#view').value,g=$('#grp').value,E=filt(R.emps);
+ $('#vo').style.display=vw=='all'?'':'none';$('#ve').style.display=vw=='emp'?'':'none';
+ if(vw=='all'){
+  drawTeam(E);$('#ptab').innerHTML=ptable(E.flatMap(e=>e.rows),g);
+  $('#sum').innerHTML=CATS.map(c=>{const x=E.filter(e=>e.c==c);if(!x.length)return '';
+   const T=agg(x.flatMap(e=>e.rows));
+   return `<h3 class="gh">${cl(c)} (${x.length}) <span>${tr('pres')} ${T.p} · ${tr('late')} ${T.l} · ${tr('miss')} ${T.m} · ${tr('sh')} ${T.sh}</span></h3>`
+   +x.map(e=>`<div class="ec"><b>${esc(nmx(e))}</b><div class="mut"><bdi>${esc(e.shift)}</bdi></div>${cards(e.t)}</div>`).join('')}).join('');
+ }else{
+  const w=$('#who'),cur=w.value;w.innerHTML=srt(E).map(e=>`<option value="${e.id}">${esc(nmx(e))}</option>`).join('');if(cur)w.value=cur;
+  const e=R.emps.find(x=>String(x.id)==w.value);if(!e){$('#est').innerHTML='';$('#det').innerHTML='';return}
+  $('#est').innerHTML=`<div class="ec"><b>${esc(nmx(e))}</b> <span class="mut">${cl(e.c)}</span><div class="mut"><bdi>${esc(e.shift)}</bdi></div>${cards(e.t)}</div>`;
+  drawCal(e);$('#det').innerHTML=g=='day'?dtable(e.rows,1,e.id):ptable(e.rows,g);$('#srcleg').innerHTML=g=='day'?srcLegend():'';
+ }
+}
+
+/* ---------- conflict detection ---------- */
+const CF_LONG=960;
+function confl(n,k){
+ const mn0=MAN[n+'|'+k];if(mn0&&!(mn0.early&&!mn0.i&&!mn0.o))return [];
+ const pr=(PR[n]||{})[k]||{i:[],o:[]},loc=(DATA[n]||{})[k]||[],out=[];
+ const I=[...pr.i].sort((a,b)=>a-b),O=[...pr.o].sort((a,b)=>a-b),f=a=>a.map(m=>fT(m)).join(' · ');
+ const both=[...new Set(I.filter(m=>O.includes(m)))];
+ if(both.length)out.push(['both',f(both)]);
+ if(loc.length>2)out.push(['many',loc.length+' ← '+loc.map(m=>fT(m)).join(' · ')]);
+ const ss=[...(loc.length?[loc[0]]:[]),...I],ci=ss.length?Math.min(...ss):null;
+ const ee=[...(loc.length?[loc[loc.length-1]]:[]),...O],lo=ee.length?Math.max(...ee):null;
+ const seq=[...I.map(m=>[m,'i']),...O.map(m=>[m,'o'])].sort((a,b)=>a[0]-b[0]||(a[1]=='i'?-1:1)),dI=[],dO=[];
+ for(let j=1;j<seq.length;j++)if(seq[j][1]==seq[j-1][1])(seq[j][1]=='i'?dI:dO).push(fT(seq[j-1][0])+' / '+fT(seq[j][0]));
+ if(dI.length)out.push(['dupI',dI.join(' | ')]);
+ if(dO.length)out.push(['dupO',dO.join(' | ')]);
+ if(ci!=null&&lo!=null&&lo-ci>CF_LONG)out.push(['long',fT(ci)+' → '+fT(lo)+' ('+(Math.round((lo-ci)/6)/10)+')']);
+ const e0=EMP.find(x=>x.n===n);
+ if(e0&&ci!=null){
+  const sc=dayS(e0,k,new Date(k+'T00:00:00').getDay());
+  if(sc.on){const st=toMin(sc.s);let en=toMin(sc.e);if(en<=st)en+=1440;
+   if(!(mn0&&mn0.early)&&((ci>=en&&I.length)||(lo!=null&&lo<=st)))out.push(['outside',fT(ci)+(lo!=null?' – '+fT(lo):'')+' ≠ '+sc.s+'–'+sc.e])}
+ }
+ return out;
+}
+function allConf(f,t){
+ const out=[];
+ EMP.forEach((e,ix)=>{if(!e.n)return;
+  new Set([...Object.keys(DATA[e.n]||{}),...Object.keys(PR[e.n]||{})]).forEach(k=>{if(k<f||k>t)return;const c=confl(e.n,k);if(c.length)out.push({ix,k,c})})});
+ return out.sort((a,b)=>a.k<b.k?1:a.k>b.k?-1:0);
+}
+function cfBlock(n,k){
+ const c=confl(n,k);
+ return c.length?`<div class="ec" style="border-inline-start-color:var(--bad);margin:6px 0">`+c.map(([t,x])=>`<div>⚠️ <b>${tr('cf_'+t)}</b> <bdi class="mut">${x}</bdi></div>`).join('')+`<div class="mut" style="margin-top:4px">${tr(c.some(([t])=>t=='many')?'cf_fixm':'cf_fix')}</div></div>`:'';
+}
+/* ---------- review list v2: grouping, search, evidence, stale banner, group message ---------- */
+let RVI=[],RVCTX={multi:false,dayN:k=>k},RVF={q:'',t:'all',mode:'emp'};
+const RVT=['miss','noin','nsin','late','inc','early'];
+const rvLab=it=>it=='nsin'?tr('nosign'):it=='noin'?tr('s_noin'):it=='miss'?tr('s_miss'):it=='late'?tr('s_late'):it=='inc'?tr('dd_inc'):tr('early');
+function rvDtl(r,it){
+ const p=[];
+ if(r[3]!='-')p.push(tr('d_came')+' <bdi>'+esc(r[3])+(it=='late'&&r[5]?' (+'+r[5]+tr('d_min')+')':'')+'</bdi>');
+ if(r[4]!='-')p.push(tr('d_left')+' <bdi>'+esc(r[4])+(it=='early'&&r[6]?' (−'+r[6]+tr('d_min')+')':'')+'</bdi>');
+ p.push(tr('d_shift')+' <bdi>'+esc(r[2])+'</bdi>');return p.join(' · ');
+}
+function rvRow(e,r,it,o){
+ const hint=it=='nsin'?`<div class="hint">${tr('hint_out')} <button class="s sm" onclick="event.stopPropagation();manEdit(${e.id},'${r[0]}')">${tr('hint_add')}</button></div>`:'';
+ return `<div class="ec rv" onclick="dayOpen(${e.id},'${r[0]}')"><span style="min-width:0">${o.name?`<b>${esc(nmx(e))}</b> `:''}${o.date?`<bdi class="mut">${r[0]} ${r[1]}</bdi>`:''}<div class="mut">${rvDtl(r,it)}</div>${hint}</span>${o.chip?`<span class="chip ${it=='miss'?'miss':'late'}">${rvLab(it)}</span>`:'<span class="mut">›</span>'}</div>`;
+}
+function onceSug(ix){
+ const e=EMP[ix];if(!e||e.once)return 0;
+ const D=DATA[e.n]||{},ks=Object.keys(D).sort().slice(-30);if(ks.length<8)return 0;
+ const pc=Math.round(ks.filter(k=>D[k].length==1).length/ks.length*100);return pc>=70?pc:0;
+}
+function onceSet(ix,v){EMP[ix].once=!!v;save();renderReport()}
+function rvEmpGroups(xs,it){
+ const m=new Map();xs.forEach(x=>{const k=x[0].id;if(!m.has(k))m.set(k,{e:x[0],rs:[]});m.get(k).rs.push(x[1])});
+ return [...m.values()].sort((a,b)=>b.rs.length-a.rs.length).map(g=>{
+  if(g.rs.length==1)return rvRow(g.e,g.rs[0],it,{name:1,date:RVCTX.multi});
+  const key='e_'+it+'_'+g.e.id,pc=it=='inc'?onceSug(g.e.id):0;
+  return `<details class="eg" ${OPENG.has(key)?'open':''} ontoggle="togG('${key}',this.open)"><summary><span style="min-width:0"><b>${esc(nmx(g.e))}</b>: ${tr('rv_days')(g.rs.length)} — ${rvLab(it)}</span><b class="chip ${it=='miss'?'miss':'late'}">${g.rs.length}</b></summary>`
+   +(pc?`<div class="hint">${tr('once_sug')(pc)} <button class="o sm" onclick="onceSet(${g.e.id},1)">${tr('once_on')}</button></div>`:'')
+   +g.rs.map(r=>rvRow(g.e,r,it,{date:1})).join('')+`</details>`;
+ }).join('');
+}
+function rvList(){
+ if(!RVI.length)return `<div class="mut">${tr('dd_clean')}</div>`;
+ const q=RVF.q.trim().toLowerCase();
+ const L=RVI.filter(([e,r,it])=>(RVF.t=='all'||it==RVF.t)&&(!q||(e.n+' '+nmx(e)).toLowerCase().includes(q)));
+ if(!L.length)return `<div class="mut">${tr('rv_none')}</div>`;
+ if(RVF.mode=='day'&&RVCTX.multi){
+  const by=new Map();L.forEach(x=>{const k=x[1][0];if(!by.has(k))by.set(k,[]);by.get(k).push(x)});
+  return [...by.entries()].sort((a,b)=>a[0]<b[0]?1:-1).map(([k,xs])=>`<h4 class="dh"><bdi>${k} ${RVCTX.dayN(k)}</bdi><b class="chip late">${xs.length}</b></h4>`+xs.map(([e,r,it])=>rvRow(e,r,it,{name:1,chip:1})).join('')).join('');
+ }
+ return RVT.filter(t=>L.some(x=>x[2]==t)).map(t=>{
+  const xs=L.filter(x=>x[2]==t),key='r_'+t;
+  return `<details class="gp" data-g="${key}" ${OPENG.has(key)||q||RVF.t!='all'?'open':''} ontoggle="togG('${key}',this.open)"><summary><span>${rvLab(t)}</span><b class="chip ${t=='miss'?'miss':'late'}">${xs.length}</b></summary>${rvEmpGroups(xs,t)}</details>`;
+ }).join('');
+}
+function rvShell(){
+ const cnt=t=>RVI.filter(x=>t=='all'||x[2]==t).length;
+ const chips=[['all',tr('rv_all')],...RVT.map(t=>[t,rvLab(t)])].filter(([t])=>t=='all'||cnt(t)).map(([t,l])=>`<button class="${RVF.t==t?'o':'s'} sm" onclick="rvSet('t','${t}')">${l} ${cnt(t)}</button>`).join('');
+ const mode=RVCTX.multi?`<div class="chips seg" style="margin-bottom:8px"><button class="${RVF.mode=='emp'?'o':'s'} sm" onclick="rvSet('mode','emp')">${tr('rv_by_emp')}</button><button class="${RVF.mode=='day'?'o':'s'} sm" onclick="rvSet('mode','day')">${tr('rv_by_day')}</button></div>`:'';
+ return RVI.length?`<div class="rvbar"><input id="rvq" type="search" placeholder="${tr('rv_search')}" value="${esc(RVF.q)}" oninput="RVF.q=this.value;rvDraw()"><div class="chips">${chips}</div>${mode}</div><div id="rvlist">${rvList()}</div>`:`<div class="mut">${tr('dd_clean')}</div>`;
+}
+function rvDraw(){const b=$('#rvlist');if(b)b.innerHTML=rvList()}
+function rvSet(k,v){RVF[k]=v;const w=$('#rvwrap');if(w)w.innerHTML=rvShell()}
+function evFor(n,k){
+ const cut=cutOf(n),out=[];
+ ((DATA[n]||{})[k]||[]).forEach(m=>out.push([m,'loc','']));
+ (typeof MSG!=='undefined'?MSG:[]).forEach(x=>{if(x.n!==n)return;const [kk,m]=wk(dec(n,x.v),cut);if(kk===k)out.push([m,'txt',x.x])});
+ return out.sort((a,b)=>a[0]-b[0]);
+}
+function evHTML(n,k){
+ const ev=evFor(n,k);
+ return `<h3 style="margin:14px 0 4px">${tr('ev_h')}</h3>`+(ev.length?ev.map(([m,t,x])=>`<div class="kv"><span>${t=='loc'?'📍':'💬'} <bdi>${fT(m)}</bdi></span><b style="font-weight:500;text-align:start;word-break:break-word;min-width:0"><bdi>${t=='loc'?tr('src_loc'):esc(String(x).slice(0,160))}</bdi></b></div>`).join(''):`<div class="mut">${tr('ev_none')}</div>`);
+}
+function lastV(){let m=0;(EVS||[]).forEach(e=>{const v=enc(e);if(v>m)m=v});(typeof MSG!=='undefined'?MSG:[]).forEach(x=>{if(x.v>m)m=x.v});return m}
+function staleHTML(){
+ const v=lastV();if(!v)return '';
+ const d=dec('',v),t=new Date(),ago=Math.max(0,Math.round((new Date(t.getFullYear(),t.getMonth(),t.getDate())-new Date(d.y,d.mo-1,d.d))/864e5)),w=ago>=2;
+ return `<div class="ec stl ${w?'w':''}"><b>📥 ${tr('stale_h')}:</b> <bdi>${vdate(v)} ${fT(d.h*60+d.mi)}</bdi> · ${tr('stale_ago')(ago)}${w?`<div class="mut">⚠️ ${tr('stale_warn')}</div>`:''}</div>`;
+}
+function impOldHTML(ok){
+ let z=0;ok.forEach(c=>{c.rec.e.forEach(a=>a.forEach(v=>{if(v>z)z=v}));(c.rec.x||[]).forEach(t=>{if(t[1]>z)z=t[1]})});
+ const cur=lastV();if(!z||!cur||z>=cur)return '';
+ return `<div class="ec bkc w"><b>${tr('imp_old')(vdate(z),vdate(cur))}</b></div>`;
+}
+function unkHTML(){
+ const u=unk(),nw=EMP.map((e,i)=>[e,i]).filter(([e])=>e.n&&nwChk(e)&&DATA[e.n]);let h='';
+ if(u.length)h+=`<div class="ec stl w"><b>${tr('unk_h')(u.length)}</b><div class="row tags" style="margin:8px 0">${u.slice(0,8).map((n,i)=>`<button class="sm" onclick="unkOne(${i})"><bdi>+ ${esc(n)}</bdi></button>`).join('')}${u.length>8?`<span class="mut">+${u.length-8}</span>`:''}</div><div class="row" style="margin:0"><button class="o" onclick="unkIgn()">${tr('unk_ign')} (${u.length})</button><button class="s" onclick="unkGo()">${tr('unk_add')}</button></div></div>`;
+ else if(IGN.length)h+=`<div class="mut" style="margin:6px 0"><button class="s sm" onclick="IGN=[];saveIGN();renderReport();drawFiles()">↩ ${tr('unk_show')} (${IGN.length})</button></div>`;
+ if(nw.length)h+=`<div class="ec stl w"><b>${tr('nw_h')}</b><div class="mut"><bdi>${esc(nw.slice(0,6).map(([e])=>e.dn||e.n).join('، '))}${nw.length>6?'…':''}</bdi></div><div class="row" style="margin:6px 0 0"><button class="o sm" onclick="nwGo(${nw[0][1]})">${tr('nw_go')}</button></div></div>`;
+ return h;
+}
+function empJump(i){const e=EMP[i];if(e)FOLD.delete(e.c||'');OPEN.add(i);showTab(1);drawEmp();const c=document.getElementById('emp'+i);if(c)c.scrollIntoView({block:'start'});else window.scrollTo(0,0)}
+function nwGo(i){empJump(i)}
+function unkIgn(){unk().forEach(n=>IGN.push(n));saveIGN();renderReport();drawFiles()}
+function unkGo(){const before=EMP.length;addUnk();empJump(before)}
+function unkOne(i){const n=unk()[i];if(!n)return;const x=mig({n,s:'09:00',e:'17:00',off:[5]});x.nw=1;EMP.push(x);save();renderReport();empJump(EMP.length-1)}
+function gmData(){
+ const RR=report(LAST,LAST,+$('#gr').value||0),a=[],b=[],c=[];
+ for(const e of RR.emps){const r=e.rows[0];if(!r)continue;const st=r[10],okst=st=='ok'||st=='late'||st=='noin';
+  if(st=='na')c.push(e.n);else if(okst&&r[3]=='-')a.push(e.n);else if((st=='ok'||st=='late')&&r[4]=='-')b.push(e.n)}
+ return {a,b,c};
+}
+function gmClose(){const o=document.getElementById('gmov');if(o)o.remove()}
+function gmOpen(){
+ if(!LAST)return;gmClose();
+ const g=gmData(),none=!g.a.length&&!g.b.length&&!g.c.length,d=LAST+' '+I[lang].days[new Date(LAST+'T00:00:00').getDay()];
+ const o=document.createElement('div');o.id='gmov';
+ o.style.cssText='position:fixed;inset:0;z-index:9996;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+ o.innerHTML=`<div class="card" style="width:min(100%,520px);margin:0;border-radius:20px 20px 0 0;max-height:90vh;overflow:auto;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))"><h2>${tr('gm_h')}</h2>`
+  +(none?`<div class="mut">${tr('gm_none')}</div>`:`<textarea id="gmt">${esc(tr('gm_t')(d,g.a,g.b,g.c))}</textarea>`)
+  +`<div class="row" style="margin-top:10px">${none?'':`<button class="o" id="gmc" onclick="gmCopy()">${tr('gm_copy')}</button><button class="s" onclick="gmWa()">${tr('gm_wa')}</button>`}<button class="s" onclick="gmClose()">${tr('close')}</button></div></div>`;
+ o.onclick=ev=>{if(ev.target===o)gmClose()};document.body.appendChild(o);
+}
+function gmCopy(){
+ const t=$('#gmt'),b=$('#gmc'),done=()=>{if(b){b.textContent=tr('gm_copied');setTimeout(()=>{if(b)b.textContent=tr('gm_copy')},2500)}};
+ const fb=()=>{try{t.focus();t.select();document.execCommand('copy');done()}catch(e){}};
+ try{navigator.clipboard.writeText(t.value).then(done,fb)}catch(e){fb()}
+}
+function gmWa(){const t=$('#gmt');if(t)window.open('https://wa.me/?text='+encodeURIComponent(t.value),'_blank')}
+
+/* ---------- dashboard / calendar / day sheet ---------- */
+let DASH='day',CALM='';
+const addD=(k,n)=>{const [y,m,d]=k.split('-').map(Number);return dk(new Date(y,m-1,d+n))};
+function setDash(k){DASH=k;drawDash()}
+let ISSALL=false;
+const OPENG=new Set();
+function togG(k,o){o?OPENG.add(k):OPENG.delete(k)}
+function allG(o){document.querySelectorAll('#dash details.gp').forEach(d=>{d.open=o;togG(d.dataset.g,o)})}
+function drawDash(){
+ const b=$('#dash');if(!b)return;
+ if(!LAST){b.innerHTML='';return}
+ const e0=LAST,f=DASH=='day'?e0:DASH=='week'?addD(e0,-6):DASH=='all'?(MINK||e0):e0.slice(0,8)+'01',t=e0;
+ const RR=report(f,t,+$('#gr').value||0);
+ let p=0,l=0,m=0,ni=0,ns=0,ea=0,inc=0,wh=0;const iss=[];
+ for(const e of RR.emps)for(const r of e.rows){
+  const st=r[10];if(st!='late'&&st!='ok'&&st!='miss'&&st!='noin')continue;
+  if(st=='noin'&&!r[16]){ni++;iss.push([e,r,'noin']);continue}
+  if(st=='noin')ns++;
+  if(st=='miss'){m++;iss.push([e,r,'miss']);continue}
+  const ic=r[3]=='-'||r[4]=='-';
+  p++;if(st=='late')l++;if(r[6])ea++;if(ic)inc++;if(r[8]!=='-')wh+=r[8];
+  if(ic||st=='late'||r[6])iss.push([e,r,ic?(r[3]=='-'?'nsin':'inc'):st=='late'?'late':'early']);
+ }
+ const CF=allConf(f,t);
+ iss.sort((x,y)=>x[1][0]<y[1][0]?1:x[1][0]>y[1][0]?-1:0);
+ const C=[[tr('dd_ok'),p-inc,0],[tr('late'),l,l],[tr('miss'),m,m],[tr('s_noin'),ni,ni],['🚫 '+tr('nosign'),ns,ns],[tr('early'),ea,0],[tr('dd_inc'),inc,inc],[tr('cf_card'),CF.length,CF.length],[tr('wh'),+wh.toFixed(1),0]];
+ const ontime=p-l-ns,tot=p+m,pc=tot?Math.round(p/tot*100):0,d1=tot?ontime/tot*360:0,d2=d1+(tot?l/tot*360:0),d3=d2+(tot?ns/tot*360:0);
+ let viz='';
+ if(tot)viz+=`<div class="dnw"><div class="dn" style="background:conic-gradient(var(--ok) 0 ${d1}deg,var(--or) ${d1}deg ${d2}deg,#8fa3b8 ${d2}deg ${d3}deg,var(--bad) ${d3}deg 360deg)"><div><b>${pc}%</b><span>${tr('dd_rate')}</span></div></div><div class="dnl"><div style="border-inline-start-color:var(--ok)"><span>${tr('dd_ontime')}</span><b>${ontime}</b></div><div style="border-inline-start-color:var(--or)"><span>${tr('late')}</span><b>${l}</b></div><div style="border-inline-start-color:#8fa3b8"><span>${tr('nosign')}</span><b>${ns}</b></div><div style="border-inline-start-color:var(--bad)"><span>${tr('miss')}</span><b>${m}</b></div></div></div>`;
+ const mon=new Set(RR.emps.flatMap(e=>e.rows.map(r=>r[0]))).size>31,G=new Map();
+ for(const e of RR.emps)for(const r of e.rows){const st=r[10];const nsd=st=='noin'&&r[16];if(st!='late'&&st!='ok'&&st!='miss'&&!nsd)continue;const g=mon?r[0].slice(0,7):r[0],o=G.get(g)||{ok:0,l:0,m:0,n:0};if(st=='miss')o.m++;else if(st=='late')o.l++;else if(nsd)o.n++;else o.ok++;G.set(g,o)}
+ const gs=[...G.entries()].sort((a,b)=>a[0]<b[0]?-1:1);
+ if(gs.length>1){const mx=Math.max(...gs.map(([,o])=>o.ok+o.l+o.m+o.n))||1,h=v=>(v/mx*100).toFixed(1);
+  viz+=`<h3>${tr('dd_chart')}</h3><div class="bars">`+gs.map(([g,o])=>`<div class="bc" title="${g}: ${o.ok} / ${o.l} / ${o.n} / ${o.m}"><div class="bs"><i style="height:${h(o.m)}%;background:var(--bad)"></i><i style="height:${h(o.n)}%;background:#8fa3b8"></i><i style="height:${h(o.l)}%;background:var(--or)"></i><i style="height:${h(o.ok)}%;background:var(--ok)"></i></div><small>${mon?g.slice(2):g.slice(8)}</small></div>`).join('')+`</div><div class="lgd"><span><i style="background:var(--ok)"></i>${tr('dd_ontime')}</span><span><i style="background:var(--or)"></i>${tr('late')}</span><span><i style="background:#8fa3b8"></i>${tr('nosign')}</span><span><i style="background:var(--bad)"></i>${tr('miss')}</span></div>`}
+ const dp=CATS.map(c=>{const x=RR.emps.filter(e=>(e.c||'')==c);if(!x.length)return '';const a=agg(x.flatMap(e=>e.rows));if(!(a.p||a.m))return '';
+  return `<div class="dc"><span>${cl(c)}</span><b>${x.length}</b><small>${tr('dd_ontime')} ${a.p-a.l-a.ns} · ${tr('late')} ${a.l}${a.ns?' · 🚫 '+a.ns:''} · ${tr('miss')} ${a.m}</small></div>`}).join('');
+ if(dp)viz+=`<h3>${tr('dd_dept')}</h3><div class="dg">${dp}</div>`;
+ if(DASH=='day'){const L=srt(RR.emps).map(e=>[e,e.rows[0]]).filter(([e,r])=>r&&(r[10]=='ok'||r[10]=='late'));
+  if(L.length)viz+=`<h3>${tr('dd_in')} (${L.length})</h3>`+L.slice(0,30).map(([e,r])=>`<div class="ec rv" onclick="dayOpen(${e.id},'${r[0]}')"><span><b>${esc(nmx(e))}</b><div class="mut"><bdi>${r[3]} → ${r[4]}</bdi></div></span><span class="chip ${r[10]=='late'?'late':'ok'}">${r[10]=='late'?tr('s_late'):tr('s_ok')}</span></div>`).join('')}
+ const lab=it=>it=='nsin'?tr('nosign'):it=='noin'?tr('s_noin'):it=='miss'?tr('s_miss'):it=='late'?tr('s_late'):it=='inc'?tr('dd_inc'):tr('early');
+ const grp=(key,title,items,cls)=>`<details class="gp" data-g="${key}" ${OPENG.has(key)?'open':''} ontoggle="togG('${key}',this.open)"><summary><span>${title}</span><b class="chip ${cls}">${items.length}</b></summary>${items.join('')}</details>`;
+ const dayN=k=>I[lang].days[new Date(k+'T00:00:00').getDay()];
+ const cfG={};CF.forEach(({ix,k,c})=>c.forEach(([t,x])=>{(cfG[t]=cfG[t]||[]).push(`<div class="ec rv" style="border-inline-start-color:var(--bad)" onclick="dayOpen(${ix},'${k}')"><span><b>${esc(nmx({id:ix,n:EMP[ix].dn||EMP[ix].n}))}</b> <bdi class="mut">${k} ${dayN(k)}</bdi><div class="mut"><bdi>${x}</bdi></div></span><span class="chip miss">⚠️</span></div>`)}));
+ const cfOrd=['outside','oonly','dupI','dupO','both','long'];
+ const cfHtml=CF.length?[...cfOrd,...Object.keys(cfG).filter(t=>!cfOrd.includes(t))].filter(t=>cfG[t]).map(t=>grp('c_'+t,tr('cf_'+t),cfG[t],'miss')).join(''):`<div class="mut">${tr('cf_none')}</div>`;
+ RVI=iss;RVCTX={multi:f!==t,dayN};const rvHtml=rvShell();
+ b.innerHTML=`<div class="chips seg">`+[['day','dd_day'],['week','dd_week'],['month','dd_mon'],['all','dd_all']].map(([k,x])=>`<button class="${DASH==k?'o':'s'} sm" onclick="setDash('${k}')">${tr(x)}</button>`).join('')+`</div>`
+  +staleHTML()+unkHTML()
+  +`<div class="mut"><bdi>${f==t?f:f+' → '+t}</bdi>${DASH=='day'?' · '+tr('dd_note'):''}</div>`
+  +`<div class="st">`+C.map(([a,v,bad])=>`<div><span>${a}</span><b class="${bad>0?'bad':''}">${v}</b></div>`).join('')+`</div>`
+  +viz
+  +`<div class="row eq" style="margin-top:10px"><button class="s sm" onclick="allG(true)">${tr('dd_exp')}</button><button class="s sm" onclick="allG(false)">${tr('dd_col')}</button></div>`
+  +`<h3>${tr('cf_h')} (${CF.length})</h3>`
+  +cfHtml
+  +`<div class="hrow"><h3>${tr('dd_rev')} (${iss.length})</h3><button class="s sm" onclick="gmOpen()">${tr('gm_btn')}</button></div>`
+  +`<div id="rvwrap">${rvHtml}</div>`;
+}
+function drawTeam(E){
+ const b=$('#team');if(!b)return;
+ if(!CALM)CALM=(LAST||dk(new Date())).slice(0,7);
+ const [y,mo]=CALM.split('-').map(Number),n=new Date(y,mo,0).getDate();
+ const ids=new Set(E.map(e=>e.id)),L=srt(report(CALM+'-01',CALM+'-'+p2(n),+$('#gr').value||0).emps.filter(e=>ids.has(e.id)));
+ if(!L.length){b.innerHTML='';return}
+ const ml=new Date(y,mo-1,1).toLocaleDateString(lang=='ar'?'ar-u-nu-latn':'en-US',{month:'long',year:'numeric'}),ar=lang=='ar'?['▶','◀']:['◀','▶'];
+ const tot=Array(n).fill(0);let cat=null;
+ let h=`<h3>${tr('tg_h')}</h3><div class="row" style="justify-content:space-between;margin:6px 0"><button class="s sm" onclick="calGo(-1)">${ar[0]}</button><b>${ml}</b><button class="s sm" onclick="calGo(1)">${ar[1]}</button></div><div class="tgw"><div class="tg" style="grid-template-columns:104px repeat(${n},28px) repeat(3,36px)">`
+  +`<div class="nm hd"></div>`+Array.from({length:n},(_,i)=>`<div class="hd">${i+1}</div>`).join('')+`<div class="hd">✓</div><div class="hd">⏰</div><div class="hd">✕</div>`;
+ for(const e of L){
+  if((e.c||'')!==cat){cat=e.c||'';h+=`<div class="gc"><span>${cl(cat)}</span></div>`}
+  const mp={};e.rows.forEach(r=>mp[r[0]]=r);
+  h+=`<div class="nm">${esc(nmx(e))}</div>`;
+  for(let d=1;d<=n;d++){
+   const k=CALM+'-'+p2(d),r=mp[k],st=r?r[10]:'na';if(st=='ok'||st=='late')tot[d-1]++;
+   const ic=(st=='ok'||st=='late')&&(r[3]=='-'||r[4]=='-'),cf=confl(EMP[e.id].n,k).length;
+   h+=`<div class="g ${st=='ok'?'ok':st=='late'?'late':st=='miss'?'miss':st=='noin'?'noin':'off'}" title="${k}" onclick="dayOpen(${e.id},'${k}')">${cf?'⚠':ic?'!':st=='noin'?'∅':r&&r[11]?'🔄':''}</div>`;
+  }
+  h+=`<div>${e.t.p}</div><div class="${e.t.l?'bad':''}">${e.t.l}</div><div class="${e.t.m?'bad':''}">${e.t.m}</div>`;
+ }
+ h+=`<div class="nm hd">${tr('tg_pres')}</div>`+tot.map(v=>`<div class="hd">${v||''}</div>`).join('')+'<div class="hd"></div>'.repeat(3);
+ h+=`</div></div><div class="lgd"><span><i style="background:rgba(15,143,107,.5)"></i>${tr('s_ok')}</span><span><i style="background:rgba(251,133,0,.55)"></i>${tr('s_late')}</span><span><i style="background:rgba(214,40,40,.5)"></i>${tr('s_miss')}</span><span><i style="background:var(--soft);border:1px solid var(--bd)"></i>${tr('dd_offl')}</span><span>! ${tr('dd_incl')}</span><span>∅ ${tr('s_noin')}</span><span>⚠ ${tr('cf_card')}</span></div>`;
+ b.innerHTML=h;
+}
+const GUIDE={
+ar:[
+{i:"🚀",t:"البداية السريعة",l:[
+["١) الموظفين","من تاب 👥 ضيف الموظفين وحدد جداولهم. الاسم لازم يطابق اسم المرسل في جروب واتساب بالظبط."],
+["٢) ملفات واتساب","اعمل Export للشات من واتساب بدون وسائط، وضيف ملف الـ zip أو txt من تاب 💬."],
+["٣) التقارير","افتح تاب 📊 وشوف لوحة الملخص والتقارير. اضغط على أي يوم أو موظف لتفاصيله."],
+["٤) التوقيع النصي","لو الموظف بعت رسالة زي (وصلت) أو (نزلت) علّمها من تاب 📝 كحضور أو انصراف."],
+["٥) النسخة الاحتياطية","اضغط 💾 نسخ احتياطي (فوق) واحفظ نسخة كاملة من وقت للتاني، وخلّيها في مكان تاني. كل حاجة بتتحفظ في متصفحك على الجهاز ده بس."]]},
+{i:"👥",t:"الموظفين والجداول",l:[
+["إضافة وحذف","(+ إضافة موظف) لإضافة موظف. علّم على اللي عاوز تمسحهم واضغط (حذف المحدد)."],
+["الاسم والاسم المعروض","الاسم لازم يطابق اسم المرسل في واتساب. الاسم المعروض اختياري، وهو اللي بيظهر في التقارير والـ PDF."],
+["تغيير اسم واتساب","لما تغيّر اسم الموظف بيظهر تنبيه بإيه اللي هيتأثر: تبديلات الورديات وعلامات التوقيع النصي والتعديلات اليدوية وسجلات الشات. وتقدر تختار تحدّث الارتباطات تلقائي أو تغيّر الاسم بس. سجلات الشات بتتربط باسم واتساب بس، فلو الاسم الجديد مش اسم المرسل بتنفصل عن الموظف."],
+["الفئة","MRI أو CT أو سكرتارية أو خزينة أو من غير فئة. الأقسام بتتجمع بيها في اللوحة والتقارير."],
+["الجدول","افتح (الجدول) لكل موظف وحدد أيام الشغل وميعاد البداية والنهاية والساعات لكل يوم. تقدر تضبط كل الأيام مرة واحدة. الوردية الليلية اللي بتخلص تاني يوم مدعومة."],
+["العرض","تجميع حسب الفئة أو قايمة عادية، وتوسيع أو طي الكل."],
+["ملخص الموظفين","جدول بالاسم والتليفون والفئة وأوقات الدخول والخروج والساعات وأيام الراحة لكل الموظفين. فيه طباعة وزر لإخفاء أرقام التليفونات."],
+["إعادة الافتراضي","بيرجّع الموظفين الأصليين المثبتين في البرنامج."],
+["حفظ وتحميل الإعدادات","ملف فيه الموظفين والجداول وعلامات التوقيع النصي وتبديلات المواعيد. وكلهم بيتحفظوا تلقائي في المتصفح كمان."]]},
+{i:"🔄",t:"تبديل المواعيد",l:[
+["من تاب الموظفين","اختار التاريخ (وإلى لو كذا يوم) والموظفين. كل واحد بيتحاسب على ميعاد التاني في الأيام دي بس."],
+["للأيام اللي فاتت","من التقرير: جنب اليوم في تفاصيل الموظف أو التقويم أو ورقة اليوم، اضغط 🔄 تبديل واختار الموظف اللي بدّل معاه."],
+["الإلغاء","الضغط على 🔄 في يوم متبدّل بيسألك تمسح التبديل. وفي قايمة التبديلات زر حذف."],
+["قواعد","التبديل بيتسجل للاتنين مرة واحدة، والموظف ما ينفعش يبقى في تبديلين متداخلين. علامة 🔄 بتظهر على اليوم في التقارير والـ PDF."],
+["تنبيه","لو غيّرت اسم الموظف (اسم واتساب) بعد تسجيل التبديل، التبديل القديم بيفقد ارتباطه. امسحه وسجله تاني."]]},
+{i:"💬",t:"ملفات واتساب",l:[
+["إضافة ملف","zip أو txt من Export الشات بدون وسائط، وتقدر تختار أكتر من ملف مرة واحدة. قبل الدمج بتظهر (تجربة الاستيراد)."],
+["تجربة الاستيراد","بتعرض لكل ملف عدد السجلات الجديدة والمكررة والمرفوضة، وسبب الرفض (تاريخ غير صالح أو في المستقبل أو مرسل فاضي)، والتواريخ الجديدة، والمرسلين اللي مش في قايمة الموظفين. ومفيش حاجة بتتدمج إلا لما تضغط دمج."],
+["منع التكرار","استيراد نفس ملف المحادثة أكتر من مرة (أو ملف فيه جزء من القديم) ما بيحسبش أي بصمة أو رسالة مرتين. الملف المطابق بالكامل بيتجاهل."],
+["تقرير الفروق","قبل الدمج البرنامج بيحسب التقرير قبل وبعد، ويعرض الموظفين اللي اتغيّر عندهم الحضور أو التأخير أو الغياب أو بلا حضور أو الساعات، والأيام اللي اتغيرت. بعد الدمج زر (📋 آخر تقرير فروق) بيفتحه تاني لحد ما تقفل البرنامج."],
+["اللي بيتاخد من الملف","أسماء المرسلين وأوقات اللوكيشن المباشر والرسائل النصية. الوسائط لأ."],
+["تفعيل وحذف","الصندوق جنب كل ملف بيفعّله أو يوقفه. زر الحذف للملفات اللي ضفتها، والملف المثبّت في البرنامج ما بيتمسحش."],
+["مرسلين جداد","زر (إضافة مرسل مش في قايمة الموظفين) بيضيفهم بجدول افتراضي ٩ص إلى ٥م والجمعة راحة، وتعدّله بعدها."]]},
+{i:"📝",t:"الرسائل والتوقيع النصي",l:[
+["القايمة والفلاتر","كل الرسائل النصية مع بحث وفلتر بالمرسل والحالة (الكل، من غير علامة، حضور، انصراف، المحذوفة) والتاريخ."],
+["علامة حضور أو انصراف","حدد الرسائل (أو تحديد الكل) واضغط علامة الحضور أو الانصراف. بتتحول لتوقيع نصي بيتدمج في الحساب."],
+["إزاي بيتدمج","الحضور = أبكر وقت بين اللوكيشن والتوقيع. الانصراف = أخير وقت بينهم."],
+["تعيين لموظف","(تعيين المحدد لموظف) بيحسب التوقيع لموظف غير اللي كتب الرسالة. الافتراضي هو اللي كتبها لو موجود في القايمة."],
+["الكشف التلقائي","بيعلّم الرسائل اللي فيها كلمات زي وصل وحضر وجيت (حضور) ونزل وانصرف ومشي وخرج (انصراف). بيسألك قبل ما يطبّق."],
+["حذف واسترجاع","الرسائل اللي مالهاش لازمة تتحذف وما بتتحسبش، وتقدر ترجّعها من فلتر المحذوفة."],
+["من التقرير","زر 🔍 توقيع نصي جنب اليوم المتأخر أو الغياب، وزر 💬 رسائل اليوم في ورقة اليوم، بيفتحوا رسائل اليوم ده على طول."],
+["PDF","تصدير القايمة الحالية، أو التوقيعات بس."]]},
+{i:"📊",t:"لوحة الملخص",u:1,l:[
+["الفترات","آخر يوم أو الأسبوع أو الشهر أو الكل. كلها محسوبة من آخر يوم في البيانات مش من تاريخ النهاردة."],
+["الكروت","حضور مكتمل، تأخير، غياب، بلا حضور، خروج مبكر، أيام من غير انصراف، تعارضات، وساعات العمل."],
+["دونات نسبة الحضور","النسبة = حاضر ÷ (حاضر + غياب). الأخضر في الميعاد، البرتقالي تأخير، الأحمر غياب."],
+["الرسم على الأيام","أعمدة لكل يوم، وبتتجمّع بالشهور لو الفترة أطول من ٣١ يوم."],
+["كروت الأقسام","لكل فئة: عدد الموظفين وفي الميعاد والتأخير والغياب."],
+["سجّلوا حضورهم","في وضع آخر يوم بس: قايمة بوقت الدخول والخروج وحالة كل موظف."],
+["تحتاج مراجعة","أحدث الأيام اللي فيها تأخير أو خروج مبكر أو من غير انصراف أو غياب. اضغط على أي بند لتفاصيل اليوم."],
+["تنبيه","الغياب بيتحسب بعد ما اليوم يخلص، فآخر يوم في البيانات ما بيظهرش فيه غياب."]]},
+{i:"⚠️",t:"كشف التعارضات",u:1,l:[
+["تكرار","حضور أو انصراف مسجل مرتين ورا بعض من غير النوع التاني بينهم. دخول وخروج وبعدين دخول وخروج تاني (راحة) مش تعارض."],
+["رسالة معلّمة الاتنين","رسالة واحدة معلّمة حضور وانصراف مع بعض."],
+["خارج الوردية","حضور بعد نهاية الوردية المقررة لليوم ده، أو انصراف قبل بدايتها. غالباً وردية غلط أو تبديل مش مسجل."],
+["مدة أطول من ١٦ ساعة","بين أول حضور وآخر انصراف. غالباً نسيان انصراف أو توقيع على يوم غلط."],
+["فين بتظهر","كارت وقايمة في اللوحة، وعلامة ⚠️ في التقويم والجدول، وصندوق أحمر في ورقة اليوم. زر (الكل) في اللوحة بيفحص كل البيانات."],
+["الحل","افتح (رسائل اليوم) من ورقة اليوم وصحّح علامات الحضور والانصراف."]]},
+{i:"📅",t:"الجدول الشهري والتقويم وتفاصيل اليوم",u:1,l:[
+["جدول الفريق الشهري","في عرض (كل الموظفين): صف لكل موظف وعمود لكل يوم بمربعات ملونة، وأعمدة حضور وتأخير وغياب، وصف عدد الحاضرين كل يوم."],
+["تقويم الموظف","في عرض (موظف): تقويم الشهر بألوان الأيام. علامة ! لحضور من غير انصراف، 🔄 لتبديل، ⚠️ لتعارض."],
+["الألوان","أخضر حضور، برتقالي تأخير، أحمر غياب، رمادي راحة، وإطار أحمر منقّط (∅) بلا حضور."],
+["ورقة اليوم","اضغط على أي يوم (في التقويم أو الجدول أو القايمة): الميعاد والحضور والانصراف والتأخير والخروج المبكر والساعات والنقص، وكل الرسائل والتوقيعات المسجلة."],
+["مصدر كل توقيت","جنب وقت الحضور والانصراف أيقونة بتوضح مصدره: 📍 موقع مباشر، 💬 رسالة نصية معتمدة (توقيع نصي)، ✏️ تعديل يدوي. بتظهر في تفاصيل الموظف وورقة اليوم والـ PDF."],
+["التعديل اليدوي","من ورقة اليوم اضغط ✏️ تعديل يدوي واكتب وقت الحضور و/أو الانصراف الصح مع ملاحظة. التعديل بيحل محل الأوقات المسجلة لليوم ده بس، وما بيطلعش على اليوم تعارضات، وبيتحفظ في النسخة الاحتياطية. لو مسحته الأوقات الأصلية بترجع."],
+["الأسهم","بتغيّر الشهر، وهي مشتركة بين الجدول الشهري والتقويم."]]},
+{i:"📈",t:"التقارير والتصدير",u:1,l:[
+["الفترة","من وإلى، واختصارات: الكل والسنة والشهر والشهر اللي فات."],
+["العرض","كل الموظفين أو موظف واحد، وفلتر الفئة، وتجميع يومي أو شهري أو سنوي."],
+["دقايق السماح","التأخير والخروج المبكر بيتحسبوا بعد الدقايق دي بس."],
+["🏆 ترتيب الالتزام","ترتيب الموظفين بنسبة الالتزام، مع الحضور والتأخير ودقايق التأخير والخروج المبكر والغياب. فيه زر طباعة."],
+["👁 إخفاء الأسماء","بيستبدل الأسماء بأرقام للعرض أو الطباعة."],
+["✅ مراجعة قبل الاعتماد","بتفحص الفترة المختارة وتعرض: أيام من غير حضور أو انصراف، والتعارضات، وأيام من غير بيانات لأي موظف (غالباً الملف ما غطّاهاش)، وموظفين بجدول ومن غير أي تسجيل (غالباً اسم واتساب غلط)، ورسائل شكلها حضور أو انصراف ومش معلّمة. بعدين (اعتماد التقرير) بيسجل الفترة والوقت وبصمة للبيانات، وبيوريك بعدين لو البيانات اتغيرت بعد الاعتماد."],
+["PDF","الشامل، أو الموظف ده، أو صفحة لكل موظف. علامة 🔄 بتظهر على الأيام المتبدّلة."],
+["جدول تفاصيل الموظف","جنب كل يوم متأخر أو غياب زر 🔍 توقيع نصي وزر 🔄 تبديل. والضغط على التاريخ نفسه بيفتح ورقة اليوم."]]},
+{i:"📐",t:"طريقة الحساب",u:1,l:[
+["يوم العمل","بيتحدد حسب وردية كل موظف مش قاعدة واحدة للكل. الموظف النهاري: أي وقت قبل ٤ الفجر (أو قبل بداية ورديته بنص ساعة لو بتبدأ بدري) بيتحسب لليوم اللي قبله. والموظف اللي ورديته الليلية بتخلص الصبح بيمتد عنده اليوم لحد ساعتين بعد نهاية الوردية."],
+["الحضور","أول لوكيشن في يوم العمل، أو توقيع الحضور لو أبكر."],
+["الانصراف","آخر لوكيشن أو توقيع انصراف، بشرط تكون المدة بعد الحضور ساعة على الأقل ونص ساعات اليوم المطلوبة على الأقل، وإلا اليوم بيتحسب من غير انصراف."],
+["بلا حضور","يوم فيه توقيع انصراف بس ومفيش لوكيشن ولا توقيع حضور. بيظهر بحالة (بلا حضور)، وما بيتحسبش حضور ولا غياب، وليه عمود وكارت لوحده."],
+["التأخير والخروج المبكر","التأخير = الحضور بعد ميعاد البداية بأكتر من دقايق السماح. الخروج المبكر = قبل النهاية بأكتر من السماح."],
+["الساعات","الفعلية والناقصة بتتحسب في الأيام اللي لها انصراف بس."],
+["الغياب","يوم عمل من غير أي تسجيل، من أول سجل للموظف لحد اليوم اللي قبل آخر يوم في البيانات."],
+["الجداول","بتتطبق على كل التواريخ. التبديل بيغيّر اليوم المحدد بس."]]},
+{i:"🛡️",t:"النسخ الاحتياطي والاستعادة",l:[
+["الزر","💾 نسخ احتياطي فوق جنب (خصائص). بتظهر عليه نقطة حمرا لما يكون فيه تغييرات بعد آخر نسخة، أو لو ما اتعملتش نسخة أصلاً."],
+["حفظ نسخة كاملة","ملف واحد فيه الموظفين وجداولهم وملفات واتساب المضافة (الرسائل والبصمات) وعلامات التوقيع النصي وتبديلات المواعيد والتعديلات اليدوية والاعتمادات والإعدادات. أول ما يتحفظ البرنامج بيفتحه ويقارنه بالبيانات الحالية ويقولك لو فيه مشكلة."],
+["التشفير","النسخة مشفّرة. محتاج نفس ملف البرنامج ونفس الرقم السري عشان تفتحها، فاحتفظ بيهم مع النسخة. الملف المثبّت جوه البرنامج مش داخل فيها لأنه جوه الملف نفسه."],
+["الاستعادة","اختار ملف النسخة. البرنامج بيختبره الأول: بيفتحه ويتأكد من سلامته ويعرض اللي جواه ومقارنته بالحالي. وبعدين تضغط (تنفيذ الاستعادة)."],
+["قبل الاستبدال","الاستعادة بتستبدل البيانات الحالية. فيه خيار (احفظ نسخة من الحالي قبل الاستبدال) متفعّل تلقائي، وبينزّل نسخة من الحالي قبل ما يبدّل."],
+["تغيير الجهاز أو المتصفح","افتح البرنامج بنفس الملف والرقم السري على الجهاز أو المتصفح الجديد، واضغط 💾 نسخ احتياطي ثم استعادة واختار آخر نسخة."],
+["ملف الإعدادات القديم","(حفظ الإعدادات) في تاب الموظفين بيحفظ الإعدادات بس من غير رسائل واتساب. تقدر تستعيده من نفس زر الاستعادة، والملفات الحالية بتفضل زي ما هي."],
+["تخزين دائم","البرنامج بيطلب من المتصفح ما يمسحش بياناته، وبيعرض في نافذة النسخ لو اتفعّل. ده مش ضمان، فالنسخة الاحتياطية هي الأمان الحقيقي."],
+["نصيحة","انسخ الملف على Drive أو ابعته لنفسك على واتساب، وخصوصاً بعد أي إضافة كبيرة."]]},
+{i:"🔐",t:"الصلاحيات والإعدادات",u:1,l:[
+["القفل","البرنامج بيتفتح برقم سري. فيه صلاحية كاملة وصلاحية عرض التقارير بس."],
+["اللغة","زر اللغة فوق بيبدّل بين العربي والإنجليزي."],
+["الوضع الليلي","بيتغير تلقائي حسب إعدادات جهازك."],
+["التقويم والتواريخ","الأسبوع بيبدأ من السبت في كل التقاويم، ومنتقي التواريخ (من / إلى والتبديل وفلتر الرسائل)، وفي ترتيب الأيام في الجداول."],
+["مكان الحفظ","الإعدادات والتبديلات والعلامات بتتحفظ في متصفح الجهاز ده. خد نسخة كاملة من زر 💾 نسخ احتياطي قبل ما تغيّر الجهاز أو تمسح بيانات المتصفح."]]}
+],
+en:[
+{i:"🚀",t:"Quick start",l:[
+["1) Employees","In the 👥 tab add employees and set their schedules. The name must match the sender name in the WhatsApp group exactly."],
+["2) WhatsApp files","Export the chat from WhatsApp without media and add the zip or txt file in the 💬 tab."],
+["3) Reports","Open the 📊 tab for the dashboard and reports. Tap any day or employee for details."],
+["4) Text sign-off","If someone sends a message like (arrived) or (leaving), mark it as check-in or check-out in the 📝 tab."],
+["5) Backup","Press 💾 Backup (top) and save a full copy now and then, somewhere else. Everything is stored in this browser on this device only."]]},
+{i:"👥",t:"Employees & schedules",l:[
+["Add and delete","(+ Add employee) adds one. Tick the ones to remove and press Delete selected."],
+["Name and display name","The name must match the WhatsApp sender. The display name is optional and is what appears in reports and PDFs."],
+["Renaming a WhatsApp name","When you rename an employee a warning shows what is affected: shift swaps, text sign-off marks, manual edits and chat records. You can update the links automatically or rename only. Chat records link by the WhatsApp name only, so if the new name is not the sender name they get detached from the employee."],
+["Category","MRI, CT, Secretarial, Cashier or none. Departments are grouped by it in the dashboard and reports."],
+["Schedule","Open Schedule for each employee and set work days, start, end and hours per day. You can set all days at once. Night shifts that end the next day are supported."],
+["Display","Group by category or flat list, expand or collapse all."],
+["Employee summary","A table with name, phone, category, in/out times, hours and days off for everyone, with print and a button to hide phone numbers."],
+["Reset defaults","Restores the original built-in employees."],
+["Save and load settings","A file with employees, schedules, text sign-off marks and shift swaps. All of them are also kept automatically in the browser."]]},
+{i:"🔄",t:"Shift swap",l:[
+["From the Employees tab","Pick the date (and To for several days) and both employees. Each is calculated on the other's schedule for those days only."],
+["For past days","From a report: next to the day in the employee details, calendar or day sheet, press 🔄 Swap and pick who swapped."],
+["Undo","Pressing 🔄 on a swapped day offers to delete the swap. The swap list also has a delete button."],
+["Rules","A swap is saved for both people at once, and an employee cannot be in two overlapping swaps. The 🔄 mark appears on the day in reports and PDFs."],
+["Note","If you rename an employee (WhatsApp name) after saving a swap, the old swap loses its link. Delete it and add it again."]]},
+{i:"💬",t:"WhatsApp files",l:[
+["Adding a file","zip or txt from a chat export without media. You can pick several files at once. Before merging the (Import preview) appears."],
+["Import preview","For each file it shows how many records are new, duplicate and rejected, why they were rejected (invalid date, future date or empty sender), the new dates and senders that are not in the employee list. Nothing is merged until you press Merge."],
+["Duplicate protection","Importing the same chat file again (or a file containing part of the old one) never counts a punch or message twice. A file identical to an existing one is ignored."],
+["Diff report","Before merging the app computes the report before and after and shows the employees whose present, late, absent, no check-in or hours changed, and the days that changed. After merging, (📋 Last diff report) reopens it until you close the app."],
+["What is read","Sender names, live-location times and text messages. No media."],
+["Use and delete","The checkbox next to a file turns it on or off. Delete works for files you added; the built-in file cannot be deleted."],
+["New senders","The button (Add senders not in the employee list) adds them with a default 9 AM to 5 PM schedule and Friday off. Edit it afterwards."]]},
+{i:"📝",t:"Messages & text sign-off",l:[
+["List and filters","All text messages with search and filters by sender, status (all, unmarked, check-in, check-out, deleted) and date."],
+["Mark check-in or check-out","Select messages (or Select all) and press the mark button. They become a text sign-off that is merged into the calculation."],
+["How it merges","Check-in = earliest time between location and sign-off. Check-out = latest time between them."],
+["Assign to employee","(Assign selected to employee) credits the sign-off to someone other than the sender. Default is the sender if they are in the list."],
+["Auto-detect","Marks messages with words like arrived, here (check-in) and left, leaving (check-out), and Arabic equivalents. It asks before applying."],
+["Delete and restore","Useless messages can be deleted and are not counted. Restore them from the Deleted filter."],
+["From a report","The 🔍 Text sign-off button next to a late or absent day, and 💬 Day messages in the day sheet, open that day's messages directly."],
+["PDF","Export the current list, or sign-offs only."]]},
+{i:"📊",t:"Dashboard",u:1,l:[
+["Periods","Latest day, week, month or all. All are counted from the last day in the data, not from today's date."],
+["Cards","Complete attendance, late, absent, no check-in, early leave, days with no check-out, conflicts and work hours."],
+["Attendance donut","Rate = present ÷ (present + absent). Green on time, orange late, red absent."],
+["Chart by day","A bar per day, grouped by month when the period is longer than 31 days."],
+["Department cards","Per category: employee count, on time, late and absent."],
+["Logged in","Latest-day mode only: a list with in/out times and status for each employee."],
+["Needs review","Most recent days with lateness, early leave, missing check-out or absence. Tap any item for the day details."],
+["Note","Absence is counted once the day is over, so the last day in the data shows no absences."]]},
+{i:"⚠️",t:"Conflict detection",u:1,l:[
+["Repeats","Two check-ins or two check-outs in a row with none of the other kind between them. In, out, in, out again (a break) is not a conflict."],
+["One message, both marks","A single message marked as both check-in and check-out."],
+["Outside the shift","A check-in after the scheduled shift ended, or a check-out before it started. Usually a wrong shift or an unrecorded swap."],
+["Span over 16 hours","Between the first check-in and last check-out. Usually a forgotten check-out or a sign-off on the wrong day."],
+["Where it shows","A card and a list in the dashboard, a ⚠️ in the calendar and table, and a red box in the day sheet. The All button scans all data."],
+["Fix","Open Day messages from the day sheet and correct the in/out marks."]]},
+{i:"📅",t:"Monthly grid, calendar & day sheet",u:1,l:[
+["Team monthly grid","In the All employees view: a row per employee, a column per day with colored squares, present/late/absent columns, and a present-count row."],
+["Employee calendar","In the Employee view: the month with colored days. ! means check-in without out, 🔄 a swap, ⚠️ a conflict."],
+["Colors","Green present, orange late, red absent, gray day off, dashed red (∅) no check-in."],
+["Day sheet","Tap any day (calendar, grid or list): shift, in, out, late, early leave, hours, shortage, and all recorded messages and sign-offs."],
+["Source of each time","Next to the check-in and check-out time an icon shows where it came from: 📍 live location, 💬 approved text message (text sign-off), ✏️ manual edit. It appears in the employee details, the day sheet and PDFs."],
+["Manual edit","From the day sheet press ✏️ Manual edit and enter the correct check-in and/or check-out time with a note. It replaces the recorded times for that day only, no conflicts are raised for that day, and it is kept in the backup. Remove it to bring the original times back."],
+["Arrows","Change the month, shared between the monthly grid and the calendar."]]},
+{i:"📈",t:"Reports & export",u:1,l:[
+["Range","From and To, plus shortcuts: All, This year, This month, Last month."],
+["View","All employees or one employee, category filter, and grouping by day, month or year."],
+["Grace minutes","Lateness and early leave count only beyond these minutes."],
+["🏆 Discipline ranking","Ranks employees by an attendance percentage, with present, late, late minutes, early leave and absent counts. Has a print button."],
+["👁 Hide names","Replaces names with numbers for display or printing."],
+["✅ Review before approval","Scans the chosen range and lists: days without check-in or check-out, conflicts, days with no data for anyone (the file may not cover them), scheduled employees with no records (often a wrong WhatsApp name) and messages that look like check-in/out but are not marked. Then (Approve this report) records the range, the time and a fingerprint of the data, and later shows whether the data changed after approval."],
+["PDF","Overall, this employee, or a page per employee. The 🔄 mark appears on swapped days."],
+["Employee details table","Next to each late or absent day there is a 🔍 Text sign-off button and a 🔄 Swap button. Tapping the date itself opens the day sheet."]]},
+{i:"📐",t:"How it is calculated",u:1,l:[
+["Work day","Set per employee shift, not one rule for everyone. Day-shift employee: any time before 4 AM (or half an hour before an early shift starts) counts for the previous day. For a night shift that ends in the morning, the day extends up to two hours after the shift end."],
+["Check-in","The first location in the work day, or the sign-in if earlier."],
+["Check-out","The last location or sign-out, provided the span after check-in is at least one hour and at least half of the day's required hours. Otherwise the day counts as no check-out."],
+["No check-in","A day with a sign-out only and no location or sign-in. It shows as (No check-in), counts as neither present nor absent, and has its own column and card."],
+["Late and early leave","Late = check-in after the start time by more than the grace minutes. Early leave = before the end time by more than the grace."],
+["Hours","Actual and shortage hours count only on days that have a check-out."],
+["Absence","A work day with no record, from the employee's first record up to the day before the last day in the data."],
+["Schedules","Apply to all dates. A swap changes only the chosen days."]]},
+{i:"🛡️",t:"Backup & restore",l:[
+["The button","💾 Backup at the top next to Features. A red dot shows when there are changes since the last backup, or if no backup was ever made."],
+["Save a full backup","One file with employees and schedules, added WhatsApp files (messages and punches), text sign-off marks, shift swaps, manual edits, approvals and settings. As soon as it is saved the app opens it, compares it with the current data and tells you if something is wrong."],
+["Encryption","The backup is encrypted. You need the same program file and the same PIN to open it, so keep them together with the backup. The built-in file is not included because it is inside the program file itself."],
+["Restore","Pick the backup file. The app tests it first: it opens it, checks integrity and shows what is inside compared to the current data. Then press Run restore."],
+["Before replacing","Restore replaces the current data. The option (Save a copy of the current data before replacing) is on by default and downloads the current state before replacing."],
+["New device or browser","Open the app with the same file and PIN on the new device or browser, press 💾 Backup then Restore and pick the latest backup."],
+["Old settings file","(Save settings) in the Employees tab saves settings only, without WhatsApp messages. You can restore it from the same Restore button, and the current files stay as they are."],
+["Persistent storage","The app asks the browser not to clear its data and shows in the backup window if it was granted. It is not a guarantee, so the backup is the real safety net."],
+["Tip","Copy the file to Drive or send it to yourself on WhatsApp, especially after any big addition."]]},
+{i:"🔐",t:"Access & settings",u:1,l:[
+["Lock","The app opens with a PIN. There is full access and a reports-only access."],
+["Language","The button at the top switches between Arabic and English."],
+["Dark mode","Follows your device setting automatically."],
+["Calendars and dates","The week starts on Saturday in every calendar, the date picker (From / To, shift swap and message filter), and in the order of days in schedules."],
+["Where data is kept","Settings, swaps and marks are kept in this device's browser. Take a full copy with the 💾 Backup button before changing devices or clearing browser data."]]}
+]};
+function guideFind(q){
+ q=q.trim().toLowerCase();let any=false;
+ document.querySelectorAll('#gdb details').forEach(d=>{
+  const st=d.querySelector('summary').textContent.toLowerCase();let m=0;
+  d.querySelectorAll('.gi').forEach(i=>{const hit=!q||st.includes(q)||i.textContent.toLowerCase().includes(q);i.style.display=hit?'':'none';if(hit)m++});
+  d.style.display=m?'':'none';if(q&&m)d.open=true;if(m)any=true});
+ document.getElementById('gdn').style.display=any?'none':'';
+}
+function closeGuide(){const o=document.getElementById('gdov');if(o)o.remove()}
+function openGuide(){
+ closeGuide();
+ const G=(GUIDE[lang]||GUIDE.ar).filter(s=>window.ROLE!=='u'||s.u);
+ const o=document.createElement('div');o.id='gdov';
+ o.style.cssText='position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+ o.innerHTML=`<div class="card" style="width:min(100%,640px);margin:0;border-radius:20px 20px 0 0;height:92vh;display:flex;flex-direction:column;padding:0"><div style="padding:14px 14px 8px"><div class="row" style="justify-content:space-between;margin:0 0 8px"><h2 style="margin:0">${tr('gd_h')}</h2><button class="s sm" onclick="closeGuide()">${tr('close')}</button></div><input id="gdq" style="width:100%" placeholder="${tr('gd_s')}" oninput="guideFind(this.value)"></div><div id="gdb" style="overflow:auto;flex:1;padding:0 14px calc(14px + env(safe-area-inset-bottom,0px))">`
+  +G.map((s,n)=>`<details class="gdd"${n==0?' open':''}><summary>${s.i} ${s.t}</summary>`+s.l.map(([a,b])=>`<div class="gi"><b>${a}</b><div>${b}</div></div>`).join('')+`</details>`).join('')
+  +`<div class="mut" id="gdn" style="display:none;text-align:center;padding:14px">${tr('gd_none')}</div></div></div>`;
+ o.onclick=ev=>{if(ev.target===o)closeGuide()};
+ document.body.appendChild(o);
+}
+/* ---------- backup & restore ---------- */
+function bkDirty(){try{localStorage.setItem('att_bkd','1')}catch(e){}const b=document.getElementById('bkbtn');if(b)b.classList.add('dirty')}
+function bkClean(at){try{localStorage.setItem('att_bk',JSON.stringify({at}));localStorage.setItem('att_bkd','0')}catch(e){}const b=document.getElementById('bkbtn');if(b)b.classList.remove('dirty')}
+function bkInit(){let l=null;try{l=localStorage.getItem('att_bk')}catch(e){}let d='1';try{d=localStorage.getItem('att_bkd')}catch(e){}const b=document.getElementById('bkbtn');if(b)b.classList.toggle('dirty',!l||d==='1');try{if(window.ROLE!=='u'&&navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}}
+function bkSnap(){
+ return {app:'attendance-report',v:5,at:new Date().toISOString(),grace:+$('#gr').value||0,emp:EMP,sw:SW,tf:TF,man:MAN,appr:APPR,
+  files:FILES.filter(f=>!f.b).map(({id,name,s,e,xs,x})=>({id,name,s,e,xs,x})),
+  use:Object.fromEntries(FILES.map(f=>[f.id,f.use])),
+  prefs:{lang,grp:GRP?'1':'0',fold:[...FOLD],hn:window.HN?'1':'0'}};
+}
+const bkSum=j=>hsh(JSON.stringify((j.v||0)>=5?[j.emp,j.sw,j.tf,j.files,j.use,j.grace,j.man,j.appr]:[j.emp,j.sw,j.tf,j.files,j.use,j.grace]));
+function bkStats(j){
+ let ev=0,msg=0,a=1e12,z=0;
+ (j.files||[]).forEach(f=>{(f.e||[]).forEach(r=>r.forEach(v=>{ev++;if(v<a)a=v;if(v>z)z=v}));msg+=(f.x||[]).length});
+ return {emp:(j.emp||[]).length,sch:(j.emp||[]).filter(e=>e.days?e.days.some(d=>d.on):1).length,files:(j.files||[]).length,ev,msg,tf:Object.keys(j.tf||{}).length,sw:(j.sw||[]).length,man:Object.keys(j.man||{}).length,grace:j.grace||0,range:ev?vdate(a)+' → '+vdate(z):''};
+}
+function bkPack(){const j=bkSnap();j.sum=bkSum(j);return JSON.stringify({app:'attendance-report',format:2,enc:AC.enc(JSON.stringify(j))})}
+function bkLegacy(s){const p=prompt(tr('bk_pin'));if(!p)throw 'dec';try{return AC.decWithPin(s,p.trim(),PSALT,WA)}catch(e){throw 'dec'}}
+function bkOpen(text){
+ let o;try{o=JSON.parse(text)}catch(e){throw 'file'}
+ let enc=false;
+ if(o&&typeof o==='object'&&o.enc){let inner;try{inner=AC.dec(o.enc)}catch(e){inner=bkLegacy(o.enc)}try{o=JSON.parse(inner)}catch(e){throw 'file'}enc=true}
+ if(!o||typeof o!=='object'||!Array.isArray(o.emp))throw 'file';
+ if(o.emp.some(e=>!e||typeof e.n!=='string'||(e.days&&(!Array.isArray(e.days)||e.days.length!==7))))throw 'file';
+ const partial=!Array.isArray(o.files);
+ if(!partial){
+  const num=a=>Array.isArray(a)&&a.every(v=>typeof v==='number');
+  if(o.files.some(f=>!f||typeof f.id!=='string'||!Array.isArray(f.s)||!Array.isArray(f.e)||f.s.length!==f.e.length||!f.e.every(num)||!Array.isArray(f.xs)||!Array.isArray(f.x)||f.x.some(t=>!Array.isArray(t)||t.length<3)))throw 'file';
+ }
+ if(o.sw!=null&&(!Array.isArray(o.sw)||o.sw.some(w=>!w||typeof w.f!=='string'||typeof w.t!=='string'||typeof w.a!=='string'||typeof w.b!=='string')))throw 'file';
+ if(o.tf!=null&&(typeof o.tf!=='object'||Array.isArray(o.tf)))throw 'file';
+ if(o.man!=null&&(typeof o.man!=='object'||Array.isArray(o.man)))throw 'file';
+ if(o.appr!=null&&!Array.isArray(o.appr))throw 'file';
+ if(o.sum&&bkSum(o)!==o.sum)throw 'sum';
+ return {j:o,partial,enc,sum:!!o.sum};
+}
+function bkApply(j,partial){
+ EMP=j.emp.map(mig);save();
+ SW=Array.isArray(j.sw)?j.sw:[];saveSW();
+ TF=(j.tf&&typeof j.tf==='object')?j.tf:{};saveTF();
+ if(!partial||j.man!=null){MAN=(j.man&&typeof j.man==='object')?j.man:{};saveMAN()}
+ if(!partial||j.appr!=null){APPR=Array.isArray(j.appr)?j.appr:[];saveAPPR()}
+ if(j.grace!=null){$('#gr').value=j.grace;try{localStorage.setItem('att_gr',String(j.grace))}catch(e){}}
+ if(!partial){
+  const bi=FILES.find(f=>f.b),use=j.use||{};
+  if(bi)bi.use=use[bi.id]!==false;
+  FILES=(bi?[bi]:[]).concat(j.files.map(f=>({...f,use:use[f.id]!==false,b:0})));
+  saveFiles();
+ }
+ const p=j.prefs||{};
+ try{
+  if(p.lang=='ar'||p.lang=='en'){lang=p.lang;localStorage.setItem('att_lang',lang)}
+  if(p.grp!=null){GRP=p.grp!=='0';localStorage.setItem('att_grp',p.grp)}
+  if(Array.isArray(p.fold)){FOLD=new Set(p.fold);localStorage.setItem('att_fold',JSON.stringify(p.fold))}
+  if(p.hn!=null){window.HN=p.hn==='1';localStorage.setItem('att_hn',p.hn)}
+ }catch(e){}
+ SEL.clear();OPEN.clear();
+ rebuildData();applyLang();
+}
+const bkWhen=iso=>{try{return new Date(iso).toLocaleString(lang=='ar'?'ar-EG-u-nu-latn':'en-GB',{dateStyle:'medium',timeStyle:'short'})}catch(e){return iso||''}};
+function bkTable(b,c,partial){
+ const R=[['bk_r_emp','emp'],['bk_r_sch','sch'],['bk_r_files','files'],['bk_r_ev','ev'],['bk_r_msg','msg'],['bk_r_tf','tf'],['bk_r_sw','sw'],['bk_r_man','man'],['bk_r_gr','grace']];
+ return `<div class="sc"><table><tr><th></th><th>${tr('bk_col_b')}</th><th>${tr('bk_col_c')}</th></tr>`
+  +R.map(([l,k])=>{const nb=partial&&['files','ev','msg'].includes(k);return `<tr><td>${tr(l)}</td><td>${nb?'-':b[k]}</td><td>${c[k]}</td></tr>`}).join('')+`</table></div>`;
+}
+function closeBk(){const o=document.getElementById('bkov');if(o)o.remove()}
+async function openBackup(){
+ if(window.ROLE==='u')return;
+ closeBk();
+ let last=null;try{last=JSON.parse(localStorage.getItem('att_bk'))}catch(e){}
+ let dirty=true;try{dirty=localStorage.getItem('att_bkd')==='1'}catch(e){}
+ const st=bkStats(bkSnap());
+ const stTxt=!last?`<div class="bkc b ec"><b>${tr('bk_never')}</b></div>`:`<div class="bkc ${dirty?'w':''} ec"><b>${tr('bk_last')}: <bdi>${bkWhen(last.at)}</bdi></b><div class="mut">${dirty?tr('bk_chg'):tr('bk_same')}</div></div>`;
+ const o=document.createElement('div');o.id='bkov';
+ o.style.cssText='position:fixed;inset:0;z-index:9996;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+ o.innerHTML=`<div class="card" style="width:min(100%,640px);margin:0;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))">`
+  +`<div class="row" style="justify-content:space-between;margin:0 0 8px"><h2 style="margin:0">${tr('bk_h')}</h2><button class="s sm" onclick="closeBk()">${tr('close')}</button></div>`
+  +`<div class="mut" style="margin-bottom:8px">${tr('bk_intro')}</div>${stTxt}`
+  +`<div class="mut" style="margin:6px 0"><b>${tr('bk_now')}:</b> ${tr('bk_r_emp')} ${st.emp} · ${tr('bk_r_files')} ${st.files} · ${tr('bk_r_msg')} ${st.msg} · ${tr('bk_r_tf')} ${st.tf} · ${tr('bk_r_sw')} ${st.sw}</div>`
+  +`<div class="row"><button class="o" onclick="bkSave()">${tr('bk_save')}</button><button class="s" onclick="document.getElementById('bkf').click()">${tr('bk_restore')}</button></div>`
+  +`<input type="file" id="bkf" accept=".json,application/json,text/plain" style="display:none" onchange="bkPick(this)">`
+  +`<div id="bkres"></div>`
+  +`<div class="mut" style="margin-top:10px">${tr('bk_what')}</div><div class="mut" style="margin-top:6px">${tr('bk_enc')}</div><div class="mut" id="bkst" style="margin-top:6px"></div></div>`;
+ o.onclick=ev=>{if(ev.target===o)closeBk()};
+ document.body.appendChild(o);
+ try{if(navigator.storage&&navigator.storage.persisted){const p=await navigator.storage.persisted();let t=tr('bk_persist')+': '+(p?tr('bk_on'):tr('bk_off'));if(navigator.storage.estimate){const e=await navigator.storage.estimate();if(e&&e.usage!=null)t+=' · '+tr('bk_space')+': '+(e.usage/1048576).toFixed(1)+' MB'}const el=document.getElementById('bkst');if(el)el.textContent=t}}catch(e){}
+}
+function bkDownload(text,name){
+ const blob=new Blob([text],{type:'application/json'}),a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+ return blob;
+}
+function bkSave(){
+ const res=document.getElementById('bkres');
+ try{
+  const text=bkPack(),cur=bkSnap(),v=bkOpen(text);
+  if(bkSum(v.j)!==bkSum(cur)||JSON.stringify(bkStats(v.j))!==JSON.stringify(bkStats(cur)))throw 'verify';
+  const name='attendance-backup-'+dk(new Date())+'.json',blob=bkDownload(text,name);
+  bkClean(new Date().toISOString());
+  let canShare=false;try{window.BKF=new File([blob],name,{type:'application/json'});canShare=!!(navigator.canShare&&navigator.canShare({files:[window.BKF]}))}catch(e){}
+  res.innerHTML=`<div class="bkc ec" style="margin-top:10px"><b>${tr('bk_done')}</b><div class="mut"><bdi>${name}</bdi></div>${bkTable(bkStats(v.j),bkStats(cur),false)}${canShare?`<div class="row"><button class="s" onclick="bkShare()">${tr('bk_share')}</button></div>`:''}</div>`;
+ }catch(e){res.innerHTML=`<div class="bkc b ec" style="margin-top:10px"><b>${tr('bk_fail')}</b></div>`}
+}
+function bkShare(){const f=window.BKF;try{if(f&&navigator.share)navigator.share({files:[f],title:f.name}).catch(()=>{})}catch(e){}}
+function bkPick(inp){
+ const f=inp.files[0],res=document.getElementById('bkres');if(!f)return;
+ f.text().then(t=>{
+  inp.value='';window.BKP=null;
+  try{
+   const r=bkOpen(t),b=bkStats(r.j),c=bkStats(bkSnap());
+   const ln=(k,x)=>`<div class="${k=='w'?'bkc w':'bkc'}" style="padding:2px 10px;margin:3px 0">${k=='w'?'⚠️':'✓'} ${x}</div>`;
+   const nw=r.j.emp.filter(e=>e.days?e.days.some(d=>d.on):1).length;
+   let h=`<div class="ec" style="margin-top:10px"><b>${tr('bk_test')}</b>`
+    +(r.j.at?`<div class="mut">${tr('bk_date')}: <bdi>${bkWhen(r.j.at)}</bdi></div>`:'')
+    +ln('',r.enc?tr('bk_c_open'):tr('bk_c_open'))
+    +(r.sum?ln('',tr('bk_c_sum')):'')
+    +ln('',tr('bk_c_emp')(b.emp,nw))
+    +(r.partial?ln('w',tr('bk_partial')):ln('',tr('bk_c_files')(b.files,b.ev,b.msg,b.range)))
+    +bkTable(b,c,r.partial)
+    +`<label style="display:flex;gap:8px;align-items:center;margin:8px 0"><input type="checkbox" id="bkpre" checked style="min-height:auto;width:20px;height:20px">${tr('bk_pre')}</label>`
+    +`<div class="mut">${tr('bk_warn')}</div><div class="row"><button class="o" onclick="bkDo()">${tr('bk_apply')}</button><button class="s" onclick="document.getElementById('bkres').innerHTML='';window.BKP=null">${tr('swcan')}</button></div></div>`;
+   window.BKP={j:r.j,partial:r.partial};
+   res.innerHTML=h;
+  }catch(e){
+   const k=typeof e==='string'?e:'file';
+   res.innerHTML=`<div class="bkc b ec" style="margin-top:10px"><b>${tr(k=='dec'?'bk_bad_dec':k=='sum'?'bk_bad_sum':'bk_bad_file')}</b></div>`;
+  }
+ }).catch(()=>{res.innerHTML=`<div class="bkc b ec" style="margin-top:10px"><b>${tr('bk_bad_file')}</b></div>`});
+}
+function bkDo(){
+ const p=window.BKP,res=document.getElementById('bkres');if(!p)return;
+ if(!confirm(tr('bk_warn')))return;
+ try{const pre=document.getElementById('bkpre');if(pre&&pre.checked)bkDownload(bkPack(),'attendance-before-restore-'+dk(new Date())+'.json')}catch(e){}
+ try{
+  bkApply(p.j,p.partial);bkClean(p.j.at||new Date().toISOString());window.BKP=null;
+  const r=document.getElementById('bkres');
+  if(r)r.innerHTML=`<div class="bkc ec" style="margin-top:10px"><b>${tr('bk_ok')}</b>${bkTable(bkStats(bkSnap()),bkStats(bkSnap()),false)}</div>`;
+ }catch(e){const r=document.getElementById('bkres');if(r)r.innerHTML=`<div class="bkc b ec" style="margin-top:10px"><b>${tr('bk_rfail')}</b></div>`}
+}
+/* ---------- import preview, duplicates, diff ---------- */
+let LASTDIFF='';
+const srcT=x=>x&&SRC[x]?' — '+SRC[x]+' '+tr('src_'+x):'';
+const fsig=f=>hsh(JSON.stringify([f.s,f.e,f.xs,f.x]));
+function impLim(){const t=new Date();return t.getFullYear()>=2024?dk(new Date(t.getFullYear(),t.getMonth(),t.getDate()+2)):'9999-99-99'}
+function impOk(o,lim){
+ if(!o.n)return 'empty';
+ if(o.y<2015||o.y>2100||o.mo<1||o.mo>12||o.d<1||o.h>23||o.mi>59)return 'bad';
+ const dt=new Date(o.y,o.mo-1,o.d);if(dt.getMonth()!==o.mo-1||dt.getDate()!==o.d)return 'bad';
+ if(dk(dt)>lim)return 'future';
+ if(enc(o)<MINV)return 'old';
+ return '';
+}
+async function impRead(f){
+ let txt;
+ if(/\.zip$/i.test(f.name)){const z=await JSZip.loadAsync(f),t=Object.values(z.files).find(x=>/\.txt$/i.test(x.name));if(!t)throw new Error('no txt');txt=await t.async('string')}
+ else txt=await f.text();
+ return parse(txt);
+}
+function impBuild(name,idx,P,seenE,seenX,sigs,lim){
+ const E=P.ev,tx=P.tx,rej={ev:{bad:0,future:0,empty:0,old:0},tx:{bad:0,future:0,empty:0,old:0}},okE=[],okT=[];
+ const c={name,ev:{n:0,d:0,r:0},tx:{n:0,d:0,r:0},rej,dates:[],unk:[],skip:'',rec:null};
+ for(const e of E){const r=impOk(e,lim);if(r){rej.ev[r]++;c.ev.r++;continue}okE.push(e);const v=enc(e),k=e.n+'|'+v;if(seenE.has(k))c.ev.d++;else{seenE.add(k);c.ev.n++;c.dates.push(vdate(v))}}
+ for(const e of tx){const r=impOk(e,lim);if(r){rej.tx[r]++;c.tx.r++;continue}okT.push(e);const v=enc(e),k=e.n+'|'+v+'|'+e.x;if(seenX.has(k))c.tx.d++;else{seenX.add(k);c.tx.n++;c.dates.push(vdate(v))}}
+ const g={};okE.forEach(e=>(g[e.n]??=[]).push(enc(e)));
+ const ss=Object.keys(g),xs=[...new Set(okT.map(e=>e.n))];
+ c.rec={id:'u'+Date.now()+'_'+idx,name,s:ss,e:ss.map(n=>g[n].sort((a,b)=>a-b)),xs,x:okT.map(e=>[xs.indexOf(e.n),enc(e),e.x]),use:true,b:0};
+ c.unk=[...new Set([...okE.map(e=>e.n),...okT.map(e=>e.n)])].filter(n=>!EMP.some(x=>x.n===n));
+ const sg=fsig(c.rec);
+ if(!okE.length&&!okT.length)c.skip='empty';
+ else if(sigs.has(sg))c.skip='dupfile';
+ else if(!c.ev.n&&!c.tx.n)c.skip='nonew';
+ sigs.add(sg);
+ return c;
+}
+function simStats(files,from,to){
+ const sv={DATA,LAST,MINK,MSG,PR,EVS,CUTSIG};
+ try{
+  const st=computeState(files);DATA=st.DATA;LAST=st.LAST;MINK=st.MINK;MSG=st.MSG;EVS=st.ev;CUTSIG=cutSig();
+  const out={};
+  report(from,to,+$('#gr').value||0,'ar').emps.forEach(e=>{const d={};e.rows.forEach(r=>d[r[0]]=r[10]);out[e.id]={n:e.n,t:e.t,d}});
+  return out;
+ }finally{({DATA,LAST,MINK,MSG,PR,EVS,CUTSIG}=sv)}
+}
+function impDiff(newFiles){
+ const used=FILES.filter(f=>f.use);let a='9999-99-99',z='';
+ newFiles.forEach(f=>{f.e.forEach(r=>r.forEach(v=>{const d=vdate(v);if(d<a)a=d;if(d>z)z=d}));(f.x||[]).forEach(t=>{const d=vdate(t[1]);if(d<a)a=d;if(d>z)z=d})});
+ if(!z)return null;
+ const to=(LAST&&LAST>z)?LAST:z;let from=a<=to?a:to;
+ if((new Date(to)-new Date(from))/864e5>400)from=addD(to,-400);
+ const B=simStats(used,from,to),A=simStats(used.concat(newFiles),from,to),rows=[],days=[],nov=x=>x=='off'||x=='na';
+ for(const id in A){
+  const b=B[id]||{t:agg([]),d:{}},x=A[id];
+  if(['p','l','m','ni','wh'].some(f=>b.t[f]!==x.t[f]))rows.push({n:x.n,b:b.t,a:x.t});
+  for(const k in x.d){const bb=b.d[k]||'na';if(bb!==x.d[k]&&!(nov(bb)&&nov(x.d[k])))days.push({n:x.n,k,b:bb,a:x.d[k]})}
+ }
+ days.sort((p,q)=>p.k<q.k?1:p.k>q.k?-1:0);
+ return {from,to,rows,days};
+}
+function impDiffHTML(d){
+ if(!d)return '';
+ const lb=x=>x=='ok'?tr('s_ok'):x=='late'?tr('s_late'):x=='miss'?tr('s_miss'):x=='noin'?tr('s_noin'):x=='off'?tr('dd_off'):tr('dd_na');
+ const cell=(b,a)=>b===a?`${a}`:`<b class="bad">${b} → ${a}</b>`;
+ let h=`<h3>${tr('imp_diff')}</h3><div class="mut"><bdi>${d.from} → ${d.to}</bdi></div>`;
+ if(!d.rows.length&&!d.days.length)return h+`<div class="mut">${tr('imp_nodiff')}</div>`;
+ h+=`<div class="sc"><table><tr><th></th><th>${tr('pres')}</th><th>${tr('late')}</th><th>${tr('miss')}</th><th>${tr('ni')}</th><th>${tr('wh')}</th></tr>`
+  +d.rows.map(r=>`<tr><td>${esc(r.n)}</td><td>${cell(r.b.p,r.a.p)}</td><td>${cell(r.b.l,r.a.l)}</td><td>${cell(r.b.m,r.a.m)}</td><td>${cell(r.b.ni,r.a.ni)}</td><td>${cell(r.b.wh,r.a.wh)}</td></tr>`).join('')+`</table></div>`;
+ if(d.days.length)h+=`<div class="mut" style="margin-top:6px"><b>${tr('imp_days')} (${d.days.length})</b></div>`+d.days.slice(0,15).map(x=>`<div class="mut"><bdi>${x.k}</bdi> · ${esc(x.n)}: ${lb(x.b)} → <b>${lb(x.a)}</b></div>`).join('')+(d.days.length>15?`<div class="mut">+${d.days.length-15}</div>`:'');
+ return h;
+}
+function closeImp(){const o=document.getElementById('impov');if(o)o.remove()}
+async function impStart(files){
+ $('#fmsg').textContent=tr('imp_read');
+ try{
+  const lim=impLim(),seenE=new Set(),seenX=new Set(),sigs=new Set(FILES.map(fsig)),C=[];
+  FILES.filter(f=>f.use).forEach(f=>{f.s.forEach((n,i)=>f.e[i].forEach(v=>seenE.add(n+'|'+v)));(f.x||[]).forEach(([i,v,x])=>seenX.add(f.xs[i]+'|'+v+'|'+x))});
+  for(let i=0;i<files.length;i++){
+   try{const P=await impRead(files[i]);C.push(impBuild(files[i].name,i,P,seenE,seenX,sigs,lim))}
+   catch(e){C.push({name:files[i].name,ev:{n:0,d:0,r:0},tx:{n:0,d:0,r:0},rej:{ev:{bad:0,future:0,empty:0},tx:{bad:0,future:0,empty:0}},dates:[],unk:[],skip:'err',rec:null})}
+  }
+  const ok=C.filter(c=>!c.skip);
+  let diff=null;try{diff=ok.length?impDiff(ok.map(c=>c.rec)):null}catch(e){}
+  window.IMPP={C,diff};
+  closeImp();
+  const o=document.createElement('div');o.id='impov';
+  o.style.cssText='position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+  const rl=r=>[r.old?tr('imp_olds')+' '+r.old:'',r.bad?tr('imp_bad')+' '+r.bad:'',r.future?tr('imp_future')+' '+r.future:'',r.empty?tr('imp_empty')+' '+r.empty:''].filter(Boolean).join(' · ');
+  const blk=c=>{
+   const why=[rl(c.rej.ev),rl(c.rej.tx)].filter(Boolean).join(' | ');
+   if(c.skip=='err')return `<div class="ec bkc b"><b>${esc(c.name)}</b><div class="mut">${tr('err')}</div></div>`;
+   const dr=c.dates.length?[...c.dates].sort():[];
+   return `<div class="ec ${c.skip?'bkc w':'bkc'}"><b>${esc(c.name)}</b>`
+    +(c.skip?`<div class="mut">⚠️ ${tr('imp_s_'+c.skip)}</div>`:'')
+    +`<div class="sc"><table><tr><th></th><th>${tr('imp_new')}</th><th>${tr('imp_dup')}</th><th>${tr('imp_rej')}</th></tr>`
+    +`<tr><td>${tr('imp_row_ev')}</td><td>${c.ev.n}</td><td>${c.ev.d}</td><td>${c.ev.r}</td></tr><tr><td>${tr('imp_row_tx')}</td><td>${c.tx.n}</td><td>${c.tx.d}</td><td>${c.tx.r}</td></tr></table></div>`
+    +(why?`<div class="mut">${tr('imp_why')}: ${why}</div>`:'')
+    +(dr.length?`<div class="mut">${tr('imp_range')}: <bdi>${dr[0]} → ${dr[dr.length-1]}</bdi></div>`:'')
+    +(c.unk.length?`<div class="mut">${tr('imp_unk')} (${c.unk.length}): <bdi>${esc(c.unk.slice(0,5).join('، '))}${c.unk.length>5?'…':''}</bdi></div>`:'')+`</div>`;
+  };
+  const T=ok.reduce((a,c)=>({n:a.n+c.ev.n+c.tx.n}),{n:0});
+  o.innerHTML=`<div class="card" style="width:min(100%,640px);margin:0;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))"><h2>${tr('imp_h')}</h2>`
+   +C.map(blk).join('')+impOldHTML(ok)+impDiffHTML(diff)
+   +`<div class="row" style="margin-top:10px">${ok.length?`<button class="o" onclick="impCommit()">${tr('imp_go')(ok.length)}</button>`:`<span class="mut">${tr('imp_none')}</span>`}<button class="s" onclick="closeImp();$('#fmsg').textContent=''">${tr('swcan')}</button></div></div>`;
+  o.onclick=ev=>{if(ev.target===o){closeImp();$('#fmsg').textContent=''}};
+  document.body.appendChild(o);$('#fmsg').textContent='';
+ }catch(e){$('#fmsg').textContent=tr('err')+e.message}
+}
+function impCommit(){
+ const P=window.IMPP;if(!P)return;
+ const ok=P.C.filter(c=>!c.skip),sum=ok.reduce((a,c)=>({en:a.en+c.ev.n,tn:a.tn+c.tx.n,d:a.d+c.ev.d+c.tx.d,r:a.r+c.ev.r+c.tx.r}),{en:0,tn:0,d:0,r:0});
+ ok.forEach(c=>FILES.push(c.rec));
+ saveFiles();rebuildData();
+ LASTDIFF=impDiffHTML(P.diff);window.IMPP=null;
+ const msg=tr('imp_done')(sum.en,sum.tn,sum.d,sum.r);$('#fmsg').textContent=msg;$('#difbtn').style.display='';
+ const o=document.getElementById('impov');
+ if(o)o.firstChild.innerHTML=`<h2>${tr('imp_h')}</h2><div class="ec bkc"><b>${msg}</b></div>${LASTDIFF}<div class="row" style="margin-top:10px"><button class="s" onclick="closeImp()">${tr('close')}</button></div>`;
+}
+function impShowLast(){
+ if(!LASTDIFF)return;closeImp();
+ const o=document.createElement('div');o.id='impov';
+ o.style.cssText='position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+ o.innerHTML=`<div class="card" style="width:min(100%,640px);margin:0;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto"><h2>${tr('imp_h')}</h2>${LASTDIFF}<div class="row" style="margin-top:10px"><button class="s" onclick="closeImp()">${tr('close')}</button></div></div>`;
+ o.onclick=ev=>{if(ev.target===o)closeImp()};document.body.appendChild(o);
+}
+/* ---------- manual time edit ---------- */
+function closeMan(){const o=document.getElementById('manov');if(o)o.remove()}
+function manEdit(ix,k){
+ const e=EMP[ix];if(!e)return;const key=e.n+'|'+k,cur=MAN[key]||{};
+ closeMan();
+ const o=document.createElement('div');o.id='manov';
+ o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px';
+ o.innerHTML=`<div class="card" style="width:min(92vw,380px);margin:0"><h2>✏️ ${tr('man_btn')}</h2><div class="mut" style="margin-bottom:8px"><bdi>${k}</bdi> · ${esc(e.dn||e.n)}</div><div class="mut">${tr('man_hint')}</div>`
+  +`<div class="g2"><label class="f"><span>${tr('d_in')}</span><input type="time" id="mni" value="${esc(cur.i||'')}"></label><label class="f"><span>${tr('d_out')}</span><input type="time" id="mno" value="${esc(cur.o||'')}"></label></div>`
+  +`<input id="mnn" placeholder="${tr('man_note')}" value="${esc(cur.note||'')}" style="width:100%;margin:6px 0 10px">`
+  +`<div class="row" style="margin:0"><button class="o" onclick="manSave(${ix},'${k}')">${tr('man_save')}</button>${MAN[key]?`<button class="d" onclick="manDel(${ix},'${k}')">${tr('man_del')}</button>`:''}<button class="s" onclick="closeMan()">${tr('swcan')}</button></div></div>`;
+ o.onclick=ev=>{if(ev.target===o)closeMan()};document.body.appendChild(o);
+}
+function manSave(ix,k){
+ const e=EMP[ix],key=e.n+'|'+k,i=document.getElementById('mni').value,o=document.getElementById('mno').value,note=document.getElementById('mnn').value.trim();
+ const pv=MAN[key]||{};if(!i&&!o&&!pv.early)delete MAN[key];else MAN[key]={i,o,note,at:new Date().toISOString(),...(pv.early?{early:1}:{})};
+ saveMAN();closeMan();renderReport();dayOpen(ix,k);
+}
+function earlyTog(ix,k){
+ const kk=EMP[ix].n+'|'+k,pv=MAN[kk]||{};
+ if(pv.early){delete pv.early;if(!pv.i&&!pv.o)delete MAN[kk]}else MAN[kk]={...pv,early:1,at:new Date().toISOString()};
+ saveMAN();renderReport();dayOpen(ix,k);
+}
+function manDel(ix,k){const kk=EMP[ix].n+'|'+k;if(MAN[kk]&&MAN[kk].early)MAN[kk]={early:1,at:new Date().toISOString()};else delete MAN[kk];saveMAN();closeMan();renderReport();dayOpen(ix,k)}
+/* ---------- rename warning ---------- */
+function closeRn(){const o=document.getElementById('rnov');if(o)o.remove()}
+function renameEmp(i,inp){
+ const e=EMP[i],old=e.n||'',nw=inp.value.trim();
+ if(nw===old){inp.value=old;return}
+ const R={sw:SW.filter(w=>w.a===old||w.b===old).length,tf:Object.values(TF).filter(o=>o.e===old||(o.x||[]).includes(old)).length,man:Object.keys(MAN).filter(k=>k.startsWith(old+'|')).length,days:old&&DATA[old]?Object.keys(DATA[old]).length:0};
+ const dup=nw&&EMP.some((x,j)=>j!==i&&x.n===nw);
+ if(!(old&&(R.sw||R.tf||R.man||R.days))&&!dup){e.n=nw;save();drawSwap();renderReport();return}
+ closeRn();
+ const o=document.createElement('div');o.id='rnov';
+ o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px';
+ const L=[];
+ if(R.days)L.push(DATA[nw]?`✓ ${tr('rn_found')(Object.keys(DATA[nw]).length)}`:`⚠️ ${tr('rn_lost')(R.days)}`);
+ if(R.sw)L.push(`🔄 ${tr('rn_sw')(R.sw)}`);
+ if(R.tf)L.push(`📝 ${tr('rn_tf')(R.tf)}`);
+ if(R.man)L.push(`✏️ ${tr('rn_man')(R.man)}`);
+ if(dup)L.push(`⚠️ ${tr('rn_dup')}`);
+ o.innerHTML=`<div class="card" style="width:min(92vw,400px);margin:0"><h2>${tr('rn_h')}</h2><div class="mut" style="margin-bottom:8px"><bdi>${esc(old||'-')} → ${esc(nw||'-')}</bdi></div>`
+  +L.map(x=>`<div class="mut" style="margin:4px 0">${x}</div>`).join('')+`<div class="mut" style="margin-top:8px">${tr('rn_note')}</div>`
+  +`<div class="row"><button class="o" onclick="rnDo(${i},${JSON.stringify(nw).replace(/"/g,'&quot;')},1)">${tr('rn_upd')}</button><button class="s" onclick="rnDo(${i},${JSON.stringify(nw).replace(/"/g,'&quot;')},0)">${tr('rn_only')}</button><button class="s" onclick="closeRn();drawEmp()">${tr('swcan')}</button></div></div>`;
+ document.body.appendChild(o);
+}
+function rnDo(i,nw,upd){
+ const old=EMP[i].n;
+ if(upd&&old){
+  SW.forEach(w=>{if(w.a===old)w.a=nw;if(w.b===old)w.b=nw});saveSW();
+  Object.values(TF).forEach(o=>{if(o.e===old)o.e=nw;if(Array.isArray(o.x))o.x=o.x.map(n=>n===old?nw:n)});saveTF();
+  const m2={};Object.keys(MAN).forEach(k=>{m2[k.startsWith(old+'|')?nw+'|'+k.slice(old.length+1):k]=MAN[k]});MAN=m2;saveMAN();
+ }
+ EMP[i].n=nw;save();closeRn();drawEmp();renderReport();
+}
+/* ---------- review before approving ---------- */
+const RV_IN=/وصل|حضر|جيت|جينا|موجود|arrived|here/i,RV_OUT=/نزل|انصرف|مشي|خرج|left|leaving/i;
+function rvSum(RR){return hsh(JSON.stringify(RR.map(e=>[e.id,e.rows.map(r=>[r[0],r[3],r[4],r[10]])])))}
+function closeRv(){const o=document.getElementById('rvov');if(o)o.remove()}
+function openReview(){
+ const f=$('#from').value,t=$('#to').value;if(!f||!t)return;
+ const gr=+$('#gr').value||0,RR=report(f,t,gr).emps;
+ const ni=[],inc=[],mis=[],dayHas={},dayMiss={};
+ for(const e of RR)for(const r of e.rows){
+  const st=r[10];
+  if(st=='ok'||st=='late'||st=='noin')dayHas[r[0]]=(dayHas[r[0]]||0)+1;
+  if(st=='miss')dayMiss[r[0]]=(dayMiss[r[0]]||0)+1;
+  if(st=='noin')ni.push([e,r]);
+  else if((st=='ok'||st=='late')&&r[4]=='-')inc.push([e,r]);
+  if(st=='miss')mis.push([e,r]);
+ }
+ const nodata=Object.keys(dayMiss).filter(k=>!dayHas[k]).sort();
+ const CF=allConf(f,t),norec=EMP.map((e,i)=>[e,i]).filter(([e,i])=>e.n&&!DATA[e.n]&&!PR[e.n]&&!Object.keys(MAN).some(k=>k.startsWith(e.n+'|'))&&RR.some(x=>x.id==i&&x.rows.some(r=>r[10]=='miss'||r[10]=='na'&&r[2]&&!String(r[2]).startsWith(tr('offday')))));
+ const unk=unk_();
+ const unm=MSG.filter(m=>{const x=fl(m);if(x.d||x.i||x.o)return false;const d=vdate(m.v);if(d<f||d>t||!EMP.some(e=>e.n===m.n))return false;return RV_IN.test(m.x||'')||RV_OUT.test(m.x||'')});
+ const man=Object.keys(MAN).filter(k=>{const d=k.split('|').pop();return d>=f&&d<=t&&(MAN[k].i||MAN[k].o)});
+ const row=(n,ico,label,items,html)=>`<details class="gdd"><summary>${n?'⚠️':'✓'} ${label} <span class="mut">(${n})</span></summary>${n?html:''}</details>`;
+ const dl=(e,r)=>`<div class="gi" style="cursor:pointer" onclick="closeRv();dayOpen(${e.id},'${r[0]}')"><b>${esc(nmx(e))}</b><div><bdi>${r[0]} ${r[1]}</bdi></div></div>`;
+ const issues=ni.length+inc.length+CF.length+nodata.length+norec.length+unm.length;
+ const sum=rvSum(RR),prev=APPR.filter(a=>a.f===f&&a.t===t).pop();
+ const ap=prev?`<div class="ec ${prev.sum===sum?'bkc':'bkc w'}">${prev.sum===sum?'✓ '+tr('rv_same'):'⚠️ '+tr('rv_chg')}: <bdi>${bkWhen(prev.at)}</bdi></div>`:'';
+ closeRv();
+ const o=document.createElement('div');o.id='rvov';
+ o.style.cssText='position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+ o.innerHTML=`<div class="card" style="width:min(100%,640px);margin:0;border-radius:20px 20px 0 0;max-height:92vh;overflow:auto;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))">`
+  +`<div class="row" style="justify-content:space-between;margin:0 0 6px"><h2 style="margin:0">${tr('rv_h')}</h2><button class="s sm" onclick="closeRv()">${tr('close')}</button></div><div class="mut"><bdi>${f} → ${t}</bdi></div>${ap}`
+  +row(ni.length,'',tr('rv_ni'),0,ni.slice(0,30).map(([e,r])=>dl(e,r)).join(''))
+  +row(inc.length,'',tr('rv_inc'),0,inc.slice(0,30).map(([e,r])=>dl(e,r)).join(''))
+  +row(CF.length,'',tr('rv_conf'),0,CF.slice(0,30).map(({ix,k,c})=>`<div class="gi" style="cursor:pointer" onclick="closeRv();dayOpen(${ix},'${k}')"><b>${esc(nmx({id:ix,n:EMP[ix].dn||EMP[ix].n}))}</b><div><bdi>${k}</bdi> · ${c.map(([x])=>tr('cf_'+x)).join(' · ')}</div></div>`).join(''))
+  +row(nodata.length,'',tr('rv_nodata'),0,`<div class="gi"><div>${nodata.slice(0,40).map(k=>`<bdi>${k}</bdi>`).join(' · ')}</div></div>`)
+  +row(norec.length,'',tr('rv_norec'),0,`<div class="gi"><div>${norec.map(([e])=>esc(e.dn||e.n)).join('، ')}</div></div>`)
+  +row(unm.length,'',tr('rv_unm'),0,unm.slice(0,20).map(m=>`<div class="gi" style="cursor:pointer" onclick="closeRv();msgFor(${JSON.stringify(m.n).replace(/"/g,'&quot;')},'${vdate(m.v)}')"><b>${esc(dnm(m.n))}</b><div><bdi>${vdate(m.v)}</bdi> · ${esc((m.x||'').slice(0,60))}</div></div>`).join(''))
+  +`<div class="mut" style="margin:8px 0">ℹ️ ${tr('rv_info')(mis.length,man.length,unk.length)}</div>`
+  +`<div class="row"><button class="o" onclick="rvApprove('${f}','${t}')">${tr('rv_appr')}</button></div>`
+  +`<div class="mut" style="margin-top:6px">${tr('rv_note')}</div></div>`;
+ o.onclick=ev=>{if(ev.target===o)closeRv()};document.body.appendChild(o);
+ window.RVI={issues};
+}
+const unk_=()=>Object.keys(DATA).filter(n=>!EMP.some(e=>e.n===n));
+function rvApprove(f,t){
+ const RR=report(f,t,+$('#gr').value||0).emps;
+ if(window.RVI&&window.RVI.issues&&!confirm(tr('rv_cf')(window.RVI.issues)))return;
+ APPR.push({f,t,at:new Date().toISOString(),sum:rvSum(RR),n:window.RVI?window.RVI.issues:0});saveAPPR();
+ openReview();
+}
+function closeDP(){const o=document.getElementById('dpov');if(o)o.remove()}
+function openDP(inp){
+ closeDP();
+ const ok=x=>/^\d{4}-\d{2}-\d{2}$/.test(x||'');
+ const v=ok(inp.value)?inp.value:(inp.id=='swt'&&ok($('#swf').value)?$('#swf').value:(LAST||dk(new Date())));
+ let [y,m]=v.split('-').map(Number);
+ const o=document.createElement('div');o.id='dpov';
+ o.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:16px';
+ const draw=()=>{
+  const D=I[lang].days,n=new Date(y,m,0).getDate(),lead=ORD.indexOf(new Date(y,m-1,1).getDay()),td=dk(new Date()),ar=lang=='ar'?['▶','◀']:['◀','▶'];
+  const ml=new Date(y,m-1,1).toLocaleDateString(lang=='ar'?'ar-u-nu-latn':'en-US',{month:'long',year:'numeric'});
+  let h=`<div class="card" style="width:min(92vw,360px);margin:0"><div class="row" style="justify-content:space-between;margin:0 0 8px"><button class="s sm" data-n="-1">${ar[0]}</button><b>${ml}</b><button class="s sm" data-n="1">${ar[1]}</button></div><div class="cal">`
+   +ORD.map(d=>`<i class="ch">${D[d]}</i>`).join('')+'<div class="cd blank"></div>'.repeat(lead);
+  for(let d=1;d<=n;d++){const k=y+'-'+p2(m)+'-'+p2(d);h+=`<div class="cd${k==inp.value?' sel':''}${k==td?' today':''}" data-d="${k}"><span>${d}</span></div>`}
+  h+=`</div><div class="row" style="margin:8px 0 0"><button class="o" data-d="${td}">${tr('dp_today')}</button>${inp.dataset.clr?`<button class="s" data-d="">${tr('dp_clear')}</button>`:''}<button class="s" data-x="1">${tr('swcan')}</button></div></div>`;
+  o.innerHTML=h;
+ };
+ o.onclick=ev=>{
+  if(ev.target===o){closeDP();return}
+  const b=ev.target.closest('[data-n],[data-d],[data-x]');if(!b)return;
+  if(b.dataset.x){closeDP();return}
+  if(b.dataset.n){m+=+b.dataset.n;if(m<1){m=12;y--}if(m>12){m=1;y++}draw();return}
+  inp.value=b.dataset.d;closeDP();inp.dispatchEvent(new Event('change',{bubbles:true}));
+ };
+ draw();document.body.appendChild(o);
+}
+document.addEventListener('click',ev=>{const t=ev.target.closest&&ev.target.closest('input.dp');if(t)openDP(t)});
+function calGo(d){const [y,m]=CALM.split('-').map(Number),x=new Date(y,m-1+d,1);CALM=x.getFullYear()+'-'+p2(x.getMonth()+1);renderReport()}
+function drawCal(e){
+ const b=$('#cal');if(!b)return;
+ if(!CALM)CALM=(LAST||dk(new Date())).slice(0,7);
+ const [y,mo]=CALM.split('-').map(Number),n=new Date(y,mo,0).getDate();
+ const E=report(CALM+'-01',CALM+'-'+p2(n),+$('#gr').value||0).emps.find(x=>x.id==e.id);
+ if(!E){b.innerHTML='';return}
+ const map={};E.rows.forEach(r=>map[r[0]]=r);
+ const D=I[lang].days,order=[6,0,1,2,3,4,5],lead=order.indexOf(new Date(y,mo-1,1).getDay());
+ const ml=new Date(y,mo-1,1).toLocaleDateString(lang=='ar'?'ar-u-nu-latn':'en-US',{month:'long',year:'numeric'});
+ let h=`<div class="row" style="justify-content:space-between;margin:10px 0 6px"><button class="s sm" onclick="calGo(-1)">${lang=='ar'?'▶':'◀'}</button><b>${ml}</b><button class="s sm" onclick="calGo(1)">${lang=='ar'?'◀':'▶'}</button></div><div class="cal">`
+  +order.map(d=>`<i class="ch">${D[d]}</i>`).join('')+'<div class="cd blank"></div>'.repeat(lead);
+ for(let d=1;d<=n;d++){
+  const k=CALM+'-'+p2(d),r=map[k],st=r?r[10]:'na',ic=r&&(st=='ok'||st=='late')&&(r[3]=='-'||r[4]=='-');
+  const cls=st=='ok'?'ok':st=='late'?'late':st=='miss'?'miss':st=='noin'?'noin':'off',ico=st=='ok'?'✓':st=='late'?'⏰':st=='miss'?'✕':st=='noin'?'∅':'';
+  h+=`<div class="cd ${cls}${ic?' inc':''}" onclick="dayOpen(${e.id},'${k}')"><span>${d}</span><small>${ico}${ic?'!':''}${r&&r[11]?'🔄':''}${confl(EMP[e.id].n,k).length?'⚠️':''}</small></div>`;
+ }
+ const a=agg(E.rows);
+ h+=`</div><div class="lgd"><span><i style="background:rgba(15,143,107,.35)"></i>${tr('s_ok')}</span><span><i style="background:rgba(251,133,0,.4)"></i>${tr('s_late')}</span><span><i style="background:rgba(214,40,40,.35)"></i>${tr('s_miss')}</span><span><i style="background:var(--soft);border:1px solid var(--bd)"></i>${tr('dd_offl')}</span><span><i style="border:1.5px dashed var(--ac)"></i>! ${tr('dd_incl')}</span><span><i style="border:1.5px dashed var(--bad)"></i>∅ ${tr('s_noin')}</span><span>⚠️ ${tr('cf_card')}</span></div>`
+  +`<div class="mut" style="margin-bottom:8px">${tr('pres')} ${a.p} · ${tr('late')} ${a.l} · ${tr('miss')} ${a.m}${a.ni?' · '+tr('s_noin')+' '+a.ni:''}${a.ns?' · 🚫 '+a.ns:''} · ${tr('wh')} ${a.wh}</div>`;
+ b.innerHTML=h;
+}
+function dayClose(){const o=document.getElementById('dsov');if(o)o.remove()}
+function dayOpen(ix,k){
+ const e0=EMP[ix];if(!e0)return;
+ const E=report(k,k,+$('#gr').value||0).emps.find(x=>x.id==ix);if(!E||!E.rows.length)return;
+ const r=E.rows[0],st=r[10],n=e0.n,raw=(DATA[n]||{})[k]||[],pr=(PR[n]||{})[k]||{i:[],o:[]};
+ const ic=(st=='ok'||st=='late')&&(r[3]=='-'||r[4]=='-'),fl=a=>a.length?a.map(m=>fT(m)).join(' · '):'-';
+ const stl=st=='ok'?tr('s_ok'):st=='late'?tr('s_late'):st=='miss'?tr('s_miss'):st=='noin'?tr('s_noin'):st=='rev'?tr('s_rev'):st=='off'?tr('dd_off'):tr('dd_na');
+ const kv=(a,v,c='')=>`<div class="kv"><span>${a}</span><b class="${c}"><bdi>${v}</bdi></b></div>`;
+ dayClose();
+ let eb='';{const mn=MAN[n+'|'+k],sc=dayS(e0,k,new Date(k+'T00:00:00').getDay())||{},cs=[...raw.slice(0,1),...pr.i];let ci=cs.length?Math.min(...cs):null;if(mn&&mn.i)ci=manMin(mn.i,n);
+  if((mn&&mn.early)||(sc.on&&ci!=null&&ci<toMin(sc.s)))eb=`<button class="${mn&&mn.early?'s':'o'}" onclick="earlyTog(${ix},'${k}')">⏱️ ${mn&&mn.early?tr('earlyoff'):tr('earlybtn')}</button>`}
+ const o=document.createElement('div');o.id='dsov';
+ o.style.cssText='position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center';
+ o.innerHTML=`<div class="card" style="width:min(100%,520px);margin:0;border-radius:20px 20px 0 0;max-height:86vh;overflow:auto;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))">`
+  +`<h2>${esc(nmx(E))}</h2><div class="mut" style="margin-bottom:6px"><bdi>${k}</bdi> ${r[1]}${r[11]?' 🔄':''} · <span class="chip ${st=='late'||st=='noin'||st=='rev'?'late':st=='miss'?'miss':'ok'}">${stl}</span>${ic?` <span class="chip late">${tr('dd_inc')}</span>`:''}</div>`
+  +cfBlock(n,k)+kv(tr('dd_sch'),r[2])+kv(tr('d_in'),r[3]+srcT(r[12]))+kv(tr('d_out'),r[4]+srcT(r[13])+(r[17]?' ➕':''))+(r[14]?kv(tr('man_nt'),esc(r[14])):'')
+  +kv(tr('d_late'),r[16]?'🚫 '+tr('nosign'):r[5],r[5]||r[16]?'bad':'')+kv(tr('d_early'),r[6],r[6]?'bad':'')+kv(tr('d_wk'),r[8])+kv(tr('d_sh'),r[9],r[9]>0?'bad':'')
+  +(r[17]?kv(tr('extra'),r[17]+' '+tr('minu'),'ok'):'')
+  +(r[15]?kv(tr('earlyin'),r[15]+' '+tr('minu'),'ok'):'')
+  +((st=='ok'||st=='late'||st=='noin')&&r[3]=='-'&&r[4]!='-'?`<div class="hint">${tr('hint_out')} <button class="s sm" onclick="dayClose();manEdit(${ix},'${k}')">${tr('hint_add')}</button></div>`:'')
+  +kv(tr('dd_raw'),fl(raw))
+  +((pr.i.length||pr.o.length)?kv(tr('dd_pr'),fl(pr.i)+' / '+fl(pr.o)):'')
+  +evHTML(n,k)
+  +`<div class="acts"><button class="o" onclick="msgFor(${JSON.stringify(n).replace(/"/g,'&quot;')},'${k}')">${tr('dd_msgs')}</button><button class="s" onclick="dayClose();manEdit(${ix},'${k}')">✏️ ${tr('man_btn')}</button>${eb}<button class="s" onclick="dayClose();swPick('${k}',${ix})">🔄 ${tr('swb')}</button><button class="s" onclick="dayClose()">${tr('close')}</button></div></div>`;
+ o.onclick=ev=>{if(ev.target===o)dayClose()};
+ document.body.appendChild(o);
+}
+let BACK=null;
+function saveBack(){
+ if(BACK||$('#t3').style.display==='none')return;
+ BACK={view:$('#view').value,who:$('#who').value,cat:$('#cat').value,grp:$('#grp').value,from:$('#from').value,to:$('#to').value,y:window.scrollY};
+ const b=$('#bkrep');if(b){b.textContent=lang=='ar'?'↩ رجوع للتقرير':'↩ Back to report';b.style.display=''}
+}
+function restoreBack(){
+ const b=BACK;BACK=null;const k=$('#bkrep');if(k)k.style.display='none';if(!b)return false;
+ $('#from').value=b.from;$('#to').value=b.to;$('#cat').value=b.cat;$('#grp').value=b.grp;$('#view').value=b.view;
+ renderReport();if(b.who&&[...$('#who').options].some(o=>o.value===b.who)){$('#who').value=b.who;renderReport()}
+ window.scrollTo(0,b.y);return true;
+}
+function msgFor(n,k){
+ saveBack();dayClose();fillMsgSel();
+ $('#mf').value=k;$('#mt').value=addD(k,1);$('#ms').value='all';
+ $('#mst').value='all';$('#mq').value='';MPAGE=0;showTab(4);$('#mas').value=n;swInfo();window.scrollTo(0,0);
+}
+let RK=false;
+function flagData(){
+ const rows=rankRows(),red=[],green=[];
+ rows.forEach(x=>{const m=x.t.m,ni=x.t.ni+x.t.ns;if(m>2||ni>4)red.push(x);else if(x.pct>=90)green.push(x)});
+ red.sort((a,b)=>(b.t.m+b.t.ni+b.t.ns)-(a.t.m+a.t.ni+a.t.ns));
+ return {red,green};
+}
+function flagCard(x,cls){
+ const t=x.t,tags=[];if(t.m)tags.push(`${tr('flg_abs')}: <b>${t.m}</b>`);if(t.ni+t.ns)tags.push(`${tr('flg_ni')}: <b>${t.ni+t.ns}</b>`);
+ return `<div class="ec fc ${cls}" onclick="flagOpen('${x.e.id}')" style="cursor:pointer"><div class="row" style="margin:0;justify-content:space-between"><b>${esc(nmx(x.e))}</b><b>${x.pct}%</b></div><div class="mut">${tr('flg_att')} <b>${t.p-t.ns}/${x.e.rows.filter(r=>r[10]!='off').length}</b> · ${tr('late')} ${t.l}${tags.length?' · '+tags.join(' · '):''}</div></div>`;
+}
+function drawFlags(){
+ if(typeof R==='undefined'||!R||!$('#flg_green'))return;
+ const d=flagData();
+ $('#flgrng').innerHTML=`${tr('flg_rng')}: ${$('#from').value} → ${$('#to').value}<br>${tr('flg_rule')}`;
+ const none=`<div class="emp0">${tr('flg_none')}</div>`;
+ $('#flg_green').innerHTML=d.green.length?d.green.map(x=>flagCard(x,'fg')).join(''):none;
+ $('#flg_red').innerHTML=d.red.length?d.red.map(x=>flagCard(x,'fr')).join(''):none;
+ drawRank();
+}
+function flagOpen(id){
+ $('#view').value='emp';showTab(3);renderReport();
+ if([...$('#who').options].some(o=>o.value===String(id))){$('#who').value=String(id);renderReport()}
+ window.scrollTo(0,0);
+}
+function rankRows(){
+ return filt(R.emps).map(e=>{const t=e.t,tot=t.p+t.m,good=e.rows.filter(r=>r[10]=='ok'&&!r[6]).length;
+  return {e,t,tot,pct:tot?Math.round(good/tot*1000)/10:0}}).filter(x=>x.tot>0)
+  .sort((a,b)=>b.pct-a.pct||a.t.m-b.t.m||a.t.lm-b.t.lm||a.t.l-b.t.l||a.t.e-b.t.e);
+}
+const RC=[['full','f'],['io','io'],['oo','oo'],['ei','ei'],['late','l'],['lm','lm'],['lo','lo'],['early','e'],['miss','m']];
+function rankHTML(){
+ const med=['🥇','🥈','🥉'];
+ return `<table><thead><tr><th>${tr('rrk')}</th><th>${tr('name')}</th><th>${tr('rpct')}</th>${RC.map(c=>TH(c[0])).join('')}</tr></thead><tbody>`
+ +rankRows().map((x,i)=>`<tr><td>${med[i]||i+1}</td><td>${esc(nmx(x.e))}</td><td class="${x.pct<70?'bad':x.pct>=90?'ok':''}"><b>${x.pct}%</b></td>`+RC.map(([,f])=>`<td class="${BAD.has(f)&&x.t[f]>0?'bad':''}">${x.t[f]}</td>`).join('')+'</tr>').join('')+'</tbody></table>';
+}
+function drawRank(){
+ const b=$('#rankbox');if(!b)return;if(!RK||typeof R==='undefined'||!R){b.innerHTML='';return}
+ b.innerHTML=`<div class="row ex"><button class="o" onclick="printDoc(tr('rank'),hdr(tr('rank'))+rankHTML())">🖨 ${tr('eprint')}</button></div><div class="scroll">${rankHTML()}</div>`;
+}
+function togRank(){RK=!RK;drawRank()}
+function togSec(k){const box=$(k=='ptab'?'#sec_ptab':'#sum'),h=$('#h_'+k),o=box.style.display=='none';box.style.display=o?'':'none';h.classList.toggle('open',o)}
+function setRange(k,quiet){
+ const b=LAST||dk(new Date()),[y,m]=b.split('-').map(Number),ld=(yy,mm)=>new Date(yy,mm,0).getDate();
+ let a,z;
+ if(k=='all'){a=MINK||b;z=b}
+ else if(k=='year'){a=y+'-01-01';z=y+'-12-31'}
+ else if(k=='month'){a=y+'-'+p2(m)+'-01';z=y+'-'+p2(m)+'-'+p2(ld(y,m))}
+ else{const pm=m==1?12:m-1,py=m==1?y-1:y;a=py+'-'+p2(pm)+'-01';z=py+'-'+p2(pm)+'-'+p2(ld(py,pm))}
+ $('#from').value=a;$('#to').value=z;if(!quiet)renderReport();
+}
+
+/* ---------- PDF export (print to PDF) ---------- */
+const nmx=e=>window.HN?tr('empn')+' '+(Number(e.id)+1):e.n;
+function togHN(){window.HN=!window.HN;try{localStorage.setItem('att_hn',window.HN?'1':'0')}catch(e){}renderReport()}
+try{window.HN=localStorage.getItem('att_hn')==='1'}catch(e){}
+const rep=()=>report($('#from').value,$('#to').value,+$('#gr').value||0);
+const wrapT=h=>'<table>'+h.replace(/^(<tr>[\s\S]*?<\/tr>)/,'<thead>$1</thead><tbody>')+'</tbody></table>';
+const hdr=(title,sub='')=>`<h1>${esc(title)}</h1><div class="m"><bdi>${$('#from').value}</bdi> → <bdi>${$('#to').value}</bdi> · ${$('#cat').selectedOptions&&$('#cat').selectedOptions[0]?esc($('#cat').selectedOptions[0].textContent):''} · ${tr('grace')}: ${+$('#gr').value||0} · ${tr('gen')}: <bdi>${dk(new Date())}</bdi>${sub?' · '+sub:''}</div>`;
+const statTable=t=>`<table><thead><tr>${SCOLS.map(c=>TH(c[0])).join('')}</tr></thead><tbody><tr>${SCOLS.map(([,f])=>`<td class="${BAD.has(f)&&t[f]>0?'bad':''}">${t[f]}</td>`).join('')}</tr></tbody></table>`;
+function sumTable(E){
+ return `<table><thead><tr>${['cat','name',...SCOLS.map(c=>c[0])].map(TH).join('')}</tr></thead><tbody>`
+ +E.map(e=>`<tr><td>${cl(e.c)}</td><td>${esc(nmx(e))}</td>`+SCOLS.map(([,f])=>`<td class="${BAD.has(f)&&e.t[f]>0?'bad':''}">${e.t[f]}</td>`).join('')+'</tr>').join('')+'</tbody></table>';
+}
+function catTable(E){
+ const rows=CATS.map(c=>{const x=E.filter(e=>e.c==c);if(!x.length)return '';const a=agg(x.flatMap(e=>e.rows));
+  return `<tr><td>${cl(c)}</td>`+[x.length,...COLS.map(([,f])=>a[f])].map(v=>`<td>${v}</td>`).join('')+'</tr>'}).join('');
+ return `<table><thead><tr><th>${tr('cat')}</th><th>${tr('ecount')}</th>${MH.map(TH).join('')}</tr></thead><tbody>${rows}</tbody></table>`;
+}
+function empBlock(e,pb){
+ return `<div class="${pb?'pb':''}"><h2>${esc(nmx(e))} <span class="m">(${cl(e.c)})</span></h2><div class="m"><bdi>${esc(e.shift)}</bdi></div>`+statTable(e.t)
+ +(e.t.md.length?`<div class="m">${tr('md')}: <bdi>${e.t.md.join(', ')}</bdi></div>`:'')
+ +`<h2>${tr('bymonth')}</h2>`+wrapT(ptable(e.rows,'month'))
+ +`<h2>${tr('det')}</h2>`+wrapT(dtable(e.rows))+srcLegend()+'</div>';
+}
+function printDoc(title,body){
+ const css=`@page{size:A4;margin:12mm}*{box-sizing:border-box}body{font:11px/1.45 Tahoma,Arial,sans-serif;color:#111;margin:0}h1{font-size:17px;margin:0 0 4px}h2{font-size:13px;margin:14px 0 6px;color:#13315c;border-bottom:2px solid #fb8500;padding-bottom:2px}.m{color:#555;font-size:10px;margin-bottom:6px}table{border-collapse:collapse;width:100%;margin-bottom:8px}th,td{border:1px solid #c8ccd2;padding:3px 5px;word-break:break-word;text-align:start;vertical-align:top}th{background:#0b2545;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}thead{display:table-header-group}tr{page-break-inside:avoid}tr.tt td{font-weight:bold;background:#d6ecf9;-webkit-print-color-adjust:exact;print-color-adjust:exact}.bad{color:#c0392b;font-weight:bold}.ok{color:#1e8e3e}.chip{padding:1px 6px;border-radius:8px}.chip.late{background:#ffe3c2}.chip.ok{background:#d8f3e6}.chip.miss{background:#ffd9d9}.pb{page-break-before:always}bdi{unicode-bidi:isolate}`;
+ const doc=`<!DOCTYPE html><html lang="${lang}" dir="${lang=='ar'?'rtl':'ltr'}"><head><meta charset="utf-8"><title>${esc(title)}</title><style>${css}</style></head><body>${body}</body></html>`;
+ const w=window.open('','_blank');
+ if(w){w.document.open();w.document.write(doc);w.document.close();setTimeout(()=>{w.focus();w.print()},500)}
+ else{const f=document.createElement('iframe');f.style.cssText='position:fixed;width:0;height:0;border:0';document.body.appendChild(f);f.onload=()=>{f.contentWindow.focus();f.contentWindow.print()};f.srcdoc=doc}
+}
+const fn2=p=>p+'_'+$('#from').value+'_to_'+$('#to').value;
+function pdfAll(){
+ const E=srt(filt(rep().emps)),g=$('#grp').value;
+ printDoc(fn2('attendance_overall'),hdr(tr('pt_all'))+`<h2>${tr('bp')} (${tr('g_'+g)})</h2>`+wrapT(ptable(E.flatMap(e=>e.rows),g,0))+`<h2>${tr('bycat')}</h2>`+catTable(E)+`<h2>${tr('empsum')}</h2>`+sumTable(E));
+}
+function pdfEmp(){
+ const e=rep().emps.find(x=>String(x.id)==$('#who').value);if(!e){alert(tr('nosel'));return}
+ printDoc(fn2('attendance_'+String(nmx(e)).replace(/[^\w\-]+/g,'_')),hdr(tr('pt_emp'))+empBlock(e,0).replace(`<h2>${tr('bymonth')}</h2>`,`<h2>${tr('byyear')}</h2>`+wrapT(ptable(e.rows,'year'))+`<h2>${tr('bymonth')}</h2>`));
+}
+function pdfEach(){
+ const E=srt(filt(rep().emps));
+ printDoc(fn2('attendance_each_employee'),hdr(tr('pt_each'))+`<h2>${tr('empsum')}</h2>`+sumTable(E)+E.map(e=>empBlock(e,1)).join(''));
+}
+function pdfTxt(p){
+ const L=mfilt().slice().reverse().filter(m=>!p||fl(m).i||fl(m).o);
+ const body=L.map((m,i)=>`<tr><td>${i+1}</td><td>${esc(m.n)}</td><td><bdi>${vdate(m.v)} ${mtime(m)}</bdi></td><td style="white-space:pre-wrap">${esc(m.x)}</td><td>${fl(m).i?'✓':''}</td><td>${fl(m).o?'✓':''}</td><td>${esc([fl(m).e,...(fl(m).x||[])].filter(Boolean).map(dnm).join(' + '))}</td></tr>`).join('');
+ printDoc('attendance_text'+(p?'_proofs':''),`<h1>${tr('pt_txt')}${p?' – '+tr('xl2').replace(/^PDF – /,''):''}</h1><div class="m">${tr('gen')}: <bdi>${dk(new Date())}</bdi> · ${L.length}</div><table><thead><tr><th>#</th><th>${tr('sender')}</th><th>${tr('d_date')}</th><th>${tr('text')}</th><th>${tr('pin')}</th><th>${tr('pout')}</th><th>${tr('forEmp')}</th></tr></thead><tbody>${body}</tbody></table>`);
+}
+/* ---------- text attendance ---------- */
+let MSG=[],TF={},SELM=new Set(),MPAGE=0,PR={};
+TF=JSON.parse(JSON.stringify(DEFX.tf));try{const q=localStorage.getItem('att_tf');if(q!=null)TF=JSON.parse(q)||{}}catch(e){}
+const saveTF=()=>{try{localStorage.setItem('att_tf',JSON.stringify(TF))}catch(e){}bkDirty()};
+const hsh=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36)};
+const fl=m=>TF[m.k]||{};
+const mtime=(m,l=lang)=>fT((Math.floor(m.v/100)%100)*60+m.v%100,l);
+const dnm=n=>(EMP.find(e=>e.n===n)||{}).dn||n;
+const credit=m=>{const n=fl(m).e||m.n;return EMP.some(e=>e.n===n)?n:null};
+const credits=m=>{const a=[],c=credit(m);if(c)a.push(c);(fl(m).x||[]).forEach(n=>{if(!a.includes(n)&&EMP.some(e=>e.n===n))a.push(n)});return a};
+let XOP=new Set();
+function buildPR(){
+ PR={};const C={},cc=n=>C[n]??=cutOf(n);
+ MSG.forEach(m=>{const x=fl(m);if(x.d||!(x.i||x.o))return;const L=credits(m);if(!L.length)return;
+  const e0=dec(m.n,m.v);
+  L.forEach(n=>{const [k,mins]=wk(e0,cc(n)),o=((PR[n]??={})[k]??={i:[],o:[]});if(x.i)o.i.push(mins);if(x.o)o.o.push(mins)})});
+}
+function setF(ids,k,v){ids.forEach(id=>{const o=TF[id]??={};if(v)o[k]=v;else delete o[k];if(!Object.keys(o).length)delete TF[id]});saveTF()}
+function fillMsgSel(){
+ const s=$('#ms'),cs=s.value||'all',st=$('#mst'),cst=st.value||'all';
+ s.innerHTML=`<option value="all">${tr('allsend')}</option>`+[...new Set(MSG.map(m=>m.n))].sort().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');s.value=cs;
+ st.innerHTML=[['all','st_all'],['un','st_un'],['in','st_in'],['out','st_out'],['del','st_del']].map(([v,k])=>`<option value="${v}">${tr(k)}</option>`).join('');st.value=cst;
+ $('#mq').placeholder=tr('search');
+}
+function mfilt(){
+ const q=($('#mq').value||'').trim().toLowerCase(),s=$('#ms').value,st=$('#mst').value,f=$('#mf').value,t=$('#mt').value;
+ return MSG.filter(m=>{const x=fl(m),d=vdate(m.v);
+  if(st=='del'){if(!x.d)return false}else if(x.d)return false;
+  if(st=='un'&&(x.i||x.o))return false;if(st=='in'&&!x.i)return false;if(st=='out'&&!x.o)return false;
+  if(s&&s!='all'&&m.n!==s)return false;if(f&&d<f)return false;if(t&&d>t)return false;
+  if(q&&!(m.x.toLowerCase().includes(q)||m.n.toLowerCase().includes(q)))return false;return true});
+}
+function renderMsgs(){
+ const L=mfilt(),PS=50,pages=Math.max(1,Math.ceil(L.length/PS));if(MPAGE>=pages)MPAGE=pages-1;if(MPAGE<0)MPAGE=0;
+ let dl=0,ci=0,co=0;MSG.forEach(m=>{const x=fl(m);if(x.d)dl++;else{if(x.i)ci++;if(x.o)co++}});
+ let cn=0;MSG.forEach(m=>{const x=fl(m);if(!x.d&&(x.i||x.o)&&credits(m).length)cn++});
+ $('#mstat').textContent=tr('mstat')(MSG.length-dl,dl,ci,co,L.length,cn);
+ const em=EMP.filter(e=>e.n),opt=sel=>`<option value="">${tr('same')}</option>`+em.map(e=>`<option value="${esc(e.n)}" ${sel===e.n?'selected':''}>${esc(e.dn||e.n)}</option>`).join('');
+ const mv=$('#mas').value;$('#mas').innerHTML=opt(mv);
+ if(!L.length){$('#mlist').innerHTML=`<div class="emp0">${tr('notxt')}</div>`;$('#mpg').textContent='1 / 1';swInfo();return}
+ $('#mlist').innerHTML=L.slice(MPAGE*PS,MPAGE*PS+PS).map(m=>{const x=fl(m);
+  return `<div class="ec mr ${x.i?'c-in':x.o?'c-out':''}"><div class="row" style="margin-bottom:2px"><input type="checkbox" ${SELM.has(m.k)?'checked':''} onchange="selM('${m.k}',this.checked)"><span class="av">${esc(m.n.replace(/^[^\p{L}\p{N}]+/u,'').charAt(0).toUpperCase()||'?')}</span><b>${esc(m.n)}</b><span class="mut"><bdi>${vdate(m.v)} ${mtime(m)}</bdi></span></div>
+  <div class="mt">${esc(m.x)}</div>
+  <div class="row" style="margin:0"><label><input type="checkbox" ${x.i?'checked':''} onchange="flM('${m.k}','i',this.checked)">${tr('pin')}</label><label><input type="checkbox" ${x.o?'checked':''} onchange="flM('${m.k}','o',this.checked)">${tr('pout')}</label><button class="d" onclick="delM('${m.k}')">${x.d?tr('restm'):tr('del')}</button></div>
+  <div class="row" style="margin:6px 0 0"><span class="mut">${tr('forEmp')}:</span><select class="nm" onchange="asgM('${m.k}',this.value)">${opt(x.e||'')}</select></div>
+  <div class="row" style="margin:6px 0 0"><button class="s" onclick="togX('${m.k}')">+ ${tr('oth')}${(x.x||[]).length?' ('+x.x.length+')':''}</button></div>${XOP.has(m.k)?`<div class="row" style="margin:4px 0 0">${em.filter(e=>e.n!==(x.e||m.n)).map(e=>`<label><input type="checkbox" ${(x.x||[]).includes(e.n)?'checked':''} onchange="xM('${m.k}','${esc(e.n).replace(/'/g,'&#39;')}',this.checked)">${esc(e.dn||e.n)}</label>`).join('')}</div>`:''}
+  ${(x.i||x.o)?(credits(m).length?`<div class="mut ok">✔ ${tr('cnt')}: ${esc(credits(m).map(dnm).join(' + '))}</div>`:`<div class="mut bad">⚠ ${tr('nocnt')}</div>`):''}</div>`}).join('');
+ $('#mpg').textContent=(MPAGE+1)+' / '+pages;swInfo();
+}
+function swInfo(){
+ const box=$('#mswp');if(!box)return;const n=$('#mas').value;
+ if(!n){box.innerHTML='';return}
+ try{
+  const e=EMP.find(x=>x.n===n);if(!e){box.innerHTML='';return}
+  reidx();const cut=cutOf(n),mm=new Map(MSG.map(m=>[m.k,m]));
+  let ks=[...new Set([...SELM].map(id=>mm.get(id)).filter(Boolean).map(m=>wk(dec(m.n,m.v),cut)[0]))].sort();
+  if(!ks.length){const f=$('#mf').value;if(f)ks=[f]}
+  const head=`<h3>📍 ${esc(e.dn||e.n)} · ${tr('swi_h')}</h3>`;
+  if(!ks.length){box.innerHTML=`<div class="swi">${head}<div class="mut">${tr('swi_pick')}</div></div>`;return}
+  const more=ks.length>7?ks.length-7:0;ks=ks.slice(0,7);
+  const body=ks.map(k=>{
+   const [yy,mo,dd]=k.split('-').map(Number),sc=dayS(e,k,new Date(yy,mo-1,dd).getDay())||{};
+   const a=(DATA[n]||{})[k]||[],need=Math.max(60,(sc.h||0)*30);
+   const ci=a.length?a[0]:null,co=a.length>1&&a[a.length-1]-a[0]>=need?a[a.length-1]:null;
+   const nl=`<span class="bad">${tr('swi_noloc')}</span>`;
+   let h=`<div class="dd"><b><bdi>${k}</bdi></b><div class="kv"><span>${tr('swi_in')}</span><b><bdi>${ci!=null?fT(ci):nl}</bdi></b></div><div class="kv"><span>${tr('swi_out')}</span><b><bdi>${co!=null?fT(co):nl}</bdi></b></div>`;
+   if(ci==null||co==null){
+    const T=MSG.filter(m=>!fl(m).d&&wk(dec(m.n,m.v),cut)[0]===k).reverse().slice(0,200);
+    h+=`<div class="mut" style="margin-top:6px">${tr('swi_txts')} (${T.length})</div>`;
+    h+=T.length?`<div class="tl">${T.map(m=>{const x=fl(m);return `<div class="tm ${m.n===n?'me':''}"><b>${esc(m.n)}</b> <span class="mut"><bdi>${mtime(m)}</bdi></span>${x.i?' <span class="chip ok">'+tr('pin')+'</span>':''}${x.o?' <span class="chip late">'+tr('pout')+'</span>':''}<div>${esc(m.x)}</div></div>`}).join('')}</div>`:`<div class="emp0">${tr('swi_notx')}</div>`;
+   }
+   return h+'</div>';
+  }).join('');
+  box.innerHTML=`<div class="swi">${head}${body}${more?`<div class="mut">+${more} ${tr('swi_more')}</div>`:''}</div>`;
+ }catch(err){box.innerHTML=''}
+}
+const selM=(k,c)=>{c?SELM.add(k):SELM.delete(k);swInfo()};
+const flM=(k,f,c)=>{setF([k],f,c);renderMsgs()};
+const asgM=(k,v)=>{setF([k],'e',v);renderMsgs()};
+const togX=k=>{XOP.has(k)?XOP.delete(k):XOP.add(k);renderMsgs()};
+const xM=(k,n,c)=>{const a=new Set(fl({k}).x||[]);c?a.add(n):a.delete(n);setF([k],'x',a.size?[...a]:null);renderMsgs()};
+function bulkAsg(){const ids=[...SELM];if(!ids.length){alert(tr('nosel'));return}setF(ids,'e',$('#mas').value);renderMsgs()}
+const delM=k=>{setF([k],'d',!fl({k}).d);renderMsgs()};
+const selAll=()=>{mfilt().forEach(m=>SELM.add(m.k));renderMsgs()};
+const clrSel=()=>{SELM.clear();renderMsgs()};
+function bulkDel(del){const ids=[...SELM];if(!ids.length){alert(tr('nosel'));return}if(!confirm(tr('c_mdel')(ids.length)))return;setF(ids,'d',del);SELM.clear();renderMsgs()}
+function bulkMark(k){const ids=[...SELM];if(!ids.length){alert(tr('nosel'));return}setF(ids,k,1);renderMsgs()}
+function autoMark(){
+ const IN=/وصل|حضر|جيت|جينا|موجود|arrived|here/i,OUT=/نزل|انصرف|مشي|خرج|left|leaving/i;
+ const L=mfilt().filter(m=>!fl(m).i&&!fl(m).o&&(IN.test(m.x)||OUT.test(m.x)));
+ if(!L.length){return}
+ if(!confirm(tr('c_auto')(L.length)))return;
+ L.forEach(m=>{const o=OUT.test(m.x),i=IN.test(m.x);setF([m.k],o&&!i?'o':'i',1)});renderMsgs();
+}
+function pg(d){MPAGE+=d;renderMsgs()}
+['#mf','#mt','#ms','#mst'].forEach(s=>$(s).onchange=()=>{MPAGE=0;renderMsgs()});$('#mq').oninput=()=>{MPAGE=0;renderMsgs()};$('#mas').onchange=swInfo;
+
+/* ---------- UI plumbing ---------- */
+function findTxt(d){saveBack();$('#mf').value=$('#mt').value=d;$('#ms').value='all';$('#mst').value='all';$('#mq').value='';MPAGE=0;showTab(4);window.scrollTo(0,0)}
+function showTab(n){if(window.ROLE==='u')n=3;if(n==4)renderMsgs();[1,2,3,4,5].forEach(i=>{$('#t'+i).style.display=i==n?'':'none';$('#b'+i).className=i==n?'on':''});if(n==3){if(!restoreBack())renderReport()}if(n==5){renderReport();drawFlags()}}
+function fillSel(){
+ const set=(id,html)=>{const s=$(id),c=s.value;s.innerHTML=html;if(c)s.value=c};
+ set('#cat',`<option value="all">${tr('all')}</option>`+CATS.map(k=>`<option value="${k||'none'}">${cl(k)}</option>`).join(''));
+ set('#view',`<option value="all">${tr('v_all')}</option><option value="emp">${tr('v_emp')}</option>`);
+ set('#grp',['day','month','year'].map(k=>`<option value="${k}">${tr('g_'+k)}</option>`).join(''));
+ if(!$('#grp').value)$('#grp').value='month';
+}
+function applyLang(){closeGuide();closeBk();
+ const d=document.documentElement;d.lang=lang;d.dir=lang=='ar'?'rtl':'ltr';
+ document.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=tr(e.dataset.i));document.querySelectorAll('[data-t]').forEach(e=>e.title=tr(e.dataset.t));
+ $('#lg').textContent=lang=='ar'?'English':'العربية';document.title=tr('title');
+ fillSel();fillMsgSel();drawEmp();renderReport();renderMsgs();
+}
+function setLang(){lang=lang=='ar'?'en':'ar';try{localStorage.setItem('att_lang',lang)}catch(e){}applyLang()}
+['#from','#to','#cat','#view','#grp','#who'].forEach(s=>$(s).onchange=renderReport);
+$('#gr').onchange=()=>{try{localStorage.setItem('att_gr',$('#gr').value)}catch(e){}renderReport()};
+$('#gr').value=DEFX.grace;try{const g=localStorage.getItem('att_gr');if(g!=null)$('#gr').value=g}catch(e){}
+window.boot=function(){if(window.ROLE==='u'){document.body.classList.add('u');window.printDoc=function(){}}loadFiles();applyLang();showTab(3);rebuildData();bkInit()};
+AC.useKey("iVBLwaeNjx4BKzU22eDnBQBWmi611EQA+A3GHxMZNkXmLgZlD0ZMxh0zLMdr7J+eoHewPi/WE95RjrytKHyVMw==");window.ROLE='a';window.boot();
+</script></body></html>
