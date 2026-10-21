@@ -103,9 +103,9 @@ body[data-sec=home]{--bg:#0a1a3a;--card:#10244d;--text:#eef4ff;--muted:#9db4d6;-
 body[data-sec=home] header{background:transparent;color:var(--text);padding-top:max(28px,env(safe-area-inset-top))}
 body[data-sec=home] header h1{font-size:26px}
 /* طابعات: ورق + نقط CMYK */
-body[data-sec=print],.tile.print{--bg:#fbfbf8;--card:#fff;--text:#1d1d1f;--muted:#6f6f73;--line:#e4e2da;--brand:#be185d;--brand-d:#9d174d;--chip:#fce7f3;--ok:#15803d;--warn:#b45309;--bad:#b91c1c;--warn-bg:#fef3c7;--bad-bg:#fee2e2;--ok-bg:#dcfce7;
+body[data-sec=print],.tile.print,body[data-sec=dprint],.tile.dprint{--bg:#fbfbf8;--card:#fff;--text:#1d1d1f;--muted:#6f6f73;--line:#e4e2da;--brand:#be185d;--brand-d:#9d174d;--chip:#fce7f3;--ok:#15803d;--warn:#b45309;--bad:#b91c1c;--warn-bg:#fef3c7;--bad-bg:#fee2e2;--ok-bg:#dcfce7;
  background:radial-gradient(circle at 20% 30%,rgba(236,72,153,.2) 0 3px,transparent 4px) 0 0/22px 22px,radial-gradient(circle at 70% 60%,rgba(6,182,212,.2) 0 3px,transparent 4px) 0 0/22px 22px,radial-gradient(circle at 45% 85%,rgba(250,204,21,.35) 0 3px,transparent 4px) 0 0/22px 22px,var(--bg)}
-body[data-sec=print] header{background:#fff;color:var(--text);border-bottom:6px solid;border-image:linear-gradient(90deg,#06b6d4 25%,#ec4899 0 50%,#facc15 0 75%,#27272a 0) 1}
+body[data-sec=print] header,body[data-sec=dprint] header{background:#fff;color:var(--text);border-bottom:6px solid;border-image:linear-gradient(90deg,#06b6d4 25%,#ec4899 0 50%,#facc15 0 75%,#27272a 0) 1}
 /* أجهزة: فتحة الجانتري */
 body[data-sec=dev],.tile.dev{--bg:#070d18;--card:rgba(16,28,48,.88);--text:#e8f1fb;--muted:#8aa0ba;--line:#1f3350;--brand:#ffb020;--brand-d:#ffc857;--chip:#14253f;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171;--warn-bg:#3a2d10;--bad-bg:#401818;--ok-bg:#12301c;
  background:repeating-radial-gradient(circle at 85% 12%,transparent 0 38px,rgba(255,176,32,.09) 38px 40px),var(--bg)}
@@ -124,7 +124,7 @@ body{overflow-x:hidden}
 .tile{min-width:0;overflow:hidden;border:1px solid rgba(255,255,255,.22);box-shadow:0 8px 22px rgba(3,10,30,.35)}
 .tile b{font-size:17px;overflow-wrap:anywhere;line-height:1.35}
 /* مربعات موحدة */
-body[data-sec=home] .tile.print,body[data-sec=home] .tile.dev,body[data-sec=home] .tile.ws,body[data-sec=home] .tile.net{--text:#fff;--muted:#a9c4ee;--brand-d:#7dd3fc;--line:rgba(125,211,252,.35);
+body[data-sec=home] .tile.print,body[data-sec=home] .tile.dprint,body[data-sec=home] .tile.dev,body[data-sec=home] .tile.ws,body[data-sec=home] .tile.net{--text:#fff;--muted:#a9c4ee;--brand-d:#7dd3fc;--line:rgba(125,211,252,.35);
  background:linear-gradient(150deg,rgba(56,189,248,.28) 0%,rgba(37,99,235,.28) 45%,rgba(10,26,58,.9) 100%);border:1px solid rgba(125,211,252,.4)}
 /* العنوان أورانج وأصغر عشان يدخل في الإطار */
 body[data-sec=home] .tile.net b{color:#fb923c;font-size:14.5px;white-space:nowrap}
@@ -186,7 +186,8 @@ body.locked header,body.locked main{display:none}
 #gate{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
 body.locked #gate{display:flex}
 #gate .gb{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.45)}
-#gate .sig{position:absolute;top:max(22px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-style:italic;font-size:38px;line-height:1.1;color:#7fd4ff;text-shadow:0 2px 14px rgba(56,170,255,.45);direction:ltr;pointer-events:none}
+#gate .sig small{display:block;font:600 12px/1.4 Cairo,Tahoma,sans-serif;font-style:normal;letter-spacing:1px;-webkit-text-fill-color:#fdba74;color:#fdba74;opacity:.85;margin-top:2px}
+#gate .sig{position:absolute;top:max(22px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-style:italic;font-size:38px;line-height:1.1;background:linear-gradient(180deg,#ffb347 0%,#ff8a1f 45%,#d4a017 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#f5a623;filter:drop-shadow(0 2px 10px rgba(255,150,30,.45));padding:0 4px;direction:ltr;pointer-events:none}
 @media print{#gate{display:none!important}}
 @media print{body[data-sec]{--bg:#fff;--card:#fff;--text:#000;--muted:#555;--line:#ccc;--chip:#eee;background:#fff}}
 @media (max-width:700px){
@@ -211,11 +212,15 @@ body.locked #gate{display:flex}
 @media print{
   header,.bar,.tabs,.stats,.act,th:last-child{display:none!important}
   body{background:#fff;color:#000} .card{border:none} table{min-width:0;font-size:12px}
+  html,body{direction:ltr} .scroll{overflow:visible!important}
+  table{display:table!important;direction:ltr;width:100%} thead{display:table-header-group!important}
+  tbody{display:table-row-group!important} tr{display:table-row!important} th,td{display:table-cell!important;text-align:left!important;direction:ltr;padding:5px 8px!important;border:1px solid #bbb!important;font-size:12px}
+  td::before{content:none!important} th{position:static!important;background:#eee!important;color:#000!important}
 }
 </style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo</div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.21</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -324,7 +329,7 @@ body.locked #gate{display:flex}
 <div class="modal" id="mSet"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2>🔑 الحسابات والصلاحيات</h2>
   <div class="tg edit"><h4>تغيير باسورد الأدمن</h4><input id="aNew" type="password" dir="ltr" placeholder="الجديد (6+)"><input id="aNew2" type="password" dir="ltr" placeholder="تأكيد"><button id="aChg" style="grid-column:1/-1">تغيير</button></div>
   <div class="tg"><h4>الحسابات (عرض فقط)</h4></div><div id="accList"></div>
-  <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="print">الطابعات</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
+  <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="print">الطابعات العادية</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
   <div class="tg"><h4>آخر دخول</h4></div><div id="loginList" style="font-size:12px;color:var(--muted)"></div>
   <div class="tg" style="margin-top:12px"><h4>خدمة الفحص (teba-agent.js)</h4><input id="sAgent" dir="ltr" placeholder="http://localhost:8787" style="grid-column:1/-1"><button id="sSave" class="primary">حفظ</button><button id="sClose">إغلاق</button></div>
 </div></div>
@@ -351,16 +356,17 @@ const HINTS={
   mac:['mac'],mask:['mask','subnet','ماسك'],gw:['gateway','gw','بوابة'],vlan:['vlan'],
   notes:['ملاحظ','note','comment','تعليق']
 };
-const DEFAULT_TYPES=['جهاز أشعة','كمبيوتر','طابعة','كاميرا مراقبة','راوتر / سويتش','سيرفر / PACS','تليفون IP','أخرى'];
+const DEFAULT_TYPES=['جهاز أشعة','كمبيوتر','طابعة','طابعة جهاز','كاميرا مراقبة','راوتر / سويتش','سيرفر / PACS','تليفون IP','أخرى'];
 const H=s=>{let h=5381;for(const c of s)h=((h<<5)+h+c.charCodeAt(0))|0;return h};
 const SEC={
- print:{t:'الطابعات',ic:'🖨️',d:'طابعات الأفلام والورق',pw:null,types:['طابعة'],c:'#ffffff'},
+ dprint:{t:'طابعات الأجهزة',ic:'🎞️',d:'طابعات DICOM للأفلام والورق المتصلة بالأجهزة',pw:null,types:['طابعة جهاز'],c:'#ffffff'},
+ print:{t:'الطابعات العادية',ic:'🖨️',d:'طابعات المكتب والاستقبال',pw:null,types:['طابعة'],c:'#ffffff'},
  dev:{t:'الأجهزة',ic:'☢️',d:'أجهزة الأشعة: MRI / CT / X-Ray',pw:null,types:['جهاز أشعة'],c:'#0f1c30'},
  ws:{t:'الورك ستيشن',ic:'🖥️',d:'محطات العمل والمعالجة',pw:null,types:['كمبيوتر'],c:'#5b4bdb'},
  net:{t:'الشبكة والسيرفرات',ic:'🌐',d:'PACS / راوتر / كاميرات / أخرى',pw:null,types:null,c:'#142624'}
 };
 const secOf=i=>Object.keys(SEC).find(k=>SEC[k].types&&SEC[k].types.includes(i.type))||'net';
-const SEED=[["PACS", "196.218.113.200", "سيرفر / PACS", "4000", "VR1", "", ""], ["WORKLIST", "196.218.113.200", "سيرفر / PACS", "104", "NEBRASWL", "", ""], ["KODAC CT", "196.218.113.123", "طابعة", "5040", "DV5950", "DV5950", ""], ["KODAC MRI", "196.218.113.124", "طابعة", "5040", "DV6850", "DV6850", "PRINTER KODAC MRI"], ["FUJI", "196.218.113.125", "طابعة", "17238", "DRYPIX", "fujiprinter", ""], ["CT", "196.218.113.230", "جهاز أشعة", "104", "CT", "CT", ""], ["CT WORKSTATION", "196.218.113.231", "كمبيوتر", "104", "ISP/DATABASE", "ISP", ""], ["MRI", "196.218.113.114", "جهاز أشعة", "4006", "gehc", "gehc", "في الورقة رقم 2 مكتوب بخط اليد فوق الـ IP — راجعه"], ["MRI WORKSTATION", "196.218.113.116", "كمبيوتر", "4006", "AW_4-7", "AW", "مكتوب بخط اليد /117 جنب الـ IP — راجعه"], ["Magnet Monitor", "196.218.113.109", "جهاز أشعة", "", "", "", ""], ["Ge router Gateway", "196.218.113.113", "راوتر / سويتش", "", "", "", ""], ["xray", "196.218.113.252", "جهاز أشعة", "5040", "Classic CR", "", ""], ["Ge Cisco", "196.218.113.222", "راوتر / سويتش", "", "", "", "مكتوب بخط اليد في الورقة"], ["Paper print (Ricoh new)", "196.218.113.177", "طابعة", "", "", "", ""], ["Paper print (Ricoh us)", "196.218.113.180", "طابعة", "", "", "", ""], ["DAHUA CAMERA", "196.218.113.150", "كاميرا مراقبة", "", "", "", ""], ["Gateway الشبكة", "196.218.113.101", "راوتر / سويتش", "", "", "", "Subnet 255.255.255.0"], ["NEW MRI WORKSTATION", "196.218.113.117", "كمبيوتر", "", "", "", ""]];
+const SEED=[["PACS", "196.218.113.200", "سيرفر / PACS", "4000", "VR1", "VR1", "Display Name: PACS"], ["WORKLIST", "196.218.113.200", "سيرفر / PACS", "104", "NEBRASWL", "", ""], ["KODAC XRAY", "196.218.113.123", "طابعة جهاز", "5040", "DV5950", "DV5950", ""], ["AGFA", "196.218.113.126", "طابعة جهاز", "104", "DS5302", "Ds5302", ""], ["MRI LASER", "196.218.113.127", "طابعة جهاز", "104", "MRL2", "MRILASER", ""], ["EPSON_LASER", "196.218.113.130", "طابعة جهاز", "104", "MRL", "EPSON_LASER", ""], ["EPSON_PAPER", "196.218.113.130", "طابعة جهاز", "104", "MRC", "EPSON_PAPER", ""], ["CT", "196.218.113.230", "جهاز أشعة", "104", "CT", "CT", ""], ["CT WORKSTATION", "196.218.113.231", "كمبيوتر", "104", "DATABASE", "ISP", "Display Name: ISP"], ["MRI", "196.218.113.114", "جهاز أشعة", "4006", "gehc", "gehc", "في الورقة رقم 2 مكتوب بخط اليد فوق الـ IP — راجعه"], ["MRI WORKSTATION", "196.218.113.116", "كمبيوتر", "4006", "AW_4-7", "AW", "Display Name: OLD AW"], ["Magnet Monitor", "196.218.113.109", "جهاز أشعة", "", "", "", ""], ["Ge router Gateway", "196.218.113.113", "راوتر / سويتش", "", "", "", ""], ["xray", "196.218.113.252", "جهاز أشعة", "5040", "Classic CR", "", ""], ["Ge Cisco", "196.218.113.222", "راوتر / سويتش", "", "", "", "مكتوب بخط اليد في الورقة"], ["DAHUA CAMERA", "196.218.113.150", "كاميرا مراقبة", "", "", "", ""], ["Gateway الشبكة", "196.218.113.101", "راوتر / سويتش", "", "", "", "Subnet 255.255.255.0"], ["NEW MRI WORKSTATION", "196.218.113.117", "كمبيوتر", "4006", "AW02", "AW02", "Display Name: AW02"]];
 const IP_RE=/(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)/;
 const IP_FULL=new RegExp('^'+IP_RE.source+'$');
 
@@ -413,9 +419,39 @@ function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){toa
 const seed=()=>SEED.map(r=>({id:uid(),name:r[0],ip:r[1],type:r[2],location:'',port:r[3],ae:r[4],host:r[5],mac:'',notes:r[6],...(r[7]||{})}));
 const scoped=()=>items.filter(i=>secOf(i)===st.sec);
 function load(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
-  if(raw===null){items=seed();save();try{localStorage.setItem(MIG,1)}catch(e){}return}
+  if(raw===null){items=seed();save();try{localStorage.setItem(MIG,1);localStorage.setItem(MIG2,1);localStorage.setItem(MIG3,1)}catch(e){}return}
   try{items=JSON.parse(raw)||[]}catch(e){items=seed()}
-  mig()}
+  mig();mig2();mig3()}
+const MIG2='teba_ip_mig_photos_1021';
+function mig2(){try{if(localStorage.getItem(MIG2))return}catch(e){return}
+  const L=n=>'196.218.113.'+n,find=(ip,ae)=>items.find(i=>i.ip===L(ip)&&(ae===undefined||String(i.ae||'').toUpperCase()===ae));
+  items=items.filter(i=>!(/ricoh|ريكو/i.test(i.name||'')||(i.type==='طابعة'&&(i.ip===L(177)||i.ip===L(180)))));
+  const up=(ip,ae,o,aeMatch)=>{let it=find(ip,aeMatch);if(!it&&aeMatch===undefined)it=null;
+    if(!it){it={id:uid(),name:'',ip:L(ip),type:'',location:'',port:'',ae:'',host:'',mac:'',mask:'',gw:'',vlan:'',notes:''};items.push(it)}
+    Object.assign(it,o);return it};
+  const hasNote=(it,t)=>{if(!String(it.notes||'').includes(t))it.notes=(it.notes?it.notes+' | ':'')+t};
+  let t;
+  t=up(123,0,{name:'KODAC XRAY',type:'طابعة جهاز',port:'5040',ae:'DV5950',host:'DV5950'});
+  t=up(126,0,{name:'AGFA',type:'طابعة جهاز',port:'104',ae:'DS5302',host:'Ds5302'});
+  t=up(127,0,{name:'MRI LASER',type:'طابعة جهاز',port:'104',ae:'MRL2',host:'MRILASER'});
+  // نفس الـ IP .130 جهازين بـ AE مختلف
+  const l=items.find(i=>i.ip===L(130)&&/laser/i.test(i.name||'')||i.ip===L(130)&&String(i.ae).toUpperCase()==='MRL');
+  const pp=items.find(i=>i.ip===L(130)&&(/paper/i.test(i.name||'')||String(i.ae).toUpperCase()==='MRC'));
+  const lo={name:'EPSON_LASER',ip:L(130),type:'طابعة جهاز',port:'104',ae:'MRL',host:'EPSON_LASER'},po={name:'EPSON_PAPER',ip:L(130),type:'طابعة جهاز',port:'104',ae:'MRC',host:'EPSON_PAPER'};
+  [[l,lo],[pp,po]].forEach(([it,o])=>{if(it)Object.assign(it,o);else items.push(Object.assign({id:uid(),location:'',mac:'',mask:'',gw:'',vlan:'',notes:''},o))});
+  // أجهزة / ورك ستيشن / سيرفر: تحديث الحقول التقنية
+  let w=find(116);if(w){Object.assign(w,{port:'4006',ae:'AW_4-7',host:'AW'});w.notes='Display Name: OLD AW'}
+  w=find(117);if(w){Object.assign(w,{port:'4006',ae:'AW02',host:'AW02'});w.notes='Display Name: AW02'}
+  else items.push({id:uid(),name:'NEW MRI WORKSTATION',ip:L(117),type:'كمبيوتر',location:'',port:'4006',ae:'AW02',host:'AW02',mac:'',mask:'',gw:'',vlan:'',notes:'Display Name: AW02'});
+  w=find(231);if(w){Object.assign(w,{port:'104',ae:'DATABASE',host:'ISP'});w.notes='Display Name: ISP'}
+  w=items.find(i=>i.ip===L(200)&&String(i.port)==='4000');if(w){Object.assign(w,{ae:'VR1',host:'VR1'});hasNote(w,'Display Name: PACS')}
+  save();addLog('تحديث',{name:'تحديث من الصور',ip:''},'طابعات الأجهزة + حذف Ricoh');
+  try{localStorage.setItem(MIG2,1)}catch(e){}}
+const MIG3='teba_ip_mig_rm_kodac_fuji';
+function mig3(){try{if(localStorage.getItem(MIG3))return}catch(e){return}
+  const n=items.length;items=items.filter(i=>!((i.ip==='196.218.113.124'||i.ip==='196.218.113.125')&&/kodac mri|fuji/i.test(i.name||'')));
+  if(items.length!==n){save();addLog('حذف',{name:'KODAC MRI + FUJI',ip:''},'حذف بطلب')}
+  try{localStorage.setItem(MIG3,1)}catch(e){}}
 function mig(){try{if(localStorage.getItem(MIG))return}catch(e){return}
   if(!items.some(i=>i.ip==='196.218.113.117')){const it={id:uid(),name:'NEW MRI WORKSTATION',ip:'196.218.113.117',type:'كمبيوتر',location:'',port:'',ae:'',host:'',mac:'',mask:'',gw:'',vlan:'',notes:''};items.push(it);save();addLog('إضافة',it)}
   try{localStorage.setItem(MIG,1)}catch(e){}}
@@ -425,7 +461,7 @@ function normMac(m){
   if(h.length===12)return h.match(/.{2}/g).join(':').toUpperCase();
   return m;
 }
-const dupKey=i=>i.ip+'|'+(i.port||'');
+const dupKey=i=>i.ip+'|'+(i.port||'')+'|'+(i.ae||'');
 function dupCounts(){const c={};items.forEach(i=>{if(i.ip)c[dupKey(i)]=(c[dupKey(i)]||0)+1});return c}
 function types(){
   const s=new Set(DEFAULT_TYPES);items.forEach(i=>i.type&&s.add(i.type));return [...s];
@@ -792,7 +828,7 @@ $('#gq').addEventListener('input',e=>{const q=latin(e.target.value).trim().toLow
   box.innerHTML=(r.length?r.map(i=>`<button class="sm" style="width:100%;text-align:right;margin-bottom:6px" data-gs="${secOf(i)}" data-q="${esc(i.ip)}">${SEC[secOf(i)].ic} ${esc(i.name||'—')} — <span dir="ltr">${esc(i.ip)}</span></button>`).join(''):'<div class="empty">مفيش نتائج</div>')+'<small style="color:var(--muted)">الأقسام المحمية بتدخل في البحث بعد فتحها بالباسورد</small>'});
 $('#gres').addEventListener('click',e=>{const b=e.target.closest('[data-gs]');if(b){go(b.dataset.gs);st.q=b.dataset.q;$('#q').value=st.q;render()}});
 const AUTH0={adm:{hl:'x',hs:'x'},acc:[]};
-const AK='teba_ip_auth_v1',SCN={ws:'الورك ستيشن',dev:'الأجهزة',print:'الطابعات',net:'الشبكة والسيرفرات',all:'كل الأقسام'};
+const AK='teba_ip_auth_v1',SCN={ws:'الورك ستيشن',dev:'الأجهزة',dprint:'طابعات الأجهزة',print:'الطابعات العادية',net:'الشبكة والسيرفرات',all:'كل الأقسام'};
 let auth=AUTH0;try{const a=JSON.parse(localStorage.getItem(AK));if(a&&a.adm&&Array.isArray(a.acc))auth=a}catch(e){}
 const saveAuth=()=>{try{localStorage.setItem(AK,JSON.stringify(auth))}catch(e){}};
 if(window.TEBA_ACCESS)auth={adm:{hl:'x',hs:'x'},acc:(window.TEBA_ACCESS.accounts||[]).map(a=>({n:a.n,s:a.sec,x:a.x||''}))};
