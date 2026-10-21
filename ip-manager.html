@@ -187,7 +187,7 @@ body.locked header,body.locked main{display:none}
 body.locked #gate{display:flex}
 #gate .gb{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.45)}
 #gate .sig small{display:block;font:600 12px/1.4 Cairo,Tahoma,sans-serif;font-style:normal;letter-spacing:1px;-webkit-text-fill-color:#fdba74;color:#fdba74;opacity:.85;margin-top:2px}
-#gate .sig{position:absolute;top:max(22px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-style:italic;font-size:38px;line-height:1.1;background:linear-gradient(180deg,#ffb347 0%,#ff8a1f 45%,#d4a017 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#f5a623;filter:drop-shadow(0 2px 10px rgba(255,150,30,.45));padding:0 4px;direction:ltr;pointer-events:none}
+#gate .sig{position:absolute;top:max(16px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-style:italic;font-size:38px;line-height:1.5;background:linear-gradient(180deg,#ffb347 0%,#ff8a1f 45%,#d4a017 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#f5a623;filter:drop-shadow(0 2px 10px rgba(255,150,30,.45));padding:10px 4px 0;direction:ltr;pointer-events:none}
 @media print{#gate{display:none!important}}
 @media print{body[data-sec]{--bg:#fff;--card:#fff;--text:#000;--muted:#555;--line:#ccc;--chip:#eee;background:#fff}}
 @media (max-width:700px){
@@ -329,7 +329,7 @@ body.locked #gate{display:flex}
 <div class="modal" id="mSet"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2>🔑 الحسابات والصلاحيات</h2>
   <div class="tg edit"><h4>تغيير باسورد الأدمن</h4><input id="aNew" type="password" dir="ltr" placeholder="الجديد (6+)"><input id="aNew2" type="password" dir="ltr" placeholder="تأكيد"><button id="aChg" style="grid-column:1/-1">تغيير</button></div>
   <div class="tg"><h4>الحسابات (عرض فقط)</h4></div><div id="accList"></div>
-  <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="print">الطابعات العادية</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
+  <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
   <div class="tg"><h4>آخر دخول</h4></div><div id="loginList" style="font-size:12px;color:var(--muted)"></div>
   <div class="tg" style="margin-top:12px"><h4>خدمة الفحص (teba-agent.js)</h4><input id="sAgent" dir="ltr" placeholder="http://localhost:8787" style="grid-column:1/-1"><button id="sSave" class="primary">حفظ</button><button id="sClose">إغلاق</button></div>
 </div></div>
@@ -359,8 +359,7 @@ const HINTS={
 const DEFAULT_TYPES=['جهاز أشعة','كمبيوتر','طابعة','طابعة جهاز','كاميرا مراقبة','راوتر / سويتش','سيرفر / PACS','تليفون IP','أخرى'];
 const H=s=>{let h=5381;for(const c of s)h=((h<<5)+h+c.charCodeAt(0))|0;return h};
 const SEC={
- dprint:{t:'طابعات الأجهزة',ic:'🎞️',d:'طابعات DICOM للأفلام والورق المتصلة بالأجهزة',pw:null,types:['طابعة جهاز'],c:'#ffffff'},
- print:{t:'الطابعات العادية',ic:'🖨️',d:'طابعات المكتب والاستقبال',pw:null,types:['طابعة'],c:'#ffffff'},
+ dprint:{t:'طابعات الأجهزة',ic:'🎞️',d:'طابعات DICOM للأفلام والورق المتصلة بالأجهزة',pw:null,types:['طابعة جهاز','طابعة'],c:'#ffffff'},
  dev:{t:'الأجهزة',ic:'☢️',d:'أجهزة الأشعة: MRI / CT / X-Ray',pw:null,types:['جهاز أشعة'],c:'#0f1c30'},
  ws:{t:'الورك ستيشن',ic:'🖥️',d:'محطات العمل والمعالجة',pw:null,types:['كمبيوتر'],c:'#5b4bdb'},
  net:{t:'الشبكة والسيرفرات',ic:'🌐',d:'PACS / راوتر / كاميرات / أخرى',pw:null,types:null,c:'#142624'}
@@ -828,7 +827,7 @@ $('#gq').addEventListener('input',e=>{const q=latin(e.target.value).trim().toLow
   box.innerHTML=(r.length?r.map(i=>`<button class="sm" style="width:100%;text-align:right;margin-bottom:6px" data-gs="${secOf(i)}" data-q="${esc(i.ip)}">${SEC[secOf(i)].ic} ${esc(i.name||'—')} — <span dir="ltr">${esc(i.ip)}</span></button>`).join(''):'<div class="empty">مفيش نتائج</div>')+'<small style="color:var(--muted)">الأقسام المحمية بتدخل في البحث بعد فتحها بالباسورد</small>'});
 $('#gres').addEventListener('click',e=>{const b=e.target.closest('[data-gs]');if(b){go(b.dataset.gs);st.q=b.dataset.q;$('#q').value=st.q;render()}});
 const AUTH0={adm:{hl:'x',hs:'x'},acc:[]};
-const AK='teba_ip_auth_v1',SCN={ws:'الورك ستيشن',dev:'الأجهزة',dprint:'طابعات الأجهزة',print:'الطابعات العادية',net:'الشبكة والسيرفرات',all:'كل الأقسام'};
+const AK='teba_ip_auth_v1',SCN={ws:'الورك ستيشن',dev:'الأجهزة',dprint:'طابعات الأجهزة',print:'طابعات الأجهزة',net:'الشبكة والسيرفرات',all:'كل الأقسام'};
 let auth=AUTH0;try{const a=JSON.parse(localStorage.getItem(AK));if(a&&a.adm&&Array.isArray(a.acc))auth=a}catch(e){}
 const saveAuth=()=>{try{localStorage.setItem(AK,JSON.stringify(auth))}catch(e){}};
 if(window.TEBA_ACCESS)auth={adm:{hl:'x',hs:'x'},acc:(window.TEBA_ACCESS.accounts||[]).map(a=>({n:a.n,s:a.sec,x:a.x||''}))};
@@ -841,11 +840,11 @@ async function who(v){
   const A=window.TEBA_ACCESS;if(!v||!A||!window.crypto||!crypto.subtle)return null;
   const today=new Date().toISOString().slice(0,10),it=A.it||150000;
   if(A.admin&&await pb(v,A.admin.salt,it)===A.admin.h)return{admin:1,n:'الأدمن'};
-  for(const a of A.accounts||[]){if(a.x&&a.x<today)continue;if(await pb(v,a.salt,it)===a.h)return{n:a.n,s:a.sec}}
+  for(const a of A.accounts||[]){if(a.x&&a.x<today)continue;if(await pb(v,a.salt,it)===a.h)return{n:a.n,s:a.sec==='print'?'dprint':a.sec}}
   return null}
 async function whoLocal(v){const l=H(v),sh=await sha(v),today=new Date().toISOString().slice(0,10),m=a=>a.hl===l&&(!a.hs||sh===null||a.hs===sh);
   if(m(auth.adm))return{admin:1,n:'الأدمن'};
-  const a=auth.acc.find(x=>m(x)&&(!x.x||x.x>=today));return a?{n:a.n,s:a.s}:null}
+  const a=auth.acc.find(x=>m(x)&&(!x.x||x.x>=today));return a?{n:a.n,s:a.s==='print'?'dprint':a.s}:null}
 async function unlockApp(){const r=await who($('#gIn').value.trim());
   if(!r){$('#gErr').textContent='الباسورد غلط';$('#gIn').value='';$('#gIn').focus();return}
   document.body.classList.remove('locked');$('#gIn').value='';
