@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>منظم عناوين IP — مركز طيبة للأشعة</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#f3f6f9;--card:#fff;--text:#1b2733;--muted:#6b7a89;--line:#e1e7ed;
@@ -186,6 +186,7 @@ body.locked header,body.locked main{display:none}
 #gate{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
 body.locked #gate{display:flex}
 #gate .gb{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.45)}
+#gate .sig{position:absolute;top:max(22px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-style:italic;font-size:38px;line-height:1.1;color:#7fd4ff;text-shadow:0 2px 14px rgba(56,170,255,.45);direction:ltr;pointer-events:none}
 @media print{#gate{display:none!important}}
 @media print{body[data-sec]{--bg:#fff;--card:#fff;--text:#000;--muted:#555;--line:#ccc;--chip:#eee;background:#fff}}
 @media (max-width:700px){
@@ -214,7 +215,7 @@ body.locked #gate{display:flex}
 </style>
 </head>
 <body class="locked">
-<div id="gate"><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo</div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
