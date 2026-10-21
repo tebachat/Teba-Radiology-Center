@@ -223,6 +223,120 @@ body.locked #gate{display:flex}
   tbody{display:table-row-group!important} tr{display:table-row!important} th,td{display:table-cell!important;text-align:left!important;direction:ltr;padding:5px 8px!important;border:1px solid #bbb!important;font-size:12px}
   td::before{content:none!important} th{position:static!important;background:#eee!important;color:#000!important}
 }
+
+/* ===== TEBA UI refresh: Navy + Turquoise (presentation only) ===== */
+:root{
+  --bg:#f3f7fa;--card:#ffffff;--text:#172b42;--muted:#667b8e;--line:#dce6ed;
+  --brand:#087f8c;--brand-d:#06636e;--chip:#e3f5f6;
+  --ok:#15803d;--warn:#a16207;--bad:#b42332;
+  --ok-bg:#dcfce7;--warn-bg:#fef3c7;--bad-bg:#fee2e2;
+  color-scheme:light;
+}
+body{background:var(--bg);color:var(--text);line-height:1.55;letter-spacing:0}
+header{background:#102a43;color:#f5fbff;padding:17px 20px;border-bottom:3px solid #22c6c9;box-shadow:0 4px 18px rgba(16,42,67,.12)}
+header h1{font-size:clamp(18px,2.3vw,23px);font-weight:700;letter-spacing:-.2px}
+header p{color:#c5d8e5;opacity:1}
+main{max-width:1320px;padding:20px;margin-inline:auto}
+.card,.stat,.box{background:var(--card);border-color:var(--line);box-shadow:0 4px 16px rgba(16,42,67,.045)}
+.card{border-radius:14px}
+.stats{gap:12px;margin-bottom:16px}
+.stat{border-radius:13px;padding:13px 16px;min-height:76px}
+.stat b{font-size:24px;color:#102a43;line-height:1.25}
+.stat span{display:block;margin-top:4px;color:var(--muted);font-size:12px}
+.bar{gap:9px;margin-bottom:14px;align-items:stretch}
+input,select,textarea{border-color:#cfdae3;border-radius:10px;background:#fff;min-height:42px;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:#0b9ca6;box-shadow:0 0 0 3px rgba(11,156,166,.13)}
+button{border-color:#d3dfe7;border-radius:10px;min-height:40px;transition:background .15s,border-color .15s,transform .12s,box-shadow .15s}
+button:hover{border-color:#0b9ca6;box-shadow:0 2px 8px rgba(16,42,67,.08)}
+button:active{transform:translateY(1px)}
+button.primary,.tabs button.on{background:#087f8c!important;border-color:#087f8c!important;color:#fff!important}
+button.primary:hover,.tabs button.on:hover{background:#06636e!important}
+button.danger{color:#b42332}
+.tabs{gap:8px;margin-bottom:14px}
+.tabs button{border-radius:10px}
+th{background:#e9f5f7;color:#163a50;font-weight:700;padding:12px}
+th,td{border-bottom-color:#e3ebf0}
+tbody tr:nth-child(even) td{background:#fbfdfe}
+tr:hover td{background:#effafb!important}
+td{padding:10px 12px}
+.ip{color:#087f8c;font-weight:700;text-decoration:underline;text-decoration-color:#b4e6e8;text-underline-offset:3px}
+.mac{color:#536b7e}
+.chip{background:#e5f5f6;color:#17616b;border:1px solid #ccebed;padding:3px 10px}
+.badge{font-weight:700}
+.badge.ok{background:#dcfce7;color:#166534}
+.subnet{margin-bottom:14px}
+.subnet summary{padding:14px 16px}
+.cell{border-radius:7px;min-height:29px}
+.cell.used{background:#d9f2f4;color:#086c78;border-color:#9bdde1}
+.cell.dup{background:#fff0cf;color:#92400e;border-color:#f3cf7b}
+.modal{background:rgba(10,31,48,.58);backdrop-filter:blur(3px)}
+.box{border:1px solid #d8e4eb;border-radius:18px;padding:22px}
+.box h2{color:#102a43}
+.form{gap:12px}
+.form label{color:#526a7c;font-weight:600}
+.drop{background:#f8fbfc;border-color:#b8cbd5;border-radius:14px}
+.drop.over{background:#e7f8f8;border-color:#087f8c}
+#toast{background:#102a43;box-shadow:0 8px 28px rgba(16,42,67,.25)}
+.alertbar{border-radius:12px}
+.empty{padding:46px 18px}
+/* Home remains navy, with a calmer turquoise accent */
+body[data-sec=home]{--bg:#0b2038;--card:#102b49;--text:#f2f8fc;--muted:#b0c6d8;--line:#2c4b65;--brand:#22c6c9;--brand-d:#16a6ae;--chip:#183b56;
+ background:radial-gradient(ellipse 70% 55% at 100% 0%,rgba(34,198,201,.18),transparent 72%),linear-gradient(145deg,#0b2038 0%,#102f4d 58%,#0a1c31 100%) fixed;min-height:100vh}
+body[data-sec=home] header{background:transparent;box-shadow:none;border-bottom:1px solid rgba(154,214,226,.22);padding-top:max(24px,env(safe-area-inset-top))}
+body[data-sec=home] header h1{font-size:clamp(22px,3vw,29px)}
+body[data-sec=home] #hStats{background:rgba(17,48,74,.8);border:1px solid rgba(122,211,220,.24);border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.10)}
+body[data-sec=home] #hStats .stat b{color:#f2f8fc}
+body[data-sec=home] #hStats .stat span{color:#b0c6d8}
+body[data-sec=home] #gq{background:rgba(255,255,255,.97);color:#172b42;border-color:rgba(255,255,255,.4);min-height:48px}
+body[data-sec=home] .tile,body[data-sec=home] .tile.print,body[data-sec=home] .tile.dprint,body[data-sec=home] .tile.dev,body[data-sec=home] .tile.ws,body[data-sec=home] .tile.net{
+  background:linear-gradient(145deg,rgba(25,65,91,.96),rgba(14,43,69,.98))!important;border:1px solid rgba(109,205,213,.30)!important;color:#f2f8fc!important;border-radius:15px;box-shadow:0 7px 20px rgba(0,0,0,.13);min-height:82px;padding:14px 15px}
+body[data-sec=home] .tile:hover{border-color:#22c6c9!important;box-shadow:0 9px 24px rgba(0,0,0,.22);transform:translateY(-2px)}
+body[data-sec=home] .tile b{color:#f2f8fc!important;font-size:15px!important;white-space:normal!important}
+body[data-sec=home] .tile span:not(.ti){color:#b9d2df!important}
+body[data-sec=home] .tile .ti{color:#48d1d4;font-size:27px}
+body[data-sec=home] .tile.net b{color:#f2f8fc!important}
+body[data-sec=home] .foot button{background:#087f8c;border-color:#22c6c9;color:white}
+/* Unify section pages; keep section identity in headings/icons rather than competing themes */
+body[data-sec]:not([data-sec=home]){--bg:#f3f7fa;--card:#fff;--text:#172b42;--muted:#667b8e;--line:#dce6ed;--brand:#087f8c;--brand-d:#06636e;--chip:#e3f5f6;--ok:#15803d;--warn:#a16207;--bad:#b42332;--warn-bg:#fef3c7;--bad-bg:#fee2e2;--ok-bg:#dcfce7;background:var(--bg);color:var(--text);min-height:100vh}
+body[data-sec]:not([data-sec=home]) header{background:#102a43;color:#f5fbff;border-bottom:3px solid #22c6c9}
+body[data-sec]:not([data-sec=home]) header p{color:#c5d8e5}
+body[data-sec]:not([data-sec=home]) .card{border-top:1px solid var(--line)}
+body[data-sec]:not([data-sec=home]) button.primary,body[data-sec]:not([data-sec=home]) .tabs button.on{background:#087f8c!important;border-color:#087f8c!important;color:#fff!important}
+#btnAdd,#btnTools{font-weight:700}
+#btnAdd{box-shadow:none!important}
+#btnTools{background:#fff}
+#view{min-width:0}
+@media(max-width:700px){
+  main{padding:12px}
+  header{padding-inline:14px}
+  .stats{gap:8px}
+  .stat{padding:10px 8px;min-height:68px}
+  .stat b{font-size:20px}
+  #stats .stat span{font-size:10.5px}
+  .bar{gap:7px}
+  .bar .grow{flex:1 1 100%;min-width:0}
+  .bar select{flex:1 1 calc(50% - 5px);min-width:0!important;width:auto}
+  .bar button:not(.primary){flex:1 1 calc(50% - 5px);padding:8px 6px}
+  #btnAdd{position:static!important;flex:1 1 100%!important;min-height:46px;border-radius:11px!important;box-shadow:none!important}
+  #btnTools{flex:1 1 100%!important}
+  .tabs{gap:6px}
+  .tabs button{font-size:12.5px;padding:9px 3px}
+  table{min-width:0}
+  td{padding:5px 10px}
+  td.nm{font-size:15px!important;color:#102a43}
+  tr{background:#fff;border:1px solid #e0e9ef;border-radius:12px;margin:9px 7px;padding:7px 0;box-shadow:0 2px 8px rgba(16,42,67,.04)}
+  tbody tr:nth-child(even) td{background:#fff}
+  td.act{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px}
+  td.act .sm{min-height:38px}
+  .form,.map{grid-template-columns:1fr}
+  .box{padding:18px}
+  body[data-sec=home] .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  body[data-sec=home] .tile{padding:11px 10px;column-gap:8px}
+  body[data-sec=home] #hStats .stat span{font-size:10px}
+}
+@media(max-width:360px){body[data-sec=home] .tiles{grid-template-columns:1fr}.tg{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
 </style>
 </head>
 <body class="locked">
@@ -674,7 +788,7 @@ function doImport(){
     const m=ip.match(IP_RE);if(m)ip=m[0];
     if(!ip&&!g('name'))return;
     if(!ip)return;
-    const pk=ip+'|'+g('port');if(skip&&seen.has(pk)){skipped++;return}
+    const pk=dupKey({ip,port:g('port'),ae:g('ae')});if(skip&&seen.has(pk)){skipped++;return}
     if(!isIp(ip))bad++;
     base.push({id:uid(),name:g('name'),ip,type:g('type'),location:g('location'),port:g('port'),ae:g('ae'),host:g('host'),mac:normMac(g('mac')),mask:g('mask'),gw:g('gw'),vlan:g('vlan'),notes:g('notes')});
     seen.add(pk);added++;
