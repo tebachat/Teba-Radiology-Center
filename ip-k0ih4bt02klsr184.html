@@ -6,6 +6,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3a">
+<link rel="manifest" href="ip-app-fpfso3yekdvx.webmanifest">
+<link rel="apple-touch-icon" href="ip-icon-180.png">
+<link rel="icon" type="image/png" href="ip-icon-192.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>منظم عناوين IP — مركز طيبة للأشعة</title>
@@ -217,6 +220,7 @@ body.locked #gate{display:flex}
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
   <div id="gErr" style="color:var(--bad);min-height:22px;margin:6px 0;font-size:14px"></div>
   <button class="primary" id="gOk" style="width:100%">دخول</button>
+  <button id="btnInstall" style="width:100%;margin-top:10px;display:none">📲 تثبيت التطبيق</button>
 </div></div>
 <header>
   <button id="back" hidden aria-label="رجوع">→</button>
@@ -861,14 +865,18 @@ $('#gOk').onclick=unlockApp;
 $('#gIn').addEventListener('keydown',e=>{if(e.key==='Enter')unlockApp()});
 setTimeout(()=>$('#gIn').focus(),100);
 if(window.TEBA_ACCESS&&window.crypto&&crypto.subtle)document.body.classList.add('fa');else $('#gErr').textContent='غير متصل';
+let dip=null;const bi=$('#btnInstall');
+if(location.protocol.startsWith('http')){
+  if('serviceWorker' in navigator)navigator.serviceWorker.register('ip-sw-wsqsyx7aaiam.js').catch(()=>{});
+  if(!(matchMedia('(display-mode: standalone)').matches||navigator.standalone))bi.style.display='';
+}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dip=e});
+window.addEventListener('appinstalled',()=>{dip=null;bi.style.display='none'});
+bi.onclick=async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null;return}
+  alert('لتثبيت التطبيق:\n• أندرويد (Chrome): اضغط ⋮ ثم "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".\n• آيفون (Safari): اضغط زر المشاركة ثم "إضافة إلى الشاشة الرئيسية".')};
 $('#back').onclick=()=>history.back();
 window.addEventListener('popstate',()=>{st.sec='home';render()});
 $('#btnReset').onclick=()=>admin(()=>{if(confirm('هترجع كل البيانات للافتراضي وتتمسح التعديلات. متأكد؟')){items=seed();save();render();toast('تم الرجوع للافتراضي ✔')}});
-try{
-  const ic='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="96" fill="#0a1a3a"/><text x="256" y="335" font-size="260" text-anchor="middle" fill="#2dd4bf" font-family="sans-serif" font-weight="700">IP</text></svg>');
-  const mf={name:'منظم IP — مركز طيبة',short_name:'Teba IP',start_url:location.href.split('#')[0],display:'standalone',background_color:'#0a1a3a',theme_color:'#0a1a3a',lang:'ar',dir:'rtl',icons:[{src:ic,sizes:'512x512',type:'image/svg+xml',purpose:'any'}]};
-  const l=document.createElement('link');l.rel='manifest';l.href=URL.createObjectURL(new Blob([JSON.stringify(mf)],{type:'application/manifest+json'}));document.head.appendChild(l);
-}catch(e){}
 
 load();render();
 })();

@@ -1,0 +1,27 @@
+{
+ "name": "منظم IP — مركز طيبة",
+ "short_name": "Teba IP",
+ "lang": "ar",
+ "dir": "rtl",
+ "start_url": "./ip-k0ih4bt02klsr184.html",
+ "id": "./ip-k0ih4bt02klsr184.html",
+ "scope": "./",
+ "display": "standalone",
+ "orientation": "portrait",
+ "background_color": "#0a1a3a",
+ "theme_color": "#0a1a3a",
+ "icons": [
+  {
+   "src": "ip-icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png",
+   "purpose": "any maskable"
+  },
+  {
+   "src": "ip-icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ]
+}
