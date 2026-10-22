@@ -463,6 +463,38 @@ body.rtMode #stats,body.rtMode #alerts,body.rtMode #app>.bar,body.rtMode #app>.t
 .rtf .rw{display:flex;gap:6px}.rtf .rw input{flex:1;min-width:0;direction:ltr;text-align:left}
 .rtf .rw button{min-width:40px;padding:0 8px}
 @media print{body.rtMode .rtdata{display:none!important}}
+
+/* ===== أزرار الأيقونات (مظهر / طباعة / ضبط) ===== */
+.tools{display:flex;gap:8px;flex:none;align-items:center;align-self:center}
+.tools button,.bar .tools button:not(.primary),.bar .tools #btnLook,.bar .tools #btnPrintAll,.bar .tools #btnTools{flex:none!important;width:44px!important;height:44px!important;min-height:0!important;padding:0!important;font-size:20px!important;line-height:1;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;font-weight:400}
+.bar #q{flex:1 1 140px!important;min-width:0!important}
+.hbar{display:flex;gap:8px;align-items:center;margin:12px 0}
+.hbar #gq{flex:1;min-width:0;margin:0}
+body[data-sec=home] .tools button{background:#087f8c;border:1px solid #22c6c9;color:#fff}
+html[data-theme] body[data-sec=home] .tools button{background:var(--t-brand);border-color:var(--t-hline);color:var(--t-on)}
+/* أنماط عرض الأقسام في الرئيسية */
+body[data-sec=home].hm-big .tiles{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))!important;gap:12px!important}
+body[data-sec=home].hm-big .tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:150px!important;padding:16px 8px!important;gap:3px!important}
+body[data-sec=home].hm-big .tile .ti{font-size:48px!important;margin:0 0 6px!important}
+body[data-sec=home].hm-big .tile b{font-size:15px!important}
+body[data-sec=home].hm-small .tiles{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:9px!important}
+body[data-sec=home].hm-small .tile{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;text-align:center!important;min-height:92px!important;padding:10px 4px!important;gap:2px!important}
+body[data-sec=home].hm-small .tile .ti{font-size:30px!important;margin:0 0 2px!important}
+body[data-sec=home].hm-small .tile b{font-size:12px!important;white-space:normal!important}
+body[data-sec=home].hm-small .tile span:not(.ti),body[data-sec=home].hm-small .tile em{display:none!important}
+body[data-sec=home].hm-list .tiles{grid-template-columns:1fr!important;gap:8px!important}
+body[data-sec=home].hm-list .tile{padding:9px 12px!important}
+
+/* تنظيم بيانات الراوتر في مجموعات */
+.rtg{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:var(--card);overflow:hidden}
+.rtg>summary{cursor:pointer;padding:11px 14px;font-weight:700;list-style:none;display:flex;align-items:center;gap:8px}
+.rtg>summary::-webkit-details-marker{display:none}
+.rtg>summary::after{content:'▾';margin-inline-start:auto;color:var(--muted)}
+.rtg[open]>summary::after{content:'▴'}
+.rtg .rtgrid{padding:2px 14px 14px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.rtg .rtf.full{grid-column:1/-1}
+.rtg .rtf .rw button{min-width:0;width:34px;height:40px;padding:0;font-size:15px}
+@media(min-width:640px){.rtg .rtgrid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
 </style>
 </head>
 <body class="locked">
@@ -481,10 +513,9 @@ body.rtMode #stats,body.rtMode #alerts,body.rtMode #app>.bar,body.rtMode #app>.t
 
 <main id="home">
   <div class="stats" id="hStats"></div>
-  <input id="gq" placeholder="🔍 بحث شامل بين الأقسام المفتوحة..." style="margin:12px 0">
+  <div class="hbar"><input id="gq" placeholder="🔍 بحث شامل..."><div class="tools"><button id="btnLookH" title="المظهر والعرض" aria-label="المظهر والعرض">🎨</button><button id="btnPrintAllSec" title="طباعة كل الأقسام في ملف واحد" aria-label="طباعة كل الأقسام">🖨️</button><button id="btnToolsH" title="ضبط" aria-label="ضبط">⚙️</button></div></div>
   <div id="gres"></div>
   <div class="tiles" id="tiles"></div>
-  <div class="foot"><button id="btnPrintAllSec" title="طباعة كل الأقسام في ملف واحد">🖨️ طباعة كل الأقسام</button><button id="btnToolsH">⚙️ ضبط</button></div>
 </main>
 
 <main id="app" hidden>
@@ -494,13 +525,11 @@ body.rtMode #stats,body.rtMode #alerts,body.rtMode #app>.bar,body.rtMode #app>.t
 
   <div class="bar">
     <input class="grow" id="q" placeholder="🔍 ابحث بالاسم / IP / المكان / MAC ...">
+    <div class="tools"><button id="btnLook" title="المظهر والعرض" aria-label="المظهر والعرض">🎨</button><button id="btnPrintAll" title="طباعة كل أجهزة القسم بدون فلاتر" aria-label="طباعة الكل">🖨️</button><button id="btnTools" title="ضبط" aria-label="ضبط">⚙️</button></div>
     <select id="typeFilter" style="width:auto;min-width:150px"></select>
     <select id="probFilter" style="width:auto;min-width:140px"><option value="">كل الحالات</option><option value="any">⚠ أي مشكلة</option><option value="dup">⚠ مكرر / تعارض</option><option value="bad">❌ بيانات غير صالحة</option><option value="nomac">بدون MAC</option></select>
-    <select id="vmode" style="width:auto;min-width:130px"><option value="details">📋 تفاصيل</option><option value="tiles">🔲 Tiles</option><option value="large">🖼️ أيقونات كبيرة</option><option value="medium">🔳 أيقونات متوسطة</option><option value="small">▫️ أيقونات صغيرة</option></select>
     <button class="primary" id="btnAdd">➕ إضافة</button>
-    <button id="btnPrintAll" title="طباعة كل أجهزة القسم بدون فلاتر">🖨️ طباعة الكل</button>
-    <button id="btnTools">⚙️ ضبط</button>
-  </div>
+      </div>
 
   <div class="tabs">
     <button class="on" data-view="table">📋 الجدول</button>
@@ -570,11 +599,16 @@ body.rtMode #stats,body.rtMode #alerts,body.rtMode #app>.bar,body.rtMode #app>.t
 </div></div>
 <div class="modal" id="mInfo"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2 id="infoT"></h2><div id="infoB"></div><div id="infoA" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px"></div></div></div>
 <div class="modal" id="mTools"><div class="box" style="max-width:420px;max-height:90vh;overflow:auto"><h2>⚙️ ضبط</h2>
-  <div class="tg"><h4>🎨 المظهر (على الجهاز ده)</h4><select id="themeSel" style="grid-column:1/-1"></select></div>
   <div class="tg" id="tgSec"><h4>بيانات القسم</h4><button id="btnImport">📥 استيراد</button><button id="btnXlsx">📤 Excel</button><button id="btnCsv">CSV</button><button id="btnPrint">🖨️ طباعة</button><button id="btnShare" style="grid-column:1/-1">📲 مشاركة المعروض PDF على واتساب</button></div>
   <div class="tg" id="tgBackup"><h4>النسخ الاحتياطي</h4><button id="btnBackup">💾 نسخة احتياطية</button><button id="btnRestore">♻️ استرجاع</button><button id="btnReset" style="grid-column:1/-1">↺ البيانات الافتراضية</button></div>
   <div class="tg tgAdmin"><h4>الأدمن</h4><button id="btnAcc" style="grid-column:1/-1">🔑 الحسابات والصلاحيات</button></div>
   <div class="actions"><button id="tClose">إغلاق</button></div>
+</div></div>
+<div class="modal" id="mLook"><div class="box" style="max-width:380px;max-height:88vh;overflow:auto"><h2>🎨 المظهر والعرض</h2>
+  <div class="tg"><h4>🎨 المظهر (على الجهاز ده)</h4><select id="themeSel" style="grid-column:1/-1"></select></div>
+  <div class="tg" id="lkHome"><h4>🏠 عرض الأقسام</h4><select id="hmode" style="grid-column:1/-1"><option value="">🔲 الافتراضي</option><option value="big">🖼️ أيقونات كبيرة</option><option value="small">▫️ أيقونات صغيرة</option><option value="list">📋 قائمة</option></select></div>
+  <div class="tg" id="lkVm"><h4>📋 عرض الأجهزة</h4><select id="vmode" style="grid-column:1/-1;width:100%"><option value="details">📋 تفاصيل</option><option value="tiles">🔲 Tiles</option><option value="large">🖼️ أيقونات كبيرة</option><option value="medium">🔳 أيقونات متوسطة</option><option value="small">▫️ أيقونات صغيرة</option></select></div>
+  <div class="actions"><button id="lkClose">إغلاق</button></div>
 </div></div>
 <div class="modal" id="mSet"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2>🔑 الحسابات والصلاحيات</h2>
   <div class="tg edit"><h4>تغيير باسورد الأدمن</h4><input id="aNew" type="password" dir="ltr" placeholder="الجديد (6+)"><input id="aNew2" type="password" dir="ltr" placeholder="تأكيد"><button id="aChg" style="grid-column:1/-1">تغيير</button></div>
@@ -1048,6 +1082,14 @@ const RT_MODELS={
  ]}
 };
 const RT_FIELDS=[['name','اسم / مكان الراوتر',0],['ip','IP الراوتر (LAN / Gateway)',0],['rwan','IP الـ WAN (من WE)',0],['rdns','DNS',0],['ru','يوزر الراوتر (Admin)',1],['rp','باسورد الراوتر (Admin)',1],['rppu','يوزر الإنترنت (PPPoE)',1],['rppp','باسورد الإنترنت (PPPoE)',1],['rwifi','اسم الواي فاي (SSID)',0],['rwp','باسورد الواي فاي',1],['notes','ملاحظات',0]];
+const RT_GROUPS=[
+ {k:'gen',t:'📍 عام',f:[['name','اسم / مكان الراوتر',1]]},
+ {k:'net',t:'🌐 الشبكة',f:[['ip','IP الراوتر (LAN)'],['rwan','IP الـ WAN'],['rdns','DNS',1]]},
+ {k:'adm',t:'🔑 دخول الراوتر',f:[['ru','اليوزر'],['rp','الباسورد']]},
+ {k:'ppp',t:'🌍 الإنترنت (PPPoE)',f:[['rppu','اليوزر'],['rppp','الباسورد']]},
+ {k:'wifi',t:'📶 الواي فاي',f:[['rwifi','اسم الشبكة (SSID)'],['rwp','الباسورد']]},
+ {k:'note',t:'📝 ملاحظات',f:[['notes','ملاحظات',1]]}
+];
 const rtItems=()=>items.filter(i=>i.type===RT_TYPE);
 function renderRouter(){
   const R=st.rt||(st.rt={m:'h168n',open:null,id:null});
@@ -1068,8 +1110,9 @@ function renderRouter(){
     h+=`<div class="rtbar">${list.length?`<select id="rtSel">${list.map(i=>`<option value="${esc(i.id)}"${i.id===R.id?' selected':''}>${esc(i.name||'راوتر')}</option>`).join('')}</select>`:''}${can('add')?'<button class="primary" id="rtNew">➕ راوتر جديد</button>':''}${it&&can('del')?'<button class="danger" id="rtDel">🗑 حذف</button>':''}${it?'<button id="rtAll">👁 إظهار الكل</button>':''}</div>`;
     if(!it)h+='<div class="empty">مفيش راوتر متسجل'+(can('add')?' — دوس "➕ راوتر جديد"':'')+'</div>';
     else{
-      h+='<div class="rtgrid">'+RT_FIELDS.map(f=>{const k=f[0],m=f[2],v=it[k]||'';
-        return `<div class="rtf"><label>${f[1]}</label><div class="rw"><input id="rt_${k}" type="${m?'password':'text'}" value="${esc(v)}" autocomplete="off"${ed?'':' readonly'}>${m?`<button class="sm" data-rtshow="${k}" title="إظهار / إخفاء">👁</button>`:''}<button class="sm" data-rtcopy="${k}" title="نسخ">📋</button></div></div>`}).join('')+'</div>';
+      const mk=Object.fromEntries(RT_FIELDS.map(f=>[f[0],f[2]]));
+      h+=RT_GROUPS.map(g=>`<details class="rtg" data-g="${g.k}"${(R.g||{})[g.k]===false?'':' open'}><summary>${g.t}</summary><div class="rtgrid">`+g.f.map(f=>{const k=f[0],m=mk[k],v=it[k]||'';
+        return `<div class="rtf${f[2]?' full':''}"><label>${f[1]}</label><div class="rw"><input id="rt_${k}" type="${m?'password':'text'}" value="${esc(v)}" autocomplete="off"${ed?'':' readonly'}>${m?`<button class="sm" data-rtshow="${k}" title="إظهار / إخفاء">👁</button>`:''}<button class="sm" data-rtcopy="${k}" title="نسخ">📋</button></div></div>`}).join('')+'</div></details>').join('');
       if(ed)h+='<div class="rtbar" style="margin:12px 0 0"><button class="primary" id="rtSave">💾 حفظ</button></div>';
       h+=`<h3 style="margin:20px 0 6px">📦 ملف Backup الراوتر</h3><p style="margin:0 0 8px;font-size:12.5px;color:var(--muted)">ملف واحد لكل راوتر (حد أقصى 450 KB)، وبيتزامن مع باقي الأجهزة زي باقي البيانات. رفع ملف جديد بيستبدل القديم.</p><div class="rtbar">${ed?'<button class="primary" id="rtUp">📤 رفع / استبدال الـ Backup</button><input type="file" id="rtFile" hidden>':''}</div><div id="rtFiles"></div>`;
     }
@@ -1106,6 +1149,7 @@ $('#view').addEventListener('click',e=>{
     if(o.rwan&&!isIp(o.rwan)){toast('IP الـ WAN غير صالح');return}
     Object.assign(it,o,{type:RT_TYPE,rm:R.m});addLog('تعديل',it,'تحديث بيانات الراوتر');save();toast('تم الحفظ ✔');renderRouter()}
 });
+$('#view').addEventListener('toggle',e=>{const d=e.target;if(st.sec==='rt'&&d.classList&&d.classList.contains('rtg')){(st.rt.g||(st.rt.g={}))[d.dataset.g]=d.open}},true);
 $('#view').addEventListener('change',e=>{
   if(st.sec!=='rt')return;
   if(e.target.id==='rtModel'){st.rt.m=e.target.value;st.rt.open=null;renderRouter()}
@@ -1119,6 +1163,19 @@ $('#view').addEventListener('change',e=>{
     fr.readAsDataURL(f);
   }
 });
+/* ---------- المظهر والعرض ---------- */
+const HM_KEY='teba_ip_hmode_v1';
+function applyHm(){let m='';try{m=localStorage.getItem(HM_KEY)||''}catch(e){}['big','small','list'].forEach(x=>document.body.classList.toggle('hm-'+x,m===x));const h=$('#hmode');if(h)h.value=m}
+$('#hmode').onchange=e=>{try{localStorage.setItem(HM_KEY,e.target.value)}catch(_){}applyHm()};
+applyHm();
+$('#btnLook').onclick=$('#btnLookH').onclick=()=>{
+  $('#lkHome').style.display=st.sec==='home'?'':'none';
+  $('#lkVm').style.display=(st.sec!=='home'&&st.sec!=='rt'&&st.view==='table')?'':'none';
+  $('#vmode').style.display='';
+  $('#mLook').classList.add('open');
+};
+$('#lkClose').onclick=()=>$('#mLook').classList.remove('open');
+$('#mLook').addEventListener('click',e=>{if(e.target.id==='mLook')e.target.classList.remove('open')});
 $('#btnPrintAllSec').onclick=()=>{
   const sens=can('sens'),dc=dupCounts(),mc=macCounts();
   const srt=(x,y)=>{const ax=isIp(x.ip)?ipNum(x.ip):Infinity,ay=isIp(y.ip)?ipNum(y.ip):Infinity;return ax-ay||String(x.name||'').localeCompare(String(y.name||''))};
