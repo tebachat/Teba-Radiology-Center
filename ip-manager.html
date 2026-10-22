@@ -3,6 +3,7 @@
 <head>
 <meta name="robots" content="noindex,nofollow">
 <script src="ip-access-5mhrcaaoc2ygmi.js"></script>
+<script src="ip-sync-config.js" onerror="void 0"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a1a3a">
@@ -53,6 +54,9 @@ table{width:100%;border-collapse:collapse;min-width:1050px}
 th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line);vertical-align:middle}
 th{background:var(--chip);font-size:13px;cursor:pointer;user-select:none;white-space:nowrap;position:sticky;top:0}
 tr:hover td{background:rgba(14,116,144,.05)}
+tr.t-ok td.num{border-inline-start:4px solid var(--ok)} tr.t-bad td.num{border-inline-start:4px solid var(--bad)}
+.phead{display:none}
+@page{margin:12mm;@bottom-center{content:counter(page) " / " counter(pages);font-size:10px}}
 .ip{font-family:Consolas,monospace;direction:ltr;unicode-bidi:embed;cursor:copy;display:inline-block}
 .mac{font-family:Consolas,monospace;direction:ltr;unicode-bidi:embed;font-size:13px;color:var(--muted)}
 .badge{display:inline-block;font-size:11px;padding:1px 8px;border-radius:99px;margin-inline-start:6px}
@@ -218,6 +222,8 @@ body.locked #gate{display:flex}
   header,.bar,.tabs,.stats,.act,th:last-child{display:none!important}
   body{background:#fff;color:#000} .card{border:none} table{min-width:0;font-size:12px}
   .modal,#toast{display:none!important}
+  .phead{display:flex!important;justify-content:space-between;margin:0 0 8px;font-size:14px;direction:ltr}
+  tbody tr:nth-child(even) td{background:#f4f4f4!important} tr.t-ok td.num,tr.t-bad td.num{border-inline-start:1px solid #bbb!important}
   html,body{direction:ltr} .scroll{overflow:visible!important}
   table{display:table!important;direction:ltr;width:100%} thead{display:table-header-group!important}
   tbody{display:table-row-group!important} tr{display:table-row!important} th,td{display:table-cell!important;text-align:left!important;direction:ltr;padding:5px 8px!important;border:1px solid #bbb!important;font-size:12px}
@@ -336,11 +342,17 @@ body[data-sec]:not([data-sec=home]) button.primary,body[data-sec]:not([data-sec=
 }
 @media(max-width:360px){body[data-sec=home] .tiles{grid-template-columns:1fr}.tg{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+/* شريط الإحصائيات على الخلفية الفاتحة */
+body[data-sec]:not([data-sec=home]) #stats{background:#fff;border:1px solid var(--line);box-shadow:0 4px 16px rgba(16,42,67,.045)}
+body[data-sec]:not([data-sec=home]) #stats .stat+.stat{border-inline-start-color:var(--line)}
+body[data-sec]:not([data-sec=home]) #stats .stat span{color:var(--muted)}
+body[data-sec]:not([data-sec=home]) #stats .stat b{color:#102a43}
+body[data-sec]:not([data-sec=home]) #stats .stat.warn b{color:var(--warn)}body[data-sec]:not([data-sec=home]) #stats .stat.bad b{color:var(--bad)}
 
 </style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.21</small></div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.22</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -451,6 +463,7 @@ body[data-sec]:not([data-sec=home]) button.primary,body[data-sec]:not([data-sec=
   <div class="tg"><h4>الحسابات (عرض فقط)</h4></div><div id="accList"></div>
   <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
   <div class="tg"><h4>آخر دخول</h4></div><div id="loginList" style="font-size:12px;color:var(--muted)"></div>
+  <div class="tg" style="margin-top:12px"><h4>☁️ المزامنة بين الأجهزة</h4><div id="syncSt" style="grid-column:1/-1;font-size:13px;color:var(--muted)">—</div><input id="syncPw" type="password" dir="ltr" placeholder="باسورد المزامنة" autocomplete="off"><button id="syncPwSave">حفظ وربط</button><button id="syncNow" style="grid-column:1/-1">🔄 مزامنة الآن</button></div>
   <div class="tg" style="margin-top:12px"><h4>خدمة الفحص (teba-agent.js)</h4><input id="sAgent" dir="ltr" placeholder="http://localhost:8787" style="grid-column:1/-1"><button id="sSave" class="primary">حفظ</button><button id="sClose">إغلاق</button></div>
 </div></div>
 
@@ -485,7 +498,7 @@ const SEC={
  net:{t:'الشبكة والسيرفرات',ic:'🌐',d:'PACS / راوتر / كاميرات / أخرى',pw:null,types:null,c:'#142624'}
 };
 const secOf=i=>Object.keys(SEC).find(k=>SEC[k].types&&SEC[k].types.includes(i.type))||'net';
-const SEED=[["PACS", "196.218.113.200", "سيرفر / PACS", "4000", "VR1", "VR1", "Display Name: PACS"], ["WORKLIST", "196.218.113.200", "سيرفر / PACS", "104", "NEBRASWL", "", ""], ["KODAC XRAY", "196.218.113.123", "طابعة جهاز", "5040", "DV5950", "DV5950", ""], ["AGFA", "196.218.113.126", "طابعة جهاز", "104", "DS5302", "Ds5302", ""], ["MRI LASER", "196.218.113.127", "طابعة جهاز", "104", "MRL2", "MRILASER", ""], ["EPSON_LASER", "196.218.113.130", "طابعة جهاز", "104", "MRL", "EPSON_LASER", ""], ["EPSON_PAPER", "196.218.113.130", "طابعة جهاز", "104", "MRC", "EPSON_PAPER", ""], ["CT", "196.218.113.230", "جهاز أشعة", "104", "CT", "CT", ""], ["CT WORKSTATION", "196.218.113.231", "كمبيوتر", "104", "DATABASE", "ISP", "Display Name: ISP"], ["MRI", "196.218.113.114", "جهاز أشعة", "4006", "gehc", "gehc", "في الورقة رقم 2 مكتوب بخط اليد فوق الـ IP — راجعه"], ["MRI WORKSTATION", "196.218.113.116", "كمبيوتر", "4006", "AW_4-7", "AW", "Display Name: OLD AW"], ["Magnet Monitor", "196.218.113.109", "جهاز أشعة", "", "", "", ""], ["Ge router Gateway", "196.218.113.113", "راوتر / سويتش", "", "", "", ""], ["xray", "196.218.113.252", "جهاز أشعة", "5040", "Classic CR", "", ""], ["Ge Cisco", "196.218.113.222", "راوتر / سويتش", "", "", "", "مكتوب بخط اليد في الورقة"], ["DAHUA CAMERA", "196.218.113.150", "كاميرا مراقبة", "", "", "", ""], ["Gateway الشبكة", "196.218.113.101", "راوتر / سويتش", "", "", "", "Subnet 255.255.255.0"], ["NEW MRI WORKSTATION", "196.218.113.117", "كمبيوتر", "4006", "AW02", "AW02", "Display Name: AW02"]];
+const SEED=[["PACS", "196.218.113.200", "سيرفر / PACS", "4000", "VR1", "VR1", "Display Name: PACS"], ["WORKLIST", "196.218.113.200", "سيرفر / PACS", "104", "NEBRASWL", "", ""], ["KODAC XRAY", "196.218.113.123", "طابعة جهاز", "5040", "DV5950", "DV5950", ""], ["AGFA", "196.218.113.126", "طابعة جهاز", "104", "DS5302", "Ds5302", ""], ["MRI LASER", "196.218.113.127", "طابعة جهاز", "104", "MRL2", "MRILASER", ""], ["EPSON_LASER", "196.218.113.130", "طابعة جهاز", "104", "MRL", "EPSON_LASER", ""], ["EPSON_PAPER", "196.218.113.130", "طابعة جهاز", "104", "MRC", "EPSON_PAPER", ""], ["CT", "196.218.113.230", "جهاز أشعة", "104", "CT", "CT", ""], ["CT WORKSTATION", "196.218.113.231", "كمبيوتر", "104", "DATABASE", "ISP", "Display Name: ISP"], ["MRI", "196.218.113.114", "جهاز أشعة", "4006", "gehc", "gehc", ""], ["MRI WORKSTATION", "196.218.113.116", "كمبيوتر", "4006", "AW_4-7", "AW", "Display Name: OLD AW"], ["Magnet Monitor", "196.218.113.109", "جهاز أشعة", "", "", "", ""], ["Ge router Gateway", "196.218.113.113", "راوتر / سويتش", "", "", "", ""], ["xray", "196.218.113.252", "جهاز أشعة", "5040", "Classic CR", "", ""], ["Ge Cisco", "196.218.113.222", "راوتر / سويتش", "", "", "", ""], ["DAHUA CAMERA", "196.218.113.150", "كاميرا مراقبة", "", "", "", ""], ["Gateway الشبكة", "196.218.113.101", "راوتر / سويتش", "", "", "", "Subnet 255.255.255.0"], ["NEW MRI WORKSTATION", "196.218.113.117", "كمبيوتر", "4006", "AW02", "AW02", "Display Name: AW02"]];
 const IP_RE=/(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)/;
 const IP_FULL=new RegExp('^'+IP_RE.source+'$');
 
@@ -534,13 +547,15 @@ const ipNum=ip=>{const p=ip.split('.').map(Number);return ((p[0]*256+p[1])*256+p
 const isIp=ip=>IP_FULL.test(ip);
 const subnetOf=ip=>ip.split('.').slice(0,3).join('.');
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2200)}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){toast('تعذر الحفظ في المتصفح')}}
-const seed=()=>SEED.map(r=>({id:uid(),name:r[0],ip:r[1],type:r[2],location:'',port:r[3],ae:r[4],host:r[5],mac:'',notes:r[6],...(r[7]||{})}));
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(items))}catch(e){toast('تعذر الحفظ في المتصفح')}}
+function save(){syncTouch();persist();syncPush()}
+const seed=()=>SEED.map(r=>({_t:0,id:uid(),name:r[0],ip:r[1],type:r[2],location:'',port:r[3],ae:r[4],host:r[5],mac:'',notes:r[6],...(r[7]||{})}));
 const scoped=()=>items.filter(i=>secOf(i)===st.sec);
 function load(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
-  if(raw===null){items=seed();save();try{localStorage.setItem(MIG,1);localStorage.setItem(MIG2,1);localStorage.setItem(MIG3,1)}catch(e){}return}
+  if(raw===null){items=seed();save();try{localStorage.setItem(MIG,1);localStorage.setItem(MIG2,1);localStorage.setItem(MIG3,1);localStorage.setItem(MIG4,1)}catch(e){}return}
   try{items=JSON.parse(raw)||[]}catch(e){items=seed()}
-  mig();mig2();mig3()}
+  items.forEach(i=>{if(i._t===undefined)i._t=0});
+  mig();mig2();mig3();mig4()}
 const MIG2='teba_ip_mig_photos_1021';
 function mig2(){try{if(localStorage.getItem(MIG2))return}catch(e){return}
   const L=n=>'196.218.113.'+n,find=(ip,ae)=>items.find(i=>i.ip===L(ip)&&(ae===undefined||String(i.ae||'').toUpperCase()===ae));
@@ -566,6 +581,10 @@ function mig2(){try{if(localStorage.getItem(MIG2))return}catch(e){return}
   w=items.find(i=>i.ip===L(200)&&String(i.port)==='4000');if(w){Object.assign(w,{ae:'VR1',host:'VR1'});hasNote(w,'Display Name: PACS')}
   save();addLog('تحديث',{name:'تحديث من الصور',ip:''},'طابعات الأجهزة + حذف Ricoh');
   try{localStorage.setItem(MIG2,1)}catch(e){}}
+const MIG4='teba_ip_mig_rm_handnotes';
+function mig4(){try{if(localStorage.getItem(MIG4))return}catch(e){return}
+  let c=0;items.forEach(i=>{if(/خط اليد|بخط يد|راجعه/.test(i.notes||'')){i.notes='';c++}});
+  if(c)save();try{localStorage.setItem(MIG4,1)}catch(e){}}
 const MIG3='teba_ip_mig_rm_kodac_fuji';
 function mig3(){try{if(localStorage.getItem(MIG3))return}catch(e){return}
   const n=items.length;items=items.filter(i=>!((i.ip==='196.218.113.124'||i.ip==='196.218.113.125')&&/kodac mri|fuji/i.test(i.name||'')));
@@ -633,12 +652,14 @@ function renderTable(){
   const th=(k,l)=>`<th data-sort="${k}">${l}${st.sort===k?(st.dir>0?' ▲':' ▼'):''}</th>`;
   const td=(l,v,x,c)=>`<td data-label="${l}" class="${c||''}${v?'':' e'}">${x==null?esc(v):x}</td>`;
   const m=(l,v)=>td(l,v,`<span class="mac">${esc(v)}</span>`);
-  let h=`<div class="card"><div class="scroll"><table><thead><tr><th>#</th>${th('name','الجهاز')}${th('ip','IP')}${th('type','النوع')}${th('location','المكان')}${th('port','Port')}${th('ae','AE Title')}${th('host','Host')}${th('mac','MAC')}${th('notes','ملاحظات')}<th class="act"></th></tr></thead><tbody>`;
+  const V={};['location','port','ae','host','mac','notes'].forEach(k=>V[k]=a.some(i=>i[k]));
+  const hd=`<div class="phead"><b>مركز طيبة للأشعة — ${esc(SEC[st.sec].t)}</b><span>${a.length} — ${new Date().toLocaleDateString('en-GB')}</span></div>`;
+  let h=`${hd}<div class="card"><div class="scroll"><table><thead><tr><th>#</th>${th('name','الجهاز')}${th('ip','IP')}${th('type','النوع')}${V.location?th('location','المكان'):''}${V.port?th('port','Port'):''}${V.ae?th('ae','AE Title'):''}${V.host?th('host','Host'):''}${V.mac?th('mac','MAC'):''}${V.notes?th('notes','ملاحظات'):''}<th class="act"></th></tr></thead><tbody>`;
   a.forEach((i,n)=>{
     const P=probs(i,dc,mc),T=tests[i.id];
-    h+=`<tr><td class="num">${n+1}</td>${td('الجهاز',i.name,null,'nm')}
+    h+=`<tr class="${T?(T.ok?'t-ok':'t-bad'):''}"><td class="num">${n+1}</td>${td('الجهاز',i.name,null,'nm')}
       ${td('IP','1',`<span class="ip" data-copy="${esc(i.ip)}" title="اضغط للنسخ">${esc(i.ip)}</span>${P.map(x=>`<span class="badge ${x[0]}">${x[1]}</span>`).join('')}${T?`<span class="badge ${T.ok?'ok':'bad'}">${esc(T.m)}</span>`:''}${i.mask||i.gw||i.vlan?`<small class="net">${[i.mask,i.gw&&'GW '+i.gw,i.vlan&&'VLAN '+i.vlan].filter(Boolean).map(esc).join(' · ')}</small>`:''}`)}
-      ${td('النوع',i.type,`<span class="chip">${esc(i.type)}</span>`)}${td('المكان',i.location)}${m('Port',i.port)}${m('AE Title',i.ae)}${m('Host',i.host)}${m('MAC',i.mac)}${td('ملاحظات',i.notes)}
+      ${td('النوع',i.type,`<span class="chip">${esc(i.type)}</span>`)}${V.location?td('المكان',i.location):''}${V.port?m('Port',i.port):''}${V.ae?m('AE Title',i.ae):''}${V.host?m('Host',i.host):''}${V.mac?m('MAC',i.mac):''}${V.notes?td('ملاحظات',i.notes):''}
       <td class="act" style="white-space:nowrap"><button class="sm" data-test="${i.id}" title="اختبار اتصال">🔌</button> ${i.ae&&i.port?`<button class="sm" data-dcm="${i.id}">DICOM</button> `:''}<button class="sm" data-share="${i.id}" title="مشاركة واتساب">📲</button> <button class="sm" data-svc="${i.id}" title="ملاحظة صيانة">🛠</button> <button class="sm" data-edit="${i.id}">تعديل</button> <button class="sm danger" data-del="${i.id}">حذف</button></td></tr>`;
   });
   $('#view').innerHTML=h+'</tbody></table></div></div>';
@@ -968,6 +989,8 @@ async function whoLocal(v){const l=H(v),sh=await sha(v),today=new Date().toISOSt
 async function unlockApp(){const r=await who($('#gIn').value.trim());
   if(!r){$('#gErr').textContent='الباسورد غلط';$('#gIn').value='';$('#gIn').focus();return}
   document.body.classList.remove('locked');$('#gIn').value='';
+  setTimeout(()=>{const c=window.TEBA_SYNC_CFG;let has='';try{has=localStorage.getItem(PW_KEY)}catch(e){}
+    if(c&&c.apiKey&&c.syncEmail&&!has&&!SYNC.on&&!SYNC.asked){SYNC.asked=1;const v=prompt('باسورد المزامنة (مرة واحدة على الجهاز) — سيبه فاضي للتخطي');if(v&&v.trim()){try{localStorage.setItem(PW_KEY,v.trim())}catch(e){}syncInit()}}},400);
   logs.unshift({t:Date.now(),a:'دخول',s:'_auth',n:r.n,note:''});logs=logs.slice(0,500);try{localStorage.setItem(LOG_KEY,JSON.stringify(logs))}catch(e){}
   if(r.admin){isAdmin=true;adminOK=true;return}
   viewOnly=true;document.body.classList.add('ro');
@@ -1034,8 +1057,66 @@ bi.onclick=async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null;return}
 $('#back').onclick=()=>history.back();
 window.addEventListener('popstate',()=>{st.sec='home';render()});
 $('#btnReset').onclick=()=>admin(()=>{if(confirm('هترجع كل البيانات للافتراضي وتتمسح التعديلات. متأكد؟')){items=seed();save();render();toast('تم الرجوع للافتراضي ✔')}});
+/* ---------- مزامنة Firestore (اختيارية: تشتغل لو ip-sync-config.js فيه إعدادات Firebase) ---------- */
+const DEL_KEY='teba_ip_del_v1',PW_KEY='teba_ip_syncpw_v1';
+const SYNC={on:false,db:null,ref:null,t:null,busy:false,again:0,hash:{},del:{},me:uid(),msg:'المزامنة مش مفعّلة'};
+try{SYNC.del=JSON.parse(localStorage.getItem(DEL_KEY)||'{}')||{}}catch(e){}
+const stripT=i=>{const o=Object.assign({},i);delete o._t;return o};
+const sig=a=>JSON.stringify([...a].sort((x,y)=>x.id<y.id?-1:1));
+function syncSt(m){SYNC.msg=m;const e=document.querySelector('#syncSt');if(e)e.textContent=m}
+function syncTouch(){const now=Date.now(),cur={};
+  items.forEach(i=>{cur[i.id]=1;const h=JSON.stringify(stripT(i));
+    if(i._t===undefined)i._t=now;else if(SYNC.hash[i.id]!==undefined&&SYNC.hash[i.id]!==h)i._t=now;
+    SYNC.hash[i.id]=h});
+  Object.keys(SYNC.hash).forEach(id=>{if(!cur[id]){SYNC.del[id]=now;delete SYNC.hash[id]}});
+  try{localStorage.setItem(DEL_KEY,JSON.stringify(SYNC.del))}catch(e){}}
+function syncMerge(loc,ld,rem,rd){
+  const del=Object.assign({},ld);Object.keys(rd||{}).forEach(k=>{del[k]=Math.max(del[k]||0,rd[k])});
+  const lid={},lkey={},used=new Set(),out=[];
+  loc.forEach(l=>{lid[l.id]=l;(lkey[dupKey(l)]=lkey[dupKey(l)]||[]).push(l)});
+  rem.forEach(r=>{
+    if((del[r.id]||0)>(r._t||0))return;
+    let l=lid[r.id];if(l&&used.has(l))l=null;
+    if(!l)l=(lkey[dupKey(r)]||[]).find(x=>!used.has(x)&&!rem.some(y=>y!==r&&y.id===x.id));
+    if(l){used.add(l);const w=(l._t||0)>(r._t||0)?l:r;out.push(Object.assign({},w,{id:r.id,_t:w._t||0}))}
+    else out.push(r)});
+  loc.forEach(l=>{if(used.has(l))return;if((del[l.id]||0)>(l._t||0))return;out.push(l)});
+  const lim=Date.now()-60*864e5;Object.keys(del).forEach(k=>{if(del[k]<lim)delete del[k]});
+  return{items:out,del}}
+function syncApply(m){items=m.items;SYNC.del=m.del;SYNC.hash={};items.forEach(i=>SYNC.hash[i.id]=JSON.stringify(stripT(i)));
+  persist();try{localStorage.setItem(DEL_KEY,JSON.stringify(SYNC.del))}catch(e){}render()}
+function syncPush(){if(!SYNC.on||viewOnly)return;clearTimeout(SYNC.t);SYNC.t=setTimeout(syncRun,700)}
+async function syncRun(){if(!SYNC.on||viewOnly)return;if(SYNC.busy){SYNC.again=1;return}SYNC.busy=true;let res=null;
+  try{await SYNC.db.runTransaction(async tx=>{const s=await tx.get(SYNC.ref),d=s.exists?s.data():{},
+      m=syncMerge(items,SYNC.del,JSON.parse(d.items||'[]'),d.del||{});res=m;
+      tx.set(SYNC.ref,{items:JSON.stringify(m.items),del:m.del,upd:Date.now(),by:SYNC.me})});
+    if(res&&sig(res.items)!==sig(items))syncApply(res);
+    syncSt('✔ متزامن '+new Date().toLocaleTimeString('ar-EG'))}
+  catch(e){syncSt('✖ فشلت المزامنة: '+(e.code||e.message))}
+  finally{SYNC.busy=false;if(SYNC.again){SYNC.again=0;syncRun()}}}
+function syncLoad(u){return new Promise((ok,no)=>{const s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=()=>no(new Error('تعذر تحميل '+u));document.head.appendChild(s)})}
+async function syncInit(){const c=window.TEBA_SYNC_CFG;
+  if(!c||!c.apiKey||!c.projectId){syncSt('المزامنة مش مفعّلة — املا ip-sync-config.js');return}
+  if(!c.syncEmail){syncSt('ضيف syncEmail في ip-sync-config.js');return}
+  let pw='';try{pw=localStorage.getItem(PW_KEY)||''}catch(e){}
+  if(!pw){syncSt('🔑 محتاج باسورد المزامنة — ادخله هنا واضغط حفظ وربط');return}
+  if(!navigator.onLine){syncSt('أوفلاين — هتتزامن لما النت يرجع');window.addEventListener('online',()=>syncInit(),{once:true});return}
+  try{const V='https://www.gstatic.com/firebasejs/10.12.2/firebase-';
+    if(!window.firebase){await syncLoad(V+'app-compat.js');await Promise.all([syncLoad(V+'auth-compat.js'),syncLoad(V+'firestore-compat.js')])}
+    const app=firebase.apps.find(a=>a.name==='tebaip')||firebase.initializeApp(c,'tebaip');
+    try{await app.auth().signInWithEmailAndPassword(c.syncEmail,pw)}
+    catch(e){if(/invalid|wrong|user-not-found|credential/.test(e.code||'')){try{localStorage.removeItem(PW_KEY)}catch(_){}syncSt('✖ باسورد المزامنة غلط — ادخله تاني');return}throw e}
+    SYNC.db=app.firestore();SYNC.ref=SYNC.db.doc('teba_ip/state');SYNC.on=true;syncSt('جاري المزامنة...');
+    SYNC.ref.onSnapshot(s=>{if(SYNC.busy)return;const d=s.exists?s.data():{},r=JSON.parse(d.items||'[]'),m=syncMerge(items,SYNC.del,r,d.del||{});
+      const chL=sig(m.items)!==sig(items),chR=sig(m.items)!==sig(r);
+      if(chL)syncApply(m);
+      if(chR&&!viewOnly){SYNC.del=m.del;syncPush()}else syncSt('✔ متزامن '+new Date().toLocaleTimeString('ar-EG'))},
+      e=>syncSt('✖ '+(e.code||e.message)))}
+  catch(e){SYNC.on=false;syncSt('✖ '+(e.code||e.message))}}
 
-load();render();
+load();items.forEach(i=>SYNC.hash[i.id]=JSON.stringify(stripT(i)));render();syncInit();
+$('#syncPwSave').onclick=()=>{const v=$('#syncPw').value.trim();if(!v){toast('اكتب باسورد المزامنة');return}try{localStorage.setItem(PW_KEY,v)}catch(e){}$('#syncPw').value='';SYNC.on=false;syncInit()};
+$('#syncNow').onclick=()=>{if(!SYNC.on){syncInit();return}syncRun()};
 })();
 </script>
 </body>
