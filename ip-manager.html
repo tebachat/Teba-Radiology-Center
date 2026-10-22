@@ -433,6 +433,7 @@ body[data-sec]:not([data-sec=home]) #stats .stat.warn b{color:var(--warn)}body[d
   #printAll h3{margin:16px 0 6px;font-size:15px;break-after:avoid;color:#000}
   #printAll table{width:100%;border-collapse:collapse;margin-bottom:8px}
   #printAll tr{break-inside:avoid}
+  #printAll th:last-child{display:table-cell!important}
 }
 
 /* ===== حماية العرض (للحسابات غير الأدمن) ===== */
@@ -484,7 +485,6 @@ body.rtMode #stats,body.rtMode #alerts,body.rtMode #app>.bar,body.rtMode #app>.t
   <div id="gres"></div>
   <div class="tiles" id="tiles"></div>
   <div class="foot"><button id="btnPrintAllSec" title="طباعة كل الأقسام في ملف واحد">🖨️ طباعة كل الأقسام</button><button id="btnToolsH">⚙️ ضبط</button></div>
-  <div id="printAll"></div>
 </main>
 
 <main id="app" hidden>
@@ -1052,11 +1052,13 @@ const rtItems=()=>items.filter(i=>i.type===RT_TYPE);
 function renderRouter(){
   const R=st.rt||(st.rt={m:'h168n',open:null,id:null});
   const M=RT_MODELS[R.m]||RT_MODELS.h168n;
-  let h=`<div class="card" style="padding:14px;margin-bottom:14px"><h3 style="margin:0 0 10px">📚 تابات الراوتر</h3>
-  <select id="rtModel" style="width:100%;margin-bottom:8px">${Object.keys(RT_MODELS).map(k=>`<option value="${k}"${k===R.m?' selected':''}>${esc(RT_MODELS[k].n)}</option>`).join('')}</select>
-  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">${esc(M.note)}</p>`;
-  M.tabs.forEach((t,ix)=>{const op=R.open===ix;
-    h+=`<div class="rtrow"><div class="rtr-h"><b dir="ltr">${t.ic} ${esc(t.en)}</b><span>${esc(t.ar)}</span><button class="sm" data-rtinfo="${ix}">${op?'▲ إخفاء':'ℹ️ معلومات'}</button></div>${op?`<div class="rtinfo"><p>${esc(t.d)}</p><ul>${t.s.map(x=>`<li><b dir="ltr">${esc(x[0])}</b> — ${esc(x[1])}</li>`).join('')}</ul></div>`:''}</div>`});
+  let h=`<div class="card" style="padding:14px;margin-bottom:14px"><div class="rtr-h" data-rttabs="1" style="cursor:pointer"><h3 style="margin:0;flex:1">📚 تابات الراوتر</h3><button class="sm" data-rttabs="1">${R.tabs?'▲ طي':'▼ عرض'}</button></div>`;
+  if(R.tabs){
+    h+=`<select id="rtModel" style="width:100%;margin:10px 0 8px">${Object.keys(RT_MODELS).map(k=>`<option value="${k}"${k===R.m?' selected':''}>${esc(RT_MODELS[k].n)}</option>`).join('')}</select>
+    <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">${esc(M.note)}</p>`;
+    M.tabs.forEach((t,ix)=>{const op=R.open===ix;
+      h+=`<div class="rtrow"><div class="rtr-h"><b dir="ltr">${t.ic} ${esc(t.en)}</b><span>${esc(t.ar)}</span><button class="sm" data-rtinfo="${ix}">${op?'▲ إخفاء':'ℹ️ معلومات'}</button></div>${op?`<div class="rtinfo"><p>${esc(t.d)}</p><ul>${t.s.map(x=>`<li><b dir="ltr">${esc(x[0])}</b> — ${esc(x[1])}</li>`).join('')}</ul></div>`:''}</div>`});
+  }
   h+='</div>';
   h+='<div class="card rtdata" style="padding:14px"><h3 style="margin:0 0 10px">🔐 بيانات الراوتر</h3>';
   if(!can('sens')){h+='<div class="empty">🔒 بيانات الراوتر متاحة للحسابات المصرّح لها فقط</div>'}
@@ -1085,7 +1087,9 @@ function rtLoadFiles(rid){
 }
 const rtB64Blob=(b64,type)=>{const bin=atob(b64),u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new Blob([u],{type:type||'application/octet-stream'})};
 $('#view').addEventListener('click',e=>{
-  if(st.sec!=='rt')return;const R=st.rt,t=e.target.closest('button');if(!t)return;
+  if(st.sec!=='rt')return;const R=st.rt;
+  if(e.target.closest('[data-rttabs]')){R.tabs=!R.tabs;renderRouter();return}
+  const t=e.target.closest('button');if(!t)return;
   if(t.dataset.rtinfo!==undefined){const ix=+t.dataset.rtinfo;R.open=R.open===ix?null:ix;renderRouter();return}
   if(t.dataset.rtshow){const i=$('#rt_'+t.dataset.rtshow);i.type=i.type==='password'?'text':'password';t.textContent=i.type==='password'?'👁':'🙈';return}
   if(t.dataset.rtcopy){const v=$('#rt_'+t.dataset.rtcopy).value;if(v)try{navigator.clipboard.writeText(v).then(()=>toast('تم النسخ ✔'))}catch(_){}return}
@@ -1414,7 +1418,7 @@ $('#syncNow').onclick=()=>{if(!SYNC.on){syncInit();return}syncRun()};
 })();
 </script>
 
-<div id="wmk"></div><div id="shieldMsg">🔒 المحتوى مخفي — ارجع للصفحة لعرضه</div>
+<div id="printAll"></div><div id="wmk"></div><div id="shieldMsg">🔒 المحتوى مخفي — ارجع للصفحة لعرضه</div>
 <script>
 (function(){
   const B=document.body,W=document.getElementById('wmk');
