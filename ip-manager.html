@@ -651,7 +651,7 @@ body[data-sec=home].hm-list .tile{padding:9px 12px!important}
 <div class="modal" id="mSet"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2>🔑 الحسابات والصلاحيات</h2>
   <div class="tg edit"><h4>تغيير باسورد الأدمن</h4><input id="aNew" type="password" dir="ltr" placeholder="الجديد (6+)"><input id="aNew2" type="password" dir="ltr" placeholder="تأكيد"><button id="aChg" style="grid-column:1/-1">تغيير</button></div>
   <div class="tg"><h4>الحسابات (عرض فقط)</h4></div><div id="accList"></div>
-  <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="rt">الراوتر</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
+  <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
   <div class="tg"><h4>آخر دخول</h4></div><div id="loginList" style="font-size:12px;color:var(--muted)"></div>
   <div class="tg" style="margin-top:12px"><h4>🛡️ صلاحيات الحسابات</h4><select id="pmWho" style="grid-column:1/-1"></select><div id="pmNote" style="grid-column:1/-1;font-size:12.5px;color:var(--muted)"></div><div id="pmList" style="grid-column:1/-1;display:grid;gap:8px"></div><button id="pmReset" style="grid-column:1/-1">↺ إرجاع الحساب للافتراضي</button></div>
   <div class="tg" style="margin-top:12px"><h4>☁️ المزامنة بين الأجهزة</h4><div id="syncSt" style="grid-column:1/-1;font-size:13px;color:var(--muted)">—</div><input id="syncPw" type="password" dir="ltr" placeholder="باسورد المزامنة" autocomplete="off"><button id="syncPwSave">حفظ وربط</button><button id="syncNow" style="grid-column:1/-1">🔄 مزامنة الآن</button></div>
@@ -1620,7 +1620,7 @@ function probs(i,dc,mc){const p=[];if(i.type==='راوتر WE'||i.type==='أكس
 const secWarn=k=>{const dc=dupCounts(),mc=macCounts();return items.filter(i=>secOf(i)===k&&probs(i,dc,mc).length).length};
 function homeStats(){const dc=dupCounts(),mc=macCounts(),w=items.filter(i=>probs(i,dc,mc).length).length;let lb=null;try{lb=localStorage.getItem('teba_ip_lastbk')}catch(e){}
   const d=lb?Math.floor((Date.now()-lb)/864e5):null;
-  $('#hStats').innerHTML=`<div class="stat"><b>${items.length}</b><span>الأجهزة</span></div><div class="stat ${w?'warn':''}"><b>${w}</b><span>مشاكل</span></div><div class="stat ${d===null||d>7?'warn':''}"><b>${d===null?'—':d+' يوم'}</b><span>آخر نسخة احتياطية</span></div>`}
+  $('#hStats').innerHTML=`<div class="stat"><b>${items.filter(i=>isAdmin||secOf(i)!=='rt').length}</b><span>الأجهزة</span></div><div class="stat ${w?'warn':''}"><b>${w}</b><span>مشاكل</span></div><div class="stat ${d===null||d>7?'warn':''}"><b>${d===null?'—':d+' يوم'}</b><span>آخر نسخة احتياطية</span></div>`}
 function renderAlerts(){const dc=dupCounts(),mc=macCounts(),n=scoped().filter(i=>probs(i,dc,mc).length).length;
   $('#alerts').innerHTML=n&&st.prob!=='any'?`<div class="alertbar">⚠ ${n} جهاز فيه مشاكل <button class="sm" data-prob="any">اعرضها</button></div>`:''}
 function renderLog(){const a=logs.filter(l=>l.s===st.sec);
@@ -1786,11 +1786,12 @@ function renderSubnets(){
   $('#view').innerHTML=h;
 }
 function renderHome(){
-  $('#tiles').innerHTML=Object.keys(SEC).map(k=>{const s=SEC[k],n=items.filter(i=>secOf(i)===k).length,w=secWarn(k);
+  $('#tiles').innerHTML=Object.keys(SEC).filter(k=>k!=='rt'||isAdmin).map(k=>{const s=SEC[k],n=items.filter(i=>secOf(i)===k).length,w=secWarn(k);
     return `<button class="tile ${k}" data-sec="${k}"><span class="ti">${s.ic}</span><b>${s.t}</b><span>${n} جهاز${w?' — ⚠ '+w:''}</span><em>${s.pw!=null?'🔒 محمي بباسورد':'مفتوح'}</em></button>`}).join('');
   homeStats();
 }
 function render(){
+  if(st.sec==='rt'&&!isAdmin)st.sec='home';
   if(restricted){st.sec=restricted;st.view='table'}
   const home=st.sec==='home',s=SEC[st.sec];
   document.body.dataset.sec=st.sec;
@@ -2324,7 +2325,7 @@ $('#mInfo').addEventListener('click',e=>{viewClick(e);if(e.target.closest('butto
 
 /* ---------- أقسام + باسورد + أندرويد ---------- */
 let target=null;
-function go(k){st.sec=k;st.q='';st.type='';st.prob='';$('#probFilter').value='';st.view='table';$('#q').value='';history.pushState({s:k},'');render();scrollTo(0,0)}
+function go(k){if(k==='rt'&&!isAdmin)return;st.sec=k;st.q='';st.type='';st.prob='';$('#probFilter').value='';st.view='table';$('#q').value='';history.pushState({s:k},'');render();scrollTo(0,0)}
 function enter(k){
   const s=SEC[k];if(s.pw==null){go(k);return}
   target=k;$('#pT').textContent=s.ic+' '+s.t;$('#pIn').value='';$('#pErr').textContent='';
@@ -2344,7 +2345,7 @@ $('#pIn').addEventListener('keydown',e=>{if(e.key==='Enter')tryPass()});
 $('#probFilter').addEventListener('change',e=>{st.prob=e.target.value;render()});
 $('#alerts').addEventListener('click',e=>{if(e.target.closest('[data-prob]')){st.prob='any';$('#probFilter').value='any';render()}});
 $('#gq').addEventListener('input',e=>{const q=latin(e.target.value).trim().toLowerCase(),box=$('#gres');if(!q){box.innerHTML='';return}
-  const r=items.filter(i=>(SEC[secOf(i)].pw==null||unlocked.has(secOf(i)))&&[i.name,i.ip,i.type,i.location,i.port,i.ae,i.host,i.mac,i.vlan,i.notes].some(v=>latin(v).toLowerCase().includes(q))).slice(0,30);
+  const r=items.filter(i=>(isAdmin||secOf(i)!=='rt')&&(SEC[secOf(i)].pw==null||unlocked.has(secOf(i)))&&[i.name,i.ip,i.type,i.location,i.port,i.ae,i.host,i.mac,i.vlan,i.notes].some(v=>latin(v).toLowerCase().includes(q))).slice(0,30);
   box.innerHTML=(r.length?r.map(i=>`<button class="sm" style="width:100%;text-align:right;margin-bottom:6px" data-gs="${secOf(i)}" data-q="${esc(i.ip)}">${SEC[secOf(i)].ic} ${esc(i.name||'—')} — <span dir="ltr">${esc(i.ip)}</span></button>`).join(''):'<div class="empty">مفيش نتائج</div>')+'<small style="color:var(--muted)">الأقسام المحمية بتدخل في البحث بعد فتحها بالباسورد</small>'});
 $('#gres').addEventListener('click',e=>{const b=e.target.closest('[data-gs]');if(b){go(b.dataset.gs);st.q=b.dataset.q;$('#q').value=st.q;render()}});
 const AUTH0={adm:{hl:'x',hs:'x'},acc:[]};
