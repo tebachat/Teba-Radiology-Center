@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="version" content="26.10.27.3">
-<meta name="theme-color" content="#0a4f53">
+<meta name="theme-color" content="#0a4a8a">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>دليل الأطباء - المنصورة</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--t9:#0a4f53;--t7:#0d7377;--t1:#e6f2f2;--ink:#14282a;--mut:#4f6466;--line:#d5e2e2;--bg:#f0f5f5;--wa:#117a40;--tbh:120px;--card:#fff;--hero:#0a4f53}
+:root{--t9:#0a4a8a;--t7:#1565c0;--t1:#e3f2fd;--ink:#10253a;--mut:#4a6179;--line:#b9d9f3;--bg:#f4f9ff;--wa:#117a40;--tbh:120px;--card:#dff0fd;--hero:#0a4a8a}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'Tajawal','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px;padding-bottom:80px}
@@ -82,15 +82,15 @@ body{font-family:'Tajawal','Segoe UI',Tahoma,sans-serif;background:var(--bg);col
 .signature-name{font-weight:800;color:var(--t9);margin-top:4px}
 .share-selected-button{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:40;display:none;align-items:center;gap:8px;min-height:48px;padding:0 24px;border:0;border-radius:999px;background:var(--hero);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(10,79,83,.35)}
 .share-selected-button.active{display:flex}
-.selected-count{background:var(--card);color:#0a4f53;border-radius:999px;padding:0 9px;font-size:.85rem}
-#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#14282a;color:#fff;padding:10px 18px;border-radius:10px;font-size:.9rem;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+.selected-count{background:var(--card);color:#0a4a8a;border-radius:999px;padding:0 9px;font-size:.85rem}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#10253a;color:#fff;padding:10px 18px;border-radius:10px;font-size:.9rem;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.show{opacity:1}
 @media(max-width:600px){.hero h1{font-size:1.5rem}.stats div{padding:0 14px}.doctors-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}#toast{transition:none}}
-@media print{[data-theme=dark]{--bg:#fff;--card:#fff;--ink:#000;--mut:#333;--line:#ccc;--t1:#e6f2f2;--t7:#0d7377;--t9:#0a4f53;--hero:#fff}body{background:var(--card);padding:0}.toolbar,.tools,.share-selected-button,.pick,.share,.fav,.totop,.more,.btn.wa,.wl,#toast{display:none!important}.specialty-title{break-after:avoid}.hero{background:var(--card);color:#000;padding:0 0 10px}.doctor-specialty{display:block!important}@page{size:A4;margin:10mm}.doctors-grid{display:block;columns:2;column-gap:10px}.doctor-card{display:block;break-inside:avoid;box-shadow:none;padding:8px;margin-bottom:8px;font-size:12px}.doctor-card.picked{box-shadow:none}.btn,.spec,.meta,.badge,.actions,.nums,.top .pick{display:none!important}.doctor-specialty{border-top:0;padding-top:4px;font-size:11px}.name{font-size:13px}.specialty-section{margin-top:12px}.stats,.org{font-size:12px}}
+@media print{[data-theme=dark]{--bg:#fff;--card:#fff;--ink:#000;--mut:#333;--line:#ccc;--t1:#e3f2fd;--t7:#1565c0;--t9:#0a4a8a;--hero:#fff}body{background:var(--card);padding:0}.toolbar,.tools,.share-selected-button,.pick,.share,.fav,.totop,.more,.btn.wa,.wl,#toast{display:none!important}.specialty-title{break-after:avoid}.hero{background:var(--card);color:#000;padding:0 0 10px}.doctor-specialty{display:block!important}@page{size:A4;margin:10mm}.doctors-grid{display:block;columns:2;column-gap:10px}.doctor-card{display:block;break-inside:avoid;box-shadow:none;padding:8px;margin-bottom:8px;font-size:12px}.doctor-card.picked{box-shadow:none}.btn,.spec,.meta,.badge,.actions,.nums,.top .pick{display:none!important}.doctor-specialty{border-top:0;padding-top:4px;font-size:11px}.name{font-size:13px}.specialty-section{margin-top:12px}.stats,.org{font-size:12px}}
 [data-theme=dark]{--bg:#0b1630;--card:#122044;--ink:#dbeafe;--mut:#9db7e0;--line:#27407a;--t1:#1a2d5c;--t7:#e0690f;--t9:#8ec5ff;--hero:#0a1a3d}
 [data-theme=dark] body{background-color:var(--bg)}
-[data-theme=dark] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='800' viewBox='0 0 360 800'%3E%3Cg fill='none' stroke='%236ea8ff' stroke-opacity='.4' stroke-width='3'%3E%3Cpolyline points='180.0,0 198.8,5 217.1,10 234.5,15 250.5,20 264.9,25 277.1,30 286.9,35 294.1,40 298.5,45 300.0,50 298.5,55 294.1,60 286.9,65 277.1,70 264.9,75 250.5,80 234.5,85 217.1,90 198.8,95 180.0,100 161.2,105 142.9,110 125.5,115 109.5,120 95.1,125 82.9,130 73.1,135 65.9,140 61.5,145 60.0,150 61.5,155 65.9,160 73.1,165 82.9,170 95.1,175 109.5,180 125.5,185 142.9,190 161.2,195 180.0,200 198.8,205 217.1,210 234.5,215 250.5,220 264.9,225 277.1,230 286.9,235 294.1,240 298.5,245 300.0,250 298.5,255 294.1,260 286.9,265 277.1,270 264.9,275 250.5,280 234.5,285 217.1,290 198.8,295 180.0,300 161.2,305 142.9,310 125.5,315 109.5,320 95.1,325 82.9,330 73.1,335 65.9,340 61.5,345 60.0,350 61.5,355 65.9,360 73.1,365 82.9,370 95.1,375 109.5,380 125.5,385 142.9,390 161.2,395 180.0,400 198.8,405 217.1,410 234.5,415 250.5,420 264.9,425 277.1,430 286.9,435 294.1,440 298.5,445 300.0,450 298.5,455 294.1,460 286.9,465 277.1,470 264.9,475 250.5,480 234.5,485 217.1,490 198.8,495 180.0,500 161.2,505 142.9,510 125.5,515 109.5,520 95.1,525 82.9,530 73.1,535 65.9,540 61.5,545 60.0,550 61.5,555 65.9,560 73.1,565 82.9,570 95.1,575 109.5,580 125.5,585 142.9,590 161.2,595 180.0,600 198.8,605 217.1,610 234.5,615 250.5,620 264.9,625 277.1,630 286.9,635 294.1,640 298.5,645 300.0,650 298.5,655 294.1,660 286.9,665 277.1,670 264.9,675 250.5,680 234.5,685 217.1,690 198.8,695 180.0,700 161.2,705 142.9,710 125.5,715 109.5,720 95.1,725 82.9,730 73.1,735 65.9,740 61.5,745 60.0,750 61.5,755 65.9,760 73.1,765 82.9,770 95.1,775 109.5,780 125.5,785 142.9,790 161.2,795 180.0,800'/%3E%3Cpolyline points='180.0,0 161.2,5 142.9,10 125.5,15 109.5,20 95.1,25 82.9,30 73.1,35 65.9,40 61.5,45 60.0,50 61.5,55 65.9,60 73.1,65 82.9,70 95.1,75 109.5,80 125.5,85 142.9,90 161.2,95 180.0,100 198.8,105 217.1,110 234.5,115 250.5,120 264.9,125 277.1,130 286.9,135 294.1,140 298.5,145 300.0,150 298.5,155 294.1,160 286.9,165 277.1,170 264.9,175 250.5,180 234.5,185 217.1,190 198.8,195 180.0,200 161.2,205 142.9,210 125.5,215 109.5,220 95.1,225 82.9,230 73.1,235 65.9,240 61.5,245 60.0,250 61.5,255 65.9,260 73.1,265 82.9,270 95.1,275 109.5,280 125.5,285 142.9,290 161.2,295 180.0,300 198.8,305 217.1,310 234.5,315 250.5,320 264.9,325 277.1,330 286.9,335 294.1,340 298.5,345 300.0,350 298.5,355 294.1,360 286.9,365 277.1,370 264.9,375 250.5,380 234.5,385 217.1,390 198.8,395 180.0,400 161.2,405 142.9,410 125.5,415 109.5,420 95.1,425 82.9,430 73.1,435 65.9,440 61.5,445 60.0,450 61.5,455 65.9,460 73.1,465 82.9,470 95.1,475 109.5,480 125.5,485 142.9,490 161.2,495 180.0,500 198.8,505 217.1,510 234.5,515 250.5,520 264.9,525 277.1,530 286.9,535 294.1,540 298.5,545 300.0,550 298.5,555 294.1,560 286.9,565 277.1,570 264.9,575 250.5,580 234.5,585 217.1,590 198.8,595 180.0,600 161.2,605 142.9,610 125.5,615 109.5,620 95.1,625 82.9,630 73.1,635 65.9,640 61.5,645 60.0,650 61.5,655 65.9,660 73.1,665 82.9,670 95.1,675 109.5,680 125.5,685 142.9,690 161.2,695 180.0,700 198.8,705 217.1,710 234.5,715 250.5,720 264.9,725 277.1,730 286.9,735 294.1,740 298.5,745 300.0,750 298.5,755 294.1,760 286.9,765 277.1,770 264.9,775 250.5,780 234.5,785 217.1,790 198.8,795 180.0,800'/%3E%3C/g%3E%3Cg stroke='%236ea8ff' stroke-opacity='.24' stroke-width='2'%3E%3Cline x1='217.1' y1='10' x2='142.9' y2='10'/%3E%3Cline x1='267.5' y1='26' x2='92.5' y2='26'/%3E%3Cline x1='296.2' y1='42' x2='63.8' y2='42'/%3E%3Cline x1='296.2' y1='58' x2='63.8' y2='58'/%3E%3Cline x1='267.5' y1='74' x2='92.5' y2='74'/%3E%3Cline x1='217.1' y1='90' x2='142.9' y2='90'/%3E%3Cline x1='103.5' y1='122' x2='256.5' y2='122'/%3E%3Cline x1='68.4' y1='138' x2='291.6' y2='138'/%3E%3Cline x1='60.9' y1='154' x2='299.1' y2='154'/%3E%3Cline x1='82.9' y1='170' x2='277.1' y2='170'/%3E%3Cline x1='128.9' y1='186' x2='231.1' y2='186'/%3E%3Cline x1='244.3' y1='218' x2='115.7' y2='218'/%3E%3Cline x1='285.2' y1='234' x2='74.8' y2='234'/%3E%3Cline x1='300.0' y1='250' x2='60.0' y2='250'/%3E%3Cline x1='285.2' y1='266' x2='74.8' y2='266'/%3E%3Cline x1='244.3' y1='282' x2='115.7' y2='282'/%3E%3Cline x1='128.9' y1='314' x2='231.1' y2='314'/%3E%3Cline x1='82.9' y1='330' x2='277.1' y2='330'/%3E%3Cline x1='60.9' y1='346' x2='299.1' y2='346'/%3E%3Cline x1='68.4' y1='362' x2='291.6' y2='362'/%3E%3Cline x1='103.5' y1='378' x2='256.5' y2='378'/%3E%3Cline x1='217.1' y1='410' x2='142.9' y2='410'/%3E%3Cline x1='267.5' y1='426' x2='92.5' y2='426'/%3E%3Cline x1='296.2' y1='442' x2='63.8' y2='442'/%3E%3Cline x1='296.2' y1='458' x2='63.8' y2='458'/%3E%3Cline x1='267.5' y1='474' x2='92.5' y2='474'/%3E%3Cline x1='217.1' y1='490' x2='142.9' y2='490'/%3E%3Cline x1='103.5' y1='522' x2='256.5' y2='522'/%3E%3Cline x1='68.4' y1='538' x2='291.6' y2='538'/%3E%3Cline x1='60.9' y1='554' x2='299.1' y2='554'/%3E%3Cline x1='82.9' y1='570' x2='277.1' y2='570'/%3E%3Cline x1='128.9' y1='586' x2='231.1' y2='586'/%3E%3Cline x1='244.3' y1='618' x2='115.7' y2='618'/%3E%3Cline x1='285.2' y1='634' x2='74.8' y2='634'/%3E%3Cline x1='300.0' y1='650' x2='60.0' y2='650'/%3E%3Cline x1='285.2' y1='666' x2='74.8' y2='666'/%3E%3Cline x1='244.3' y1='682' x2='115.7' y2='682'/%3E%3Cline x1='128.9' y1='714' x2='231.1' y2='714'/%3E%3Cline x1='82.9' y1='730' x2='277.1' y2='730'/%3E%3Cline x1='60.9' y1='746' x2='299.1' y2='746'/%3E%3Cline x1='68.4' y1='762' x2='291.6' y2='762'/%3E%3Cline x1='103.5' y1='778' x2='256.5' y2='778'/%3E%3C/g%3E%3Cg fill='%238ec5ff' fill-opacity='.45'%3E%3Ccircle cx='217.1' cy='10' r='4'/%3E%3Ccircle cx='142.9' cy='10' r='4'/%3E%3Ccircle cx='267.5' cy='26' r='4'/%3E%3Ccircle cx='92.5' cy='26' r='4'/%3E%3Ccircle cx='296.2' cy='42' r='4'/%3E%3Ccircle cx='63.8' cy='42' r='4'/%3E%3Ccircle cx='296.2' cy='58' r='4'/%3E%3Ccircle cx='63.8' cy='58' r='4'/%3E%3Ccircle cx='267.5' cy='74' r='4'/%3E%3Ccircle cx='92.5' cy='74' r='4'/%3E%3Ccircle cx='217.1' cy='90' r='4'/%3E%3Ccircle cx='142.9' cy='90' r='4'/%3E%3Ccircle cx='103.5' cy='122' r='4'/%3E%3Ccircle cx='256.5' cy='122' r='4'/%3E%3Ccircle cx='68.4' cy='138' r='4'/%3E%3Ccircle cx='291.6' cy='138' r='4'/%3E%3Ccircle cx='60.9' cy='154' r='4'/%3E%3Ccircle cx='299.1' cy='154' r='4'/%3E%3Ccircle cx='82.9' cy='170' r='4'/%3E%3Ccircle cx='277.1' cy='170' r='4'/%3E%3Ccircle cx='128.9' cy='186' r='4'/%3E%3Ccircle cx='231.1' cy='186' r='4'/%3E%3Ccircle cx='244.3' cy='218' r='4'/%3E%3Ccircle cx='115.7' cy='218' r='4'/%3E%3Ccircle cx='285.2' cy='234' r='4'/%3E%3Ccircle cx='74.8' cy='234' r='4'/%3E%3Ccircle cx='300.0' cy='250' r='4'/%3E%3Ccircle cx='60.0' cy='250' r='4'/%3E%3Ccircle cx='285.2' cy='266' r='4'/%3E%3Ccircle cx='74.8' cy='266' r='4'/%3E%3Ccircle cx='244.3' cy='282' r='4'/%3E%3Ccircle cx='115.7' cy='282' r='4'/%3E%3Ccircle cx='128.9' cy='314' r='4'/%3E%3Ccircle cx='231.1' cy='314' r='4'/%3E%3Ccircle cx='82.9' cy='330' r='4'/%3E%3Ccircle cx='277.1' cy='330' r='4'/%3E%3Ccircle cx='60.9' cy='346' r='4'/%3E%3Ccircle cx='299.1' cy='346' r='4'/%3E%3Ccircle cx='68.4' cy='362' r='4'/%3E%3Ccircle cx='291.6' cy='362' r='4'/%3E%3Ccircle cx='103.5' cy='378' r='4'/%3E%3Ccircle cx='256.5' cy='378' r='4'/%3E%3Ccircle cx='217.1' cy='410' r='4'/%3E%3Ccircle cx='142.9' cy='410' r='4'/%3E%3Ccircle cx='267.5' cy='426' r='4'/%3E%3Ccircle cx='92.5' cy='426' r='4'/%3E%3Ccircle cx='296.2' cy='442' r='4'/%3E%3Ccircle cx='63.8' cy='442' r='4'/%3E%3Ccircle cx='296.2' cy='458' r='4'/%3E%3Ccircle cx='63.8' cy='458' r='4'/%3E%3Ccircle cx='267.5' cy='474' r='4'/%3E%3Ccircle cx='92.5' cy='474' r='4'/%3E%3Ccircle cx='217.1' cy='490' r='4'/%3E%3Ccircle cx='142.9' cy='490' r='4'/%3E%3Ccircle cx='103.5' cy='522' r='4'/%3E%3Ccircle cx='256.5' cy='522' r='4'/%3E%3Ccircle cx='68.4' cy='538' r='4'/%3E%3Ccircle cx='291.6' cy='538' r='4'/%3E%3Ccircle cx='60.9' cy='554' r='4'/%3E%3Ccircle cx='299.1' cy='554' r='4'/%3E%3Ccircle cx='82.9' cy='570' r='4'/%3E%3Ccircle cx='277.1' cy='570' r='4'/%3E%3Ccircle cx='128.9' cy='586' r='4'/%3E%3Ccircle cx='231.1' cy='586' r='4'/%3E%3Ccircle cx='244.3' cy='618' r='4'/%3E%3Ccircle cx='115.7' cy='618' r='4'/%3E%3Ccircle cx='285.2' cy='634' r='4'/%3E%3Ccircle cx='74.8' cy='634' r='4'/%3E%3Ccircle cx='300.0' cy='650' r='4'/%3E%3Ccircle cx='60.0' cy='650' r='4'/%3E%3Ccircle cx='285.2' cy='666' r='4'/%3E%3Ccircle cx='74.8' cy='666' r='4'/%3E%3Ccircle cx='244.3' cy='682' r='4'/%3E%3Ccircle cx='115.7' cy='682' r='4'/%3E%3Ccircle cx='128.9' cy='714' r='4'/%3E%3Ccircle cx='231.1' cy='714' r='4'/%3E%3Ccircle cx='82.9' cy='730' r='4'/%3E%3Ccircle cx='277.1' cy='730' r='4'/%3E%3Ccircle cx='60.9' cy='746' r='4'/%3E%3Ccircle cx='299.1' cy='746' r='4'/%3E%3Ccircle cx='68.4' cy='762' r='4'/%3E%3Ccircle cx='291.6' cy='762' r='4'/%3E%3Ccircle cx='103.5' cy='778' r='4'/%3E%3Ccircle cx='256.5' cy='778' r='4'/%3E%3C/g%3E%3C/svg%3E") center top/auto 100% no-repeat}
+[data-theme=dark] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='100' viewBox='0 0 150 100'%3E%3Ctext x='75' y='58' text-anchor='middle' transform='rotate(-12 75 50)' fill='%236ea8ff' fill-opacity='.08' font-size='32' font-style='italic' font-family='Segoe Script,Brush Script MT,Snell Roundhand,Apple Chancery,Dancing Script,cursive'%3ETrc%3C/text%3E%3C/svg%3E") center top/150px 100px repeat}
 [data-theme=dark] .doctor-card{background:rgba(18,32,68,.9)}
 [data-theme=dark] :focus-visible{outline-color:#8ec5ff}
 [data-theme=dark] .btn{background:var(--t7);color:#fff}
@@ -1410,29 +1410,6 @@ dialog .doctor-specialty{display:block;border-top:0;padding-top:4px}
         </a>
       </div>
 
-      <div class="doctor-card">
-        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
-          <div class="doctor-icons">
-            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
-            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
-          </div>
-          <span class="doctor-name-text">👨‍⚕️ د.ادم سعد عبد الحميد</span>
-          <span class="status-indicator"></span>
-        </button>
-        <div class="doctor-specialty">
-          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ طب وجراحة المخ والاعصاب</div>
-          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> 0122667769</div>
-          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ١٩ شارع احمد غازى . عبد السلام عارف بجوار سنترال حى غرب</div>
-          <div class="specialty-info"><span class="info-label">🕐 المواعيد:</span> استفسر هاتفياً</div>
-        </div>
-        <div class="contact-buttons">
-          <a href="tel:+201226637769" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د.ادم سعد عبد الحميد','اتصال')">اتصال</a>
-          <a href="https://wa.me/201226637769" class="contact-btn whatsapp-btn" target="_blank" onclick="trackDoctorClick('د.ادم سعد عبد الحميد','واتساب')">واتساب</a>
-        </div>
-        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D9%A1%D9%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D8%AD%D9%85%D8%AF%20%D8%BA%D8%A7%D8%B2%D9%89%20.%20%D8%B9%D8%A8%D8%AF%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D8%A7%D8%B1%D9%81%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B3%D9%86%D8%AA%D8%B1%D8%A7%D9%84%20%D8%AD%D9%89%20%D8%BA%D8%B1%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د.ادم سعد عبد الحميد','موقع')">
-          📍 الموقع<span class="tooltiptext">المنصورة ١٩ شارع احمد غازى . عبد السلام عارف بجوار سنترال حى غرب</span>
-        </a>
-      </div>
     
 <div class="doctor-card">
         <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
@@ -2762,6 +2739,7 @@ $$('.specialty-section').forEach(function(sec,si){
     var mapEl=card.querySelector('a.location-btn'),map=mapEl?mapEl.getAttribute('href'):null,mapRaw=map;
     var mq='';try{mq=decodeURIComponent((map||'').split('q=')[1]||'').trim()}catch(e){}
     if(mq.length<6)map=null;
+    var mapOv=card.getAttribute('data-map')||'';
     var panel=card.querySelector('.doctor-specialty');
     card.textContent='';
     var top=el('div','top'),pick=el('button','pick','',{type:'button','aria-pressed':'false','aria-label':'تحديد '+name});
@@ -2790,9 +2768,30 @@ $$('.specialty-section').forEach(function(sec,si){
     }
     if(info.addr)panel.append(row('📍 العنوان:',document.createTextNode(info.addr)));
     var brs=(info.addr||'').split(/\n+|\s*\|\s*/).map(function(x){return x.trim()}).filter(Boolean);
-    var mapQ=function(b){var t=b.replace(/\s+/g,' '),m=t.search(/(^|\s)(أمام|امام|بجوار|بجانب|جوار|خلف|مقابل|اعلى|أعلى|فوق|تحت|بالقرب|قرب|ناصية|ناصيه|عند|الدور|دور)(\s|$)/);if(m>6)t=t.slice(0,m);return t.replace(/[\s\-–:]+$/,'')};
+    var mapQ=function(b){
+      var nz=function(s){return s.replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه')};
+      var KW=/(^|\s)و?(?:امام|قدام|بجوار|بجانب|بجنب|جنب|جوار|خلف|وراء|ورا|مقابل|قبالة|تجاه|اعلي|فوق|تحت|بالقرب|قرب|بعد|عند|ناصيه|محاذي|بمحاذاه|ملاصق|الدور|دور)(?=\s|$)/;
+      var LABEL=/^(العيادة|المركز|العنوان|عيادة\s*(رقم\s*)?\d*)$/,cut=false,out=[];
+      b.replace(/[()]/g,' - ').replace(/\s*:\s*/g,' - ').split(/\s*[-–—]+\s*|\s*[،,\n]\s*/).forEach(function(s){
+        s=s.replace(/\s+/g,' ').trim();if(!s||LABEL.test(s))return;
+        var m=KW.exec(nz(s));if(m){s=s.slice(0,m.index).trim();cut=true}
+        s=s.replace(/\s+(من|في|و)$/,'').replace(/\s+عيادة\s*(رقم\s*)?\d+$/,'').trim();
+        if(s)out.push(s);
+      });
+      out=out.map(function(x){return x.replace(/(^|\s)ش\s+/g,'$1شارع ')});
+      /* ترتيب عنوان عادي: الأدق الأول (برج، شارع) وبعدين المدينة */
+      var f=out[0]||'';
+      if(out.length>1&&f.split(' ').length<=2&&!/(برج|شارع|مركز|\d)/.test(f))out=out.slice(1).reverse().concat(f);
+      var q=out.join('، ');
+      /* لو اتشال المعلم ومفضلش غير اسم مدينة/قرية، المعلم هو المرجع الوحيد فنرجّعه */
+      if(q.length<3||(cut&&out.length<2&&!/(برج|عمار[ةه]|مركز|مستشفى|شارع|ش\s|ميدان|\d)/.test(q)))
+        q=b.replace(/[()]/g,' ').replace(/\s*:\s*/g,' - ').replace(/\s*(الدور|دور)\s*\S+(\s*علو[يى])?\s*$/,'').replace(/\s+/g,' ').replace(/^[\s\-–]+|[\s\-–]+$/g,'');
+      return q;
+    };
+    var mUrlB=function(q){return /(القاهر|الجيز|دمياط|بورسعيد|الاسكندر|الإسكندر|التجمع)/.test(q)?mUrl(q):'https://www.google.com/maps/search/'+encodeURIComponent(q)+'/@31.0409,31.3785,14z'};
+    var ovUrl=function(v){v=(v||'').trim();if(/^https?:\/\//.test(v))return v;if(/^-?\d+(\.\d+)?\s*,\s*-?\d+(\.\d+)?$/.test(v))return mUrl(v.replace(/\s+/g,''));return ''};
     var mUrl=function(q){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)};
-    brs.forEach(function(b){var lbl=brs.length>1?'📍 '+b.split(/\s*[-–]\s*/)[0].slice(0,18):'📍 فتح الموقع على الخريطة';var mb=el('a','btn map',lbl,{href:mUrl(mapQ(b)),target:'_blank',rel:'noopener'});mb.onclick=function(){track('map',name)};panel.append(mb)});
+    brs.forEach(function(b,bi){var lbl=brs.length>1?'📍 '+b.split(/\s*[-–]\s*/)[0].slice(0,18):'📍 فتح الموقع على الخريطة';var mb=el('a','btn map',lbl,{href:(bi===0&&ovUrl(mapOv))||mUrlB(mapQ(b)),target:'_blank',rel:'noopener'});mb.onclick=function(){track('map',name)};panel.append(mb)});
     if(brs.length){var nm=name.split(/\s+(?=(?:أ\.د|د)[\.:\s])/)[0],city=brs[0].split(/[\s\-–]+/)[0]||'';panel.append(el('a','btn map2','🔎 بحث باسم الطبيب في الخرائط',{href:mUrl(nm+' '+city),target:'_blank',rel:'noopener'}))}
     panel.append(row('🕐 المواعيد:',document.createTextNode(info.sched||'غير مدخلة، يُفضّل الاتصال للتأكيد')));
     card.append(panel);
@@ -2866,7 +2865,7 @@ $('#statWa').textContent=docs.filter(function(d){return d.wa}).length;
 var v=($('meta[name=version]').content||'').split('.');
 if(v.length>=3)$('#updInfo').textContent='الإصدار '+v.join('.');
 var th=store.get('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
-function setTheme(t){document.documentElement.dataset.theme=t;$('#themeBtn').textContent=t==='dark'?'☀️ نهاري':'🌙 ليلي';var m=$('meta[name=theme-color]');if(m)m.content=t==='dark'?'#0a1a3d':'#0a4f53'}
+function setTheme(t){document.documentElement.dataset.theme=t;$('#themeBtn').textContent=t==='dark'?'☀️ نهاري':'🌙 ليلي';var m=$('meta[name=theme-color]');if(m)m.content=t==='dark'?'#0a1a3d':'#0a4a8a'}
 setTheme(th);$('#themeBtn').onclick=function(){th=th==='dark'?'light':'dark';store.set('theme',th);setTheme(th)};
 var tt=$('#toTop');window.addEventListener('scroll',function(){tt.classList.toggle('show',window.scrollY>600)},{passive:true});tt.onclick=function(){window.scrollTo({top:0})};
 $('#chkBtn').onclick=function(){
