@@ -2,595 +2,153 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="version" content="26.10.27.3">
+<meta name="theme-color" content="#0a4f53">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>دليل الأطباء - المنصورة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+:root{--t9:#0a4f53;--t7:#0d7377;--t1:#e6f2f2;--ink:#14282a;--mut:#4f6466;--line:#d5e2e2;--bg:#f0f5f5;--wa:#117a40;--tbh:120px;--card:#fff;--hero:#0a4f53}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Tajawal','Segoe UI',Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;font-size:16px;padding-bottom:80px}
+.wrap{max-width:1400px;margin:0 auto;padding:0 16px}
+.hero{background:var(--hero);color:#fff;padding:24px 0 20px}
+.hero .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px}
+.hero h1{font-size:1.9rem;font-weight:800;line-height:1.3}
+.org{font:400 .95rem Arial,sans-serif;opacity:.85;direction:ltr;text-align:right;margin-top:4px}
+.upd{font-size:.82rem;opacity:.75;margin-top:6px}
+.stats{display:flex;gap:0}
+.stats div{padding:0 22px;border-inline-start:1px solid rgba(255,255,255,.25)}
+.stats div:first-child{border:0;padding-inline-start:0}
+.stats b{display:block;font-size:1.6rem;font-weight:800;line-height:1.2}
+.stats span{font-size:.82rem;opacity:.8}
+.toolbar{position:sticky;top:0;z-index:30;background:var(--card);border-bottom:1px solid var(--line);padding:10px 0 8px}
+#searchInput{flex:1;min-width:0;height:46px;border:1px solid var(--line);border-radius:10px;padding:0 14px;font:inherit;background:var(--bg);color:var(--ink)}
+:focus-visible{outline:3px solid #4fb6b9;outline-offset:2px}
+.srow{display:flex;gap:8px}
+.vt{display:flex;flex:none;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.vt button{width:46px;height:44px;border:0;background:var(--card);color:var(--mut);cursor:pointer;display:grid;place-items:center}
+.vt button[aria-pressed=true]{background:var(--t7);color:#fff}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:36px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 14px;font:inherit;font-size:.9rem;cursor:pointer}
+.chip small{color:var(--mut);margin-inline-start:4px}
+.chip.active{background:var(--t7);border-color:var(--t7);color:#fff}
+.chip.active small{color:#d7eeee}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 0 0}
+.tools select,.tog,.link{min-height:38px;border-radius:8px;border:1px solid var(--line);background:var(--card);font:inherit;font-size:.9rem;padding:0 12px;cursor:pointer;color:var(--ink)}
+.tog[aria-pressed=true]{background:var(--t1);border-color:var(--t7);color:var(--t9);font-weight:700}
+.link{background:none;border-color:transparent;color:var(--t7);font-weight:700}
+#resultCount{color:var(--mut);font-size:.9rem;margin-inline-end:auto}
+.container{max-width:1400px;margin:0 auto;padding:0 16px}
+.specialty-section{margin-top:26px}
+.specialty-title{display:flex;align-items:baseline;gap:10px;font-size:1.25rem;font-weight:800;color:var(--t9);padding-bottom:8px;border-bottom:2px solid var(--t7);margin-bottom:14px;scroll-margin-top:calc(var(--tbh) + 8px)}
+.specialty-title small{font-size:.85rem;font-weight:500;color:var(--mut)}
+.doctors-grid{display:grid;align-items:start;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.doctor-card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.doctor-card[hidden],.specialty-section[hidden]{display:none}
+.doctor-card.picked{border-color:var(--t7);box-shadow:inset 0 0 0 2px var(--t7)}
+.top{display:flex;align-items:flex-start;gap:10px}
+.name{flex:1;font-size:1.08rem;font-weight:800;line-height:1.45}
+.name button{all:unset;cursor:pointer;display:block;width:100%}
+.name button:focus-visible{outline:3px solid #4fb6b9}
+.pick{flex:none;width:24px;height:24px;margin-top:2px;border:2px solid #8aa5a6;border-radius:6px;background:var(--card);cursor:pointer;display:grid;place-items:center;color:#fff;font-size:15px;line-height:1}
+.pick[aria-pressed=true]{background:var(--t7);border-color:var(--t7)}
+.pick[aria-pressed=true]::after{content:'✓'}
+.share{flex:none;width:34px;height:34px;border:0;background:var(--t1);border-radius:8px;cursor:pointer;font-size:1rem}
+.spec{font-size:.92rem;color:var(--mut)}
+.spec,.meta span:last-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta{font-size:.88rem;display:flex;gap:6px}
+.meta span:first-child{flex:none}
+.meta.dim{color:var(--mut)}
+.badge{font-size:.78rem;font-weight:700;border-radius:6px;padding:1px 8px;align-self:flex-start}
+.badge.on{background:#dff5e8;color:#0b6b36}
+.badge.off{background:#eceff0;color:#4f6466}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:6px}
+.btn{flex:1 1 calc(50% - 4px);min-height:44px;display:flex;align-items:center;justify-content:center;gap:6px;border-radius:10px;font-size:.95rem;font-weight:700;text-decoration:none;border:1.5px solid var(--t7);color:var(--t7);background:var(--card)}
+.btn.call{background:var(--t7);color:#fff}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:#fff}
+.more{align-self:flex-start;border:0;background:none;color:var(--t7);font:inherit;font-size:.88rem;font-weight:700;cursor:pointer;padding:2px 0}
+.doctor-specialty{display:none;border-top:1px dashed var(--line);padding-top:8px;font-size:.9rem}
+.doctor-card.open .doctor-specialty{display:block}
+.specialty-info{padding:3px 0}
+.info-label{font-weight:800;color:var(--t9);margin-inline-end:4px}
+.nums{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.nums a{border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:.85rem;color:var(--t9);text-decoration:none;background:var(--t1)}
+.nums a.w{background:#e4f5ea;color:#0b6b36}
+.empty{text-align:center;padding:48px 16px;color:var(--mut)}
+.signature{margin-top:40px;padding:22px 0;text-align:center;color:var(--mut);border-top:1px solid var(--line);font-size:.9rem}
+.signature-name{font-weight:800;color:var(--t9);margin-top:4px}
+.share-selected-button{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:40;display:none;align-items:center;gap:8px;min-height:48px;padding:0 24px;border:0;border-radius:999px;background:var(--hero);color:#fff;font:inherit;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(10,79,83,.35)}
+.share-selected-button.active{display:flex}
+.selected-count{background:var(--card);color:#0a4f53;border-radius:999px;padding:0 9px;font-size:.85rem}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#14282a;color:#fff;padding:10px 18px;border-radius:10px;font-size:.9rem;z-index:50;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+@media(max-width:600px){.hero h1{font-size:1.5rem}.stats div{padding:0 14px}.doctors-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}#toast{transition:none}}
+@media print{[data-theme=dark]{--bg:#fff;--card:#fff;--ink:#000;--mut:#333;--line:#ccc;--t1:#e6f2f2;--t7:#0d7377;--t9:#0a4f53;--hero:#fff}body{background:var(--card);padding:0}.toolbar,.tools,.share-selected-button,.pick,.share,.fav,.totop,.more,.btn.wa,.wl,#toast{display:none!important}.specialty-title{break-after:avoid}.hero{background:var(--card);color:#000;padding:0 0 10px}.doctor-specialty{display:block!important}@page{size:A4;margin:10mm}.doctors-grid{display:block;columns:2;column-gap:10px}.doctor-card{display:block;break-inside:avoid;box-shadow:none;padding:8px;margin-bottom:8px;font-size:12px}.doctor-card.picked{box-shadow:none}.btn,.spec,.meta,.badge,.actions,.nums,.top .pick{display:none!important}.doctor-specialty{border-top:0;padding-top:4px;font-size:11px}.name{font-size:13px}.specialty-section{margin-top:12px}.stats,.org{font-size:12px}}
+[data-theme=dark]{--bg:#0b1630;--card:#122044;--ink:#dbeafe;--mut:#9db7e0;--line:#27407a;--t1:#1a2d5c;--t7:#e0690f;--t9:#8ec5ff;--hero:#0a1a3d}
+[data-theme=dark] body{background-color:var(--bg)}
+[data-theme=dark] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='800' viewBox='0 0 360 800'%3E%3Cg fill='none' stroke='%236ea8ff' stroke-opacity='.4' stroke-width='3'%3E%3Cpolyline points='180.0,0 198.8,5 217.1,10 234.5,15 250.5,20 264.9,25 277.1,30 286.9,35 294.1,40 298.5,45 300.0,50 298.5,55 294.1,60 286.9,65 277.1,70 264.9,75 250.5,80 234.5,85 217.1,90 198.8,95 180.0,100 161.2,105 142.9,110 125.5,115 109.5,120 95.1,125 82.9,130 73.1,135 65.9,140 61.5,145 60.0,150 61.5,155 65.9,160 73.1,165 82.9,170 95.1,175 109.5,180 125.5,185 142.9,190 161.2,195 180.0,200 198.8,205 217.1,210 234.5,215 250.5,220 264.9,225 277.1,230 286.9,235 294.1,240 298.5,245 300.0,250 298.5,255 294.1,260 286.9,265 277.1,270 264.9,275 250.5,280 234.5,285 217.1,290 198.8,295 180.0,300 161.2,305 142.9,310 125.5,315 109.5,320 95.1,325 82.9,330 73.1,335 65.9,340 61.5,345 60.0,350 61.5,355 65.9,360 73.1,365 82.9,370 95.1,375 109.5,380 125.5,385 142.9,390 161.2,395 180.0,400 198.8,405 217.1,410 234.5,415 250.5,420 264.9,425 277.1,430 286.9,435 294.1,440 298.5,445 300.0,450 298.5,455 294.1,460 286.9,465 277.1,470 264.9,475 250.5,480 234.5,485 217.1,490 198.8,495 180.0,500 161.2,505 142.9,510 125.5,515 109.5,520 95.1,525 82.9,530 73.1,535 65.9,540 61.5,545 60.0,550 61.5,555 65.9,560 73.1,565 82.9,570 95.1,575 109.5,580 125.5,585 142.9,590 161.2,595 180.0,600 198.8,605 217.1,610 234.5,615 250.5,620 264.9,625 277.1,630 286.9,635 294.1,640 298.5,645 300.0,650 298.5,655 294.1,660 286.9,665 277.1,670 264.9,675 250.5,680 234.5,685 217.1,690 198.8,695 180.0,700 161.2,705 142.9,710 125.5,715 109.5,720 95.1,725 82.9,730 73.1,735 65.9,740 61.5,745 60.0,750 61.5,755 65.9,760 73.1,765 82.9,770 95.1,775 109.5,780 125.5,785 142.9,790 161.2,795 180.0,800'/%3E%3Cpolyline points='180.0,0 161.2,5 142.9,10 125.5,15 109.5,20 95.1,25 82.9,30 73.1,35 65.9,40 61.5,45 60.0,50 61.5,55 65.9,60 73.1,65 82.9,70 95.1,75 109.5,80 125.5,85 142.9,90 161.2,95 180.0,100 198.8,105 217.1,110 234.5,115 250.5,120 264.9,125 277.1,130 286.9,135 294.1,140 298.5,145 300.0,150 298.5,155 294.1,160 286.9,165 277.1,170 264.9,175 250.5,180 234.5,185 217.1,190 198.8,195 180.0,200 161.2,205 142.9,210 125.5,215 109.5,220 95.1,225 82.9,230 73.1,235 65.9,240 61.5,245 60.0,250 61.5,255 65.9,260 73.1,265 82.9,270 95.1,275 109.5,280 125.5,285 142.9,290 161.2,295 180.0,300 198.8,305 217.1,310 234.5,315 250.5,320 264.9,325 277.1,330 286.9,335 294.1,340 298.5,345 300.0,350 298.5,355 294.1,360 286.9,365 277.1,370 264.9,375 250.5,380 234.5,385 217.1,390 198.8,395 180.0,400 161.2,405 142.9,410 125.5,415 109.5,420 95.1,425 82.9,430 73.1,435 65.9,440 61.5,445 60.0,450 61.5,455 65.9,460 73.1,465 82.9,470 95.1,475 109.5,480 125.5,485 142.9,490 161.2,495 180.0,500 198.8,505 217.1,510 234.5,515 250.5,520 264.9,525 277.1,530 286.9,535 294.1,540 298.5,545 300.0,550 298.5,555 294.1,560 286.9,565 277.1,570 264.9,575 250.5,580 234.5,585 217.1,590 198.8,595 180.0,600 161.2,605 142.9,610 125.5,615 109.5,620 95.1,625 82.9,630 73.1,635 65.9,640 61.5,645 60.0,650 61.5,655 65.9,660 73.1,665 82.9,670 95.1,675 109.5,680 125.5,685 142.9,690 161.2,695 180.0,700 198.8,705 217.1,710 234.5,715 250.5,720 264.9,725 277.1,730 286.9,735 294.1,740 298.5,745 300.0,750 298.5,755 294.1,760 286.9,765 277.1,770 264.9,775 250.5,780 234.5,785 217.1,790 198.8,795 180.0,800'/%3E%3C/g%3E%3Cg stroke='%236ea8ff' stroke-opacity='.24' stroke-width='2'%3E%3Cline x1='217.1' y1='10' x2='142.9' y2='10'/%3E%3Cline x1='267.5' y1='26' x2='92.5' y2='26'/%3E%3Cline x1='296.2' y1='42' x2='63.8' y2='42'/%3E%3Cline x1='296.2' y1='58' x2='63.8' y2='58'/%3E%3Cline x1='267.5' y1='74' x2='92.5' y2='74'/%3E%3Cline x1='217.1' y1='90' x2='142.9' y2='90'/%3E%3Cline x1='103.5' y1='122' x2='256.5' y2='122'/%3E%3Cline x1='68.4' y1='138' x2='291.6' y2='138'/%3E%3Cline x1='60.9' y1='154' x2='299.1' y2='154'/%3E%3Cline x1='82.9' y1='170' x2='277.1' y2='170'/%3E%3Cline x1='128.9' y1='186' x2='231.1' y2='186'/%3E%3Cline x1='244.3' y1='218' x2='115.7' y2='218'/%3E%3Cline x1='285.2' y1='234' x2='74.8' y2='234'/%3E%3Cline x1='300.0' y1='250' x2='60.0' y2='250'/%3E%3Cline x1='285.2' y1='266' x2='74.8' y2='266'/%3E%3Cline x1='244.3' y1='282' x2='115.7' y2='282'/%3E%3Cline x1='128.9' y1='314' x2='231.1' y2='314'/%3E%3Cline x1='82.9' y1='330' x2='277.1' y2='330'/%3E%3Cline x1='60.9' y1='346' x2='299.1' y2='346'/%3E%3Cline x1='68.4' y1='362' x2='291.6' y2='362'/%3E%3Cline x1='103.5' y1='378' x2='256.5' y2='378'/%3E%3Cline x1='217.1' y1='410' x2='142.9' y2='410'/%3E%3Cline x1='267.5' y1='426' x2='92.5' y2='426'/%3E%3Cline x1='296.2' y1='442' x2='63.8' y2='442'/%3E%3Cline x1='296.2' y1='458' x2='63.8' y2='458'/%3E%3Cline x1='267.5' y1='474' x2='92.5' y2='474'/%3E%3Cline x1='217.1' y1='490' x2='142.9' y2='490'/%3E%3Cline x1='103.5' y1='522' x2='256.5' y2='522'/%3E%3Cline x1='68.4' y1='538' x2='291.6' y2='538'/%3E%3Cline x1='60.9' y1='554' x2='299.1' y2='554'/%3E%3Cline x1='82.9' y1='570' x2='277.1' y2='570'/%3E%3Cline x1='128.9' y1='586' x2='231.1' y2='586'/%3E%3Cline x1='244.3' y1='618' x2='115.7' y2='618'/%3E%3Cline x1='285.2' y1='634' x2='74.8' y2='634'/%3E%3Cline x1='300.0' y1='650' x2='60.0' y2='650'/%3E%3Cline x1='285.2' y1='666' x2='74.8' y2='666'/%3E%3Cline x1='244.3' y1='682' x2='115.7' y2='682'/%3E%3Cline x1='128.9' y1='714' x2='231.1' y2='714'/%3E%3Cline x1='82.9' y1='730' x2='277.1' y2='730'/%3E%3Cline x1='60.9' y1='746' x2='299.1' y2='746'/%3E%3Cline x1='68.4' y1='762' x2='291.6' y2='762'/%3E%3Cline x1='103.5' y1='778' x2='256.5' y2='778'/%3E%3C/g%3E%3Cg fill='%238ec5ff' fill-opacity='.45'%3E%3Ccircle cx='217.1' cy='10' r='4'/%3E%3Ccircle cx='142.9' cy='10' r='4'/%3E%3Ccircle cx='267.5' cy='26' r='4'/%3E%3Ccircle cx='92.5' cy='26' r='4'/%3E%3Ccircle cx='296.2' cy='42' r='4'/%3E%3Ccircle cx='63.8' cy='42' r='4'/%3E%3Ccircle cx='296.2' cy='58' r='4'/%3E%3Ccircle cx='63.8' cy='58' r='4'/%3E%3Ccircle cx='267.5' cy='74' r='4'/%3E%3Ccircle cx='92.5' cy='74' r='4'/%3E%3Ccircle cx='217.1' cy='90' r='4'/%3E%3Ccircle cx='142.9' cy='90' r='4'/%3E%3Ccircle cx='103.5' cy='122' r='4'/%3E%3Ccircle cx='256.5' cy='122' r='4'/%3E%3Ccircle cx='68.4' cy='138' r='4'/%3E%3Ccircle cx='291.6' cy='138' r='4'/%3E%3Ccircle cx='60.9' cy='154' r='4'/%3E%3Ccircle cx='299.1' cy='154' r='4'/%3E%3Ccircle cx='82.9' cy='170' r='4'/%3E%3Ccircle cx='277.1' cy='170' r='4'/%3E%3Ccircle cx='128.9' cy='186' r='4'/%3E%3Ccircle cx='231.1' cy='186' r='4'/%3E%3Ccircle cx='244.3' cy='218' r='4'/%3E%3Ccircle cx='115.7' cy='218' r='4'/%3E%3Ccircle cx='285.2' cy='234' r='4'/%3E%3Ccircle cx='74.8' cy='234' r='4'/%3E%3Ccircle cx='300.0' cy='250' r='4'/%3E%3Ccircle cx='60.0' cy='250' r='4'/%3E%3Ccircle cx='285.2' cy='266' r='4'/%3E%3Ccircle cx='74.8' cy='266' r='4'/%3E%3Ccircle cx='244.3' cy='282' r='4'/%3E%3Ccircle cx='115.7' cy='282' r='4'/%3E%3Ccircle cx='128.9' cy='314' r='4'/%3E%3Ccircle cx='231.1' cy='314' r='4'/%3E%3Ccircle cx='82.9' cy='330' r='4'/%3E%3Ccircle cx='277.1' cy='330' r='4'/%3E%3Ccircle cx='60.9' cy='346' r='4'/%3E%3Ccircle cx='299.1' cy='346' r='4'/%3E%3Ccircle cx='68.4' cy='362' r='4'/%3E%3Ccircle cx='291.6' cy='362' r='4'/%3E%3Ccircle cx='103.5' cy='378' r='4'/%3E%3Ccircle cx='256.5' cy='378' r='4'/%3E%3Ccircle cx='217.1' cy='410' r='4'/%3E%3Ccircle cx='142.9' cy='410' r='4'/%3E%3Ccircle cx='267.5' cy='426' r='4'/%3E%3Ccircle cx='92.5' cy='426' r='4'/%3E%3Ccircle cx='296.2' cy='442' r='4'/%3E%3Ccircle cx='63.8' cy='442' r='4'/%3E%3Ccircle cx='296.2' cy='458' r='4'/%3E%3Ccircle cx='63.8' cy='458' r='4'/%3E%3Ccircle cx='267.5' cy='474' r='4'/%3E%3Ccircle cx='92.5' cy='474' r='4'/%3E%3Ccircle cx='217.1' cy='490' r='4'/%3E%3Ccircle cx='142.9' cy='490' r='4'/%3E%3Ccircle cx='103.5' cy='522' r='4'/%3E%3Ccircle cx='256.5' cy='522' r='4'/%3E%3Ccircle cx='68.4' cy='538' r='4'/%3E%3Ccircle cx='291.6' cy='538' r='4'/%3E%3Ccircle cx='60.9' cy='554' r='4'/%3E%3Ccircle cx='299.1' cy='554' r='4'/%3E%3Ccircle cx='82.9' cy='570' r='4'/%3E%3Ccircle cx='277.1' cy='570' r='4'/%3E%3Ccircle cx='128.9' cy='586' r='4'/%3E%3Ccircle cx='231.1' cy='586' r='4'/%3E%3Ccircle cx='244.3' cy='618' r='4'/%3E%3Ccircle cx='115.7' cy='618' r='4'/%3E%3Ccircle cx='285.2' cy='634' r='4'/%3E%3Ccircle cx='74.8' cy='634' r='4'/%3E%3Ccircle cx='300.0' cy='650' r='4'/%3E%3Ccircle cx='60.0' cy='650' r='4'/%3E%3Ccircle cx='285.2' cy='666' r='4'/%3E%3Ccircle cx='74.8' cy='666' r='4'/%3E%3Ccircle cx='244.3' cy='682' r='4'/%3E%3Ccircle cx='115.7' cy='682' r='4'/%3E%3Ccircle cx='128.9' cy='714' r='4'/%3E%3Ccircle cx='231.1' cy='714' r='4'/%3E%3Ccircle cx='82.9' cy='730' r='4'/%3E%3Ccircle cx='277.1' cy='730' r='4'/%3E%3Ccircle cx='60.9' cy='746' r='4'/%3E%3Ccircle cx='299.1' cy='746' r='4'/%3E%3Ccircle cx='68.4' cy='762' r='4'/%3E%3Ccircle cx='291.6' cy='762' r='4'/%3E%3Ccircle cx='103.5' cy='778' r='4'/%3E%3Ccircle cx='256.5' cy='778' r='4'/%3E%3C/g%3E%3C/svg%3E") center top/auto 100% no-repeat}
+[data-theme=dark] .doctor-card{background:rgba(18,32,68,.9)}
+[data-theme=dark] :focus-visible{outline-color:#8ec5ff}
+[data-theme=dark] .btn{background:var(--t7);color:#fff}
+[data-theme=dark] .share-selected-button{background:var(--t7)}
+[data-theme=dark] .selected-count{color:#9a4306}
+[data-theme=dark] .chip.active small{color:#ffe3cc}
+.fav{flex:none;width:34px;height:34px;border:0;background:none;font-size:1.3rem;cursor:pointer;color:#8aa5a6;line-height:1}
+.fav[aria-pressed=true]{color:#e0a100}
+.tl{display:inline-block;direction:ltr;padding:2px 10px;margin:2px 3px;border:1px solid var(--line);border-radius:8px;background:var(--t1);color:var(--t9);font-weight:700;text-decoration:none}
+.wl{display:inline-block;padding:2px 8px;margin:2px 0;border-radius:8px;background:var(--wa);color:#fff;text-decoration:none;font-size:.85rem}
+.doctor-specialty .btn{flex:none;margin-top:10px}
+.btn.map2{border-style:dashed;font-weight:500;min-height:38px;font-size:.88rem}
+.doctor-specialty .specialty-info{white-space:pre-line}
+[data-theme=dark] .btn.map2{background:transparent;color:var(--t7)}
+.totop{position:fixed;bottom:16px;inset-inline-start:16px;z-index:35;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--t7);font-size:1.2rem;cursor:pointer;display:none}
+.totop.show{display:block}
+dialog{border:1px solid var(--line);border-radius:12px;padding:18px;width:min(560px,92vw);max-height:80vh;overflow:auto;background:var(--card);color:var(--ink);margin:auto}
+dialog h2{font-size:1.1rem}
+dialog h3{font-size:.95rem;margin:14px 0 4px;color:var(--t9)}
+dialog li{font-size:.88rem;margin-inline-start:18px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
 
-body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0d7377 0%, #14b8a6 100%);
-  padding: 20px 15px;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-h1 {
-  text-align: center;
-  color: #fff;
-  font-size: 2rem;
-  margin-bottom: 30px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.specialty-section {
-  margin-bottom: 30px;
-}
-
-.specialty-title {
-  background: rgba(255, 255, 255, 0.95);
-  padding: 12px 15px;
-  border-radius: 10px 10px 0 0;
-  font-size: 1.3rem;
-  color: #0d7377;
-  font-weight: bold;
-  border-bottom: 3px solid #0d7377;
-}
-
-.doctors-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 20px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0 0 10px 10px;
-}
-
-.doctor-card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 10px;
-  margin: 5px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  transition: transform 0.3s, box-shadow 0.3s;
-  min-height: 132px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: visible;
-}
-
-.doctor-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-}
-
-.doctor-name-btn {
-  background: linear-gradient(135deg, #0d7377 0%, #14b8a6 100%);
-  color: white;
-  border: none;
-  padding: 6px 8px;
-  border-radius: 5px;
-  font-size: 0.75rem;
-  font-weight: bold;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-  transition: all 0.3s;
-  white-space: nowrap;
-  overflow: visible;
-  text-overflow: ellipsis;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 5px;
-}
-
-.doctor-name-text {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  text-align: center;
-}
-
-.doctor-icons {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-shrink: 0;
-}
-
-/* مربع التحديد */
-.doctor-checkbox {
-  width: 12px;
-  height: 12px;
-  border: 2px solid white;
-  border-radius: 3px;
-  cursor: pointer;
-  position: relative;
-  background: transparent;
-  transition: all 0.2s;
-  flex-shrink: 0;
-}
-
-.doctor-checkbox.checked {
-  background: white;
-}
-
-.doctor-checkbox.checked::after {
-  content: '✓';
-  position: absolute;
-  top: -3px;
-  left: 1px;
-  color: #0d7377;
-  font-size: 10px;
-  font-weight: bold;
-}
-
-/* أيقونة المشاركة */
-.share-icon {
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition: transform 0.2s;
-  flex-shrink: 0;
-}
-
-.share-icon:hover {
-  transform: scale(1.2);
-}
-
-.doctor-name-btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 3px 10px rgba(13, 115, 119, 0.4);
-}
-
-.doctor-specialty {
-  background: #f0f4ff;
-  padding: 6px;
-  border-radius: 4px;
-  font-size: 0.55rem;
-  color: #555;
-  line-height: 1.3;
-  display: none;
-  max-height: 45px;
-  overflow-y: auto;
-  margin: 3px 0;
-}
-
-.doctor-specialty.show {
-  display: block;
-  animation: slideDown 0.2s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    max-height: 45px;
-  }
-}
-
-.contact-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-  margin: 3px 0;
-}
-
-.contact-btn {
-  flex: 1;
-  min-width: 50px;
-  padding: 4px 6px;
-  border: 1px solid rgba(13, 115, 119, 0.3);
-  border-radius: 4px;
-  font-size: 0.55rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  text-decoration: none;
-  color: #333;
-  white-space: nowrap;
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.contact-btn:hover {
-  background: rgba(13, 115, 119, 0.2);
-  border-color: rgba(13, 115, 119, 0.5);
-}
-
-.location-btn {
-  background: rgba(255, 255, 255, 0.2);
-  color: #333;
-  border: 1px solid rgba(13, 115, 119, 0.3);
-  padding: 5px 8px;
-  border-radius: 4px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.2s;
-  position: relative;
-  text-decoration: none;
-  display: block;
-  text-align: center;
-  white-space: nowrap;
-  overflow: visible;
-  text-overflow: ellipsis;
-}
-
-.location-btn:hover {
-  background: rgba(13, 115, 119, 0.2);
-  border-color: rgba(13, 115, 119, 0.5);
-}
-
-.tooltip {
-  position: relative;
-}
-
-.tooltiptext {
-  visibility: hidden;
-  width: 200px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 6px;
-  padding: 8px;
-  position: absolute;
-  z-index: 1000;
-  bottom: 125%;
-  left: 50%;
-  margin-left: -100px;
-  opacity: 0;
-  transition: opacity 0.3s;
-  font-size: 0.65rem;
-  white-space: normal;
-  line-height: 1.3;
-}
-
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
-
-.doctor-specialty::-webkit-scrollbar {
-  width: 3px;
-}
-
-.doctor-specialty::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 2px;
-}
-
-.doctor-specialty::-webkit-scrollbar-thumb {
-  background: #0d7377;
-  border-radius: 2px;
-}
-
-.doctor-specialty::-webkit-scrollbar-thumb:hover {
-  background: #14b8a6;
-}
-
-.doctor-specialty {
-  background: #f0f4ff;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 0.62rem;
-  color: #333;
-  line-height: 1.4;
-  display: none;
-  max-height: none;
-  overflow-y: visible;
-  margin: 3px 0;
-  border: 1px solid rgba(13, 115, 119, 0.2);
-}
-
-.doctor-specialty.show {
-  display: block;
-  animation: slideDown 0.3s ease-out;
-}
-
-.specialty-info {
-  margin-bottom: 5px;
-  padding-bottom: 3px;
-  border-bottom: 1px dashed rgba(13, 115, 119, 0.15);
-}
-
-.specialty-info:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-}
-
-.info-label {
-  font-weight: bold;
-  color: #0d7377;
-  display: inline;
-  margin-right: 4px;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* دائرة الحالة */
-.status-indicator {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 8px;
-  position: relative;
-  top: -1px;
-  animation: pulse 2s infinite;
-}
-
-.status-online {
-  background-color: #10b981;
-  box-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
-}
-
-.status-offline {
-  background-color: #6b7280;
-  animation: none;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-/* التوقيع */
-.signature {
-  text-align: center;
-  margin-top: 40px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  backdrop-filter: blur(10px);
-}
-
-.signature-text {
-  color: #fff;
-  font-size: 0.9rem;
-  line-height: 1.6;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-}
-
-.signature-name {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 10px;
-  color: #fff;
-}
-
-/* زر PDF */
-.pdf-button {
-  position: fixed;
-  bottom: 30px;
-  left: 30px;
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
-  transition: all 0.3s;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.pdf-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(239, 68, 68, 0.6);
-}
-
-.pdf-button:active {
-  transform: translateY(-1px);
-}
-
-/* زر المشاركة الجماعية */
-.share-selected-button {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-  color: white;
-  border: none;
-  padding: 15px 25px;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-  transition: all 0.3s;
-  z-index: 1000;
-  display: none;
-  align-items: center;
-  gap: 8px;
-}
-
-.share-selected-button.active {
-  display: flex;
-}
-
-.share-selected-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(59, 130, 246, 0.6);
-}
-
-.share-selected-button:active {
-  transform: translateY(-1px);
-}
-
-.selected-count {
-  background: white;
-  color: #2563eb;
-  padding: 2px 8px;
-  border-radius: 15px;
-  font-size: 0.85rem;
-}
-
-@media print {
-  body {
-    background: white;
-    padding: 10px;
-  }
-  
-  .pdf-button {
-    display: none !important;
-  }
-  
-  .share-selected-button {
-    display: none !important;
-  }
-  
-  .search-box, .filters {
-    display: none !important;
-  }
-  
-  .doctor-card {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-  
-  .doctors-grid {
-    gap: 10px;
-  }
-  
-  .doctor-specialty {
-    display: block !important;
-  }
-  
-  .doctor-name-btn {
-    background: linear-gradient(135deg, #0d7377 0%, #14b8a6 100%) !important;
-  }
-  
-  .doctor-checkbox, .share-icon {
-    display: none !important;
-  }
-}
-
-@media (max-width: 768px) {
-  .doctors-grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  }
-  
-  h1 {
-    font-size: 1.5rem;
-  }
-  
-  .specialty-title {
-    font-size: 1.1rem;
-  }
-  
-  .pdf-button {
-    bottom: 15px;
-    left: 15px;
-    padding: 12px 20px;
-    font-size: 0.85rem;
-  }
-  
-  .share-selected-button {
-    bottom: 15px;
-    right: 15px;
-    padding: 12px 20px;
-    font-size: 0.85rem;
-  }
-}
-
-/* ===== search & filters ===== */
-.search-box{max-width:500px;margin:0 auto 15px}
-#searchInput{width:100%;padding:12px;border-radius:10px;border:none;font-size:.9rem}
-
-.filters{
- display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:25px
-}
-.filter-btn,select{
- padding:8px 14px;border-radius:20px;border:none;font-size:.7rem;font-weight:bold;cursor:pointer
-}
-.filter-btn.active{
- background:linear-gradient(135deg,#0d7377,#14b8a6);color:#fff
-}
-.reset-btn{background:#ef4444;color:#fff}
-
-</style>
-<style>
-body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
-.whatsapp-btn{background:#25D366!important;color:white!important}
-.facebook-btn{background:#1877F2!important;color:white!important}
-.land-btn{background:#64748b!important;color:white!important}
+.tiles .doctors-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:700px){.tiles .doctors-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+.tiles .doctor-card{padding:12px 10px;gap:6px;min-height:104px;justify-content:space-between}
+.tiles .top{flex-wrap:wrap;justify-content:space-between;gap:6px}
+.tiles .name{order:-1;flex:1 1 100%;text-align:center;font-size:.98rem}
+.tiles .more,.tiles .doctor-card .doctor-specialty{display:none!important}
+.tiles .pick,.tiles .fav,.tiles .share{width:30px;height:30px}
+dialog .doctor-specialty{display:block;border-top:0;padding-top:4px}
 </style>
 </head>
 <body>
-<button class="pdf-button" onclick="toggleAllDetails()" id="pdfButton">📄 عرض الكل للطباعة</button>
-<button class="share-selected-button" id="shareSelectedButton" onclick="shareSelected()">📤 مشاركة المحدد <span class="selected-count" id="selectedCount">0</span></button>
+<button class="share-selected-button" id="shareSelectedButton" type="button">📤 مشاركة المحدد <span class="selected-count" id="selectedCount">0</span></button>
+<div class="hero"><div class="wrap">
+  <div><h1>Teba Radiology Center</h1>
+  <div class="upd" id="updInfo"></div></div>
+  <div class="stats"><div><b id="statDoctors">0</b><span>طبيب</span></div><div><b id="statSections">0</b><span>قسم</span></div><div><b id="statWa">0</b><span>واتساب مؤكد</span></div></div>
+</div></div>
+<div class="toolbar"><div class="wrap">
+  <div class="srow"><input id="searchInput" type="search" placeholder="ابحث بالاسم أو التخصص أو العنوان أو الرقم" autocomplete="off" aria-label="بحث">
+  <div class="vt" role="group" aria-label="طريقة العرض"><button id="vList" type="button" aria-pressed="true" aria-label="عرض قائمة" title="قائمة"><svg width='22' height='22' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'><rect x='3' y='5' width='18' height='2.6' rx='1.3'/><rect x='3' y='10.7' width='18' height='2.6' rx='1.3'/><rect x='3' y='16.4' width='18' height='2.6' rx='1.3'/></svg></button><button id="vTiles" type="button" aria-pressed="false" aria-label="عرض مربعات" title="مربعات"><svg width='22' height='22' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'><rect x='3' y='3' width='8' height='8' rx='2'/><rect x='13' y='3' width='8' height='8' rx='2'/><rect x='3' y='13' width='8' height='8' rx='2'/><rect x='13' y='13' width='8' height='8' rx='2'/></svg></button></div></div>
+  <div class="chips" id="chips"></div>
+</div></div>
+<div class="wrap"><div class="tools">
+  <select id="locationFilter" aria-label="المنطقة"><option value="all">كل المناطق</option><option>المنصورة</option><option>طلخا</option><option>شربين</option><option>ميت بدر</option><option>دمياط</option><option>نبروه</option></select>
+  <button class="tog" id="favToggle" type="button" aria-pressed="false">⭐ المفضلة</button>
+  <button class="tog" id="waToggle" type="button" aria-pressed="false">💬 واتساب فقط</button>
+  <select id="sortSel" aria-label="الترتيب"><option value="def">الترتيب الأصلي</option><option value="az">ترتيب أبجدي</option></select>
+  <span id="resultCount" aria-live="polite"></span>
+  <button class="link" id="resetBtn" type="button" hidden>مسح الفلاتر</button>
+  <button class="link" id="chkBtn" type="button">🔍 فحص البيانات</button>
+  <button class="link" id="themeBtn" type="button">🌙 ليلي</button>
+  <button class="link" id="printBtn" type="button">🖨️ طباعة / PDF</button>
+</div></div>
 <div class="container">
-  <h1>🩺 دليل الأطباء - المنصورة 🩺</h1>
-  <div style="text-align:center;color:#fff;margin-bottom:20px;font-family:Arial,sans-serif">
-    <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;margin-bottom:3px;text-shadow:2px 2px 4px rgba(0,0,0,.3)">Teba Radiology Center</div>
-    <div style="font-size:.95rem;font-weight:400;letter-spacing:.5px;opacity:.95">Teba IT Department</div>
-  </div>
-<div style="display:flex;justify-content:center;gap:15px;flex-wrap:wrap;margin-bottom:20px;direction:rtl">
-  <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;text-align:center;border:1px solid rgba(255,255,255,.2)">
-    <div style="color:white;font-size:1.5rem;font-weight:800">72</div>
-    <div style="color:rgba(255,255,255,.85);font-size:.75rem">👨‍⚕️ عدد الأطباء</div>
-  </div>
-  <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;text-align:center;border:1px solid rgba(255,255,255,.2)">
-    <div style="color:white;font-size:1.5rem;font-weight:800">71</div>
-    <div style="color:rgba(255,255,255,.85);font-size:.75rem">🔬 التخصصات</div>
-  </div>
-  <div style="background:rgba(255,255,255,.15);backdrop-filter:blur(6px);border-radius:12px;padding:10px 20px;text-align:center;border:1px solid rgba(255,255,255,.2)">
-    <div style="color:white;font-size:1.5rem;font-weight:800">15</div>
-    <div style="color:rgba(255,255,255,.85);font-size:.75rem">📂 الأقسام</div>
-  </div>
-</div>
-<div class="search-box"><input id="searchInput" placeholder="🔍 ابحث باسم الدكتور أو التخصص أو العنوان" onkeyup="applyFilters()"></div>
-<div class="filters">
-  <button class="filter-btn active" onclick="setSpecialty('all',this)">الكل</button>
-  <button class="filter-btn" onclick="setSpecialty('نساء',this)">نساء</button>
-  <button class="filter-btn" onclick="setSpecialty('أطفال',this)">أطفال</button>
-  <button class="filter-btn" onclick="setSpecialty('عيون',this)">عيون</button>
-  <button class="filter-btn" onclick="setSpecialty('مخ',this)">مخ وأعصاب</button>
-  <button class="filter-btn" onclick="setSpecialty('جراحة',this)">جراحة</button>
-  <button class="filter-btn" onclick="setSpecialty('روماتيزم',this)">الروماتيزم والمناعة</button>
-  <select id="locationFilter" onchange="applyFilters()">
-    <option value="all">كل المناطق</option>
-    <option value="المنصورة">المنصورة</option>
-    <option value="طلخا">طلخا</option>
-    <option value="شربين">شربين</option>
-    <option value="ميت بدر">ميت بدر</option>
-    <option value="دمياط">دمياط</option>
-    <option value="نبروه">نبروه</option>
-  </select>
-</div>
+<dialog id="chk"></dialog><dialog id="tdlg"></dialog><button class="totop" id="toTop" type="button" aria-label="الرجوع للأعلى">↑</button>
+<div class="empty" id="empty" hidden><p>لا توجد نتائج مطابقة للبحث.</p><button class="link" id="emptyReset" type="button">مسح الفلاتر وعرض الكل</button></div>
 
   <div class="specialty-section" id="section-pediatrics">
     <div class="specialty-title">👶 أطباء الأطفال وحديثي الولادة</div>
@@ -1262,7 +820,97 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">المنصورة  ميدان الطميهي - برج الحجاز الدور الرابع علوي</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. طارق بركات</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جهاز هضمي أطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01029176060</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ميدان المحطة برج اللؤلؤة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01029176060" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. طارق بركات','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%84%D8%A4%D9%84%D8%A4%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. طارق بركات','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ميدان المحطة برج اللؤلؤة</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أحمد جمال الدين إبراهيم</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> عضو الجمعية البريطانية لطب الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 01011551605 | موبايل: 01023798844</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - ش الجمهورية - برج السوسن - بلازا ناصية - شارع محمد فتحي من البحر - أعلى صيدلية البسطويسي - الدور الثاني علوي</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01011551605" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد جمال الدين إبراهيم','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01023798844" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد جمال الدين إبراهيم','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%20%D8%A7%D9%84%D8%AC%D9%85%D9%87%D9%88%D8%B1%D9%8A%D8%A9%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B3%D9%88%D8%B3%D9%86%20-%20%D8%A8%D9%84%D8%A7%D8%B2%D8%A7%20%D9%86%D8%A7%D8%B5%D9%8A%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%85%D8%AD%D9%85%D8%AF%20%D9%81%D8%AA%D8%AD%D9%8A%20%D9%85%D9%86%20%D8%A7%D9%84%D8%A8%D8%AD%D8%B1%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A8%D8%B3%D8%B7%D9%88%D9%8A%D8%B3%D9%8A%20-%20%D8%A7%D9%84%D8%AF%D9%88%D8%B1%20%D8%A7%D9%84%D8%AB%D8%A7%D9%86%D9%8A%20%D8%B9%D9%84%D9%88%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد جمال الدين إبراهيم','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - ش الجمهورية - برج السوسن - بلازا ناصية - شارع محمد فتحي من البحر - أعلى صيدلية البسطويسي - الدور الثاني علوي</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أحمد عماد أبو الخير</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> ماجستير طب الأطفال وحديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502037291 | موبايل: 01062881444</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> شها - أمام الكوبري</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502037291" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد عماد أبو الخير','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01062881444" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد عماد أبو الخير','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B4%D9%87%D8%A7%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D9%83%D9%88%D8%A8%D8%B1%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد عماد أبو الخير','موقع')">
+          📍 الموقع<span class="tooltiptext">شها - أمام الكوبري</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أحمد درويش</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه طب الأطفال وحديثي الولادة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502354445</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> امتداد شارع جيهان الجامعة - بلازا أمام القارية الأولمبية</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502354445" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد درويش','☎️ اتصال')">☎️ اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%85%D8%AA%D8%AF%D8%A7%D8%AF%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%AC%D9%8A%D9%87%D8%A7%D9%86%20%D8%A7%D9%84%D8%AC%D8%A7%D9%85%D8%B9%D8%A9%20-%20%D8%A8%D9%84%D8%A7%D8%B2%D8%A7%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D9%82%D8%A7%D8%B1%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A3%D9%88%D9%84%D9%85%D8%A8%D9%8A%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد درويش','موقع')">
+          📍 الموقع<span class="tooltiptext">امتداد شارع جيهان الجامعة - بلازا أمام القارية الأولمبية</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-surgery">
@@ -1400,7 +1048,97 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
 المنصورة  أول شارع بورسعيد بجوار ميدان مشعل  برج سلمى</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمد حافظ</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة السمنة والمناظير</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01061784091</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ش جيهان أمام مستشفى الطوارئ</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01061784091" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد حافظ','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%20%D8%AC%D9%8A%D9%87%D8%A7%D9%86%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B7%D9%88%D8%A7%D8%B1%D8%A6" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد حافظ','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ش جيهان أمام مستشفى الطوارئ</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. عيد محمد رزق</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> جراحة عامة</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502264141 | موبايل: 01023334301</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ميدان مشعل</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502264141" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عيد محمد رزق','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01023334301" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عيد محمد رزق','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D9%85%D8%B4%D8%B9%D9%84" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عيد محمد رزق','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ميدان مشعل</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمود حجاج</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائي الجراحة العامة - مدرس جراحات ومناظير الجهاز الهضمي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502734455 | موبايل: 01016532353</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> ميت خميس / منزل عبدالبديع سالم بجوار صيدلية الإيمان</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502734455" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمود حجاج','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01016532353" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمود حجاج','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D9%85%D9%8A%D8%AA%20%D8%AE%D9%85%D9%8A%D8%B3%20/%20%D9%85%D9%86%D8%B2%D9%84%20%D8%B9%D8%A8%D8%AF%D8%A7%D9%84%D8%A8%D8%AF%D9%8A%D8%B9%20%D8%B3%D8%A7%D9%84%D9%85%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%A5%D9%8A%D9%85%D8%A7%D9%86" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمود حجاج','موقع')">
+          📍 الموقع<span class="tooltiptext">ميت خميس / منزل عبدالبديع سالم بجوار صيدلية الإيمان</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. السيد عادل أبو المجد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحات السمنة والجهاز الهضمي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01094415242</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ش حسين بك بعد تنظيم الأسرة أعلى محل المدار</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01094415242" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. السيد عادل أبو المجد','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%83%20%D8%A8%D8%B9%D8%AF%20%D8%AA%D9%86%D8%B8%D9%8A%D9%85%20%D8%A7%D9%84%D8%A3%D8%B3%D8%B1%D8%A9%20%D8%A3%D8%B9%D9%84%D9%89%20%D9%85%D8%AD%D9%84%20%D8%A7%D9%84%D9%85%D8%AF%D8%A7%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. السيد عادل أبو المجد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ش حسين بك بعد تنظيم الأسرة أعلى محل المدار</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-neurology">
@@ -1695,7 +1433,96 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">المنصورة ١٩ شارع احمد غازى . عبد السلام عارف بجوار سنترال حى غرب</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. بثينة حسانين</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ مخ وأعصاب أطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01005103189</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة بنك مصر</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01005103189" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. بثينة حسانين','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. بثينة حسانين','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة بنك مصر</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. عماد الدين حسين</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ مخ وأعصاب وعمود فقري</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502232632</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ميدان المحطة برج الكوثر</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502232632" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عماد الدين حسين','☎️ اتصال')">☎️ اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D8%A7%D9%84%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D9%83%D9%88%D8%AB%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عماد الدين حسين','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ميدان المحطة برج الكوثر</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمد قاسم</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة المخ والأعصاب</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502338053 | موبايل: 01003916111</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> ش جيهان أمام مستشفى الطوارئ</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502338053" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد قاسم','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01003916111" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد قاسم','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B4%20%D8%AC%D9%8A%D9%87%D8%A7%D9%86%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B7%D9%88%D8%A7%D8%B1%D8%A6" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد قاسم','موقع')">
+          📍 الموقع<span class="tooltiptext">ش جيهان أمام مستشفى الطوارئ</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمد متولي العدروسي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه طب المخ والأعصاب والعمود الفقري</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01009404605</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> ميت الكرماء - شارع السلام</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01009404605" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد متولي العدروسي','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D9%85%D9%8A%D8%AA%20%D8%A7%D9%84%D9%83%D8%B1%D9%85%D8%A7%D8%A1%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد متولي العدروسي','موقع')">
+          📍 الموقع<span class="tooltiptext">ميت الكرماء - شارع السلام</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-rheumatology">
@@ -1891,7 +1718,29 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">العنوان: الحواوشة - منزل أ إبراهيم حماد</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمد محمود الحنتيري</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أمراض الصدر والجهاز التنفسي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502734455</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - سندوب شارع محمود شاهين بجوار مسجد التوبة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502734455" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد محمود الحنتيري','☎️ اتصال')">☎️ اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B3%D9%86%D8%AF%D9%88%D8%A8%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D9%85%D8%AD%D9%85%D9%88%D8%AF%20%D8%B4%D8%A7%D9%87%D9%8A%D9%86%20%D8%A8%D8%AC%D9%88%D8%A7%D8%B1%20%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A7%D9%84%D8%AA%D9%88%D8%A8%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد محمود الحنتيري','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - سندوب شارع محمود شاهين بجوار مسجد التوبة</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-auto-6">
@@ -2000,7 +1849,117 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
 برج خطاب بجوار مسجد القاضي</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أحمد إبراهيم صالح</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه ومدرس طب العظام - استشاري جراحة العظام ومناظير اليد والطرف العلوي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01204095157</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> بنك مصر - برج الصحابة - أمام صيدلية الطرشوبي - أعلى معمل وفا لاب</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01204095157" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد إبراهيم صالح','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A8%D9%86%D9%83%20%D9%85%D8%B5%D8%B1%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B5%D8%AD%D8%A7%D8%A8%D8%A9%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B7%D8%B1%D8%B4%D9%88%D8%A8%D9%8A%20-%20%D8%A3%D8%B9%D9%84%D9%89%20%D9%85%D8%B9%D9%85%D9%84%20%D9%88%D9%81%D8%A7%20%D9%84%D8%A7%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد إبراهيم صالح','موقع')">
+          📍 الموقع<span class="tooltiptext">بنك مصر - برج الصحابة - أمام صيدلية الطرشوبي - أعلى معمل وفا لاب</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمد الحديدي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري جراحة العظام والمفاصل - الركبة والكتف والرسغ</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01553330006</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ش الهنداوي من شجيبة أمام بوابة مركز الجهاز الهضمي - برج ميديكال جيت وأعلى صيدلية سالي</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01553330006" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد الحديدي','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%20%D8%A7%D9%84%D9%87%D9%86%D8%AF%D8%A7%D9%88%D9%8A%20%D9%85%D9%86%20%D8%B4%D8%AC%D9%8A%D8%A8%D8%A9%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A8%D9%88%D8%A7%D8%A8%D8%A9%20%D9%85%D8%B1%D9%83%D8%B2%20%D8%A7%D9%84%D8%AC%D9%87%D8%A7%D8%B2%20%D8%A7%D9%84%D9%87%D8%B6%D9%85%D9%8A%20-%20%D8%A8%D8%B1%D8%AC%20%D9%85%D9%8A%D8%AF%D9%8A%D9%83%D8%A7%D9%84%20%D8%AC%D9%8A%D8%AA%20%D9%88%D8%A3%D8%B9%D9%84%D9%89%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D8%B3%D8%A7%D9%84%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد الحديدي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ش الهنداوي من شجيبة أمام بوابة مركز الجهاز الهضمي - برج ميديكال جيت وأعلى صيدلية سالي</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. خالد نور</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ جراحة العظام والمفاصل</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01025403017</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع جيهان أمام بوابة مستشفى الطوارئ</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01025403017" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. خالد نور','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%AC%D9%8A%D9%87%D8%A7%D9%86%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A8%D9%88%D8%A7%D8%A8%D8%A9%20%D9%85%D8%B3%D8%AA%D8%B4%D9%81%D9%89%20%D8%A7%D9%84%D8%B7%D9%88%D8%A7%D8%B1%D8%A6" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. خالد نور','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع جيهان أمام بوابة مستشفى الطوارئ</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. مازن سمير أبو السعد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ واستشاري جراحة عظام الأطفال</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502220013</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - 29 نهاية شارع حسين بك - برج الشامي أعلى الوكالة اليابانية</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502220013" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. مازن سمير أبو السعد','☎️ اتصال')">☎️ اتصال</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%2029%20%D9%86%D9%87%D8%A7%D9%8A%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%83%20-%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B4%D8%A7%D9%85%D9%8A%20%D8%A3%D8%B9%D9%84%D9%89%20%D8%A7%D9%84%D9%88%D9%83%D8%A7%D9%84%D8%A9%20%D8%A7%D9%84%D9%8A%D8%A7%D8%A8%D8%A7%D9%86%D9%8A%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. مازن سمير أبو السعد','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - 29 نهاية شارع حسين بك - برج الشامي أعلى الوكالة اليابانية</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أكرم حماد</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أخصائي جراحة العظام</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01025178002</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> ش حسين بك</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01025178002" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أكرم حماد','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B4%20%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A8%D9%83" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أكرم حماد','موقع')">
+          📍 الموقع<span class="tooltiptext">ش حسين بك</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-auto-7">
@@ -2215,7 +2174,52 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">المنصورة, شارع  أحمد ماهر -برج الزهراء الدور الأول بجوار عمارة المقاولين العرب</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. رامي سعيد بيومي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> جهاز هضمي ومناظير</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01032276640</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة السكة الجديدة برج الصفوة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01032276640" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. رامي سعيد بيومي','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%D8%A8%D8%B1%D8%AC%20%D8%A7%D9%84%D8%B5%D9%81%D9%88%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. رامي سعيد بيومي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة السكة الجديدة برج الصفوة</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. طارق علي بشير</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ الكبد والجهاز الهضمي</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502247174 | موبايل: 01272434781</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> ش هنداوي أمام بوابة الجهاز الهضمي</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502247174" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. طارق علي بشير','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01272434781" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. طارق علي بشير','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B4%20%D9%87%D9%86%D8%AF%D8%A7%D9%88%D9%8A%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A8%D9%88%D8%A7%D8%A8%D8%A9%20%D8%A7%D9%84%D8%AC%D9%87%D8%A7%D8%B2%20%D8%A7%D9%84%D9%87%D8%B6%D9%85%D9%8A" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. طارق علي بشير','موقع')">
+          📍 الموقع<span class="tooltiptext">ش هنداوي أمام بوابة الجهاز الهضمي</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-auto-8">
@@ -2348,7 +2352,30 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">المنصورة - عمارة المنصورة - شارع الجيش بجوار بنك القاهرة والناصريين الشرقيين مقابل المحطة الدولية</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. محمد حسن حسين</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ التوليد وأمراض النساء</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502365262 | موبايل: 01005785388</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - أمام الجمعية الشرعية</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502365262" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد حسن حسين','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01005785388" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. محمد حسن حسين','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D8%AC%D9%85%D8%B9%D9%8A%D8%A9%20%D8%A7%D9%84%D8%B4%D8%B1%D8%B9%D9%8A%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. محمد حسن حسين','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - أمام الجمعية الشرعية</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-auto-10">
@@ -2384,7 +2411,30 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
 مائة متر من مستشفى الصدر</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أحمد جلال</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> دكتوراه المسالك البولية - مركز الكلى غنيم - واستشاري جراحة ومناظير المسالك البولية</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 01060553138 | موبايل: 01008014564</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة - شارع الجلاء أمام البوسطة على مطعم أولاد الشال</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01060553138" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد جلال','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01008014564" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد جلال','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AC%D9%84%D8%A7%D8%A1%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A7%D9%84%D8%A8%D9%88%D8%B3%D8%B7%D8%A9%20%D8%B9%D9%84%D9%89%20%D9%85%D8%B7%D8%B9%D9%85%20%D8%A3%D9%88%D9%84%D8%A7%D8%AF%20%D8%A7%D9%84%D8%B4%D8%A7%D9%84" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد جلال','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة - شارع الجلاء أمام البوسطة على مطعم أولاد الشال</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-ent">
@@ -2442,7 +2492,30 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">المنصورة - أول شارع العباسي - مركز غنيم بجوار بنك الاسكندرية برج الاطباء أعلى صيدلية الطرشوبى</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. أحمد الدجوي علي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ الأنف والأذن والحنجرة وجراحة الوجه والفكين</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502264469 | موبايل: 01203174637</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> ميدان مشعل - شارع سكة سندوب</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502264469" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد الدجوي علي','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01203174637" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. أحمد الدجوي علي','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D9%85%D9%8A%D8%AF%D8%A7%D9%86%20%D9%85%D8%B4%D8%B9%D9%84%20-%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%B3%D9%83%D8%A9%20%D8%B3%D9%86%D8%AF%D9%88%D8%A8" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. أحمد الدجوي علي','موقع')">
+          📍 الموقع<span class="tooltiptext">ميدان مشعل - شارع سكة سندوب</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-oncology">
@@ -2503,7 +2576,52 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
           📍 الموقع<span class="tooltiptext">المنصورة - منتصف شارع بور سعيد  أمام صيدلية الطرشوبي</span>
         </a>
       </div>
-    </div>
+    
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. عمرو عبد اللطيف</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ قلب وصدر ومناظير الصدر</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> موبايل: 01022817299</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ش جيهان أمام مسجد النور</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:01022817299" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عمرو عبد اللطيف','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%20%D8%AC%D9%8A%D9%87%D8%A7%D9%86%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B3%D8%AC%D8%AF%20%D8%A7%D9%84%D9%86%D9%88%D8%B1" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عمرو عبد اللطيف','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ش جيهان أمام مسجد النور</span>
+        </a>
+      </div>
+      
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. عبدالرازق معاطي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> استشاري أمراض القلب والأوعية الدموية</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502253883 | موبايل: 01002226557</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> شارع السكة الجديدة - أمام صيدلية قنديل الشريف - حارة الشريف المنصورة</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502253883" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عبدالرازق معاطي','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01002226557" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. عبدالرازق معاطي','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%B3%D9%83%D8%A9%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20-%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%B5%D9%8A%D8%AF%D9%84%D9%8A%D8%A9%20%D9%82%D9%86%D8%AF%D9%8A%D9%84%20%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D9%81%20-%20%D8%AD%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D8%B4%D8%B1%D9%8A%D9%81%20%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. عبدالرازق معاطي','موقع')">
+          📍 الموقع<span class="tooltiptext">شارع السكة الجديدة - أمام صيدلية قنديل الشريف - حارة الشريف المنصورة</span>
+        </a>
+      </div>
+      </div>
   </div>
 
   <div class="specialty-section" id="section-1771537705672">
@@ -2536,393 +2654,244 @@ body{background:linear-gradient(135deg,#0d7377,#14b8a6)}
     </div>
   </div>
 
+  <div class="specialty-section" id="section-new-0">
+    <div class="specialty-title">🩻 عيادات</div>
+    <div class="doctors-grid">
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">أ.د: طلال عامر         أ.د: محمد أبو العطا</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> عيادة الأشعة العادية والسونار والماموجرام</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضى 1 : 0502221213      أرضى 2: 0502351466</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة شارع بورسعيد أمام مطعم زيزو أعلى محلات رأفت صيام</div>
+
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502221213" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د: طلال عامر         أ.د: محمد أبو العطا','أرضي 1')">أرضي 1</a>
+          <a href="tel:0502351466" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('أ.د: طلال عامر         أ.د: محمد أبو العطا','أرضي 2')">أرضي 2</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A8%D9%88%D8%B1%D8%B3%D8%B9%D9%8A%D8%AF%20%D8%A3%D9%85%D8%A7%D9%85%20%D9%85%D8%B7%D8%B9%D9%85%20%D8%B2%D9%8A%D8%B2%D9%88%20%D8%A3%D8%B9%D9%84%D9%89%20%D9%85%D8%AD%D9%84%D8%A7%D8%AA%20%D8%B1%D8%A3%D9%81%D8%AA%20%D8%B5%D9%8A%D8%A7%D9%85" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('أ.د: طلال عامر         أ.د: محمد أبو العطا','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة شارع بورسعيد أمام مطعم زيزو أعلى محلات رأفت صيام</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="specialty-section" id="section-new-1">
+    <div class="specialty-title">🧴 الجلدية والتناسلية</div>
+    <div class="doctors-grid">
+<div class="doctor-card">
+        <button class="doctor-name-btn" onclick="toggleSpecialty(this)">
+          <div class="doctor-icons">
+            <span class="doctor-checkbox" onclick="event.stopPropagation();toggleCheckbox(this)"></span>
+            <span class="share-icon" onclick="event.stopPropagation();shareDoctor(this)" title="مشاركة">📤</span>
+          </div>
+          <span class="doctor-name-text">د. صبحي الحفناوي</span>
+          <span class="status-indicator"></span>
+        </button>
+        <div class="doctor-specialty">
+          <div class="specialty-info"><span class="info-label">📋 التخصص:</span> أستاذ الجلدية والتناسلية</div>
+          <div class="specialty-info"><span class="info-label">📞 التليفون:</span> أرضي: 0502243165 | موبايل: 01094553224</div>
+          <div class="specialty-info"><span class="info-label">📍 العنوان:</span> المنصورة ش الجلاء أمام أولاد الشال ومحطة الغاز على معمل زهران</div>
+        </div>
+        <div class="contact-buttons">
+          <a href="tel:0502243165" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. صبحي الحفناوي','☎️ اتصال')">☎️ اتصال</a>
+          <a href="tel:01094553224" class="contact-btn mobile-btn" target="_self" onclick="trackDoctorClick('د. صبحي الحفناوي','📱 موبايل')">📱 موبايل</a>
+        </div>
+        <a href="https://maps.google.com/?q=%D8%A7%D9%84%D9%85%D9%86%D8%B5%D9%88%D8%B1%D8%A9%20%D8%B4%20%D8%A7%D9%84%D8%AC%D9%84%D8%A7%D8%A1%20%D8%A3%D9%85%D8%A7%D9%85%20%D8%A3%D9%88%D9%84%D8%A7%D8%AF%20%D8%A7%D9%84%D8%B4%D8%A7%D9%84%20%D9%88%D9%85%D8%AD%D8%B7%D8%A9%20%D8%A7%D9%84%D8%BA%D8%A7%D8%B2%20%D8%B9%D9%84%D9%89%20%D9%85%D8%B9%D9%85%D9%84%20%D8%B2%D9%87%D8%B1%D8%A7%D9%86" target="_blank" class="location-btn tooltip" onclick="trackDoctorClick('د. صبحي الحفناوي','موقع')">
+          📍 الموقع<span class="tooltiptext">المنصورة ش الجلاء أمام أولاد الشال ومحطة الغاز على معمل زهران</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
 <div class="signature">
   <div class="signature-text">تم إعداد هذا الدليل بعناية لتسهيل الوصول إلى أفضل الأطباء في المنصورة</div>
   <div class="signature-name">🩺 دليل أطباء المنصورة 🩺</div>
 </div>
 </div>
 <script>
-function toggleSpecialty(btn) {
-  const specialty = btn.nextElementSibling;
-  const card = btn.closest('.doctor-card');
-  const nameText = btn.querySelector('.doctor-name-text');
-  const doctorName = nameText ? nameText.textContent : 'Unknown';
-  
-  specialty.classList.toggle('show');
-  
-  if (specialty.classList.contains('show')) {
-    btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-    if (card) card.classList.add('details-shown');
-    
-    // تتبع فتح التفاصيل
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'view_details', {
-        'event_category': 'Doctor Interaction',
-        'event_label': doctorName
-      });
-    }
-  } else {
-    btn.style.background = 'linear-gradient(135deg, #0d7377 0%, #14b8a6 100%)';
-    if (card) card.classList.remove('details-shown');
-  }
+(function(){
+'use strict';
+var $=function(s){return document.querySelector(s)},$$=function(s){return Array.from(document.querySelectorAll(s))};
+var track=function(a,l){if(typeof gtag!=='undefined')gtag('event',a,{event_category:'Doctor Interaction',event_label:l})};
+var norm=function(t){return (t||'').toLowerCase().replace(/[٠-٩]/g,function(d){return d.charCodeAt(0)-1632}).replace(/[۰-۹]/g,function(d){return d.charCodeAt(0)-1776}).replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/[\u064B-\u065F\u0640]/g,'').replace(/\s+/g,' ').trim()};
+var el=function(tag,cls,txt,at){var e=document.createElement(tag);if(cls)e.className=cls;if(txt)e.textContent=txt;if(at)for(var k in at)e.setAttribute(k,at[k]);return e};
+var isMob=function(n){return /^01[0125]\d{8}$/.test(n)};
+var toLocal=function(d){if(d.length===14&&d.indexOf('2020')===0)d=d.slice(2);return d.length===12&&d.indexOf('20')===0?'0'+d.slice(2):d};
+var store={get:function(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+var favs=store.get('favs')||[];
+var meta=function(ic,t,dim){var p=el('p','meta'+(dim?' dim':''));p.append(el('span','',ic),el('span','',t));return p};
+function openNow(s){
+  var t=norm(s),m=t.match(/(\d{1,2})\s*(مساء|صباح|ص|م)\S*\s*-\s*(\d{1,2})\s*(مساء|صباح|ص|م)/);
+  if(!m||!/السبت-الخميس|يوميا/.test(t)||/عدا/.test(t))return null;
+  var now=new Date(),day=now.getDay(),mins=now.getHours()*60+now.getMinutes();
+  if(day===5&&/السبت-الخميس/.test(t))return false;
+  var h=function(x,p){x=+x%12;return (p.charAt(0)==='م'?x+12:x)*60};
+  return mins>=h(m[1],m[2])&&mins<h(m[3],m[4]);
 }
-
-// دالة لتحديد حالة online/offline
-function updateOnlineStatus() {
-  const now = new Date();
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-  const day = now.getDay();
-  const currentTime = hour * 60 + minute; // الوقت بالدقائق
-  
-  document.querySelectorAll('.status-indicator').forEach(indicator => {
-    const card = indicator.closest('.doctor-card');
-    const workingHoursElement = card.querySelector('.specialty-info:nth-child(4)');
-    
-    if (!workingHoursElement) {
-      // المواعيد الافتراضية
-      const isWorkingDay = day >= 6 || day <= 4;
-      const isWorkingHours = hour >= 9 && hour < 21;
-      const isOnline = isWorkingDay && isWorkingHours;
-      
-      if (isOnline) {
-        indicator.classList.remove('status-offline');
-        indicator.classList.add('status-online');
-      } else {
-        indicator.classList.remove('status-online');
-        indicator.classList.add('status-offline');
-      }
-      return;
+var docs=[];
+$$('.specialty-section').forEach(function(sec,si){
+  var title=sec.querySelector('.specialty-title');
+  var clean=title.textContent.replace(/^[\p{Extended_Pictographic}\uFE0F\u200d\s]+/u,'').trim();
+  sec.dataset.sec=si;sec.dataset.label=clean;
+  sec.querySelectorAll('.doctor-card').forEach(function(card){
+    var name=card.querySelector('.doctor-name-text').textContent.replace(/^[^\u0600-\u06FF]+/,'').replace(/\s+/g,' ').trim(),info={};
+    card.querySelectorAll('.specialty-info').forEach(function(i){
+      var l=i.querySelector('.info-label').textContent,v=i.textContent.replace(l,'').trim();
+      if(l.indexOf('التخصص')>-1)info.spec=v;else if(l.indexOf('التليفون')>-1)info.phone=v;else if(l.indexOf('العنوان')>-1)info.addr=v;else if(l.indexOf('المواعيد')>-1)info.sched=v;
+    });
+    var nums=[],waMark=null;
+    card.querySelectorAll('a[href^="tel:"],a[href*="wa.me/"]').forEach(function(a){
+      var n=toLocal(a.getAttribute('href').replace(/\D/g,''));
+      if(nums.indexOf(n)<0)nums.push(n);
+      if(/wa\.me/.test(a.href)||a.classList.contains('whatsapp-btn'))waMark=waMark||n;
+    });
+    var pt=info.phone||'';
+    var cand=nums.concat((pt.match(/01[0125]\d{8}/g)||[]).filter(function(n){return nums.indexOf(n)<0}));
+    var waSet=cand.filter(function(n){if(n===waMark)return true;if(!isMob(n))return false;var i=pt.indexOf(n);if(i<0)return false;
+      return /واتس/.test(pt.slice(Math.max(0,i-14),i))||/واتس/.test(pt.slice(i+11,i+21).split('|')[0])});
+    var wa=waSet[0]||null;
+    waSet.forEach(function(n){if(nums.indexOf(n)<0)nums.push(n)});
+    var mapEl=card.querySelector('a.location-btn'),map=mapEl?mapEl.getAttribute('href'):null,mapRaw=map;
+    var mq='';try{mq=decodeURIComponent((map||'').split('q=')[1]||'').trim()}catch(e){}
+    if(mq.length<6)map=null;
+    var panel=card.querySelector('.doctor-specialty');
+    card.textContent='';
+    var top=el('div','top'),pick=el('button','pick','',{type:'button','aria-pressed':'false','aria-label':'تحديد '+name});
+    var h=el('h3','name'),nb=el('button','',name,{type:'button','aria-expanded':'false'});h.append(nb);
+    var sh=el('button','share','📤',{type:'button','aria-label':'مشاركة '+name,title:'مشاركة'});
+    var key=name+'|'+(nums[0]||'');
+    var fav=el('button','fav','☆',{type:'button','aria-pressed':'false','aria-label':'المفضلة: '+name,title:'المفضلة'});
+    var setFav=function(on){fav.setAttribute('aria-pressed',on);fav.textContent=on?'★':'☆'};
+    setFav(favs.indexOf(key)>-1);
+    fav.onclick=function(){var on=fav.getAttribute('aria-pressed')!=='true';setFav(on);favs=favs.filter(function(k){return k!==key});if(on)favs.push(key);store.set('favs',favs);if(S.fav)apply();track('favorite',name)};
+    top.append(pick,h,fav,sh);card.append(top);
+    if(info.sched)info.sched=info.sched.replace(/^\s*(المواعيد|مواعيد العمل)\s*:?\s*/,'').trim();
+    var st=info.sched?openNow(info.sched):null;
+    var more=el('button','more','عرض التفاصيل ▾',{type:'button'});card.append(more);
+    panel.textContent='';
+    var row=function(l,c){var r=el('div','specialty-info');r.append(el('span','info-label',l),c);return r};
+    var waLink=function(n){return el('a','wl','💬',{href:'https://wa.me/20'+n.slice(1),target:'_blank',rel:'noopener','aria-label':'واتساب '+n})};
+    if(st!==null)panel.append(el('span','badge '+(st?'on':'off'),st?'مفتوح الآن':'مغلق الآن'));
+    if(info.spec)panel.append(row('📋 التخصص:',document.createTextNode(info.spec)));
+    if(nums.length||pt){
+      var pv=el('span'),used={},last=0,mt,re=/(?<!\d)(?:01[0125]\d{8}|0\d{9})(?!\d)/g;
+      while((mt=re.exec(pt))){var n0=mt[0];used[n0]=1;pv.append(pt.slice(last,mt.index),el('a','tl',n0,{href:'tel:'+n0,dir:'ltr'}));if(waSet.indexOf(n0)>-1)pv.append(waLink(n0));last=mt.index+n0.length}
+      pv.append(pt.slice(last));
+      nums.forEach(function(n){if(!used[n]){pv.append(' ',el('a','tl',n,{href:'tel:'+n,dir:'ltr'}));if(waSet.indexOf(n)>-1)pv.append(waLink(n))}});
+      panel.append(row('📞 التليفون:',pv));
     }
-    
-    const workingHoursText = workingHoursElement.textContent;
-    let isOnline = false;
-    
-    // تحليل أوقات العمل من النص
-    // نمط: "السبت-الخميس: 9 صباحاً - 9 مساءً"
-    // نمط: "يومياً من 3 مساءً إلى 7 مساءً"
-    // نمط: "السبت-الثلاثاء: 3 مساءً - 7 مساءً"
-    
-    const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
-    const currentDayName = dayNames[day];
-    
-    // تحقق من "يومياً" أو إذا كان اليوم الحالي مذكور
-    const worksToday = workingHoursText.includes('يومياً') || 
-                      workingHoursText.includes(currentDayName) ||
-                      (workingHoursText.includes('السبت') && workingHoursText.includes('الخميس') && day >= 6 || day <= 4) ||
-                      (workingHoursText.includes('السبت') && workingHoursText.includes('الثلاثاء') && (day === 6 || day === 0 || day === 1 || day === 2));
-    
-    if (!worksToday) {
-      indicator.classList.remove('status-online');
-      indicator.classList.add('status-offline');
-      return;
-    }
-    
-    // استخراج الساعات
-    const timePattern = /(\d+):?(\d+)?\s*(صباحاً|مساءً|ص|م)/g;
-    const times = [];
-    let match;
-    
-    while ((match = timePattern.exec(workingHoursText)) !== null) {
-      let h = parseInt(match[1]);
-      const m = match[2] ? parseInt(match[2]) : 0;
-      const period = match[3];
-      
-      if (period.includes('مساء') || period === 'م') {
-        if (h !== 12) h += 12;
-      } else if ((period.includes('صباح') || period === 'ص') && h === 12) {
-        h = 0;
-      }
-      
-      times.push(h * 60 + m);
-    }
-    
-    // التحقق من الوقت الحالي
-    if (times.length >= 2) {
-      for (let i = 0; i < times.length; i += 2) {
-        if (currentTime >= times[i] && currentTime < times[i + 1]) {
-          isOnline = true;
-          break;
-        }
-      }
-    }
-    
-    if (isOnline) {
-      indicator.classList.remove('status-offline');
-      indicator.classList.add('status-online');
-    } else {
-      indicator.classList.remove('status-online');
-      indicator.classList.add('status-offline');
-    }
+    if(info.addr)panel.append(row('📍 العنوان:',document.createTextNode(info.addr)));
+    var brs=(info.addr||'').split(/\n+|\s*\|\s*/).map(function(x){return x.trim()}).filter(Boolean);
+    var mapQ=function(b){var t=b.replace(/\s+/g,' '),m=t.search(/(^|\s)(أمام|امام|بجوار|بجانب|جوار|خلف|مقابل|اعلى|أعلى|فوق|تحت|بالقرب|قرب|ناصية|ناصيه|عند|الدور|دور)(\s|$)/);if(m>6)t=t.slice(0,m);return t.replace(/[\s\-–:]+$/,'')};
+    var mUrl=function(q){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q)};
+    brs.forEach(function(b){var lbl=brs.length>1?'📍 '+b.split(/\s*[-–]\s*/)[0].slice(0,18):'📍 فتح الموقع على الخريطة';var mb=el('a','btn map',lbl,{href:mUrl(mapQ(b)),target:'_blank',rel:'noopener'});mb.onclick=function(){track('map',name)};panel.append(mb)});
+    if(brs.length){var nm=name.split(/\s+(?=(?:أ\.د|د)[\.:\s])/)[0],city=brs[0].split(/[\s\-–]+/)[0]||'';panel.append(el('a','btn map2','🔎 بحث باسم الطبيب في الخرائط',{href:mUrl(nm+' '+city),target:'_blank',rel:'noopener'}))}
+    panel.append(row('🕐 المواعيد:',document.createTextNode(info.sched||'غير مدخلة، يُفضّل الاتصال للتأكيد')));
+    card.append(panel);
+    var tog=function(){if(document.body.classList.contains('tiles')){openTile(name,panel);track('view_details',name);return}var o=card.classList.toggle('open');nb.setAttribute('aria-expanded',o);more.textContent=o?'إخفاء التفاصيل ▴':'عرض التفاصيل ▾';if(o)track('view_details',name)};
+    nb.onclick=more.onclick=tog;
+    pick.onclick=function(){var on=pick.getAttribute('aria-pressed')!=='true';pick.setAttribute('aria-pressed',on);card.classList.toggle('picked',on);updSel()};
+    var d={card:card,sec:String(si),name:name,spec:info.spec||'',phone:info.phone||'',addr:info.addr||'',sched:info.sched||'',wa:!!wa,
+      hay:norm([name,info.spec,info.addr,info.phone,nums.join(' '),clean].join(' ')),addrN:norm(info.addr),key:key,nums:nums.slice(),mapOk:brs.length>0,idx:docs.length,grid:card.parentNode};
+    docs.push(d);
+    sh.onclick=function(){send([d],'🏥 *'+name+'*\n'+fmt(d)+'\n\n📱 دليل أطباء المنصورة',name);track('share_doctor',name)};
   });
-}
-
-// إضافة دوائر الحالة
-function addStatusIndicators() {
-  updateOnlineStatus();
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  addStatusIndicators();
-  setInterval(updateOnlineStatus, 60000);
-  updateSelectedCount();
+  title.append(el('small','',sec.querySelectorAll('.doctor-card').length+' طبيب'));
 });
-
-// مصفوفة الأطباء المحددين
-let selectedDoctors = [];
-
-// دالة تتبع النقرات على الأطباء
-function trackDoctorClick(doctorName, action) {
-  if (typeof gtag !== 'undefined') {
-    gtag('event', action, {
-      'event_category': 'Doctor Interaction',
-      'event_label': doctorName,
-      'value': 1
-    });
-  }
+function openTile(name,panel){var dlg=$('#tdlg');dlg.textContent='';dlg.append(el('h2','',name));dlg.append(panel.cloneNode(true));var f=el('form','',null,{method:'dialog'});f.append(el('button','link','إغلاق',{type:'submit'}));dlg.append(f);if(dlg.showModal)dlg.showModal()}
+function applyView(){var t=S.view==='tiles';if(t)$$('.doctor-card.open .more').forEach(function(b){b.click()});document.body.classList.toggle('tiles',t);$('#vList').setAttribute('aria-pressed',!t);$('#vTiles').setAttribute('aria-pressed',t)}
+function fmt(d){return [['📋 التخصص',d.spec],['📞 التليفون',d.phone],['📍 العنوان',d.addr],['🕐 المواعيد',d.sched]].filter(function(x){return x[1]}).map(function(x){return x[0]+': '+x[1]}).join('\n')}
+var toastT;function toast(t){var e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){e.classList.remove('show')},2200)}
+function send(list,text,title){
+  if(navigator.share){navigator.share({title:title,text:text}).catch(function(){})}
+  else if(navigator.clipboard){navigator.clipboard.writeText(text).then(function(){toast('تم نسخ بيانات '+list.length+' طبيب')},function(){toast('تعذّر النسخ')})}
+  else toast('المشاركة غير مدعومة في هذا المتصفح');
 }
-
-// دالة تبديل التحديد
-function toggleCheckbox(checkbox) {
-  checkbox.classList.toggle('checked');
-  updateSelectedCount();
-}
-
-// تحديث عداد المحددين
-function updateSelectedCount() {
-  const checkedBoxes = document.querySelectorAll('.doctor-checkbox.checked');
-  const count = checkedBoxes.length;
-  const button = document.getElementById('shareSelectedButton');
-  const countSpan = document.getElementById('selectedCount');
-  
-  countSpan.textContent = count;
-  
-  if (count > 0) {
-    button.classList.add('active');
-  } else {
-    button.classList.remove('active');
-  }
-}
-
-// مشاركة طبيب واحد
-function shareDoctor(shareIcon) {
-  const card = shareIcon.closest('.doctor-card');
-  const nameBtn = card.querySelector('.doctor-name-btn');
-  const nameText = nameBtn.querySelector('.doctor-name-text').textContent;
-  const specialty = card.querySelector('.doctor-specialty');
-  
-  // استخراج المعلومات
-  const specialtyInfo = specialty.querySelectorAll('.specialty-info');
-  let doctorInfo = `🏥 *${nameText}*\n\n`;
-  
-  specialtyInfo.forEach(info => {
-    doctorInfo += info.textContent.trim() + '\n';
+function updSel(){var n=docs.filter(function(d){return d.card.classList.contains('picked')}).length;$('#selectedCount').textContent=n;$('#shareSelectedButton').classList.toggle('active',n>0)}
+$('#shareSelectedButton').onclick=function(){
+  var l=docs.filter(function(d){return d.card.classList.contains('picked')});if(!l.length)return;
+  var t='🏥 *دليل أطباء المنصورة*\n\n';l.forEach(function(d,i){t+=(i+1)+'. *'+d.name+'*\n'+fmt(d).replace(/^/gm,'   ')+'\n\n'});
+  send(l,t+'📱 دليل أطباء المنصورة','دليل أطباء المنصورة');track('share_multiple',l.length+' doctors');
+};
+var S={q:'',sec:'all',loc:'all',wa:false,fav:false,sort:'def',view:'list'};
+function apply(){
+  var toks=norm(S.q).split(' ').filter(Boolean),loc=S.loc==='all'?'':norm(S.loc),n=0;
+  docs.forEach(function(d){
+    var ok=(S.sec==='all'||d.sec===S.sec)&&toks.every(function(t){return d.hay.indexOf(t)>-1})&&(!loc||d.addrN.indexOf(loc)>-1)&&(!S.wa||d.wa)&&(!S.fav||favs.indexOf(d.key)>-1);
+    d.card.hidden=!ok;if(ok)n++;
   });
-  
-  doctorInfo += '\n📱 دليل أطباء المنصورة';
-  
-  // تتبع المشاركة
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'share_doctor', {
-      'event_category': 'Social',
-      'event_label': nameText,
-      'method': 'single'
-    });
-  }
-  
-  // المشاركة
-  if (navigator.share) {
-    navigator.share({
-      title: `د. ${nameText}`,
-      text: doctorInfo
-    }).catch(err => console.log('خطأ في المشاركة:', err));
-  } else {
-    // نسخ للحافظة
-    navigator.clipboard.writeText(doctorInfo).then(() => {
-      alert('✅ تم نسخ معلومات الطبيب!');
-    });
-  }
+  $$('.specialty-section').forEach(function(s){s.hidden=!s.querySelector('.doctor-card:not([hidden])')});
+  $('#resultCount').textContent='عرض '+n+' من '+docs.length+' طبيب';
+  $('#resetBtn').hidden=!(S.q||S.sec!=='all'||S.loc!=='all'||S.wa||S.fav);
+  store.set('state',S);
+  $('#empty').hidden=n>0;
 }
-
-// مشاركة المحددين
-function shareSelected() {
-  const checkedBoxes = document.querySelectorAll('.doctor-checkbox.checked');
-  
-  if (checkedBoxes.length === 0) {
-    alert('⚠️ الرجاء تحديد طبيب واحد على الأقل');
-    return;
-  }
-  
-  // تتبع المشاركة الجماعية
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'share_multiple', {
-      'event_category': 'Social',
-      'event_label': `${checkedBoxes.length} doctors`,
-      'value': checkedBoxes.length
-    });
-  }
-  
-  let allDoctorsInfo = '🏥 *دليل أطباء المنصورة*\n\n';
-  
-  checkedBoxes.forEach((checkbox, index) => {
-    const card = checkbox.closest('.doctor-card');
-    const nameBtn = card.querySelector('.doctor-name-btn');
-    const nameText = nameBtn.querySelector('.doctor-name-text').textContent;
-    const specialty = card.querySelector('.doctor-specialty');
-    const specialtyInfo = specialty.querySelectorAll('.specialty-info');
-    
-    allDoctorsInfo += `${index + 1}. *${nameText}*\n`;
-    
-    specialtyInfo.forEach(info => {
-      allDoctorsInfo += '   ' + info.textContent.trim() + '\n';
-    });
-    
-    allDoctorsInfo += '\n';
+var chips=$('#chips');
+function chip(label,val,count){
+  var b=el('button','chip'+(val==='all'?' active':''),label,{type:'button'});b.dataset.v=val;b.append(el('small','',String(count)));
+  b.onclick=function(){
+    S.sec=val;$$('.chip').forEach(function(c){c.classList.toggle('active',c===b)});apply();
+    if(val==='all')window.scrollTo({top:0});else{var f=$$('.specialty-section').filter(function(s){return !s.hidden})[0];if(f)f.scrollIntoView({block:'start'})}
+    track('filter_specialty',label);
+  };chips.append(b);
+}
+chip('الكل','all',docs.length);
+$$('.specialty-section').forEach(function(s){chip(s.dataset.label,s.dataset.sec,s.querySelectorAll('.doctor-card').length)});
+$('#searchInput').addEventListener('input',function(e){S.q=e.target.value;apply()});
+$('#locationFilter').addEventListener('change',function(e){S.loc=e.target.value;apply()});
+function sortAll(){var az=S.sort==='az',k=function(d){return norm(d.name).replace(/^(ا\.?\s*)?د\.?\s*/,'')};
+  $$('.doctors-grid').forEach(function(g){var l=docs.filter(function(d){return d.grid===g});l.sort(function(a,b){return az?k(a).localeCompare(k(b),'ar'):a.idx-b.idx});l.forEach(function(d){g.append(d.card)})})}
+$('#vList').onclick=function(){S.view='list';applyView();apply()};
+$('#vTiles').onclick=function(){S.view='tiles';applyView();apply()};
+window.addEventListener('beforeprint',function(){document.body.classList.remove('tiles')});window.addEventListener('afterprint',applyView);
+$('#sortSel').addEventListener('change',function(e){S.sort=e.target.value;sortAll();apply()});
+$('#favToggle').onclick=function(){S.fav=!S.fav;this.setAttribute('aria-pressed',S.fav);apply()};
+$('#waToggle').onclick=function(){S.wa=!S.wa;this.setAttribute('aria-pressed',S.wa);apply()};
+function syncUI(){$('#searchInput').value=S.q;$('#locationFilter').value=S.loc;$('#sortSel').value=S.sort;$('#waToggle').setAttribute('aria-pressed',S.wa);$('#favToggle').setAttribute('aria-pressed',S.fav);$$('.chip').forEach(function(c){c.classList.toggle('active',c.dataset.v===S.sec)})}
+function reset(){S={q:'',sec:'all',loc:'all',wa:false,fav:false,sort:'def',view:S.view};sortAll();syncUI();apply()}
+$('#resetBtn').onclick=$('#emptyReset').onclick=reset;
+$('#printBtn').onclick=function(){window.print()};
+var uniq=new Set(docs.map(function(d){return d.name})).size;
+$('#statDoctors').textContent=uniq;
+$('#statSections').textContent=$$('.specialty-section').length;
+$('#statWa').textContent=docs.filter(function(d){return d.wa}).length;
+var v=($('meta[name=version]').content||'').split('.');
+if(v.length>=3)$('#updInfo').textContent='الإصدار '+v.join('.');
+var th=store.get('theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+function setTheme(t){document.documentElement.dataset.theme=t;$('#themeBtn').textContent=t==='dark'?'☀️ نهاري':'🌙 ليلي';var m=$('meta[name=theme-color]');if(m)m.content=t==='dark'?'#0a1a3d':'#0a4f53'}
+setTheme(th);$('#themeBtn').onclick=function(){th=th==='dark'?'light':'dark';store.set('theme',th);setTheme(th)};
+var tt=$('#toTop');window.addEventListener('scroll',function(){tt.classList.toggle('show',window.scrollY>600)},{passive:true});tt.onclick=function(){window.scrollTo({top:0})};
+$('#chkBtn').onclick=function(){
+  var G=['بدون رقم تليفون','رقم بصيغة غير معتادة','بدون عنوان','رابط الخريطة ناقص أو فارغ','اسم مكرر'],g={},cnt={},dlg=$('#chk');
+  G.forEach(function(k){g[k]=[]});docs.forEach(function(d){cnt[d.name]=(cnt[d.name]||0)+1});
+  docs.forEach(function(d){
+    if(!d.nums.length)g[G[0]].push(d.name);
+    var bad=d.nums.filter(function(n){return !isMob(n)&&!/^\d{7,10}$/.test(n)});if(bad.length)g[G[1]].push(d.name+': '+bad.join('، '));
+    if(!d.addr)g[G[2]].push(d.name);else if(!d.mapOk)g[G[3]].push(d.name);
+    if(cnt[d.name]>1&&g[G[4]].indexOf(d.name)<0)g[G[4]].push(d.name);
   });
-  
-  allDoctorsInfo += '📱 دليل أطباء المنصورة';
-  
-  // المشاركة
-  if (navigator.share) {
-    navigator.share({
-      title: 'دليل أطباء المنصورة',
-      text: allDoctorsInfo
-    }).catch(err => console.log('خطأ في المشاركة:', err));
-  } else {
-    // نسخ للحافظة
-    navigator.clipboard.writeText(allDoctorsInfo).then(() => {
-      alert(`✅ تم نسخ معلومات ${checkedBoxes.length} طبيب!`);
-    });
-  }
-}
-
-// دالة لعرض/إخفاء جميع التفاصيل
-let allDetailsShown = false;
-
-function toggleAllDetails() {
-  const button = document.getElementById('pdfButton');
-  const allCards = document.querySelectorAll('.doctor-card');
-  
-  allDetailsShown = !allDetailsShown;
-  
-  allCards.forEach(card => {
-    const btn = card.querySelector('.doctor-name-btn');
-    const specialty = card.querySelector('.doctor-specialty');
-    
-    if (allDetailsShown) {
-      // إظهار الكل
-      specialty.classList.add('show');
-      btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-      card.classList.add('details-shown');
-    } else {
-      // إخفاء الكل
-      specialty.classList.remove('show');
-      btn.style.background = 'linear-gradient(135deg, #0d7377 0%, #14b8a6 100%)';
-      card.classList.remove('details-shown');
-    }
-  });
-  
-  // تحديث نص الزر
-  if (allDetailsShown) {
-    button.innerHTML = '🖨️ طباعة PDF';
-    button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-    // تمرير للأعلى
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else {
-    button.innerHTML = '📄 عرض الكل للطباعة';
-    button.style.background = 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
-  }
-  
-  // إذا كانت التفاصيل ظاهرة، جعل الزر يطبع
-  if (allDetailsShown) {
-    button.onclick = function() {
-      window.print();
-      return false;
-    };
-  } else {
-    button.onclick = toggleAllDetails;
-  }
-}
-
-let activeSpecialty="all";
-
-function setSpecialty(val,btn){
- activeSpecialty=val.toLowerCase();
- document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- 
- // إخفاء/إظهار أقسام التخصصات
- if(activeSpecialty === "all") {
-   // إظهار جميع الأقسام
-   document.querySelectorAll(".specialty-section").forEach(section => {
-     section.style.display = "block";
-   });
-   window.scrollTo({ top: 0, behavior: 'smooth' });
- } else {
-   // إخفاء جميع الأقسام أولاً
-   document.querySelectorAll(".specialty-section").forEach(section => {
-     section.style.display = "none";
-   });
-   
-   // إظهار القسم المطلوب فقط
-   let targetSection = null;
-   document.querySelectorAll(".specialty-section").forEach(section => {
-     const title = section.querySelector(".specialty-title").innerText.toLowerCase();
-     if(title.includes(activeSpecialty)) {
-       section.style.display = "block";
-       if (!targetSection) targetSection = section;
-     }
-   });
-   
-   // التمرير للقسم المحدد
-   if (targetSection) {
-     setTimeout(() => {
-       targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-       window.scrollBy(0, -100);
-     }, 100);
-   }
-   
-   // تتبع في Analytics
-   if (typeof gtag !== 'undefined') {
-     gtag('event', 'filter_specialty', {
-       'event_category': 'Navigation',
-       'event_label': activeSpecialty
-     });
-   }
- }
- 
- applyFilters();
-}
-
-function applyFilters(){
- const text=document.getElementById("searchInput").value.toLowerCase();
- const loc=document.getElementById("locationFilter").value.toLowerCase();
-
- document.querySelectorAll(".doctor-card").forEach(card=>{
-  const content=card.innerText.toLowerCase();
-  const okText=content.includes(text);
-  const okSpec=activeSpecialty==="all"||content.includes(activeSpecialty);
-  const okLoc=loc==="all"||content.includes(loc);
-  card.style.display=(okText&&okSpec&&okLoc)?"flex":"none";
- });
-}
-
-function resetFilters(){
- document.getElementById("searchInput").value="";
- document.getElementById("locationFilter").value="all";
- activeSpecialty="all";
- document.querySelectorAll(".filter-btn").forEach(b=>b.classList.remove("active"));
- document.querySelector(".filter-btn").classList.add("active");
- 
- // إظهار جميع الأقسام والتمرير للأعلى
- document.querySelectorAll(".specialty-section").forEach(section => {
-   section.style.display = "block";
- });
- window.scrollTo({ top: 0, behavior: 'smooth' });
- 
- applyFilters();
-}
-
+  dlg.textContent='';dlg.append(el('h2','','فحص البيانات'));var any=false;
+  G.forEach(function(k){if(!g[k].length)return;any=true;dlg.append(el('h3','',k+' ('+g[k].length+')'));var ul=el('ul');g[k].forEach(function(x){ul.append(el('li','',x))});dlg.append(ul)});
+  if(!any)dlg.append(el('p','','لا توجد مشاكل.'));
+  var f=el('form','',null,{method:'dialog'});f.append(el('button','link','إغلاق',{type:'submit'}));dlg.append(f);
+  if(dlg.showModal)dlg.showModal();
+};
+var st=store.get('state');
+if(st&&typeof st==='object'){S.q=String(st.q||'');S.loc=st.loc||'all';S.wa=!!st.wa;S.fav=!!st.fav;S.sort=st.sort==='az'?'az':'def';S.view=st.view==='tiles'?'tiles':'list';S.sec=$$('.chip').some(function(c){return c.dataset.v===st.sec})?st.sec:'all';sortAll();syncUI()}
+applyView();
+var tb=$('.toolbar');function setH(){document.documentElement.style.setProperty('--tbh',tb.offsetHeight+'px')}
+setH();if(window.ResizeObserver)new ResizeObserver(setH).observe(tb);
+apply();
+})();
 </script>
+<div id="toast" role="status"></div>
 </body>
 </html>
