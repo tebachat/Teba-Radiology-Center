@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob: data:; worker-src 'self' blob:; frame-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob: data: http://localhost:* http://127.0.0.1:* http://*:8042; worker-src 'self' blob:; frame-src 'self' blob: data:; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>DICOM Touch | Sa3d Abdo</title>
 <meta name="description" content="أداة مجانية لتحويل ملفات الأشعة التشخيصية DICOM إلى PDF أو فيديو، معالجة كاملة داخل المتصفح بدون رفع أي بيانات لأي سيرفر.">
@@ -2228,6 +2228,7 @@
       <div class="act-alt">
         <button type="button" onclick="document.getElementById('folder-input').click()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span>فولدر كامل</span></button>
         <button type="button" onclick="document.getElementById('camera-input').click()"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-2.500h6L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.500"/></svg><span>كاميرا</span></button>
+        <button type="button" onclick="pacsOpen()">📥 من الباكس</button>
       </div>
     </div>
     <div class="act-card conv">
@@ -3639,6 +3640,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 // ===================== APP VERSION =====================
 // يُحدَّث هذا الرقم تلقائيًا مع كل تعديل/إضافة جديدة على التطبيق.
 // CHANGELOG (أحدث تعديل في الأعلى):
+//   6.1.0 — زرار «من الباكس»: تحميل دراسات من Orthanc مباشرة (REST) وفتحها في العارض
 //   6.0.6 — عدّاد التحويل بيعرض المحدد بس، وبانر الرئيسية مضغوط (من غير عنوان الترحيب)
 //   5.4.0 — لمستين = تكبير 2.5× عند مكان اللمس (ولمستين تانيين = رجوع) | اهتزاز خفيف في العارض (آخر/أول صورة، إنهاء قياس، التكبير) | آخر إعدادات التحويل بتتحفظ وتتطبّق تلقائيًا لكل نوع فحص (CT / MRI / X-Ray ...)
 //   5.3.0 — Tec: مكتبة بروتوكولات محفوظة على الجهاز (حفظ/عرض/كـ A أو B/حذف/استيراد)، مشاركة التقرير والمقارنة كنص، ومؤشرات تأثير جديدة (SAR / Phase steps) | تحديث شكل الأزرار والقائمة العلوية وفتحها التلقائي 15 ثانية
@@ -3738,7 +3740,7 @@ const cancelBtn  = document.getElementById('cancel-btn');
 //   1.2.0 — تحويل حسابات الـ Windowing (السطوع/التباين/الـ HU) لتعمل بالتوازي في Web Workers بدل الـ main thread — رفع/تصدير الدفعات الكبيرة بقى أسرع وواجهة المستخدم متجمدش
 //   1.1.0 — إضافة: إلغاء التحويل أثناء التنفيذ + حفظ الإعدادات المفضلة محليًا (localStorage) + رقم إصدار تلقائي
 //   1.0.0 — الإصدار الأساسي (رفع/سحب DICOM، تحويل PDF/فيديو، معاينة، Windowing، سطوع/تباين)
-const APP_VERSION = '6.0.6';
+const APP_VERSION = '6.1.0';
 document.getElementById('app-version').textContent = APP_VERSION;
 
 // ===================== CANCEL CONVERSION =====================
@@ -11403,6 +11405,75 @@ document.addEventListener('keydown', e => {
   setInterval(() => { const s = sig(); if(s !== last) { last = s; try { render(); } catch(_) {} } }, 700);
 })();
 
+
+// ===== PACS (Orthanc) =====
+function pacsOpen(){
+  const m=document.getElementById('pacs-modal');
+  try{ document.getElementById('pacs-url').value=localStorage.getItem('pacsUrl')||'http://localhost:8042'; document.getElementById('pacs-user').value=localStorage.getItem('pacsUser')||'admin'; }catch(_){ document.getElementById('pacs-url').value='http://localhost:8042'; document.getElementById('pacs-user').value='admin'; }
+  m.hidden=false; m.style.display='flex';
+}
+function pacsClose(){ const m=document.getElementById('pacs-modal'); m.hidden=true; m.style.display='none'; }
+function pacsCfg(){
+  const base=document.getElementById('pacs-url').value.trim().replace(/\/+$/,'')||'http://localhost:8042';
+  const u=document.getElementById('pacs-user').value.trim(), pw=document.getElementById('pacs-pass').value;
+  try{ localStorage.setItem('pacsUrl',base); localStorage.setItem('pacsUser',u); }catch(_){}
+  const h={}; if(u||pw) h.Authorization='Basic '+btoa(unescape(encodeURIComponent(u+':'+pw)));
+  return {base,h};
+}
+function pacsErr(e){
+  if(e&&e.status===401) return 'اسم المستخدم أو الباسورد غلط';
+  if(e&&e.status) return 'خطأ من Orthanc: '+e.status;
+  return 'تعذّر الاتصال — اتأكد إن Orthanc شغال، وإضافة Access-Control-Allow-Origin في orthanc.json، وإن التطبيق مفتوح من نفس الجهاز (مش https)';
+}
+async function pacsList(){
+  const {base,h}=pacsCfg(), msg=document.getElementById('pacs-msg'), box=document.getElementById('pacs-list');
+  msg.textContent='⏳ جاري الاتصال…'; box.innerHTML='';
+  try{
+    const r=await fetch(base+'/studies?expand',{headers:h});
+    if(!r.ok) throw {status:r.status};
+    let st=await r.json();
+    st.sort((a,b)=>String(b.MainDicomTags&&b.MainDicomTags.StudyDate||'').localeCompare(String(a.MainDicomTags&&a.MainDicomTags.StudyDate||'')));
+    st=st.slice(0,50);
+    msg.textContent=st.length?('آخر '+st.length+' دراسة'):'مفيش دراسات في الباكس';
+    st.forEach(s=>{
+      const t=s.MainDicomTags||{}, p=s.PatientMainDicomTags||{};
+      const d=String(t.StudyDate||'').replace(/^(\d{4})(\d{2})(\d{2})$/,'$1-$2-$3');
+      const b=document.createElement('button'); b.type='button';
+      b.style.cssText='text-align:right;padding:10px;border-radius:10px;border:1px solid #30363d;background:#0d1117;color:inherit;cursor:pointer';
+      b.innerHTML='<b>'+escHtml(String(p.PatientName||'بدون اسم').replace(/\^/g,' '))+'</b><br><small style="opacity:.75">'+escHtml(d+' · '+(t.StudyDescription||'')+' · '+(s.Series||[]).length+' سيريز')+'</small>';
+      b.onclick=()=>pacsLoad(s.ID,String(p.PatientName||'study').replace(/[^\w\u0600-\u06FF-]+/g,'_'));
+      box.appendChild(b);
+    });
+  }catch(e){ msg.textContent='⚠️ '+pacsErr(e); }
+}
+async function pacsLoad(id,name){
+  const {base,h}=pacsCfg(), msg=document.getElementById('pacs-msg');
+  msg.textContent='⏳ جاري تحميل الدراسة…';
+  try{
+    const r=await fetch(base+'/studies/'+id+'/archive',{headers:h});
+    if(!r.ok) throw {status:r.status};
+    const blob=await r.blob();
+    const prev=files.length;
+    pacsClose();
+    addFileGroups([{key:'',files:[new File([blob],(name||id)+'.zip',{type:'application/zip'})]}]);
+    for(let i=0;i<120&&files.length<=prev;i++) await new Promise(res=>setTimeout(res,500));
+    if(files.length>prev){ try{ await openViewer(files[prev].id); }catch(_){} }
+  }catch(e){ msg.textContent='⚠️ '+pacsErr(e); }
+}
 </script>
+
+<div id="pacs-modal" hidden style="position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:12px" onclick="if(event.target===this)pacsClose()">
+  <div dir="rtl" style="background:#161b22;color:#e6edf3;border:1px solid #30363d;border-radius:14px;width:min(560px,100%);max-height:88vh;display:flex;flex-direction:column;padding:16px;gap:10px;font-family:inherit">
+    <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:17px">📥 تحميل من الباكس (Orthanc)</b><button type="button" onclick="pacsClose()" style="background:none;border:0;color:inherit;font-size:20px;cursor:pointer">✕</button></div>
+    <input id="pacs-url" dir="ltr" placeholder="http://localhost:8042" style="padding:9px;border-radius:8px;border:1px solid #30363d;background:#0d1117;color:inherit">
+    <div style="display:flex;gap:8px">
+      <input id="pacs-user" dir="ltr" placeholder="user" style="flex:1;min-width:0;padding:9px;border-radius:8px;border:1px solid #30363d;background:#0d1117;color:inherit">
+      <input id="pacs-pass" type="password" dir="ltr" placeholder="password" style="flex:1;min-width:0;padding:9px;border-radius:8px;border:1px solid #30363d;background:#0d1117;color:inherit">
+    </div>
+    <button type="button" id="pacs-go" onclick="pacsList()" style="padding:10px;border-radius:8px;border:0;background:#238636;color:#fff;font-weight:700;cursor:pointer">اتصال / تحديث</button>
+    <div id="pacs-msg" style="font-size:13px;opacity:.8"></div>
+    <div id="pacs-list" style="overflow:auto;display:flex;flex-direction:column;gap:6px"></div>
+  </div>
+</div>
 </body>
 </html>
