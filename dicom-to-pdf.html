@@ -9917,7 +9917,7 @@ if('serviceWorker' in navigator && location.protocol.startsWith('http')) {
   };
   navigator.serviceWorker.addEventListener('controllerchange', () => { if(hadController) showUpdateBanner(); });
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').then(reg => {
+    navigator.serviceWorker.register('dicom-sw.js').then(reg => {
       if(reg.waiting && navigator.serviceWorker.controller) showUpdateBanner();
       reg.addEventListener('updatefound', () => {
         const nw = reg.installing;
