@@ -512,10 +512,17 @@ body[data-sec=home].hm-list .tile{padding:9px 12px!important}
 
 .sico{width:1.15em;height:1.15em;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em}
 .lkic{font-size:11px;opacity:.75}
+
+.edtabs{display:flex;gap:6px;margin:0 0 12px;overflow-x:auto}
+.edtabs button{flex:1;white-space:nowrap;padding:8px 10px;font-size:13px}
+.edtabs button.on{background:var(--brand,#0e7490);color:#fff;border-color:transparent}
+#edForm[data-t="g"] [data-f]:not([data-f="g"]),#edForm[data-t="n"] [data-f]:not([data-f="n"]),#edForm[data-t="d"] [data-f]:not([data-f="d"]),#edForm[data-t="h"] [data-f]:not([data-f="h"]){display:none}
+#edHist .hrow{padding:8px 2px;border-bottom:1px solid var(--line);font-size:13px}
+#edHist small{color:var(--muted)}
 </style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.31:7</small></div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.31:10</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -560,19 +567,21 @@ body[data-sec=home].hm-list .tile{padding:9px 12px!important}
 <!-- Add / Edit -->
 <div class="modal" id="mEdit"><div class="box">
   <h2 id="editTitle">إضافة جهاز</h2>
-  <div class="form">
-    <div><label>اسم الجهاز</label><input id="f_name"></div>
-    <div><label>عنوان IP *</label><input id="f_ip" dir="ltr" placeholder="192.168.1.10"></div>
-    <div><label>النوع</label><input id="f_type" list="typeList" placeholder="كمبيوتر / طابعة / MRI ..."></div>
-    <div><label>المكان / القسم</label><input id="f_location"></div>
-    <div><label>Port</label><input id="f_port" dir="ltr"></div>
-    <div><label>AE Title</label><input id="f_ae" dir="ltr"></div>
-    <div class="full"><label>Host Name</label><input id="f_host" dir="ltr"></div>
-    <div class="full"><label>MAC</label><input id="f_mac" dir="ltr" placeholder="AA:BB:CC:DD:EE:FF"></div>
-    <div><label>Subnet Mask</label><input id="f_mask" dir="ltr" placeholder="255.255.255.0"></div>
-    <div><label>Gateway</label><input id="f_gw" dir="ltr"></div>
-    <div><label>VLAN</label><input id="f_vlan" dir="ltr"></div>
-    <div class="full"><label>ملاحظات</label><textarea id="f_notes" rows="2"></textarea></div>
+  <div class="edtabs" id="edTabs"><button type="button" data-et="g" class="on">📋 عام</button><button type="button" data-et="n">🌐 الشبكة</button><button type="button" data-et="d">🩻 DICOM</button><button type="button" data-et="h" id="edTabH">🕘 السجل</button></div>
+  <div class="form" id="edForm" data-t="g">
+    <div data-f="g"><label>اسم الجهاز</label><input id="f_name"></div>
+    <div data-f="n"><label>عنوان IP *</label><input id="f_ip" dir="ltr" placeholder="192.168.1.10"></div>
+    <div data-f="g"><label>النوع</label><input id="f_type" list="typeList" placeholder="كمبيوتر / طابعة / MRI ..."></div>
+    <div data-f="g"><label>المكان / القسم</label><input id="f_location"></div>
+    <div data-f="d"><label>Port</label><input id="f_port" dir="ltr"></div>
+    <div data-f="d"><label>AE Title</label><input id="f_ae" dir="ltr"></div>
+    <div class="full" data-f="d"><label>Host Name</label><input id="f_host" dir="ltr"></div>
+    <div class="full" data-f="n"><label>MAC</label><input id="f_mac" dir="ltr" placeholder="AA:BB:CC:DD:EE:FF"></div>
+    <div data-f="n"><label>Subnet Mask</label><input id="f_mask" dir="ltr" placeholder="255.255.255.0"></div>
+    <div data-f="n"><label>Gateway</label><input id="f_gw" dir="ltr"></div>
+    <div data-f="n"><label>VLAN</label><input id="f_vlan" dir="ltr"></div>
+    <div class="full" data-f="g"><label>ملاحظات</label><textarea id="f_notes" rows="2"></textarea></div>
+    <div class="full" data-f="h" id="edHist"></div>
   </div>
   <datalist id="typeList"></datalist>
   <div class="actions">
@@ -617,12 +626,12 @@ body[data-sec=home].hm-list .tile{padding:9px 12px!important}
 <div class="modal" id="mInfo"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2 id="infoT"></h2><div id="infoB"></div><div id="infoA" style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px"></div></div></div>
 <div class="modal" id="mTools"><div class="box" style="max-width:420px;max-height:90vh;overflow:auto"><h2>⚙️ ضبط</h2>
   <div class="tg" id="tgSec"><h4>بيانات القسم</h4><button id="btnImport">📥 استيراد</button><button id="btnXlsx">📤 Excel</button><button id="btnCsv">CSV</button><button id="btnPrint">🖨️ طباعة</button><button id="btnShare" style="grid-column:1/-1">📲 مشاركة المعروض PDF على واتساب</button></div>
-  <div class="tg" id="tgBackup"><h4>النسخ الاحتياطي</h4><button id="btnBackup">💾 نسخة احتياطية</button><button id="btnRestore">♻️ استرجاع</button><button id="btnReset" style="grid-column:1/-1">↺ البيانات الافتراضية</button></div>
+  <div class="tg" id="tgBackup"><h4>النسخ الاحتياطي</h4><button id="btnBackup">💾 نسخة احتياطية</button><button id="btnRestore">♻️ استرجاع</button><button id="btnReset" style="grid-column:1/-1">🗑 مسح كل البيانات</button></div>
   <div class="tg tgAdmin"><h4>الأدمن</h4><button id="btnAcc" style="grid-column:1/-1">🔑 الحسابات والصلاحيات</button><button id="btnCloudBk" style="grid-column:1/-1">☁️ نسخ Firebase الاحتياطية</button></div>
   <div class="actions"><button id="tClose">إغلاق</button></div>
 </div></div>
 <div class="modal" id="mGuide"><div class="box" style="max-width:440px;max-height:90vh;overflow:auto"><h2>📖 دليل الاستخدام</h2>
-  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.10.31:7</span></p>
+  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.10.31:10</span></p>
 <details class="rtg" open><summary>✨ مميزات البرنامج</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تنظيم عناوين الـ IP لأجهزة المركز في أقسام: طابعات الأجهزة، الأجهزة، الورك ستيشن، الشبكة والسيرفرات.</li><li>أقسام للأدمن بس: <b>📡 الراوتر</b> (والأكسس بوينت)، <b>📹 كاميرات Dahua</b>، <b>🔑 Device Login</b>، <b>📧 حسابات وإيميلات</b>.</li><li>كشف تلقائي لمشاكل الـ IP (غير صالح أو مكرر) وعرض الشبكات (Subnets).</li><li>بحث شامل وفلاتر، وأكتر من طريقة عرض.</li><li>فحص الاتصال وDICOM وملاحظات الصيانة (حسب الصلاحية).</li><li>طباعة وتصدير Excel / CSV ومشاركة PDF على واتساب.</li><li>نسخ احتياطي واسترجاع، وسجل بالتغييرات.</li><li>مزامنة بين الأجهزة.</li><li>حسابات عرض فقط بصلاحيات إنت اللي بتحددها.</li><li>خزنة مشفّرة لليوزرات والباسوردات.</li><li>علامة مائية وحماية من لقطات الشاشة للحسابات غير الأدمن، وتطبيق أندرويد بحماية FLAG_SECURE.</li></ul></div></details>
 <details class="rtg"><summary>🧭 الاستخدام اليومي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>من الرئيسية اختار القسم.</li><li>دوس <b>➕ إضافة</b> لإضافة جهاز: الاسم، IP، النوع، المكان، Port، AE Title، Host، MAC وغيرها.</li><li>استخدم 🔍 البحث (بالاسم أو IP أو المكان أو MAC) والفلاتر.</li><li>التبويبات: <b>📋 الجدول</b> و<b>🧾 السجل</b> (مين عدّل إيه) و<b>🧭 الشبكات</b>.</li><li>أزرار كارت الجهاز (فحص الاتصال / DICOM / ملاحظة الصيانة / تعديل / حذف) بتظهر حسب صلاحياتك.</li><li><b>🎨</b> للمظهر وطريقة عرض الأقسام والأجهزة.</li><li><b>🖨️</b> للطباعة: جوه القسم بتطبع القسم، وفي الرئيسية بتطبع كل الأقسام.</li><li><b>⚙️ ضبط</b>: استيراد، Excel / CSV، مشاركة PDF، نسخ احتياطي واسترجاع، والحسابات.</li></ol></div></details>
 <details class="rtg"><summary>📡 الراوتر والأكسس بوينت</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>📚 تابات الراوتر</b>: اختار الموديل وادوس <b>ℹ️ معلومات</b> على أي تاب تعرف وظيفته.</li><li>بيانات الراوتر في مجموعات تتطوي: عام، الشبكة، دخول الراوتر، PPPoE، الواي فاي، ملاحظات. <b>👁</b> إظهار / إخفاء، <b>📋</b> نسخ، <b>💾</b> حفظ.</li><li><b>📦 ملف Backup</b>: ملف واحد لكل راوتر (حد أقصى 450 KB) بيتشفّر ويتزامن.</li><li><b>📶 الأكسس بوينت</b>: ➕ جديد، وزرار <b>📱 QR الواي فاي</b> بيفتح كود تمسحه بالموبايل للاتصال، و<b>⤵️ واي فاي الراوتر</b> بينسخ بيانات الشبكة.</li></ul></div></details>
@@ -630,7 +639,7 @@ body[data-sec=home].hm-list .tile{padding:9px 12px!important}
 <details class="rtg"><summary>🔑 Device Login</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>دوس <b>➕ جهاز جديد</b> واكتب اسم الجهاز واليوزر والباسورد وملاحظات، ثم <b>💾 حفظ</b>.</li><li>فيه خانة بحث بالاسم فوق القايمة.</li><li>اليوزر والباسورد بيتشفّروا بالخزنة.</li></ul></div></details>
 <details class="rtg"><summary>🔐 الخزنة (التشفير)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>الأدمن يدوس <b>🔒 تفعيل التشفير</b> ويكتب باسورد (8 حروف على الأقل).</li><li>الحقول الحساسة بتظهر مقفولة لحد <b>🔓 فتح</b> بالباسورد، وبتتقفل لوحدها بعد 10 دقايق أو بزرار <b>🔒 قفل</b>.</li><li><b>🔑 تغيير الباسورد</b> للأدمن (والخزنة لازم تكون مفتوحة). لو الباسورد اتنسي مفيش استرجاع للبيانات المشفّرة.</li><li>التفاصيل في زرار <b>ℹ️ تعليمات التشفير</b> جوه أي قسم من الأقسام دي.</li></ol></div></details>
 <details class="rtg"><summary>👥 الحسابات والصلاحيات</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>من <b>⚙️ ضبط ثم 🔑 الحسابات والصلاحيات</b>.</li><li>الحسابات عرض فقط، وبتيجي من ملف <code dir="ltr">ip-access-….js</code> المنشور مع الصفحة. أي حساب جديد أو تغيير باسورد لازم يتنشر الملف من جديد.</li><li>الصلاحيات (إضافة، تعديل، حذف، فحص، مشاركة، طباعة، استيراد، نسخ احتياطي، السجل، الشبكات، إظهار MAC…) افتراضية للكل أو مخصصة لكل حساب، وبتتزامن بين الأجهزة.</li><li>زرار <b>📲 واتس</b> جنب الحساب بيشارك أجهزة قسمه كـ PDF، وبتشوف آخر دخول لكل حساب.</li></ul></div></details>
-<details class="rtg"><summary>☁️ المزامنة والنسخ الاحتياطي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>باسورد المزامنة: <b>⚙️ ضبط ثم 🔑 الحسابات والصلاحيات ثم ☁️ المزامنة بين الأجهزة</b>، اكتب الباسورد وادوس <b>حفظ وربط</b>، و<b>🔄 مزامنة الآن</b> لو عايز تفرضها.</li><li>لتغيير باسورد المزامنة: غيّره من لوحة Firebase، وبعدين حدّثه على كل جهاز.</li><li><b>📤 تصدير/استيراد الحسابات:</b> من قسم حسابات وإيميلات (للأدمن): ملف مشفّر بنفس باسورد الخزنة، والاستيراد بيشترط تفتح الخزنة بنفس الباسورد. <b>👤🔑</b> على كارت الحساب بينسخوا اليوزر أو الباسورد من غير فتح الكارت. علامة 🔒 جنب أي حقل مشفّر.</li><li><b>🔑 قوة الباسورد:</b> مؤشر ملوّن عند تفعيل التشفير أو تغييره، والباسورد الضعيف أو الشائع بيترفض. <b>📜 سجل الفتح</b> (للأدمن) بيعرض محاولات فتح الخزنة على الجهاز ده. وبعد 6 شهور من آخر تغيير بيظهر تذكير. <b>⚠ التعارض:</b> لو نفس العنصر اتعدّل على جهازين في نفس الوقت بيظهر تنبيه ويتسجل في سجل القسم.</li><li><b>🛡 حماية الخزنة:</b> بعد 5 محاولات غلط لفتح الخزنة بيتوقف الفتح مؤقتًا (30 ثانية وبتزيد). والباسورد المعروض بـ 👁 بيرجع مخفي بعد 15 ثانية.</li><li><b>↩ التراجع:</b> بعد أي حذف بيظهر زرار تراجع لمدة 10 ثواني.</li><li><b>☁️ النسخ التلقائي:</b> كل أسبوع بيتعمل نسخة على Firebase (لو الأدمن فتح التطبيق)، وبيتحتفظ بآخر 10. بتقدر توقفه من نافذة النسخ. والرئيسية بتعرض عمر آخر نسخة.</li><li><b>🔒 القفل التلقائي:</b> الخزنة بتتقفل بعد 5 دقايق من عدم الاستخدام، أو بعد دقيقة لو سبت التطبيق في الخلفية. والباسورد المنسوخ بيتمسح من الحافظة بعد 30 ثانية.</li><li><b>☁️ نسخ Firebase الاحتياطية</b>: من ⚙️ ضبط (للأدمن)، تعمل نسخة بتاريخها وتسترجع منها لاحقًا.</li><li><b>💾 نسخة احتياطية</b> و<b>♻️ استرجاع</b> من ⚙️ ضبط. النسخة بتشمل البيانات المشفّرة، فاحتفظ بيها في مكان آمن.</li></ul></div></details>
+<details class="rtg"><summary>☁️ المزامنة والنسخ الاحتياطي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>باسورد المزامنة: <b>⚙️ ضبط ثم 🔑 الحسابات والصلاحيات ثم ☁️ المزامنة بين الأجهزة</b>، اكتب الباسورد وادوس <b>حفظ وربط</b>، و<b>🔄 مزامنة الآن</b> لو عايز تفرضها.</li><li>لتغيير باسورد المزامنة: غيّره من لوحة Firebase، وبعدين حدّثه على كل جهاز.</li><li><b>🔑 باسورد المزامنة:</b> من ⚙️ ضبط تقدر تشيل "افتكر الباسورد على الجهاز ده" (يتحفظ للجلسة بس) أو تدوس "انسَ باسورد المزامنة".</li><li><b>🗂 نافذة الجهاز بتبويبات:</b> عام / الشبكة / DICOM / السجل (تاريخ التعديلات على الجهاز ده).</li><li><b>🔐 إعادة تأكيد الباسورد:</b> قبل تغيير باسورد الخزنة، أو مسح كل البيانات، أو الاسترجاع من نسخة (محلية أو Firebase)، أو تصدير الحسابات، بيطلب باسورد الخزنة (ويفتكره دقيقة واحدة).</li><li><b>📤 تصدير/استيراد الحسابات:</b> من قسم حسابات وإيميلات (للأدمن): ملف مشفّر بنفس باسورد الخزنة، والاستيراد بيشترط تفتح الخزنة بنفس الباسورد. <b>👤🔑</b> على كارت الحساب بينسخوا اليوزر أو الباسورد من غير فتح الكارت. علامة 🔒 جنب أي حقل مشفّر.</li><li><b>🔑 قوة الباسورد:</b> مؤشر ملوّن عند تفعيل التشفير أو تغييره، والباسورد الضعيف أو الشائع بيترفض. <b>📜 سجل الفتح</b> (للأدمن) بيعرض محاولات فتح الخزنة على الجهاز ده. وبعد 6 شهور من آخر تغيير بيظهر تذكير. <b>⚠ التعارض:</b> لو نفس العنصر اتعدّل على جهازين في نفس الوقت بيظهر تنبيه ويتسجل في سجل القسم.</li><li><b>🛡 حماية الخزنة:</b> بعد 5 محاولات غلط لفتح الخزنة بيتوقف الفتح مؤقتًا (30 ثانية وبتزيد). والباسورد المعروض بـ 👁 بيرجع مخفي بعد 15 ثانية.</li><li><b>↩ التراجع:</b> بعد أي حذف بيظهر زرار تراجع لمدة 10 ثواني.</li><li><b>☁️ النسخ التلقائي:</b> كل أسبوع بيتعمل نسخة على Firebase (لو الأدمن فتح التطبيق)، وبيتحتفظ بآخر 10. بتقدر توقفه من نافذة النسخ. والرئيسية بتعرض عمر آخر نسخة.</li><li><b>🔒 القفل التلقائي:</b> الخزنة بتتقفل بعد 5 دقايق من عدم الاستخدام، أو بعد دقيقة لو سبت التطبيق في الخلفية. والباسورد المنسوخ بيتمسح من الحافظة بعد 30 ثانية.</li><li><b>☁️ نسخ Firebase الاحتياطية</b>: من ⚙️ ضبط (للأدمن)، تعمل نسخة بتاريخها وتسترجع منها لاحقًا.</li><li><b>💾 نسخة احتياطية</b> و<b>♻️ استرجاع</b> من ⚙️ ضبط. النسخة بتشمل البيانات المشفّرة، فاحتفظ بيها في مكان آمن.</li></ul></div></details>
 <details class="rtg"><summary>🛡️ نصايح أمان</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>فعّل الخزنة، ومتديش باسورد المزامنة ولا باسورد الخزنة إلا للي محتاج.</li><li>لو حد ماعادش يشتغل معاك: غيّر باسورد المزامنة وباسورد الخزنة، وشيل حسابه.</li><li>الأقسام الخاصة بالأدمن (الراوتر، Dahua، Device Login) ما بتظهرش لغيرك، لكن الحماية الأساسية للباسوردات هي التشفير.</li><li>ماتحفظش صور QR الواي فاي ولا ملفات الـ Backup في أماكن مشتركة.</li></ul></div></details>
 <details class="rtg"><summary>📱 تطبيق الأندرويد</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>مشروع <b>ip-secure-app</b> بيفتح الصفحة في تطبيق بحماية <b>FLAG_SECURE</b> (يمنع السكرين شوت وتسجيل الشاشة).</li><li>الطباعة وتحميل الملفات مش شغالين جواه، استخدم المتصفح لده.</li></ul></div></details>
   <div class="actions"><button class="primary" id="gdX">إغلاق</button></div>
@@ -682,11 +691,12 @@ body[data-sec=home].hm-list .tile{padding:9px 12px!important}
   <div class="tg edit"><h4>حساب جديد</h4><input id="nName" placeholder="الاسم (م. أحمد)"><input id="nPw" type="password" dir="ltr" placeholder="باسورد"><select id="nScope"><option value="dprint">طابعات الأجهزة</option><option value="dev">الأجهزة</option><option value="ws">الورك ستيشن</option><option value="net">الشبكة والسيرفرات</option><option value="all">كل الأقسام</option></select><input id="nExp" type="date" title="تاريخ الانتهاء (اختياري)"><button id="nAdd" style="grid-column:1/-1">➕ إضافة حساب</button></div>
   <div class="tg"><h4>آخر دخول</h4></div><div id="loginList" style="font-size:12px;color:var(--muted)"></div>
   <div class="tg" style="margin-top:12px"><h4>🛡️ صلاحيات الحسابات</h4><select id="pmWho" style="grid-column:1/-1"></select><div id="pmNote" style="grid-column:1/-1;font-size:12.5px;color:var(--muted)"></div><div id="pmList" style="grid-column:1/-1;display:grid;gap:8px"></div><button id="pmReset" style="grid-column:1/-1">↺ إرجاع الحساب للافتراضي</button></div>
-  <div class="tg" style="margin-top:12px"><h4>☁️ المزامنة بين الأجهزة</h4><div id="syncSt" style="grid-column:1/-1;font-size:13px;color:var(--muted)">—</div><input id="syncPw" type="password" dir="ltr" placeholder="باسورد المزامنة" autocomplete="off"><button id="syncPwSave">حفظ وربط</button><button id="syncNow" style="grid-column:1/-1">🔄 مزامنة الآن</button></div>
+  <div class="tg" style="margin-top:12px"><h4>☁️ المزامنة بين الأجهزة</h4><div id="syncSt" style="grid-column:1/-1;font-size:13px;color:var(--muted)">—</div><input id="syncPw" type="password" dir="ltr" placeholder="باسورد المزامنة" autocomplete="off"><button id="syncPwSave">حفظ وربط</button><label style="grid-column:1/-1;display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="syncRem"> افتكر باسورد المزامنة على الجهاز ده (شيلها في الأجهزة المشتركة)</label><button id="syncForget" class="danger" style="grid-column:1/-1">🗑 انسَ باسورد المزامنة على الجهاز ده</button><button id="syncNow" style="grid-column:1/-1">🔄 مزامنة الآن</button></div>
   <div class="tg" style="margin-top:12px"><h4>خدمة الفحص (teba-agent.js)</h4><input id="sAgent" dir="ltr" placeholder="http://localhost:8787" style="grid-column:1/-1"><button id="sSave" class="primary">حفظ</button><button id="sClose">إغلاق</button></div>
 </div></div>
 
 <div class="modal" id="mCBk"><div class="box" style="max-width:440px;max-height:88vh;overflow:auto"><h2>☁️ نسخ Firebase الاحتياطية</h2><p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">النسخة بتتحفظ منفصلة عن البيانات الحية، وبتشمل الحقول المشفّرة والصلاحيات. الاسترجاع بيستبدل البيانات على كل الأجهزة. لو غيّرت باسورد الخزنة بعد النسخة، هتحتاج الباسورد القديم لفتح الحقول المشفّرة منها.</p><button class="primary" id="cbNew" style="width:100%;margin-bottom:10px">➕ عمل نسخة الآن</button><label style="display:flex;gap:8px;align-items:center;margin:0 0 10px;font-size:13px"><input type="checkbox" id="cbAuto"> نسخة تلقائية كل أسبوع (بتحتفظ بآخر 10 نسخ)</label><div id="cbList"></div><div class="actions"><button id="cbX">إغلاق</button></div></div></div>
+<div class="modal" id="mRA"><div class="box" style="max-width:340px"><h2>🔐 تأكيد الهوية</h2><p id="raP" style="font-size:13px;color:var(--muted);margin:0 0 10px"></p><input type="password" id="raIn" autocomplete="off" placeholder="باسورد الخزنة" style="width:100%;margin-bottom:8px"><div class="actions"><button class="primary" id="raOk">تأكيد</button><button id="raNo">إلغاء</button></div></div></div>
 <div class="modal" id="mVL"><div class="box" style="max-width:420px;max-height:80vh;overflow:auto"><h2>📜 سجل فتح الخزنة</h2><p style="margin:0 0 8px;font-size:12.5px;color:var(--muted)">السجل على الجهاز ده بس، ومفيهوش أي باسوردات.</p><div id="vlList"></div><div class="actions"><button id="vlClr">مسح السجل</button><button id="vlX">إغلاق</button></div></div></div>
 <input type="file" id="fileRestore" accept=".json" hidden>
 <div id="toast"></div>
@@ -1625,7 +1635,7 @@ const SEC={
  net:{t:'الشبكة والسيرفرات',ic:'🌐',d:'PACS / راوتر / كاميرات / أخرى',pw:null,types:null,c:'#142624'}
 };
 const secOf=i=>Object.keys(SEC).find(k=>SEC[k].types&&SEC[k].types.includes(i.type))||'net';
-const SEED=[["PACS", "196.218.113.200", "سيرفر / PACS", "4000", "VR1", "VR1", "Display Name: PACS"], ["WORKLIST", "196.218.113.200", "سيرفر / PACS", "104", "NEBRASWL", "", ""], ["KODAC XRAY", "196.218.113.123", "طابعة جهاز", "5040", "DV5950", "DV5950", ""], ["AGFA", "196.218.113.126", "طابعة جهاز", "104", "DS5302", "Ds5302", ""], ["MRI LASER", "196.218.113.127", "طابعة جهاز", "104", "MRL2", "MRILASER", ""], ["EPSON_LASER", "196.218.113.130", "طابعة جهاز", "104", "MRL", "EPSON_LASER", ""], ["EPSON_PAPER", "196.218.113.130", "طابعة جهاز", "104", "MRC", "EPSON_PAPER", ""], ["CT", "196.218.113.230", "جهاز أشعة", "104", "CT", "CT", ""], ["CT WORKSTATION", "196.218.113.231", "كمبيوتر", "104", "DATABASE", "ISP", "Display Name: ISP"], ["MRI", "196.218.113.114", "جهاز أشعة", "4006", "gehc", "gehc", ""], ["MRI WORKSTATION", "196.218.113.116", "كمبيوتر", "4006", "AW_4-7", "AW", "Display Name: OLD AW"], ["Magnet Monitor", "196.218.113.109", "جهاز أشعة", "", "", "", ""], ["Ge router Gateway", "196.218.113.113", "راوتر / سويتش", "", "", "", ""], ["xray", "196.218.113.252", "جهاز أشعة", "5040", "Classic CR", "", ""], ["Ge Cisco", "196.218.113.222", "راوتر / سويتش", "", "", "", ""], ["DAHUA CAMERA", "196.218.113.150", "كاميرا مراقبة", "", "", "", ""], ["Gateway الشبكة", "196.218.113.101", "راوتر / سويتش", "", "", "", "Subnet 255.255.255.0"], ["NEW MRI WORKSTATION", "196.218.113.117", "كمبيوتر", "4006", "AW02", "AW02", "Display Name: AW02"]];
+const SEED=[];
 const IP_RE=/(?:(?:25[0-5]|2[0-4]\d|1?\d?\d)\.){3}(?:25[0-5]|2[0-4]\d|1?\d?\d)/;
 const IP_FULL=new RegExp('^'+IP_RE.source+'$');
 
@@ -1633,7 +1643,6 @@ let items=[];
 let st={q:'',type:'',view:'table',sec:'home',sort:'ip',dir:1,editId:null,prob:'',mode:(()=>{try{return localStorage.getItem('teba_ip_vmode_v1')||'details'}catch(e){return'details'}})()};
 let imp={rows:[],sheets:null,wb:null};
 const CFG_KEY='teba_ip_cfg_v1',LOG_KEY='teba_ip_log_v1';
-const MIG='teba_ip_mig_117';
 let restricted=null,viewOnly=false,isAdmin=false;
 const ADMIN_SECS=['rt','cam','dl','acc'];
 let cfg={agent:'',pin:''},logs=[],adminOK=false,pend=null;const tests={},unlocked=new Set();
@@ -1680,47 +1689,14 @@ function save(){syncTouch();persist();syncPush()}
 const seed=()=>SEED.map(r=>({_t:0,id:uid(),name:r[0],ip:r[1],type:r[2],location:'',port:r[3],ae:r[4],host:r[5],mac:'',notes:r[6],...(r[7]||{})}));
 const scoped=()=>items.filter(i=>secOf(i)===st.sec);
 function load(){let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){}
-  if(raw===null){items=seed();save();try{localStorage.setItem(MIG,1);localStorage.setItem(MIG2,1);localStorage.setItem(MIG3,1);localStorage.setItem(MIG4,1)}catch(e){}return}
+  if(raw===null){items=seed();save();try{localStorage.setItem(MIG4,1)}catch(e){}return}
   try{items=JSON.parse(raw)||[]}catch(e){items=seed()}
   items.forEach(i=>{if(i._t===undefined)i._t=0});
-  mig();mig2();mig3();mig4()}
-const MIG2='teba_ip_mig_photos_1021';
-function mig2(){try{if(localStorage.getItem(MIG2))return}catch(e){return}
-  const L=n=>'196.218.113.'+n,find=(ip,ae)=>items.find(i=>i.ip===L(ip)&&(ae===undefined||String(i.ae||'').toUpperCase()===ae));
-  items=items.filter(i=>!(/ricoh|ريكو/i.test(i.name||'')||(i.type==='طابعة'&&(i.ip===L(177)||i.ip===L(180)))));
-  const up=(ip,ae,o,aeMatch)=>{let it=find(ip,aeMatch);if(!it&&aeMatch===undefined)it=null;
-    if(!it){it={id:uid(),name:'',ip:L(ip),type:'',location:'',port:'',ae:'',host:'',mac:'',mask:'',gw:'',vlan:'',notes:''};items.push(it)}
-    Object.assign(it,o);return it};
-  const hasNote=(it,t)=>{if(!String(it.notes||'').includes(t))it.notes=(it.notes?it.notes+' | ':'')+t};
-  let t;
-  t=up(123,0,{name:'KODAC XRAY',type:'طابعة جهاز',port:'5040',ae:'DV5950',host:'DV5950'});
-  t=up(126,0,{name:'AGFA',type:'طابعة جهاز',port:'104',ae:'DS5302',host:'Ds5302'});
-  t=up(127,0,{name:'MRI LASER',type:'طابعة جهاز',port:'104',ae:'MRL2',host:'MRILASER'});
-  // نفس الـ IP .130 جهازين بـ AE مختلف
-  const l=items.find(i=>i.ip===L(130)&&/laser/i.test(i.name||'')||i.ip===L(130)&&String(i.ae).toUpperCase()==='MRL');
-  const pp=items.find(i=>i.ip===L(130)&&(/paper/i.test(i.name||'')||String(i.ae).toUpperCase()==='MRC'));
-  const lo={name:'EPSON_LASER',ip:L(130),type:'طابعة جهاز',port:'104',ae:'MRL',host:'EPSON_LASER'},po={name:'EPSON_PAPER',ip:L(130),type:'طابعة جهاز',port:'104',ae:'MRC',host:'EPSON_PAPER'};
-  [[l,lo],[pp,po]].forEach(([it,o])=>{if(it)Object.assign(it,o);else items.push(Object.assign({id:uid(),location:'',mac:'',mask:'',gw:'',vlan:'',notes:''},o))});
-  // أجهزة / ورك ستيشن / سيرفر: تحديث الحقول التقنية
-  let w=find(116);if(w){Object.assign(w,{port:'4006',ae:'AW_4-7',host:'AW'});w.notes='Display Name: OLD AW'}
-  w=find(117);if(w){Object.assign(w,{port:'4006',ae:'AW02',host:'AW02'});w.notes='Display Name: AW02'}
-  else items.push({id:uid(),name:'NEW MRI WORKSTATION',ip:L(117),type:'كمبيوتر',location:'',port:'4006',ae:'AW02',host:'AW02',mac:'',mask:'',gw:'',vlan:'',notes:'Display Name: AW02'});
-  w=find(231);if(w){Object.assign(w,{port:'104',ae:'DATABASE',host:'ISP'});w.notes='Display Name: ISP'}
-  w=items.find(i=>i.ip===L(200)&&String(i.port)==='4000');if(w){Object.assign(w,{ae:'VR1',host:'VR1'});hasNote(w,'Display Name: PACS')}
-  save();addLog('تحديث',{name:'تحديث من الصور',ip:''},'طابعات الأجهزة + حذف Ricoh');
-  try{localStorage.setItem(MIG2,1)}catch(e){}}
+  mig4()}
 const MIG4='teba_ip_mig_rm_handnotes';
 function mig4(){try{if(localStorage.getItem(MIG4))return}catch(e){return}
   let c=0;items.forEach(i=>{if(/خط اليد|بخط يد|راجعه/.test(i.notes||'')){i.notes='';c++}});
   if(c)save();try{localStorage.setItem(MIG4,1)}catch(e){}}
-const MIG3='teba_ip_mig_rm_kodac_fuji';
-function mig3(){try{if(localStorage.getItem(MIG3))return}catch(e){return}
-  const n=items.length;items=items.filter(i=>!((i.ip==='196.218.113.124'||i.ip==='196.218.113.125')&&/kodac mri|fuji/i.test(i.name||'')));
-  if(items.length!==n){save();addLog('حذف',{name:'KODAC MRI + FUJI',ip:''},'حذف بطلب')}
-  try{localStorage.setItem(MIG3,1)}catch(e){}}
-function mig(){try{if(localStorage.getItem(MIG))return}catch(e){return}
-  if(!items.some(i=>i.ip==='196.218.113.117')){const it={id:uid(),name:'NEW MRI WORKSTATION',ip:'196.218.113.117',type:'كمبيوتر',location:'',port:'',ae:'',host:'',mac:'',mask:'',gw:'',vlan:'',notes:''};items.push(it);save();addLog('إضافة',it)}
-  try{localStorage.setItem(MIG,1)}catch(e){}}
 function normMac(m){
   m=String(m||'').trim();
   const h=m.replace(/[^0-9a-fA-F]/g,'');
@@ -1783,7 +1759,7 @@ function renderTable(){
   const V={};['location','port','ae','host','mac','notes'].forEach(k=>V[k]=a.some(i=>i[k]));V.mac=V.mac&&can('sens');
   const mode=st.mode||'details';
   const ig=mode==='details'?'':`<div class="ig ig-${mode}">`+a.map(i=>{const P=probs(i,dc,mc),T=tests[i.id];
-    return `<button class="ic${P.length?' warn':''}${T?(T.ok?' t-ok':' t-bad'):''}" data-open="${i.id}" title="${esc(i.name||i.ip)}"><span class="ie">${TI(i.type)}</span><span class="tx"><span class="in">${esc(i.name||'—')}</span><span class="ia">${esc(i.ip)}</span>${mode==='tiles'?`<span class="it">${esc([i.type,i.port,i.ae].filter(Boolean).join(' · '))}</span>`:''}</span></button>`}).join('')+'</div>';
+    return `<button class="ic${P.length?' warn':''}${T?(T.ok?' t-ok':' t-bad'):''}" data-open="${esc(i.id)}" title="${esc(i.name||i.ip)}"><span class="ie">${TI(i.type)}</span><span class="tx"><span class="in">${esc(i.name||'—')}</span><span class="ia">${esc(i.ip)}</span>${mode==='tiles'?`<span class="it">${esc([i.type,i.port,i.ae].filter(Boolean).join(' · '))}</span>`:''}</span></button>`}).join('')+'</div>';
   const hd=`<div class="phead"><b>مركز طيبة للأشعة — ${esc(SEC[st.sec].t)}</b><span>${a.length} — ${new Date().toLocaleDateString('en-GB')}</span></div>`;
   let h=`${hd}${ig}<div class="card${mode!=='details'?' hid-screen':''}"><div class="scroll"><table><thead><tr><th>#</th>${th('name','الجهاز')}${th('ip','IP')}${th('type','النوع')}${V.location?th('location','المكان'):''}${V.port?th('port','Port'):''}${V.ae?th('ae','AE Title'):''}${V.host?th('host','Host'):''}${V.mac?th('mac','MAC'):''}${V.notes?th('notes','ملاحظات'):''}<th class="act"></th></tr></thead><tbody>`;
   a.forEach((i,n)=>{
@@ -1791,7 +1767,7 @@ function renderTable(){
     h+=`<tr class="${T?(T.ok?'t-ok':'t-bad'):''}"><td class="num">${n+1}</td>${td('الجهاز',i.name,null,'nm')}
       ${td('IP','1',`<span class="ip" data-copy="${esc(i.ip)}" title="اضغط للنسخ">${esc(i.ip)}</span>${P.map(x=>`<span class="badge ${x[0]}">${x[1]}</span>`).join('')}${T?`<span class="badge ${T.ok?'ok':'bad'}">${esc(T.m)}</span>`:''}${can('sens')&&(i.mask||i.gw||i.vlan)?`<small class="net">${[i.mask,i.gw&&'GW '+i.gw,i.vlan&&'VLAN '+i.vlan].filter(Boolean).map(esc).join(' · ')}</small>`:''}`)}
       ${td('النوع',i.type,`<span class="chip">${esc(i.type)}</span>`)}${V.location?td('المكان',i.location):''}${V.port?m('Port',i.port):''}${V.ae?m('AE Title',i.ae):''}${V.host?m('Host',i.host):''}${V.mac?m('MAC',i.mac):''}${V.notes?td('ملاحظات',i.notes):''}
-      <td class="act" style="white-space:nowrap"><button class="sm" data-test="${i.id}" title="اختبار اتصال">🔌</button> ${i.ae&&i.port?`<button class="sm" data-dcm="${i.id}">DICOM</button> `:''}<button class="sm" data-share="${i.id}" title="مشاركة واتساب">📲</button> <button class="sm" data-svc="${i.id}" title="ملاحظة صيانة">🛠</button> <button class="sm" data-edit="${i.id}">تعديل</button> <button class="sm danger" data-del="${i.id}">حذف</button></td></tr>`;
+      <td class="act" style="white-space:nowrap"><button class="sm" data-test="${esc(i.id)}" title="اختبار اتصال">🔌</button> ${i.ae&&i.port?`<button class="sm" data-dcm="${esc(i.id)}">DICOM</button> `:''}<button class="sm" data-share="${esc(i.id)}" title="مشاركة واتساب">📲</button> <button class="sm" data-svc="${esc(i.id)}" title="ملاحظة صيانة">🛠</button> <button class="sm" data-edit="${esc(i.id)}">تعديل</button> <button class="sm danger" data-del="${esc(i.id)}">حذف</button></td></tr>`;
   });
   $('#view').innerHTML=h+'</tbody></table></div></div>';
 }
@@ -1859,6 +1835,11 @@ function render(){
 }
 
 /* ---------- add / edit ---------- */
+function edTab(t){const f=$('#edForm');f.dataset.t=t;document.querySelectorAll('#edTabs button').forEach(b=>b.classList.toggle('on',b.dataset.et===t))}
+function edHist(it){const b=$('#edHist');if(!it){b.innerHTML='';return}
+  const key=((it.name||'')+' '+(it.ip||'')).trim(),a=logs.filter(l=>l.n===key||(it.ip&&String(l.n||'').includes(it.ip))).slice(0,25);
+  b.innerHTML=a.length?a.map(l=>`<div class="hrow"><b>${esc(l.a)}</b> ${esc(l.note||'')}<br><small>${new Date(l.t).toLocaleString('ar-EG')}</small></div>`).join(''):'<div class="empty">مفيش سجل للجهاز ده لسه</div>'}
+document.querySelectorAll('#edTabs button').forEach(b=>b.onclick=()=>edTab(b.dataset.et));
 function openEdit(id,presetIp){
   if(id?!can('edit'):!can('add')){toast('مفيش صلاحية');return}
   if(cfg.pin&&!adminOK){admin(()=>openEdit(id,presetIp));return}
@@ -1866,18 +1847,19 @@ function openEdit(id,presetIp){
   const it=id?items.find(i=>i.id===id):{};
   $('#editTitle').textContent=id?'تعديل جهاز':'إضافة جهاز';
   FIELDS.forEach(f=>$('#f_'+f.k).value=it[f.k]||'');
+  $('#f_notes').value=it.notes||'';edTab('g');$('#edTabH').style.display=id?'':'none';edHist(id?it:null);
   if(presetIp)$('#f_ip').value=presetIp;
   if(!id&&SEC[st.sec].types)$('#f_type').value=SEC[st.sec].types[0];
   $('#mEdit').classList.add('open');
   setTimeout(()=>$(presetIp?'#f_name':'#f_name').focus(),50);
 }
 function saveEdit(){
-  const o={};FIELDS.forEach(f=>o[f.k]=$('#f_'+f.k).value.trim());
+  const o={};FIELDS.forEach(f=>o[f.k]=$('#f_'+f.k).value.trim());o.notes=$('#f_notes').value.trim();
   o.ip=latin(o.ip);o.mac=normMac(o.mac);
-  if(!isIp(o.ip)){toast('عنوان IP غير صالح');return}
+  if(!isIp(o.ip)){toast('عنوان IP غير صالح');edTab('n');$('#f_ip').focus();return}
   const dup=items.some(i=>i.ip===o.ip&&(i.port||'')===(o.port||'')&&i.id!==st.editId);
   if(dup&&!confirm('الـ IP ده موجود قبل كده. تحفظه برضه؟'))return;
-  if(st.editId){const it=items.find(i=>i.id===st.editId),ch=FIELDS.filter(f=>(it[f.k]||'')!==(o[f.k]||'')).map(f=>f.l);Object.assign(it,o);addLog('تعديل',it,ch.join('، '))}
+  if(st.editId){const it=items.find(i=>i.id===st.editId),ch=FIELDS.filter(f=>(it[f.k]||'')!==(o[f.k]||'')).map(f=>f.l).concat((it.notes||'')!==(o.notes||'')?['ملاحظات']:[]);Object.assign(it,o);addLog('تعديل',it,ch.join('، '))}
   else{const it={id:uid(),...o};items.push(it);addLog('إضافة',it)}
   save();$('#mEdit').classList.remove('open');render();toast('تم الحفظ ✔');
 }
@@ -2174,6 +2156,17 @@ function vStrUI(){const box=$('#vStr');if(!box)return;const m=_vm!=='unlock';box
   const r=pwScore($('#vA').value),col=['#ef4444','#f97316','#eab308','#22c55e','#16a34a'];
   $('#vStB').style.width=r.s<0?'0':((r.s+1)*20)+'%';$('#vStB').style.background=r.s<0?'transparent':col[r.s];
   $('#vStT').textContent=r.s<0?'':'قوة الباسورد: '+r.t+(r.s<2?' — لازم "مقبول" على الأقل':'')}
+let _raUntil=0;
+function reauth(msg){return new Promise(res=>{
+  if(!vaultOn()||!vCan()||Date.now()<_raUntil){res(true);return}
+  const first=vItems().find(i=>i.enc);if(!first){res(true);return}
+  $('#raP').textContent=msg||'اكتب باسورد الخزنة للمتابعة';$('#raIn').value='';
+  const m=$('#mRA');m.classList.add('open');setTimeout(()=>$('#raIn').focus(),50);
+  const done=v=>{m.classList.remove('open');$('#raOk').onclick=null;$('#raNo').onclick=null;$('#raIn').onkeydown=null;res(v)};
+  const go=async()=>{const w=vfWait();if(w){toast('محاولات غلط كتير — استنى '+w+' ثانية');return}
+    try{await vDec($('#raIn').value,first.enc)}catch(e){vlogAdd('fail');toast(vfFail());$('#raIn').value='';return}
+    vfSet({});_raUntil=Date.now()+60000;done(true)};
+  $('#raOk').onclick=go;$('#raNo').onclick=()=>done(false);$('#raIn').onkeydown=e=>{if(e.key==='Enter')go()}})}
 const VL_KEY='teba_ip_vlog',VPW_KEY='teba_ip_vpwT',VPW_DAYS=180;
 function vlogAdd(k){try{const a=JSON.parse(localStorage.getItem(VL_KEY)||'[]');a.unshift({t:Date.now(),k});localStorage.setItem(VL_KEY,JSON.stringify(a.slice(0,60)))}catch(e){}}
 function vlogOpen(){if(!isAdmin)return;let a=[];try{a=JSON.parse(localStorage.getItem(VL_KEY)||'[]')}catch(e){}
@@ -2186,7 +2179,7 @@ function vpwRemind(){try{const v=+localStorage.getItem(VPW_KEY)||0;if(!v){vpwMar
 let _idle=null;
 function rerender(){if(st.sec==='cam')renderCam();else if(st.sec==='dl')renderDL();else if(st.sec==='acc')renderAcct();else if(st.sec==='rt')renderRouter()}
 function vaultLock(){VAULT.pw=null;VAULT.cache={};VAULT.sig={};_kc.clear();clearTimeout(_idle);rerender();toast('🔒 الخزنة اتقفلت')}
-function vtAct(a){if(a==='help')$('#mVH').classList.add('open');else if(a==='vlog')vlogOpen();else if(a==='lock')vaultLock();else if(a==='enc'){if(VAULT.pw===null)return;vaultEncryptAll().then(()=>{save();toast('🔐 اتشفّر الباقي ✔');rerender()}).catch(()=>toast('تعذر التشفير'))}else openVault(a)}
+function vtAct(a){if(a==='help')$('#mVH').classList.add('open');else if(a==='vlog')vlogOpen();else if(a==='lock')vaultLock();else if(a==='change'){reauth('اكتب باسورد الخزنة الحالي قبل تغييره').then(ok=>{if(ok)openVault('change')})}else if(a==='enc'){if(VAULT.pw===null)return;vaultEncryptAll().then(()=>{save();toast('🔐 اتشفّر الباقي ✔');rerender()}).catch(()=>toast('تعذر التشفير'))}else openVault(a)}
 const vBump=()=>{clearTimeout(_idle);if(VAULT.pw!==null)_idle=setTimeout(vaultLock,5*60*1000)};
 let _hid=null;document.addEventListener('visibilitychange',()=>{clearTimeout(_hid);if(document.hidden&&VAULT.pw!==null)_hid=setTimeout(()=>{if(document.hidden&&VAULT.pw!==null)vaultLock()},60000)});
 ['click','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,vBump,true));
@@ -2509,7 +2502,7 @@ function acCard(it,ed,A){
    +K.f.map(f=>acFld(pre,it,f,ed)).join('')
    +`</div><div class="rtbar" style="padding:0 14px 14px;margin:0">${ed?`<button class="primary" data-acsave="${id}">💾 حفظ</button>`:''}${can('del')?`<button class="danger" data-acdel="${id}">🗑 حذف</button>`:''}</div></details>`}
 const AC_ALLOWED=['id','name','ip','type','location','port','ae','host','mac','notes','akind','enc','_t'];
-function acExport(){if(!isAdmin)return;const L=items.filter(i=>i.type===AC_TYPE);
+async function acExport(){if(!isAdmin)return;if(!(await reauth('تصدير الحسابات — اكتب باسورد الخزنة للتأكيد')))return;const L=items.filter(i=>i.type===AC_TYPE);
   if(!L.length){toast('مفيش حسابات للتصدير');return}
   const pl=L.filter(i=>!i.enc&&AC_SEC.some(k=>i[k]!==undefined&&i[k]!==''));
   if(pl.length){toast('فيه '+pl.length+' حساب غير مشفّر — فعّل التشفير وادوس 🔐 تشفير الباقي الأول');return}
@@ -2624,8 +2617,9 @@ $('#fileRestore').onchange=e=>{
     const n=d.map(x=>({...x,id:x.id||uid(),name:x.name||'',ip:latin(x.ip||'').trim(),type:x.type||'',location:x.location||'',port:x.port||'',ae:x.ae||'',host:x.host||'',mac:normMac(x.mac||''),mask:x.mask||'',gw:x.gw||'',vlan:x.vlan||'',notes:x.notes||''}));
     const bad=n.filter(x=>!isIp(x.ip)).length;
     if(!confirm(`النسخة فيها ${n.length} جهاز${bad?` (منهم ${bad} IP غير صالح)`:''} والحالي ${items.length}. هيتم الاستبدال. متأكد؟`))return;
+    reauth('استرجاع نسخة بيستبدل كل البيانات — اكتب باسورد الخزنة').then(ok=>{if(!ok)return;
     items=n;if(!Array.isArray(j)&&Array.isArray(j.log)){logs=j.log.slice(0,500);try{localStorage.setItem(LOG_KEY,JSON.stringify(logs))}catch(_){}}
-    save();render();toast('تم الاسترجاع ✔');
+    save();render();toast('تم الاسترجاع ✔')});
   }catch(_){toast('ملف النسخة غير صالح')}};
   fr.readAsText(f);e.target.value='';
 };
@@ -2725,8 +2719,8 @@ async function whoLocal(v){const l=H(v),sh=await sha(v),today=new Date().toISOSt
 async function unlockApp(){const r=await who($('#gIn').value.trim());
   if(!r){$('#gErr').textContent='الباسورد غلط';$('#gIn').value='';$('#gIn').focus();return}
   document.body.classList.remove('locked');$('#gIn').value='';
-  setTimeout(()=>{const c=window.TEBA_SYNC_CFG;let has='';try{has=localStorage.getItem(PW_KEY)}catch(e){}
-    if(c&&c.apiKey&&c.syncEmail&&!has&&!SYNC.on&&!SYNC.asked){SYNC.asked=1;const v=prompt('باسورد المزامنة (مرة واحدة على الجهاز) — سيبه فاضي للتخطي');if(v&&v.trim()){try{localStorage.setItem(PW_KEY,v.trim())}catch(e){}syncInit()}}},400);
+  setTimeout(()=>{const c=window.TEBA_SYNC_CFG;let has='';try{has=pwGet()}catch(e){}
+    if(c&&c.apiKey&&c.syncEmail&&!has&&!SYNC.on&&!SYNC.asked){SYNC.asked=1;const v=prompt(pwRem()?'باسورد المزامنة (مرة واحدة على الجهاز) — سيبه فاضي للتخطي':'باسورد المزامنة (للجلسة دي بس) — سيبه فاضي للتخطي');if(v&&v.trim()){try{pwSet(v.trim())}catch(e){}syncInit()}}},400);
   logs.unshift({t:Date.now(),a:'دخول',s:'_auth',n:r.n,note:''});logs=logs.slice(0,500);try{localStorage.setItem(LOG_KEY,JSON.stringify(logs))}catch(e){}
   me={n:r.n};
   if(r.admin){isAdmin=true;adminOK=true;applyPerms();return}
@@ -2793,7 +2787,7 @@ bi.onclick=async()=>{if(dip){dip.prompt();await dip.userChoice;dip=null;return}
   alert('لتثبيت التطبيق:\n• أندرويد (Chrome): اضغط ⋮ ثم "تثبيت التطبيق" أو "إضافة إلى الشاشة الرئيسية".\n• آيفون (Safari): اضغط زر المشاركة ثم "إضافة إلى الشاشة الرئيسية".')};
 $('#back').onclick=()=>history.back();
 window.addEventListener('popstate',()=>{st.sec='home';render()});
-$('#btnReset').onclick=()=>isAdmin&&admin(()=>{if(confirm('هترجع كل البيانات للافتراضي وتتمسح التعديلات. متأكد؟')){items=seed();save();render();toast('تم الرجوع للافتراضي ✔')}});
+$('#btnReset').onclick=()=>isAdmin&&admin(async()=>{if(!(await reauth('مسح كل البيانات — اكتب باسورد الخزنة للتأكيد')))return;if(confirm('هتمسح كل البيانات من الجهاز ده، ولو المزامنة شغالة هتتمسح من باقي الأجهزة كمان. اعمل نسخة احتياطية الأول. متأكد؟')&&confirm('تأكيد أخير: مسح كل البيانات؟')){items=seed();save();render();toast('تم مسح كل البيانات')}});
 /* ---------- صلاحيات الحسابات + المظهر + أنماط العرض ---------- */
 const PFLAGS=[['add','➕ إضافة جهاز'],['edit','✏️ تعديل'],['del','🗑 حذف'],['test','🔌 فحص الاتصال / DICOM / ملاحظة صيانة'],['share','📲 مشاركة واتساب'],['print','🖨️ طباعة وتصدير Excel / CSV'],['imp','📥 استيراد'],['backup','💾 نسخ احتياطي واسترجاع'],['log','🧾 تاب السجل'],['net','🧭 تاب الشبكات'],['sens','🔎 إظهار MAC / Mask / Gateway / VLAN']];
 const PERM_KEY='teba_ip_perm_v1',TH_KEY='teba_ip_theme_v1',VM_KEY='teba_ip_vmode_v1';
@@ -2820,7 +2814,7 @@ function openInfo(id){const i=items.find(x=>x.id===id);if(!i)return;
   if(can('sens'))rows.push(['MAC',i.mac],['Mask',i.mask],['Gateway',i.gw],['VLAN',i.vlan]);rows.push(['ملاحظات',i.notes]);
   $('#infoT').textContent=TI(i.type)+' '+(i.name||i.ip);
   $('#infoB').innerHTML=rows.filter(r=>r[1]).map(([l,v])=>`<div class="irow"><span>${l}</span><b dir="ltr">${esc(v)}</b></div>`).join('');
-  $('#infoA').innerHTML=`<button class="sm" data-copy="${esc(i.ip)}">📋 نسخ IP</button><button class="sm" data-test="${i.id}">🔌 فحص</button>${i.ae&&i.port?`<button class="sm" data-dcm="${i.id}">DICOM</button>`:''}<button class="sm" data-share="${i.id}">📲</button><button class="sm" data-svc="${i.id}">🛠</button><button class="sm" data-edit="${i.id}">تعديل</button><button class="sm danger" data-del="${i.id}">حذف</button><button class="sm">إغلاق</button>`;
+  $('#infoA').innerHTML=`<button class="sm" data-copy="${esc(i.ip)}">📋 نسخ IP</button><button class="sm" data-test="${esc(i.id)}">🔌 فحص</button>${i.ae&&i.port?`<button class="sm" data-dcm="${esc(i.id)}">DICOM</button>`:''}<button class="sm" data-share="${esc(i.id)}">📲</button><button class="sm" data-svc="${esc(i.id)}">🛠</button><button class="sm" data-edit="${esc(i.id)}">تعديل</button><button class="sm danger" data-del="${esc(i.id)}">حذف</button><button class="sm">إغلاق</button>`;
   $('#mInfo').classList.add('open')}
 const THEMES=[['','🌊 تركواز (الافتراضي)'],['navy','🌃 كحلي وأورانج'],['ocean','🔵 أزرق'],['emerald','🟢 أخضر'],['violet','🟣 بنفسجي'],['sunset','🟠 غروب'],['graphite','⚫ رمادي داكن']];
 $('#themeSel').innerHTML=THEMES.map(([v,l])=>`<option value="${v}">${l}</option>`).join('');
@@ -2829,7 +2823,11 @@ $('#themeSel').onchange=e=>{const t=e.target.value;if(t)document.documentElement
 $('#vmode').onchange=e=>{st.mode=e.target.value;try{localStorage.setItem(VM_KEY,st.mode)}catch(_){}render()};
 
 /* ---------- مزامنة Firestore (اختيارية: تشتغل لو ip-sync-config.js فيه إعدادات Firebase) ---------- */
-const DEL_KEY='teba_ip_del_v1',PW_KEY='teba_ip_syncpw_v1';
+const DEL_KEY='teba_ip_del_v1',PW_KEY='teba_ip_syncpw_v1',REM_KEY='teba_ip_syncrem_v1';
+const pwRem=()=>{try{return localStorage.getItem(REM_KEY)!=='0'}catch(e){return true}};
+function pwGet(){try{return (pwRem()?localStorage:sessionStorage).getItem(PW_KEY)||''}catch(e){return''}}
+function pwSet(v){try{if(pwRem()){localStorage.setItem(PW_KEY,v);sessionStorage.removeItem(PW_KEY)}else{sessionStorage.setItem(PW_KEY,v);localStorage.removeItem(PW_KEY)}}catch(e){}}
+function pwDel(){try{localStorage.removeItem(PW_KEY)}catch(e){}try{sessionStorage.removeItem(PW_KEY)}catch(e){}}
 const SYNC={on:false,db:null,ref:null,t:null,busy:false,again:0,hash:{},del:{},me:uid(),msg:'المزامنة مش مفعّلة'};
 try{SYNC.del=JSON.parse(localStorage.getItem(DEL_KEY)||'{}')||{}}catch(e){}
 try{SYNC.lastOk=+localStorage.getItem('teba_ip_lastok')||0}catch(e){}
@@ -2838,7 +2836,7 @@ const sig=a=>JSON.stringify([...a].sort((x,y)=>x.id<y.id?-1:1));
 function syncSt(m){SYNC.msg=m;if(m.startsWith('✔')){SYNC.lastOk=Date.now();try{localStorage.setItem('teba_ip_lastok',String(SYNC.lastOk))}catch(e){}}const e=document.querySelector('#syncSt');if(e)e.textContent=m;
   const l=document.querySelector('#syncLamp');if(l){l.className=m.startsWith('✔')?'ok':m.startsWith('✖')?'bad':m.startsWith('جاري')?'wait':(m.startsWith('🔑')||m.startsWith('أوفلاين'))?'warn':'';l.title=m}
   syncPwUI()}
-function syncPwUI(){const i=document.querySelector('#syncPw'),b=document.querySelector('#syncPwSave');if(!i||!b)return;let has='';try{has=localStorage.getItem(PW_KEY)||''}catch(e){}
+function syncPwUI(){const rc=document.querySelector('#syncRem');if(rc)rc.checked=pwRem();const i=document.querySelector('#syncPw'),b=document.querySelector('#syncPwSave');if(!i||!b)return;let has='';try{has=pwGet()}catch(e){}
   i.placeholder=has?'✔ باسورد المزامنة محفوظ على الجهاز — اكتب الجديد للتغيير':'باسورد المزامنة';
   b.textContent=has?'تغيير الباسورد':'حفظ وربط';i.style.borderColor=has?'var(--ok)':''}
 function syncTouch(){const now=Date.now(),cur={};
@@ -2883,14 +2881,14 @@ function syncLoad(u){return new Promise((ok,no)=>{const s=document.createElement
 async function syncInit(){const c=window.TEBA_SYNC_CFG;
   if(!c||!c.apiKey||!c.projectId){syncSt('المزامنة مش مفعّلة — املا ip-sync-config.js');return}
   if(!c.syncEmail){syncSt('ضيف syncEmail في ip-sync-config.js');return}
-  let pw='';try{pw=localStorage.getItem(PW_KEY)||''}catch(e){}
+  let pw='';try{pw=pwGet()}catch(e){}
   if(!pw){syncSt('🔑 محتاج باسورد المزامنة — ادخله هنا واضغط حفظ وربط');return}
   if(!navigator.onLine){syncSt('أوفلاين — هتتزامن لما النت يرجع');window.addEventListener('online',()=>syncInit(),{once:true});return}
   try{const V='https://www.gstatic.com/firebasejs/10.12.2/firebase-';
     if(!window.firebase){await syncLoad(V+'app-compat.js');await Promise.all([syncLoad(V+'auth-compat.js'),syncLoad(V+'firestore-compat.js')])}
     const app=firebase.apps.find(a=>a.name==='tebaip')||firebase.initializeApp(c,'tebaip');
     try{await app.auth().signInWithEmailAndPassword(c.syncEmail,pw)}
-    catch(e){if(/invalid|wrong|user-not-found|credential/.test(e.code||'')){try{localStorage.removeItem(PW_KEY)}catch(_){}syncSt('✖ باسورد المزامنة غلط — ادخله تاني');return}throw e}
+    catch(e){if(/invalid|wrong|user-not-found|credential/.test(e.code||'')){pwDel();syncSt('✖ باسورد المزامنة غلط — ادخله تاني');return}throw e}
     SYNC.db=app.firestore();SYNC.ref=SYNC.db.doc('teba_ip/state');SYNC.on=true;syncSt('جاري المزامنة...');
     SYNC.ref.onSnapshot(s=>{if(SYNC.busy)return;const d=s.exists?s.data():{};if((d.permT||0)>PERM.t){try{PERM=Object.assign({t:d.permT,def:{},acc:{}},JSON.parse(d.perm));permSave();applyPerms()}catch(e){}}
       const r=JSON.parse(d.items||'[]'),m=syncMerge(items,SYNC.del,r,d.del||{});
@@ -2936,6 +2934,7 @@ async function cbCheck(){if(!isAdmin||viewOnly||!SYNC.on||SYNC.cbChecked)return;
   catch(e){}}
 function cbAutoUI(){const c=$('#cbAuto');if(c)c.checked=cbAutoOn()}
 async function cbRestore(id){
+  if(!(await reauth('استرجاع نسخة Firebase بيستبدل كل البيانات على كل الأجهزة — اكتب باسورد الخزنة')))return;
   if(!confirm('هيتم استبدال كل البيانات الحالية (على كل الأجهزة) بالنسخة دي. متأكد؟'))return;
   try{toast('جاري الاسترجاع...');
     const ref=SYNC.db.collection(CB_COL).doc(id),m=await ref.get();if(!m.exists){toast('النسخة مش موجودة');return}
@@ -2959,7 +2958,9 @@ $('#cbAuto').onchange=e=>{try{localStorage.setItem(CB_AUTO_KEY,e.target.checked?
 $('#cbX').onclick=()=>$('#mCBk').classList.remove('open');
 $('#cbList').addEventListener('click',e=>{const r=e.target.closest('[data-cbrs]'),d=e.target.closest('[data-cbdel]');if(!isAdmin)return;if(r)cbRestore(r.dataset.cbrs);if(d)cbDel(d.dataset.cbdel)});
 load();items.forEach(i=>SYNC.hash[i.id]=JSON.stringify(stripT(i)));render();syncInit();
-$('#syncPwSave').onclick=()=>{const v=$('#syncPw').value.trim();if(!v){toast('اكتب باسورد المزامنة');return}try{localStorage.setItem(PW_KEY,v)}catch(e){}$('#syncPw').value='';SYNC.on=false;syncInit()};
+$('#syncRem').onchange=e=>{const cur=pwGet();try{localStorage.setItem(REM_KEY,e.target.checked?'1':'0')}catch(_){}if(cur)pwSet(cur);syncPwUI();toast(e.target.checked?'الباسورد هيتحفظ على الجهاز ده':'الباسورد هيتحفظ للجلسة دي بس وهيتسأل عنه كل مرة')};
+$('#syncForget').onclick=()=>{if(!confirm('تنسى باسورد المزامنة على الجهاز ده؟ المزامنة هتقف لحد ما تدخله تاني. بياناتك على الجهاز مش هتتمسح.'))return;pwDel();SYNC.on=false;try{const a=window.firebase&&firebase.apps.find(x=>x.name==='tebaip');if(a)a.auth().signOut()}catch(e){}syncPwUI();setTimeout(()=>syncSt('🔑 محتاج باسورد المزامنة — ادخله هنا واضغط حفظ وربط'),700);toast('اتنسى باسورد المزامنة')};
+$('#syncPwSave').onclick=()=>{const v=$('#syncPw').value.trim();if(!v){toast('اكتب باسورد المزامنة');return}try{pwSet(v)}catch(e){}$('#syncPw').value='';SYNC.on=false;syncInit()};
 $('#syncLamp').onclick=()=>toast(SYNC.msg);
 window.addEventListener('offline',()=>{if(SYNC.on)syncSt('أوفلاين — هتتزامن لما النت يرجع')});
 window.addEventListener('online',()=>{if(SYNC.on)syncRun()});
