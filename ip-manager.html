@@ -447,7 +447,7 @@ html[data-theme] body[data-sec=home] .tile{background:rgba(255,255,255,.07)!impo
 html[data-theme] body[data-sec=home] .tile .ti{color:var(--t-hline)}
 html[data-theme] body[data-sec=home] .foot button{background:var(--t-brand);border-color:var(--t-hline);color:var(--t-on)}
 html[data-theme] body[data-sec=home] #hStats{border-color:var(--t-hline)}
-html[data-theme] .box{background:var(--t-card,var(--card));color:var(--t-text,var(--text))}
+html[data-theme] .box{--card:var(--t-card,var(--card));--text:var(--t-text,var(--text));--muted:var(--t-muted,var(--muted));--line:var(--t-line,var(--line));background:var(--card);color:var(--text)}
 html[data-theme] .box :is(input,select,textarea){background:var(--t-inp,#fff);color:var(--t-text,var(--text));border-color:var(--t-line,var(--line))}
 
 /* شريط الإحصائيات على الخلفية الفاتحة */
@@ -656,7 +656,7 @@ html[data-theme=ios] .tile.it{--ic:#af52de}
 </style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.31:23</small></div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.31:24</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -766,7 +766,7 @@ html[data-theme=ios] .tile.it{--ic:#af52de}
   <div class="actions"><button id="tClose">إغلاق</button></div>
 </div></div>
 <div class="modal" id="mGuide"><div class="box" style="max-width:440px;max-height:90vh;overflow:auto"><h2>📖 دليل الاستخدام</h2>
-  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.10.31:23</span></p>
+  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.10.31:24</span></p>
 <details class="rtg" open><summary>✨ مميزات البرنامج</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تنظيم عناوين الـ IP لأجهزة المركز في أقسام: طابعات الأجهزة، الأجهزة، الورك ستيشن، الشبكة والسيرفرات.</li><li>أقسام للأدمن بس: <b>📡 الراوتر</b> (والأكسس بوينت)، <b>📹 كاميرات Dahua</b>، <b>🔑 Device Login</b>، <b>📧 حسابات وإيميلات</b>، <b>📶 مراقبة الشبكة</b>، <b>🛠 الصيانة</b>، <b>🧾 سجل التدقيق</b>، <b>🗝️ Stacks</b>.</li><li>كشف تلقائي لمشاكل الـ IP (غير صالح أو مكرر) وعرض الشبكات (Subnets).</li><li>بحث شامل وفلاتر، وأكتر من طريقة عرض.</li><li>فحص الاتصال وDICOM وتسجيل الصيانة (حسب الصلاحية).</li><li>طباعة وتصدير Excel / CSV ومشاركة PDF على واتساب.</li><li>نسخ احتياطي واسترجاع، وسجل بالتغييرات.</li><li>مزامنة بين الأجهزة.</li><li>حسابات عرض فقط بصلاحيات إنت اللي بتحددها.</li><li>خزنة مشفّرة لليوزرات والباسوردات.</li><li><b>📊 لوحة معلومات</b> في الرئيسية (حالة المراقبة، الصيانة، مشاكل البيانات، الأجهزة حسب القسم، آخر التعديلات) وصفحة تفاصيل موحدة لكل جهاز.</li><li><b>📶 مراقبة الشبكة</b> من خدمة خلفية، و<b>🛠 إدارة الصيانة</b>، و<b>🧾 سجل تدقيق</b> شامل، و<b>🔗 روابط ومراجع</b> لكل جهاز.</li><li><b>📱 ثيم iOS</b> (فاتح وداكن تلقائي) بشريط تنقل سفلي وعناوين كبيرة.</li><li>علامة مائية وحماية من لقطات الشاشة للحسابات غير الأدمن، وتطبيق أندرويد بحماية FLAG_SECURE.</li></ul></div></details>
 <details class="rtg"><summary>🧭 الاستخدام اليومي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>من الرئيسية اختار القسم.</li><li>دوس <b>➕ إضافة</b> لإضافة جهاز: الاسم، IP، النوع، المكان، Port، AE Title، Host، MAC وغيرها.</li><li>استخدم 🔍 البحث (بالاسم أو IP أو المكان أو MAC) والفلاتر.</li><li>التبويبات: <b>📋 الجدول</b> و<b>🧾 السجل</b> (مين عدّل إيه) و<b>🧭 الشبكات</b>.</li><li>أزرار كارت الجهاز (فحص الاتصال / DICOM / ملاحظة الصيانة / تعديل / حذف) بتظهر حسب صلاحياتك.</li><li><b>🎨</b> للمظهر وطريقة عرض الأقسام والأجهزة.</li><li><b>🖨️</b> للطباعة: جوه القسم بتطبع القسم، وفي الرئيسية بتطبع كل الأقسام.</li><li><b>⚙️ ضبط</b>: استيراد، Excel / CSV، مشاركة PDF، نسخ احتياطي واسترجاع، والحسابات.</li></ol></div></details>
 <details class="rtg"><summary>📡 الراوتر والأكسس بوينت</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>📚 تابات الراوتر</b>: اختار الموديل وادوس <b>ℹ️ معلومات</b> على أي تاب تعرف وظيفته.</li><li>بيانات الراوتر في مجموعات تتطوي: عام، الشبكة، دخول الراوتر، PPPoE، الواي فاي، ملاحظات. <b>👁</b> إظهار / إخفاء، <b>📋</b> نسخ، <b>💾</b> حفظ.</li><li><b>📦 ملف Backup</b>: ملف واحد لكل راوتر (حد أقصى 450 KB) بيتشفّر ويتزامن.</li><li><b>📶 الأكسس بوينت</b>: ➕ جديد، وزرار <b>📱 QR الواي فاي</b> بيفتح كود تمسحه بالموبايل للاتصال، و<b>⤵️ واي فاي الراوتر</b> بينسخ بيانات الشبكة.</li></ul></div></details>
