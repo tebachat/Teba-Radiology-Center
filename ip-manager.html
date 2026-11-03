@@ -653,10 +653,46 @@ body[data-sec=it] :is(header h1,.itT,.rtg>summary,.rtsub,.rtr-h,label,.chip,.itS
 .tile.it b{font-size:20px}
 body[data-sec=it] .chip{background:rgba(212,175,55,.15)!important;color:#f0d77a!important;border-color:rgba(212,175,55,.35)!important}
 html[data-theme=ios] .tile.it{--ic:#af52de}
+
+/* ===== تاب QR Code (للأدمن) ===== */
+#printQR{display:none}
+.qrBar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0 8px}
+.qrBar #qrQ{flex:1;min-width:140px}
+.qrAllRow{display:flex;align-items:center;gap:10px;margin:0 2px 8px;font-size:13.5px;color:var(--muted)}
+.qrAllRow label{display:flex;align-items:center;gap:8px;cursor:pointer;color:var(--text);font-weight:700}
+.qrRow{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;background:var(--card)}
+.qrRow.on{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand) inset}
+.qrRow input[type=checkbox],.qrOpt input[type=checkbox],.qrAllRow input[type=checkbox]{width:22px;height:22px;min-width:22px;padding:0;margin:0;accent-color:var(--brand);cursor:pointer}
+.qrNm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qrLk{font-size:12.5px;color:var(--muted);direction:ltr;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qrRow button.sm{min-width:40px;min-height:40px;padding:0 8px;font-size:17px;line-height:1}
+.qrOpts{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 12px;display:grid;gap:8px}
+.qrOpt{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;font-weight:600}
+.qrOpt small{display:block;color:var(--muted);font-weight:400;font-size:12px}
+.qrCard{background:#fff;color:#111;border:1px solid #d6dde3;border-radius:18px;padding:16px;text-align:center}
+.qrCard .qcN{font-weight:800;font-size:17px;margin:0 0 10px;word-break:break-word}
+.qrCard .qcQ svg{width:100%;max-width:240px;height:auto;display:block;margin:0 auto;border:1px solid #e5e9ed;border-radius:10px}
+.qrCard .qcL{direction:ltr;font-size:12px;color:#445;margin-top:10px;word-break:break-all}
+.qrCard .qcP{margin-top:12px;padding-top:10px;border-top:1px dashed #b8c2cc;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-size:13px}
+.qrCard .qcP b{direction:ltr;font-family:ui-monospace,Consolas,monospace;font-size:15px;letter-spacing:1px;word-break:break-all}
+.qrCard .qcP button{background:#f2f5f8;color:#111;border-color:#cfd8df;min-width:38px;padding:4px 8px}
+.qrCard .qcX{color:#667;font-size:12.5px;margin-top:10px}
+@media print{
+  body.pq>*:not(#printQR){display:none!important}
+  body.pq #printQR{display:block!important;color:#000;background:#fff;direction:rtl;padding:0}
+  #printQR .pqh{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin:0 0 10px;direction:ltr}
+  #printQR .pqg{display:grid;grid-template-columns:repeat(var(--pqc,3),minmax(0,1fr));gap:10px}
+  #printQR .pqc{border:1px solid #888;border-radius:8px;padding:10px;text-align:center;break-inside:avoid;page-break-inside:avoid;background:#fff}
+  #printQR .pqn{font-weight:700;font-size:13px;margin-bottom:6px;word-break:break-word}
+  #printQR .pqs svg{width:100%;max-width:160px;height:auto;display:block;margin:0 auto;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printQR .pql{font-size:10.5px;direction:ltr;word-break:break-all;margin-top:6px;color:#000}
+  #printQR .pqp{font:700 12px ui-monospace,Consolas,monospace;direction:ltr;word-break:break-all;border-top:1px dashed #666;margin-top:7px;padding-top:5px}
+}
+html[data-theme=ios] .tile.qr{--ic:#5ac8fa}
 </style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo<small>ver 26.10.31:24</small></div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.11.3.1</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -766,21 +802,22 @@ html[data-theme=ios] .tile.it{--ic:#af52de}
   <div class="actions"><button id="tClose">إغلاق</button></div>
 </div></div>
 <div class="modal" id="mGuide"><div class="box" style="max-width:440px;max-height:90vh;overflow:auto"><h2>📖 دليل الاستخدام</h2>
-  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.10.31:24</span></p>
+  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.11.3.1</span></p>
 <details class="rtg" open><summary>✨ مميزات البرنامج</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تنظيم عناوين الـ IP لأجهزة المركز في أقسام: طابعات الأجهزة، الأجهزة، الورك ستيشن، الشبكة والسيرفرات.</li><li>أقسام للأدمن بس: <b>📡 الراوتر</b> (والأكسس بوينت)، <b>📹 كاميرات Dahua</b>، <b>🔑 Device Login</b>، <b>📧 حسابات وإيميلات</b>، <b>📶 مراقبة الشبكة</b>، <b>🛠 الصيانة</b>، <b>🧾 سجل التدقيق</b>، <b>🗝️ Stacks</b>.</li><li>كشف تلقائي لمشاكل الـ IP (غير صالح أو مكرر) وعرض الشبكات (Subnets).</li><li>بحث شامل وفلاتر، وأكتر من طريقة عرض.</li><li>فحص الاتصال وDICOM وتسجيل الصيانة (حسب الصلاحية).</li><li>طباعة وتصدير Excel / CSV ومشاركة PDF على واتساب.</li><li>نسخ احتياطي واسترجاع، وسجل بالتغييرات.</li><li>مزامنة بين الأجهزة.</li><li>حسابات عرض فقط بصلاحيات إنت اللي بتحددها.</li><li>خزنة مشفّرة لليوزرات والباسوردات.</li><li><b>📊 لوحة معلومات</b> في الرئيسية (حالة المراقبة، الصيانة، مشاكل البيانات، الأجهزة حسب القسم، آخر التعديلات) وصفحة تفاصيل موحدة لكل جهاز.</li><li><b>📶 مراقبة الشبكة</b> من خدمة خلفية، و<b>🛠 إدارة الصيانة</b>، و<b>🧾 سجل تدقيق</b> شامل، و<b>🔗 روابط ومراجع</b> لكل جهاز.</li><li><b>📱 ثيم iOS</b> (فاتح وداكن تلقائي) بشريط تنقل سفلي وعناوين كبيرة.</li><li>علامة مائية وحماية من لقطات الشاشة للحسابات غير الأدمن، وتطبيق أندرويد بحماية FLAG_SECURE.</li></ul></div></details>
-<details class="rtg"><summary>🧭 الاستخدام اليومي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>من الرئيسية اختار القسم.</li><li>دوس <b>➕ إضافة</b> لإضافة جهاز: الاسم، IP، النوع، المكان، Port، AE Title، Host، MAC وغيرها.</li><li>استخدم 🔍 البحث (بالاسم أو IP أو المكان أو MAC) والفلاتر.</li><li>التبويبات: <b>📋 الجدول</b> و<b>🧾 السجل</b> (مين عدّل إيه) و<b>🧭 الشبكات</b>.</li><li>أزرار كارت الجهاز (فحص الاتصال / DICOM / ملاحظة الصيانة / تعديل / حذف) بتظهر حسب صلاحياتك.</li><li><b>🎨</b> للمظهر وطريقة عرض الأقسام والأجهزة.</li><li><b>🖨️</b> للطباعة: جوه القسم بتطبع القسم، وفي الرئيسية بتطبع كل الأقسام.</li><li><b>⚙️ ضبط</b>: استيراد، Excel / CSV، مشاركة PDF، نسخ احتياطي واسترجاع، والحسابات.</li></ol></div></details>
-<details class="rtg"><summary>📡 الراوتر والأكسس بوينت</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>📚 تابات الراوتر</b>: اختار الموديل وادوس <b>ℹ️ معلومات</b> على أي تاب تعرف وظيفته.</li><li>بيانات الراوتر في مجموعات تتطوي: عام، الشبكة، دخول الراوتر، PPPoE، الواي فاي، ملاحظات. <b>👁</b> إظهار / إخفاء، <b>📋</b> نسخ، <b>💾</b> حفظ.</li><li><b>📦 ملف Backup</b>: ملف واحد لكل راوتر (حد أقصى 450 KB) بيتشفّر ويتزامن.</li><li><b>📶 الأكسس بوينت</b>: ➕ جديد، وزرار <b>📱 QR الواي فاي</b> بيفتح كود تمسحه بالموبايل للاتصال، و<b>⤵️ واي فاي الراوتر</b> بينسخ بيانات الشبكة.</li></ul></div></details>
+<details class="rtg"><summary>🧭 الاستخدام اليومي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>من الرئيسية اختار القسم.</li><li>دوس <b>➕ إضافة</b> لإضافة جهاز: الاسم، IP، النوع، المكان، Port، AE Title، Host، MAC وغيرها.</li><li>استخدم 🔍 البحث (بالاسم أو IP أو المكان أو MAC) والفلاتر.</li><li>التبويبات: <b>📋 الجدول</b> و<b>🧾 السجل</b> (مين عدّل إيه) و<b>🧭 الشبكات</b>.</li><li>أزرار كارت الجهاز (فحص الاتصال / DICOM / ملاحظة الصيانة / تعديل / حذف) بتظهر حسب صلاحياتك.</li><li><b>🎨</b> للمظهر وطريقة العرض (على الجهاز ده بس): <b>المظهر</b> (الافتراضي iOS، تركواز، كحلي وأورانج، أزرق، أخضر، بنفسجي، غروب، رمادي داكن)، و<b>عرض الأقسام</b> في الرئيسية (افتراضي / أيقونات كبيرة / صغيرة / قايمة)، و<b>عرض الأجهزة</b> (تفاصيل / Tiles / أيقونات كبيرة أو متوسطة أو صغيرة).</li><li><b>📲 تثبيت التطبيق</b>: زرار بيظهر في شاشة الدخول (لو المتصفح بيدعمه) عشان تثبّت الصفحة كتطبيق على الجهاز.</li><li><b>🖨️</b> للطباعة: جوه القسم بتطبع القسم، وفي الرئيسية بتطبع كل الأقسام.</li><li><b>⚙️ ضبط</b>: استيراد، Excel / CSV، مشاركة PDF، نسخ احتياطي واسترجاع، والحسابات.</li><li><b>📥 الاستيراد</b>: اختار ملف Excel / CSV، أو الصق البيانات من Excel وادوس <b>قراءة اللصق</b>، واختار الشيت (لو الملف فيه أكتر من شيت) وطابق الأعمدة قبل ما تدوس استيراد.</li></ol></div></details>
+<details class="rtg"><summary>📡 الراوتر والأكسس بوينت</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>📚 تابات الراوتر</b>: اختار الموديل وادوس <b>ℹ️ معلومات</b> على أي تاب تعرف وظيفته.</li><li>بيانات الراوتر في مجموعات تتطوي: عام، الشبكة، دخول الراوتر، PPPoE، الواي فاي، ملاحظات. <b>👁</b> إظهار / إخفاء، <b>📋</b> نسخ، <b>💾</b> حفظ.</li><li><b>📦 ملف Backup</b>: ملف واحد لكل راوتر (حد أقصى 450 KB) بيتشفّر ويتزامن.</li><li><b>📶 الأكسس بوينت</b>: ➕ جديد، وزرار <b>📱 QR الواي فاي</b> بيفتح كود تمسحه بالموبايل للاتصال (وفيه <b>⬇️ حفظ صورة</b> للكود)، و<b>⤵️ واي فاي الراوتر</b> بينسخ بيانات الشبكة.</li></ul></div></details>
 <details class="rtg"><summary>📹 كاميرات Dahua</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>سيرفر (NVR / DSS): عام، الشبكة (IP وPorts وP2P وDDNS)، دخول الأدمن، نمط الفتح (Pattern)، الحسابات، ملاحظات.</li><li>الحسابات: ضيف أي عدد (يوزر، باسورد، صلاحية) بزرار ➕ إضافة حساب.</li><li><b>📦 ملف إعدادات السيرفر</b>: ملف واحد، بيتشفّر ويتزامن.</li><li>الكاميرات: كارت لكل كاميرا (IP، Port، يوزر، باسورد) وزرار <b>⤵️ نفس بيانات السيرفر</b>.</li></ul></div></details>
 <details class="rtg"><summary>🔑 Device Login</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>دوس <b>➕ جهاز جديد</b> واكتب اسم الجهاز واليوزر والباسورد وملاحظات، ثم <b>💾 حفظ</b>.</li><li>فيه خانة بحث بالاسم فوق القايمة.</li><li>اليوزر والباسورد بيتشفّروا بالخزنة.</li></ul></div></details>
-<details class="rtg"><summary>🔐 الخزنة (التشفير)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>الأدمن يدوس <b>🔒 تفعيل التشفير</b> ويكتب باسورد (8 حروف على الأقل).</li><li>الحقول الحساسة بتظهر مقفولة لحد <b>🔓 فتح</b> بالباسورد، وبتتقفل لوحدها بعد 10 دقايق أو بزرار <b>🔒 قفل</b>.</li><li><b>🔑 تغيير الباسورد</b> للأدمن (والخزنة لازم تكون مفتوحة). لو الباسورد اتنسي مفيش استرجاع للبيانات المشفّرة.</li><li>التفاصيل في زرار <b>ℹ️ تعليمات التشفير</b> جوه أي قسم من الأقسام دي.</li></ol></div></details>
-<details class="rtg"><summary>👥 الحسابات والصلاحيات</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>من <b>⚙️ ضبط ثم 🔑 الحسابات والصلاحيات</b>.</li><li>الحسابات عرض فقط، وبتيجي من ملف <code dir="ltr">ip-access-….js</code> المنشور مع الصفحة. أي حساب جديد أو تغيير باسورد لازم يتنشر الملف من جديد.</li><li>الصلاحيات (إضافة، تعديل، حذف، فحص، مشاركة، طباعة، استيراد، نسخ احتياطي، السجل، الشبكات، إظهار MAC…) افتراضية للكل أو مخصصة لكل حساب، وبتتزامن بين الأجهزة.</li><li>زرار <b>📲 واتس</b> جنب الحساب بيشارك أجهزة قسمه كـ PDF، وبتشوف آخر دخول لكل حساب.</li></ul></div></details>
+<details class="rtg"><summary>🔐 الخزنة (التشفير)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>الأدمن يدوس <b>🔒 تفعيل التشفير</b> ويكتب باسورد (8 حروف على الأقل).</li><li>الحقول الحساسة بتظهر مقفولة لحد <b>🔓 فتح</b> بالباسورد، وبتتقفل لوحدها بعد 5 دقايق من عدم الاستخدام (أو بعد دقيقة لو سبت التطبيق في الخلفية) أو بزرار <b>🔒 قفل</b>.</li><li><b>🔑 تغيير الباسورد</b> للأدمن (والخزنة لازم تكون مفتوحة). لو الباسورد اتنسي مفيش استرجاع للبيانات المشفّرة.</li><li>التفاصيل في زرار <b>ℹ️ تعليمات التشفير</b> جوه أي قسم من الأقسام دي.</li></ol></div></details>
+<details class="rtg"><summary>👥 الحسابات والصلاحيات</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>من <b>⚙️ ضبط ثم 🔑 الحسابات والصلاحيات</b>.</li><li>الحسابات عرض فقط، وبتيجي من ملف <code dir="ltr">ip-access-….js</code> المنشور مع الصفحة. أي حساب جديد أو تغيير باسورد لازم يتنشر الملف من جديد.</li><li>الصلاحيات (إضافة، تعديل، حذف، فحص، مشاركة، طباعة، استيراد، نسخ احتياطي، السجل، الشبكات، إظهار MAC…) افتراضية للكل أو مخصصة لكل حساب، وبتتزامن بين الأجهزة.</li><li>زرار <b>📲 واتس</b> جنب الحساب بيشارك أجهزة قسمه كـ PDF، وبتشوف آخر دخول لكل حساب.</li><li><b>حساب جديد</b>: الاسم والباسورد (4 على الأقل) والقسم، و<b>تاريخ انتهاء</b> اختياري للحساب.</li><li><b>تغيير باسورد الأدمن</b> من نفس النافذة (6 على الأقل). و<b>↺ إرجاع الحساب للافتراضي</b> بيرجّع صلاحيات الحساب المختار للإعداد الافتراضي.</li></ul></div></details>
 <details class="rtg"><summary>📊 لوحة المعلومات وتفاصيل الجهاز</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تحت بلاطات الأقسام في الرئيسية بطاقات: <b>مراقبة الشبكة</b> و<b>الصيانة</b> (للأدمن)، و<b>مشاكل البيانات</b>، و<b>الأجهزة حسب القسم</b>، و<b>آخر التعديلات</b>. الضغط على أي جهاز فيها بيفتح تفاصيله.</li><li><b>تفاصيل الجهاز:</b> دوس على اسم الجهاز في الجدول أو أي بطاقة. بتشوف بياناته ومشاكله وآخر اختبار وحالة المراقبة (Ping) وآخر نشاط عليه، وبتقدر تسجّل صيانة أو تضيف رابط من نفس النافذة. بتفتح للأجهزة العادية بس، أما الراوتر والكاميرات والحسابات فليها شاشاتها الخاصة.</li></ul></div></details>
 <details class="rtg"><summary>📶 مراقبة الشبكة (للأدمن)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>القسم بيعرض: الأجهزة الشغالة والمش مستجيبة، زمن الـ Ping، حالة البورت وDICOM، آخر وقت فحص، وسجل الانقطاع والعودة بمدته.</li><li>الفحص <b>مش بيتم من المتصفح</b>. بتشغّل الملف <span dir="ltr">ip-monitor-agent.js</span> على كمبيوتر شغال طول الوقت جوه شبكة المركز، وهو بيكتب النتايج على Firebase والصفحة بتقراها.</li><li>لو ظهر <b>⚠ خدمة الفحص واقفة</b> يبقى النتايج قديمة والأرقام مش حقيقية.</li><li>الجهاز بيتعتبر واقف بعد فحصين فاشلين ورا بعض (عشان ما يطلعش إنذار كاذب). فحص DICOM هو محاولة اتصال (Association) مش C-ECHO كامل.</li><li>محتاج قاعدة <span dir="ltr">teba_ip_monitor</span> في Firestore Rules. الخطوات الكاملة في ملف <span dir="ltr">monitor-README.txt</span>.</li></ul></div></details>
 <details class="rtg"><summary>🛠 الصيانة والروابط</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>تسجيل صيانة:</b> زرار 🛠 على الجهاز (أو ➕ تسجيل في تفاصيله): النوع، التاريخ، إيه اللي اتعمل، الفني، وموعد الصيانة الجاية (اختياري، وفيه اختصارات شهر / 3 شهور / 6 شهور / سنة).</li><li>قسم <b>🛠 الصيانة</b> (للأدمن) بيعرض المتأخر والقريب (30 يوم) والأجهزة اللي ماتصانتش، وآخر الأعمال.</li><li><b>🔗 روابط ومراجع:</b> أضف عنوان ورابط لأي جهاز (مثلًا ملف على Drive). الروابط <b>http / https</b> بس، وأي رابط تاني بيتعرض "غير آمن" ومش بيتفتح. حد أقصى 15 رابط.</li><li>الصيانة والروابط <b>مش مشفّرة</b>، فما تكتبش فيها باسوردات.</li></ul></div></details>
 <details class="rtg"><summary>🧾 سجل التدقيق (للأدمن)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>بيسجّل كل العمليات: إضافة وتعديل (بالقيمة القديمة والجديدة) وحذف واستيراد وصيانة وفحص، وكمان أحداث النظام: فتح الخزنة، الاسترجاع، تنزيل نسخة، مسح البيانات، تصدير الحسابات. مع اسم المستخدم.</li><li>بحث وفلاتر (الفترة، العملية، القسم) وزرار <b>📤 تصدير CSV</b>.</li><li>السجل <b>محفوظ على كل جهاز لوحده</b> (آخر 2000 عملية) ومش بيتزامن، ومفيهوش أي باسوردات.</li></ul></div></details>
-<details class="rtg"><summary>🗝️ Stacks (الموقع والحسابات والروابط)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تاب للأدمن بس بخط مائل وشكل مميز، لتسجيل: <b>🌐 الموقع</b> (الرابط والاستضافة)، و<b>🔑 حسابات الخدمات</b> (Vercel / GitHub / Firebase / Netlify... باليوزر والباسورد ورابط الدخول)، و<b>🔗 الروابط الفرعية</b> (زي الحضور والانصراف وTeba IP).</li><li><b>كل حاجة فيه مشفّرة بالخزنة، حتى العناوين.</b> وهي مقفولة مش بيظهر غير عدد العناصر. لازم تفتح الخزنة عشان تشوف أو تضيف.</li><li>على كل عنصر أزرار سريعة: 👤 نسخ اليوزر، 🔑 نسخ الباسورد (بيتمسح من الحافظة بعد 30 ثانية)، 📋 نسخ الرابط، ↗ فتح الرابط (http / https بس).</li><li>مش بيظهر في البحث الشامل ولا بيتسجل عنوانه في سجل التدقيق.</li><li>لو الباسورد اتنسي مفيش استرجاع للبيانات المشفّرة، فاحتفظ بنسخة احتياطية.</li></ul></div></details>
+<details class="rtg"><summary>🗝️ Stacks (الموقع والحسابات والروابط)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تاب للأدمن بس بخط مائل وشكل مميز، لتسجيل: <b>🌐 الموقع</b> (الرابط والاستضافة)، و<b>🔑 حسابات الخدمات</b> (Vercel / GitHub / Firebase / Netlify... باليوزر والباسورد ورابط الدخول)، و<b>🔗 الروابط الفرعية</b> (زي الحضور والانصراف وTeba IP).</li><li><b>كل حاجة فيه مشفّرة بالخزنة، حتى العناوين.</b> وهي مقفولة مش بيظهر غير عدد العناصر. لازم تفتح الخزنة عشان تشوف أو تضيف.</li><li>نوعا <b>الموقع</b> و<b>الرابط الفرعي</b> فيهم حقل اختياري <b>باسورد دخول الموقع</b> (مشفّر بالخزنة زي باقي الحقول)، وبيظهر في تاب QR Code.</li><li>على كل عنصر أزرار سريعة: 👤 نسخ اليوزر، 🔑 نسخ الباسورد (بيتمسح من الحافظة بعد 30 ثانية)، 📋 نسخ الرابط، ↗ فتح الرابط (http / https بس).</li><li>مش بيظهر في البحث الشامل ولا بيتسجل عنوانه في سجل التدقيق.</li><li>لو الباسورد اتنسي مفيش استرجاع للبيانات المشفّرة، فاحتفظ بنسخة احتياطية.</li></ul></div></details>
 <details class="rtg"><summary>📱 ثيم iOS</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>فعّله من <b>🎨 المظهر ثم 📱 iOS (فاتح)</b>، وترجع للافتراضي من نفس القائمة. بيتحول <b>داكن تلقائيًا</b> لو تليفونك على الوضع الداكن.</li><li>على الموبايل: <b>شريط سفلي</b> (الرئيسية، الراوتر، الكاميرات، الشبكات، الإيميلات)، وعناوين كبيرة بتصغر مع السكرول، والنوافذ بتطلع من تحت وبتتقفل بالسحب لتحت.</li><li>الراوتر والكاميرات والإيميلات بتظهر في الشريط للأدمن بس.</li></ul></div></details>
 <details class="rtg"><summary>☁️ المزامنة والنسخ الاحتياطي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>باسورد المزامنة: <b>⚙️ ضبط ثم 🔑 الحسابات والصلاحيات ثم ☁️ المزامنة بين الأجهزة</b>، اكتب الباسورد وادوس <b>حفظ وربط</b>، و<b>🔄 مزامنة الآن</b> لو عايز تفرضها.</li><li>لتغيير باسورد المزامنة: غيّره من لوحة Firebase، وبعدين حدّثه على كل جهاز.</li><li><b>🔑 باسورد المزامنة:</b> من ⚙️ ضبط تقدر تشيل "افتكر الباسورد على الجهاز ده" (يتحفظ للجلسة بس) أو تدوس "انسَ باسورد المزامنة".</li><li><b>🗂 نافذة الجهاز بتبويبات:</b> عام / الشبكة / DICOM / السجل (تاريخ التعديلات على الجهاز ده).</li><li><b>🔐 إعادة تأكيد الباسورد:</b> قبل تغيير باسورد الخزنة، أو مسح كل البيانات، أو الاسترجاع من نسخة (محلية أو Firebase)، أو تصدير الحسابات، بيطلب باسورد الخزنة (ويفتكره دقيقة واحدة).</li><li><b>📤 تصدير/استيراد الحسابات:</b> من قسم حسابات وإيميلات (للأدمن): ملف مشفّر بنفس باسورد الخزنة، والاستيراد بيشترط تفتح الخزنة بنفس الباسورد. <b>👤🔑</b> على كارت الحساب بينسخوا اليوزر أو الباسورد من غير فتح الكارت. علامة 🔒 جنب أي حقل مشفّر.</li><li><b>🔑 قوة الباسورد:</b> مؤشر ملوّن عند تفعيل التشفير أو تغييره، والباسورد الضعيف أو الشائع بيترفض. <b>📜 سجل الفتح</b> (للأدمن) بيعرض محاولات فتح الخزنة على الجهاز ده. وبعد 6 شهور من آخر تغيير بيظهر تذكير. <b>⚠ التعارض:</b> لو نفس العنصر اتعدّل على جهازين في نفس الوقت بيظهر تنبيه ويتسجل في سجل القسم.</li><li><b>🛡 حماية الخزنة:</b> بعد 5 محاولات غلط لفتح الخزنة بيتوقف الفتح مؤقتًا (30 ثانية وبتزيد). والباسورد المعروض بـ 👁 بيرجع مخفي بعد 15 ثانية.</li><li><b>↩ التراجع:</b> بعد أي حذف بيظهر زرار تراجع لمدة 10 ثواني.</li><li><b>☁️ النسخ التلقائي:</b> كل أسبوع بيتعمل نسخة على Firebase (لو الأدمن فتح التطبيق)، وبيتحتفظ بآخر 10. بتقدر توقفه من نافذة النسخ. والرئيسية بتعرض عمر آخر نسخة.</li><li><b>🔒 القفل التلقائي:</b> الخزنة بتتقفل بعد 5 دقايق من عدم الاستخدام، أو بعد دقيقة لو سبت التطبيق في الخلفية. والباسورد المنسوخ بيتمسح من الحافظة بعد 30 ثانية.</li><li><b>☁️ نسخ Firebase الاحتياطية</b>: من ⚙️ ضبط (للأدمن)، تعمل نسخة بتاريخها وتسترجع منها لاحقًا.</li><li><b>💾 نسخة احتياطية</b> و<b>♻️ استرجاع</b> من ⚙️ ضبط. النسخة بتشمل البيانات المشفّرة، فاحتفظ بيها في مكان آمن.</li></ul></div></details>
+<details class="rtg"><summary>📱 QR Code (للأدمن)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>بيعرض كل لينكات <b>Stacks</b> (الموقع والروابط الفرعية وروابط دخول الحسابات) بالاسم، وأسماءها مشفّرة فلازم الخزنة تكون مفتوحة. أي عنصر رابطه مش http / https مش بيظهر.</li><li>فيه خانة <b>🔍 بحث</b> بالاسم أو اللينك، و<b>تحديد الكل</b> (للنتايج الظاهرة)، و<b>إلغاء التحديد</b>.</li><li>على كل لينك: ☑ للتحديد، <b>📋</b> لنسخ اللينك، و<b>QR</b> لعرض كارت فيه الـ QR واللينك وباسورد الموقع (مخفي بنقط ومتشفّر بالخزنة، و👁 لإظهاره 15 ثانية، و📋 لنسخه).</li><li>في كارت الـ QR: <b>⬇ تنزيل PNG</b> (الـ QR بس من غير باسورد) و<b>🖨 طباعة</b> للكارت ده لوحده بنفس خيارات الطباعة.</li><li>باسورد الموقع بيتضاف من <b>Stacks</b> (حقل «باسورد دخول الموقع») وبيتشفّر زي باقي الحقول.</li><li>الطباعة: حدد لينك أو أكتر أو الكل، واختار تطبع <b>QR</b> و/أو <b>اللينك</b> (واحد منهم على الأقل)، ثم <b>🖨 طباعة المحدد</b> (فوق وتحت). لو الـ QR مش ممكن (لينك أطول من 900 حرف) بيتطبع نص اللينك بدله.</li><li><b>طباعة الباسورد</b> تحت الـ QR تفعيلها بيطلب باسورد الخزنة (وبيتطلب تاني وقت الطباعة لو عدّت دقيقة)، وبترجع مقفولة لما الخزنة تتقفل. الباسوردات بتتمسح من الصفحة بعد الطباعة.</li><li>الطباعة بتتسجل في سجل التدقيق من غير أي باسورد.</li></ul></div></details>
 <details class="rtg"><summary>🛡️ نصايح أمان</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>فعّل الخزنة، ومتديش باسورد المزامنة ولا باسورد الخزنة إلا للي محتاج.</li><li>لو حد ماعادش يشتغل معاك: غيّر باسورد المزامنة وباسورد الخزنة، وشيل حسابه.</li><li>الأقسام الخاصة بالأدمن (الراوتر، Dahua، Device Login) ما بتظهرش لغيرك، لكن الحماية الأساسية للباسوردات هي التشفير.</li><li>ماتحفظش صور QR الواي فاي ولا ملفات الـ Backup في أماكن مشتركة.</li></ul></div></details>
 <details class="rtg"><summary>📱 تطبيق الأندرويد</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>مشروع <b>ip-secure-app</b> بيفتح الصفحة في تطبيق بحماية <b>FLAG_SECURE</b> (يمنع السكرين شوت وتسجيل الشاشة).</li><li>الطباعة وتحميل الملفات مش شغالين جواه، استخدم المتصفح لده.</li></ul></div></details>
   <div class="actions"><button class="primary" id="gdX">إغلاق</button></div>
@@ -794,7 +831,7 @@ html[data-theme=ios] .tile.it{--ic:#af52de}
    <ul style="margin:4px 0 10px;padding-inline-start:20px">
     <li>الأدمن بيدوس <b>🔒 تفعيل التشفير</b> ويكتب باسورد (8 حروف على الأقل)، وكل البيانات الحالية بتتشفّر فورًا.</li>
     <li>بعد كده الحقول الحساسة بتظهر مقفولة لحد ما تدوس <b>🔓 فتح</b> وتكتب الباسورد.</li>
-    <li>الخزنة بتتقفل لوحدها بعد 10 دقايق من غير استخدام، أو بزرار <b>🔒 قفل</b>.</li>
+    <li>الخزنة بتتقفل لوحدها بعد 5 دقايق من غير استخدام، أو بعد دقيقة لو سبت التطبيق في الخلفية، أو بزرار <b>🔒 قفل</b>.</li>
     <li>أي حساب ليه صلاحية العرض الحساس بيفتحها بنفس الباسورد. الباسورد ده تدّيه لهم بنفسك، مش بيتبعت لهم.</li>
     <li>أي حاجة جديدة بتضيفها وإنت فاتح الخزنة بتتشفّر تلقائي.</li>
     <li>تغيير الباسورد من <b>🔑 تغيير الباسورد</b> (للأدمن بس) وبيتطلب إن الخزنة تكون مفتوحة.</li>
@@ -815,6 +852,7 @@ html[data-theme=ios] .tile.it{--ic:#af52de}
   <input type="password" id="vB" autocomplete="off" placeholder="تأكيد الباسورد" style="width:100%;margin-bottom:8px">
   <div class="actions"><button class="primary" id="vOk">تأكيد</button><button id="vX">إلغاء</button></div>
 </div></div>
+<div class="modal" id="mQRL"><div class="box" style="max-width:360px"><div id="qlBody"></div></div></div>
 <div class="modal" id="mQR"><div class="box" style="max-width:340px;text-align:center"><h2 id="qrT">📱 QR الواي فاي</h2>
   <div id="qrBox" style="background:#fff;padding:8px;border-radius:12px;display:inline-block;line-height:0"></div>
   <p id="qrS" style="margin:10px 0 2px;font-weight:700"></p><p style="margin:0 0 6px;font-size:12.5px;color:var(--muted)">امسح الكود بكاميرا الموبايل للاتصال بالواي فاي</p>
@@ -1786,6 +1824,7 @@ const SEC={
  mnt:{t:'الصيانة',ic:'🛠️',d:'سجل الصيانة والمواعيد القادمة والمتأخرة لكل الأجهزة',pw:null,types:[],c:'#142624'},
  aud:{t:'سجل التدقيق',ic:'🧾',d:'كل العمليات: مين عمل إيه ومتى',pw:null,types:[],c:'#142624'},
  it:{t:'Stacks',ic:'🗝️',d:'الموقع والحسابات والروابط — مشفّرة بالكامل',pw:null,types:['It'],c:'#120d24'},
+ qr:{t:'QR Code',ic:'📱',d:'QR لكل لينك وطباعة المحدد — مشفّر بالخزنة',pw:null,types:[],c:'#142624'},
  net:{t:'الشبكة والسيرفرات',ic:'🌐',d:'PACS / راوتر / كاميرات / أخرى',pw:null,types:null,c:'#142624'}
 };
 const secOf=i=>Object.keys(SEC).find(k=>SEC[k].types&&SEC[k].types.includes(i.type))||'net';
@@ -1798,7 +1837,7 @@ let st={q:'',type:'',view:'table',sec:'home',sort:'ip',dir:1,editId:null,prob:''
 let imp={rows:[],sheets:null,wb:null};
 const CFG_KEY='teba_ip_cfg_v1',LOG_KEY='teba_ip_log_v1';
 let restricted=null,viewOnly=false,isAdmin=false;
-const ADMIN_SECS=['rt','cam','dl','acc','mon','mnt','aud','it'];
+const ADMIN_SECS=['rt','cam','dl','acc','mon','mnt','aud','it','qr'];
 let cfg={agent:'',pin:''},logs=[],adminOK=false,pend=null;const tests={},unlocked=new Set();
 try{cfg=Object.assign(cfg,JSON.parse(localStorage.getItem(CFG_KEY)||'{}'));logs=JSON.parse(localStorage.getItem(LOG_KEY)||'[]')}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem(CFG_KEY,JSON.stringify(cfg))}catch(e){}};
@@ -1958,6 +1997,7 @@ const TILE_ICONS={
  dprint:'<path d="M7 9V3.5h10V9"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v6.5H7z"/>',
  cam:'<rect x="2" y="7" width="14" height="10" rx="2.5"/><path d="M16 10.5l6-3v9l-6-3"/>',
  dl:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3M14.5 8.5l2 2"/>',
+ qr:'<rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><path d="M14 14h3v3h-3zM20 14v1M17 20h3v-3M14 20v1"/>',
  it:'<path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M9 9l3 12 3-12-3-6z"/>',
  mon:'<path d="M3 12h4l3-7 4 14 3-7h4"/>',
  mnt:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
@@ -1997,6 +2037,7 @@ function render(){
   if(st.sec==='mnt'){renderMnt();return}
   if(st.sec==='aud'){renderAud();return}
   if(st.sec==='it'){renderIT();return}
+  if(st.sec==='qr'){renderQR();return}
   renderStats();renderFilter();renderAlerts();
   $('#vmode').value=st.mode;$('#vmode').style.display=st.view==='table'?'':'none';
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===st.view));
@@ -2346,8 +2387,8 @@ function vpwMark(){try{localStorage.setItem(VPW_KEY,String(Date.now()))}catch(e)
 function vpwRemind(){try{const v=+localStorage.getItem(VPW_KEY)||0;if(!v){vpwMark();return}
   const d=Math.floor((Date.now()-v)/864e5);if(d>=VPW_DAYS)setTimeout(()=>toast('🔑 باسورد الخزنة عدّى عليه '+d+' يوم — فكّر تغيّره (🔑 تغيير الباسورد)'),2600)}catch(e){}}
 let _idle=null;
-function rerender(){if(st.sec==='cam')renderCam();else if(st.sec==='dl')renderDL();else if(st.sec==='acc')renderAcct();else if(st.sec==='mon')renderMon();else if(st.sec==='mnt')renderMnt();else if(st.sec==='aud')renderAud();else if(st.sec==='it')renderIT();else if(st.sec==='rt')renderRouter()}
-function vaultLock(){VAULT.pw=null;VAULT.cache={};VAULT.sig={};_kc.clear();clearTimeout(_idle);rerender();toast('🔒 الخزنة اتقفلت')}
+function rerender(){if(st.sec==='cam')renderCam();else if(st.sec==='dl')renderDL();else if(st.sec==='acc')renderAcct();else if(st.sec==='mon')renderMon();else if(st.sec==='mnt')renderMnt();else if(st.sec==='aud')renderAud();else if(st.sec==='it')renderIT();else if(st.sec==='qr')renderQR();else if(st.sec==='rt')renderRouter()}
+function vaultLock(){VAULT.pw=null;VAULT.cache={};VAULT.sig={};_kc.clear();clearTimeout(_idle);try{QRS.o.pw=false;qrLClose()}catch(e){}rerender();toast('🔒 الخزنة اتقفلت')}
 function vtAct(a){if(a==='help')$('#mVH').classList.add('open');else if(a==='vlog')vlogOpen();else if(a==='lock')vaultLock();else if(a==='change'){reauth('اكتب باسورد الخزنة الحالي قبل تغييره').then(ok=>{if(ok)openVault('change')})}else if(a==='enc'){if(VAULT.pw===null)return;vaultEncryptAll().then(()=>{save();toast('🔐 اتشفّر الباقي ✔');rerender()}).catch(()=>toast('تعذر التشفير'))}else openVault(a)}
 const vBump=()=>{clearTimeout(_idle);if(VAULT.pw!==null)_idle=setTimeout(vaultLock,5*60*1000)};
 let _hid=null;document.addEventListener('visibilitychange',()=>{clearTimeout(_hid);if(document.hidden&&VAULT.pw!==null)_hid=setTimeout(()=>{if(document.hidden&&VAULT.pw!==null)vaultLock()},60000)});
@@ -3143,9 +3184,9 @@ setInterval(()=>{if(st.sec==='mon'&&MON.d&&!MON.d.none&&!document.querySelector(
 /* ---------- Stacks (id: it): الموقع والحسابات والروابط (كله مشفّر بالخزنة، حتى العناوين) ---------- */
 const IT_SVC=['Vercel','GitHub','Firebase','Netlify','Google','Cloudflare','Median','أخرى'];
 const IT_KINDS={
- site:{ic:'🌐',t:'الموقع',f:[{k:'ttl',l:'اسم الموقع'},{k:'url',l:'رابط الموقع',u:1},{k:'hs',l:'الاستضافة / النطاق'},{k:'nt',l:'ملاحظات',full:1}]},
+ site:{ic:'🌐',t:'الموقع',f:[{k:'ttl',l:'اسم الموقع'},{k:'url',l:'رابط الموقع',u:1},{k:'hs',l:'الاستضافة / النطاق'},{k:'pw',l:'باسورد دخول الموقع (اختياري)',m:1},{k:'nt',l:'ملاحظات',full:1}]},
  acct:{ic:'🔑',t:'حساب خدمة',f:[{k:'svc',l:'الخدمة',sel:IT_SVC},{k:'ttl',l:'اسم الحساب (للتعريف)'},{k:'usr',l:'اليوزر / الإيميل'},{k:'pw',l:'الباسورد',m:1},{k:'url',l:'رابط الدخول',u:1},{k:'nt',l:'ملاحظات',full:1}]},
- link:{ic:'🔗',t:'رابط فرعي',f:[{k:'ttl',l:'اسم الرابط (مثلًا الحضور والانصراف)'},{k:'url',l:'الرابط',u:1},{k:'hs',l:'منصة النشر'},{k:'nt',l:'ملاحظات',full:1}]}
+ link:{ic:'🔗',t:'رابط فرعي',f:[{k:'ttl',l:'اسم الرابط (مثلًا الحضور والانصراف)'},{k:'url',l:'الرابط',u:1},{k:'hs',l:'منصة النشر'},{k:'pw',l:'باسورد دخول الموقع (اختياري)',m:1},{k:'nt',l:'ملاحظات',full:1}]}
 };
 const itKind=it=>IT_KINDS[it.akind]||IT_KINDS.link;
 const itTitle=it=>sv(it,'ttl')||itKind(it).t;
@@ -3201,6 +3242,118 @@ $('#view').addEventListener('click',e=>{if(st.sec!=='it')return;const A=st.it,t=
     const o=itCollect('it_'+it.id,it.akind&&IT_KINDS[it.akind]?it.akind:'link');
     setFields(it,o).then(()=>{addLog('تعديل',it,'تحديث '+itKind(it).t);save();toast('تم الحفظ ✔');renderIT()}).catch(()=>toast('تعذر الحفظ'));return}
   if(t.dataset.itdel){const it=items.find(i=>i.id===t.dataset.itdel);if(!it||!can('del')||!confirm('تحذف العنصر ده؟'))return;delItem(it);renderIT()}});
+
+/* ---------- تاب QR Code (id: qr): كل اللينكات + QR + طباعة محددة. مبني على Stacks (مشفّر بالخزنة) ---------- */
+const QR_MAX=900;
+const QRS={q:'',sel:new Set(),o:{qr:true,lk:true,pw:false}};
+let _qlId=null,_qlPw='';
+function qrMake(url){if(!url)throw new Error('empty');if(url.length>QR_MAX)throw new Error('long');
+  const m=TebaQR(url,'M');if(!m||!m.length)throw new Error('fail');return m}
+function qrSvg(m,px){const n=m.length,q=4,S=n+q*2;let d='';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)if(m[r][c])d+=`M${c+q} ${r+q}h1v1h-1z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${S} ${S}" width="${px}" height="${px}" shape-rendering="crispEdges" role="img" aria-label="QR"><rect width="${S}" height="${S}" fill="#fff"/><path d="${d}" fill="#000"/></svg>`}
+function qrList(){const out=[];let skipped=0;
+  itItems().forEach(it=>{if(it.enc&&!cacheOk(it))return;
+    const u=safeUrl(sv(it,'url'));if(!u){skipped++;return}
+    const K=itKind(it);out.push({id:it.id,it,url:u,name:sv(it,'ttl')||sv(it,'svc')||K.t,kind:K.t,ic:K.ic})});
+  out.sort((a,b)=>a.name.localeCompare(b.name,'ar'));out.skipped=skipped;return out}
+function qrVisible(all){const q=QRS.q.trim().toLowerCase();
+  return q?all.filter(r=>(r.name+' '+r.url+' '+r.kind).toLowerCase().includes(q)):all}
+function qrCopy(v){const ok=()=>toast('تم نسخ اللينك ✔'),bad=()=>toast('تعذر النسخ');
+  const fb=()=>{try{const a=document.createElement('textarea');a.value=v;a.style.cssText='position:fixed;opacity:0;left:-9999px';document.body.appendChild(a);a.select();const r=document.execCommand('copy');a.remove();r?ok():bad()}catch(e){bad()}};
+  try{navigator.clipboard.writeText(v).then(ok).catch(fb)}catch(e){fb()}}
+function qrRowHtml(r){const on=QRS.sel.has(r.id),nm=esc(r.name);
+  return `<div class="qrRow${on?' on':''}"><input type="checkbox" class="qrCk" data-qk="${esc(r.id)}"${on?' checked':''} aria-label="تحديد ${nm}"><div style="min-width:0"><div class="qrNm">${r.ic} ${nm}</div><div class="qrLk">${esc(r.url)}</div></div><button class="sm" data-qc="${esc(r.id)}" title="نسخ اللينك" aria-label="نسخ اللينك">📋</button><button class="sm" data-qq="${esc(r.id)}" title="QR Code" aria-label="QR Code"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TILE_ICONS.qr}</svg></button></div>`}
+function qrDrawList(){const box=$('#qrListBox');if(!box)return;
+  const all=qrList(),vis=qrVisible(all),ids=new Set(all.map(r=>r.id));
+  [...QRS.sel].forEach(id=>{if(!ids.has(id))QRS.sel.delete(id)});
+  box.innerHTML=vis.length?vis.map(qrRowHtml).join(''):`<div class="empty" style="padding:24px">${all.length?'مفيش نتيجة للبحث':'مفيش لينكات لسه — ضيفها من Stacks (موقع / رابط فرعي / حساب برابط دخول)'}</div>`;
+  qrSync(vis,all)}
+function qrSync(vis,all){vis=vis||qrVisible(qrList());
+  const a=$('#qrAll'),n=QRS.sel.size,sv2=vis.filter(r=>QRS.sel.has(r.id)).length;
+  if(a){a.checked=vis.length>0&&sv2===vis.length;a.indeterminate=sv2>0&&sv2<vis.length;a.disabled=!vis.length}
+  const c=$('#qrCnt');if(c)c.textContent=n?('محدد: '+n):'مفيش تحديد';
+  const p=$('#qrPrint');if(p)p.textContent='🖨 طباعة المحدد'+(n?' ('+n+')':'')}
+function renderQR(){
+  if(!isAdmin){$('#view').innerHTML='';return}
+  const locked=isLocked();
+  let h=`<div class="card rtdata" style="padding:14px">`+vaultBar();
+  if(locked){
+    h+=`<div class="rtrow"><div class="empty" style="padding:14px;line-height:1.9">🔒 ${vaultOn()?'افتح الخزنة عشان تشوف اللينكات':'فعّل التشفير الأول (زرار 🔒 تفعيل التشفير فوق)'}.<br><small>أسماء اللينكات وباسورداتها مشفّرة ومخفية وهي مقفولة.</small></div></div></div>`;
+    $('#view').innerHTML=h;return}
+  const all=qrList(),o=QRS.o;
+  h+=`<div class="qrOpts"><label class="qrOpt"><input type="checkbox" id="qoQR"${o.qr?' checked':''}><span>طباعة الـ QR Code</span></label><label class="qrOpt"><input type="checkbox" id="qoLK"${o.lk?' checked':''}><span>طباعة اللينك (النص)</span></label><label class="qrOpt"><input type="checkbox" id="qoPW"${o.pw?' checked':''}><span>🔐 طباعة باسورد الموقع تحت الـ QR<small>تفعيلها بيطلب باسورد الخزنة، وبترجع مقفولة لما الخزنة تتقفل</small></span></label></div>`;
+  h+=`<div class="qrBar"><input id="qrQ" type="search" placeholder="🔍 بحث بالاسم أو اللينك..." value="${esc(QRS.q)}" autocomplete="off"></div>`;
+  h+=`<div class="qrAllRow"><label><input type="checkbox" id="qrAll"> تحديد الكل</label><span id="qrCnt" style="margin-inline-start:auto"></span><button class="primary sm" id="qrPrintTop">🖨 طباعة</button></div>`;
+  h+=`<div id="qrListBox"></div>`;
+  h+=`<div class="rtbar" style="margin:12px 0 0"><button class="primary" id="qrPrint" style="flex:1 1 200px">🖨 طباعة المحدد</button><button id="qrClr">إلغاء التحديد</button></div>`;
+  if(all.skipped)h+=`<p style="margin:10px 2px 0;font-size:12.5px;color:var(--muted)">${all.skipped} عنصر في Stacks بدون رابط http/https صالح — مش ظاهر هنا.</p>`;
+  $('#view').innerHTML=h+'</div>';
+  qrDrawList();
+  if(VAULT.pw!==null)vaultEnsure().then(ch=>{if(ch&&st.sec==='qr')renderQR()})}
+async function qrPrint(ids){
+  const all=qrList(),rows=all.filter(r=>ids.includes(r.id)),o=QRS.o;
+  if(!rows.length){toast('حدد لينك واحد على الأقل');return}
+  if(!o.qr&&!o.lk){toast('فعّل طباعة الـ QR أو اللينك على الأقل');return}
+  if(o.pw&&isLocked()){toast(lockMsg());return}
+  if(o.pw&&!(await reauth('اكتب باسورد الخزنة عشان تطبع الباسورد'))){toast('اتلغت طباعة الباسورد');return}
+  let cards='',fail=0,nopw=0;
+  rows.forEach(r=>{let q='';
+    if(o.qr){try{q=qrSvg(qrMake(r.url),170)}catch(e){fail++}}
+    const pw=o.pw?sv(r.it,'pw'):'';if(o.pw&&!pw)nopw++;
+    const showLk=o.lk||(o.qr&&!q);
+    cards+=`<div class="pqc"><div class="pqn">${esc(r.name)}</div>${q?`<div class="pqs">${q}</div>`:''}${showLk?`<div class="pql">${esc(r.url)}</div>`:''}${pw?`<div class="pqp">${esc(pw)}</div>`:''}</div>`});
+  const cols=o.qr?3:2;
+  $('#printQR').innerHTML=`<div class="pqh"><span>مركز طيبة للأشعة — QR Code</span><span>${rows.length} — ${new Date().toLocaleDateString('en-GB')}</span></div><div class="pqg" style="--pqc:${cols}">${cards}</div>`;
+  document.body.classList.add('pq');
+  sysLog('طباعة QR',rows.length+' لينك'+(o.qr?' + QR':'')+(o.lk?' + لينك':'')+(o.pw?' + باسورد':''));
+  if(fail)toast('تعذر عمل QR لـ '+fail+' لينك (طويل جدًا) — اتطبع نصه');
+  else if(nopw)toast(nopw+' لينك مالهوش باسورد محفوظ');
+  const back=()=>{document.body.classList.remove('pq');$('#printQR').innerHTML='';window.removeEventListener('afterprint',back)};
+  window.addEventListener('afterprint',back);
+  setTimeout(()=>window.print(),300)}
+/* كارت الـ QR */
+function qrCardOpen(id){const r=qrList().find(x=>x.id===id);if(!r)return;
+  let m;try{m=qrMake(r.url)}catch(e){toast(e.message==='long'?'اللينك طويل جدًا لعمل QR':'تعذر عمل الـ QR');return}
+  _qlId=id;_qlPw=sv(r.it,'pw')||'';
+  $('#qlBody').innerHTML=`<div class="qrCard"><div class="qcN">${r.ic} ${esc(r.name)}</div><div class="qcQ">${qrSvg(m,240)}</div><div class="qcL">${esc(r.url)}</div>`
+   +(_qlPw?`<div class="qcP"><span>🔑 باسورد الدخول:</span><b id="qlPw">••••••••</b><button id="qlSh" title="إظهار / إخفاء" aria-label="إظهار الباسورد">👁</button><button id="qlCp" title="نسخ الباسورد" aria-label="نسخ الباسورد">📋</button></div>`:`<div class="qcX">مفيش باسورد محفوظ للموقع ده (ضيفه من Stacks)</div>`)
+   +`</div><div class="actions"><button class="primary" id="qlDl">⬇ تنزيل PNG</button><button id="qlPr">🖨 طباعة</button><button id="qlX">إغلاق</button></div>`;
+  $('#mQRL').classList.add('open')}
+function qrLClose(){const m=$('#mQRL');if(m)m.classList.remove('open');const b=$('#qlBody');if(b)b.innerHTML='';_qlPw='';_qlId=null}
+new MutationObserver(()=>{if(!$('#mQRL').classList.contains('open')){$('#qlBody').innerHTML='';_qlPw='';_qlId=null}}).observe($('#mQRL'),{attributes:true,attributeFilter:['class']});
+$('#mQRL').addEventListener('click',e=>{
+  if(e.target.id==='mQRL'){qrLClose();return}
+  const t=e.target.closest('button');if(!t)return;
+  if(t.id==='qlX'){qrLClose();return}
+  if(t.id==='qlSh'){const p=$('#qlPw');if(!p)return;const hid=p.textContent.startsWith('•');
+    p.textContent=hid?_qlPw:'••••••••';t.textContent=hid?'🙈':'👁';clearTimeout(t._h);
+    if(hid)t._h=setTimeout(()=>{const q=$('#qlPw');if(q){q.textContent='••••••••';t.textContent='👁'}},15000);return}
+  if(t.id==='qlCp'){if(_qlPw)cpSafe(_qlPw);return}
+  if(t.id==='qlDl'){const r=qrList().find(x=>x.id===_qlId);if(!r)return;let m;try{m=qrMake(r.url)}catch(er){toast('تعذر عمل الـ QR');return}
+    const n=m.length,q=4,k=10,S=(n+q*2)*k,cv=document.createElement('canvas');cv.width=cv.height=S;const x=cv.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,S,S);x.fillStyle='#000';
+    for(let a=0;a<n;a++)for(let c=0;c<n;c++)if(m[a][c])x.fillRect((c+q)*k,(a+q)*k,k,k);
+    cv.toBlob(b=>{if(!b){toast('تعذر التنزيل');return}const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='qr-'+(r.name||'link').replace(/[\\/:*?"<>|\s]+/g,'-').slice(0,40)+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)});return}
+  if(t.id==='qlPr'){const id=_qlId;if(!id)return;qrLClose();qrPrint([id]);return}
+});
+/* أحداث التاب */
+$('#view').addEventListener('input',e=>{if(st.sec!=='qr'||e.target.id!=='qrQ')return;QRS.q=e.target.value;qrDrawList()});
+$('#view').addEventListener('change',e=>{if(st.sec!=='qr')return;const t=e.target;
+  if(t.dataset&&t.dataset.qk){t.checked?QRS.sel.add(t.dataset.qk):QRS.sel.delete(t.dataset.qk);const row=t.closest('.qrRow');if(row)row.classList.toggle('on',t.checked);qrSync();return}
+  if(t.id==='qrAll'){qrVisible(qrList()).forEach(r=>{t.checked?QRS.sel.add(r.id):QRS.sel.delete(r.id)});qrDrawList();return}
+  if(t.id==='qoQR'){QRS.o.qr=t.checked;return}
+  if(t.id==='qoLK'){QRS.o.lk=t.checked;return}
+  if(t.id==='qoPW'){
+    if(!t.checked){QRS.o.pw=false;return}
+    t.checked=false;
+    if(isLocked()){toast(lockMsg());return}
+    reauth('اكتب باسورد الخزنة عشان تفعّل طباعة الباسورد').then(ok=>{QRS.o.pw=!!ok;const b=$('#qoPW');if(b)b.checked=!!ok;if(!ok)toast('طباعة الباسورد فضلت مقفولة')});return}});
+$('#view').addEventListener('click',e=>{if(st.sec!=='qr')return;const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.vt){vtAct(t.dataset.vt);return}
+  if(t.dataset.qc){const r=qrList().find(x=>x.id===t.dataset.qc);if(r)qrCopy(r.url);return}
+  if(t.dataset.qq){qrCardOpen(t.dataset.qq);return}
+  if(t.id==='qrClr'){QRS.sel.clear();qrDrawList();return}
+  if(t.id==='qrPrint'||t.id==='qrPrintTop'){qrPrint([...QRS.sel]);return}});
 
 /* ---------- المرحلة 3: سجل التدقيق + الصيانة + الروابط ---------- */
 const MT_KINDS=['صيانة دورية','إصلاح عطل','استبدال قطعة','تحديث برمجي / فيرموير','معايرة / فحص جودة','أخرى'];
@@ -3296,6 +3449,7 @@ function tileSub(k,n){
   if(k==='mnt'){const S=mtStats();return S.over.length?'⚠ '+S.over.length+' صيانة متأخرة':S.soon.length?S.soon.length+' قريبة (30 يوم)':'✔ مفيش متأخر'}
   if(k==='aud')return logs.length+' عملية مسجلة';
   if(k==='it')return n+' عنصر 🔒';
+  if(k==='qr')return 'QR وطباعة اللينكات 🔒';
   return n+' '+(k==='acc'?'حساب':'جهاز')}
 
 /* ثيم iOS: عنوان كبير بيصغر مع السكرول + سحب النافذة لتحت للقفل */
@@ -3381,7 +3535,7 @@ $('#syncNow').onclick=()=>{if(!SYNC.on){syncInit();return}syncRun()};
 })();
 </script>
 
-<div id="printAll"></div><div id="wmk"></div><div id="shieldMsg">🔒 المحتوى مخفي — ارجع للصفحة لعرضه</div>
+<div id="printAll"></div><div id="printQR"></div><div id="wmk"></div><div id="shieldMsg">🔒 المحتوى مخفي — ارجع للصفحة لعرضه</div>
 <script>
 (function(){
   const B=document.body,W=document.getElementById('wmk');
