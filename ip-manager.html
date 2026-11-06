@@ -690,9 +690,10 @@ html[data-theme=ios] .tile.it{--ic:#af52de}
 }
 html[data-theme=ios] .tile.qr{--ic:#5ac8fa}
 </style>
+<style>.plg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:6px 0 4px}.plg label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.plg input{width:100%}.plx{border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:8px}.ntd{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-inline-end:6px}</style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo<small>ver 26.11.3.1</small></div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.11.6.3</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -802,10 +803,11 @@ html[data-theme=ios] .tile.qr{--ic:#5ac8fa}
   <div class="actions"><button id="tClose">إغلاق</button></div>
 </div></div>
 <div class="modal" id="mGuide"><div class="box" style="max-width:440px;max-height:90vh;overflow:auto"><h2>📖 دليل الاستخدام</h2>
-  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.11.3.1</span></p>
+  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.11.6.3</span></p>
 <details class="rtg" open><summary>✨ مميزات البرنامج</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تنظيم عناوين الـ IP لأجهزة المركز في أقسام: طابعات الأجهزة، الأجهزة، الورك ستيشن، الشبكة والسيرفرات.</li><li>أقسام للأدمن بس: <b>📡 الراوتر</b> (والأكسس بوينت)، <b>📹 كاميرات Dahua</b>، <b>🔑 Device Login</b>، <b>📧 حسابات وإيميلات</b>، <b>📶 مراقبة الشبكة</b>، <b>🛠 الصيانة</b>، <b>🧾 سجل التدقيق</b>، <b>🗝️ Stacks</b>.</li><li>كشف تلقائي لمشاكل الـ IP (غير صالح أو مكرر) وعرض الشبكات (Subnets).</li><li>بحث شامل وفلاتر، وأكتر من طريقة عرض.</li><li>فحص الاتصال وDICOM وتسجيل الصيانة (حسب الصلاحية).</li><li>طباعة وتصدير Excel / CSV ومشاركة PDF على واتساب.</li><li>نسخ احتياطي واسترجاع، وسجل بالتغييرات.</li><li>مزامنة بين الأجهزة.</li><li>حسابات عرض فقط بصلاحيات إنت اللي بتحددها.</li><li>خزنة مشفّرة لليوزرات والباسوردات.</li><li><b>📊 لوحة معلومات</b> في الرئيسية (حالة المراقبة، الصيانة، مشاكل البيانات، الأجهزة حسب القسم، آخر التعديلات) وصفحة تفاصيل موحدة لكل جهاز.</li><li><b>📶 مراقبة الشبكة</b> من خدمة خلفية، و<b>🛠 إدارة الصيانة</b>، و<b>🧾 سجل تدقيق</b> شامل، و<b>🔗 روابط ومراجع</b> لكل جهاز.</li><li><b>📱 ثيم iOS</b> (فاتح وداكن تلقائي) بشريط تنقل سفلي وعناوين كبيرة.</li><li>علامة مائية وحماية من لقطات الشاشة للحسابات غير الأدمن، وتطبيق أندرويد بحماية FLAG_SECURE.</li></ul></div></details>
 <details class="rtg"><summary>🧭 الاستخدام اليومي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>من الرئيسية اختار القسم.</li><li>دوس <b>➕ إضافة</b> لإضافة جهاز: الاسم، IP، النوع، المكان، Port، AE Title، Host، MAC وغيرها.</li><li>استخدم 🔍 البحث (بالاسم أو IP أو المكان أو MAC) والفلاتر.</li><li>التبويبات: <b>📋 الجدول</b> و<b>🧾 السجل</b> (مين عدّل إيه) و<b>🧭 الشبكات</b>.</li><li>أزرار كارت الجهاز (فحص الاتصال / DICOM / ملاحظة الصيانة / تعديل / حذف) بتظهر حسب صلاحياتك.</li><li><b>🎨</b> للمظهر وطريقة العرض (على الجهاز ده بس): <b>المظهر</b> (الافتراضي iOS، تركواز، كحلي وأورانج، أزرق، أخضر، بنفسجي، غروب، رمادي داكن)، و<b>عرض الأقسام</b> في الرئيسية (افتراضي / أيقونات كبيرة / صغيرة / قايمة)، و<b>عرض الأجهزة</b> (تفاصيل / Tiles / أيقونات كبيرة أو متوسطة أو صغيرة).</li><li><b>📲 تثبيت التطبيق</b>: زرار بيظهر في شاشة الدخول (لو المتصفح بيدعمه) عشان تثبّت الصفحة كتطبيق على الجهاز.</li><li><b>🖨️</b> للطباعة: جوه القسم بتطبع القسم، وفي الرئيسية بتطبع كل الأقسام.</li><li><b>⚙️ ضبط</b>: استيراد، Excel / CSV، مشاركة PDF، نسخ احتياطي واسترجاع، والحسابات.</li><li><b>📥 الاستيراد</b>: اختار ملف Excel / CSV، أو الصق البيانات من Excel وادوس <b>قراءة اللصق</b>، واختار الشيت (لو الملف فيه أكتر من شيت) وطابق الأعمدة قبل ما تدوس استيراد.</li></ol></div></details>
 <details class="rtg"><summary>📡 الراوتر والأكسس بوينت</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>📚 تابات الراوتر</b>: اختار الموديل وادوس <b>ℹ️ معلومات</b> على أي تاب تعرف وظيفته.</li><li>بيانات الراوتر في مجموعات تتطوي: عام، الشبكة، دخول الراوتر، PPPoE، الواي فاي، ملاحظات. <b>👁</b> إظهار / إخفاء، <b>📋</b> نسخ، <b>💾</b> حفظ.</li><li><b>📦 ملف Backup</b>: ملف واحد لكل راوتر (حد أقصى 450 KB) بيتشفّر ويتزامن.</li><li><b>📶 الأكسس بوينت</b>: ➕ جديد، وزرار <b>📱 QR الواي فاي</b> بيفتح كود تمسحه بالموبايل للاتصال (وفيه <b>⬇️ حفظ صورة</b> للكود)، و<b>⤵️ واي فاي الراوتر</b> بينسخ بيانات الشبكة.</li></ul></div></details>
+<details class="rtg"><summary>🔔 الإشعارات وباقات WE</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>🔔 الإشعارات</b> (للأدمن): كل دخول للتطبيق من أي جهاز — ناجح أو فاشل — بيتسجل ويتزامن بنوع الجهاز والوقت. الباسورد المكتوب نفسه عمره ما بيتسجل.</li><li>الجهاز اللي مش متوصل بالمزامنة بيحفظ المحاولات عنده وبيرفعها أول ما يتوصل.</li><li>نفس الصفحة فيها تنبيهات الباقات اللي قربت (7 أيام للتجديد الشهري، 3 أيام للإضافية) والصيانة المتأخرة.</li><li><b>💳 باقات WE والاشتراكات</b> في قسم الراوتر: الخط الأرضي، الإنترنت، Static IP (قيمة + موعد تجديد شهري)، والباقات الإضافية بموعد الانتهاء المتوقع. بتتزامن مع الأجهزة وبتظهر مواعيدها في قسم الصيانة.</li><li><b>✔ تم الدفع</b> بيسجل الدفع في سجل التدقيق، ويخفي التنبيه لحد الدورة الجاية، ولو الموعد عدّى من غير دفع بيظهر 🔴 متأخرة (بعد أول مرة تدوس فيها تم الدفع للباقة).</li><li>🚨 لو نفس الجهاز فشل 3 مرات أو أكتر في 30 دقيقة بيظهر إنذار واحد أحمر.</li><li>مهلة التنبيه (تجديد شهري / باقة إضافية) تتعدل من كارت الباقات.</li><li><b>التنبيه والتطبيق مفتوح</b>: شريط أحمر + صوت + اهتزاز عند أي دخول فاشل من جهاز تاني، وإشعار نظام اختياري على الكمبيوتر. الإعدادات من تاب الإشعارات.</li><li><b>📲 إشعارات الموبايل والتطبيق مقفول</b>: من تاب الإشعارات ولّد اسم قناة، اشترك فيها من تطبيق ntfy، وشغّل <code dir="ltr">ip-notify-agent.js</code> على كمبيوتر المركز.</li><li>لازم قاعدة <code dir="ltr">teba_ip_notif</code> تتضاف في Firestore Rules.</li></ul></div></details>
 <details class="rtg"><summary>📹 كاميرات Dahua</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>سيرفر (NVR / DSS): عام، الشبكة (IP وPorts وP2P وDDNS)، دخول الأدمن، نمط الفتح (Pattern)، الحسابات، ملاحظات.</li><li>الحسابات: ضيف أي عدد (يوزر، باسورد، صلاحية) بزرار ➕ إضافة حساب.</li><li><b>📦 ملف إعدادات السيرفر</b>: ملف واحد، بيتشفّر ويتزامن.</li><li>الكاميرات: كارت لكل كاميرا (IP، Port، يوزر، باسورد) وزرار <b>⤵️ نفس بيانات السيرفر</b>.</li></ul></div></details>
 <details class="rtg"><summary>🔑 Device Login</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>دوس <b>➕ جهاز جديد</b> واكتب اسم الجهاز واليوزر والباسورد وملاحظات، ثم <b>💾 حفظ</b>.</li><li>فيه خانة بحث بالاسم فوق القايمة.</li><li>اليوزر والباسورد بيتشفّروا بالخزنة.</li></ul></div></details>
 <details class="rtg"><summary>🔐 الخزنة (التشفير)</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>الأدمن يدوس <b>🔒 تفعيل التشفير</b> ويكتب باسورد (8 حروف على الأقل).</li><li>الحقول الحساسة بتظهر مقفولة لحد <b>🔓 فتح</b> بالباسورد، وبتتقفل لوحدها بعد 5 دقايق من عدم الاستخدام (أو بعد دقيقة لو سبت التطبيق في الخلفية) أو بزرار <b>🔒 قفل</b>.</li><li><b>🔑 تغيير الباسورد</b> للأدمن (والخزنة لازم تكون مفتوحة). لو الباسورد اتنسي مفيش استرجاع للبيانات المشفّرة.</li><li>التفاصيل في زرار <b>ℹ️ تعليمات التشفير</b> جوه أي قسم من الأقسام دي.</li></ol></div></details>
@@ -1823,6 +1825,7 @@ const SEC={
  mon:{t:'مراقبة الشبكة',ic:'📶',d:'الأجهزة المتاحة والمنقطعة، Ping، البورتات، DICOM، وسجل الانقطاع',pw:null,types:[],c:'#142624'},
  mnt:{t:'الصيانة',ic:'🛠️',d:'سجل الصيانة والمواعيد القادمة والمتأخرة لكل الأجهزة',pw:null,types:[],c:'#142624'},
  aud:{t:'سجل التدقيق',ic:'🧾',d:'كل العمليات: مين عمل إيه ومتى',pw:null,types:[],c:'#142624'},
+ ntf:{t:'الإشعارات',ic:'🔔',d:'دخول الأجهزة (الناجح والفاشل) متزامن + تنبيهات الباقات والمواعيد',pw:null,types:[],c:'#142624'},
  it:{t:'Stacks',ic:'🗝️',d:'الموقع والحسابات والروابط — مشفّرة بالكامل',pw:null,types:['It'],c:'#120d24'},
  qr:{t:'QR Code',ic:'📱',d:'QR لكل لينك وطباعة المحدد — مشفّر بالخزنة',pw:null,types:[],c:'#142624'},
  net:{t:'الشبكة والسيرفرات',ic:'🌐',d:'PACS / راوتر / كاميرات / أخرى',pw:null,types:null,c:'#142624'}
@@ -1837,7 +1840,7 @@ let st={q:'',type:'',view:'table',sec:'home',sort:'ip',dir:1,editId:null,prob:''
 let imp={rows:[],sheets:null,wb:null};
 const CFG_KEY='teba_ip_cfg_v1',LOG_KEY='teba_ip_log_v1';
 let restricted=null,viewOnly=false,isAdmin=false;
-const ADMIN_SECS=['rt','cam','dl','acc','mon','mnt','aud','it','qr'];
+const ADMIN_SECS=['rt','cam','dl','acc','mon','mnt','aud','ntf','it','qr'];
 let cfg={agent:'',pin:''},logs=[],adminOK=false,pend=null;const tests={},unlocked=new Set();
 try{cfg=Object.assign(cfg,JSON.parse(localStorage.getItem(CFG_KEY)||'{}'));logs=JSON.parse(localStorage.getItem(LOG_KEY)||'[]')}catch(e){}
 const saveCfg=()=>{try{localStorage.setItem(CFG_KEY,JSON.stringify(cfg))}catch(e){}};
@@ -2003,6 +2006,7 @@ const TILE_ICONS={
  mnt:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
  aud:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h7M9 8h3"/>',
  acc:'<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7.5l8.5 6 8.5-6"/>',
+ ntf:'<path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 21h4"/>',
  net:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>'
 };
 const secIco=k=>TILE_ICONS[k]?`<svg class="sico" viewBox="0 0 24 24" aria-hidden="true">${TILE_ICONS[k]}</svg>`:(SEC[k]?SEC[k].ic:'');
@@ -2019,6 +2023,7 @@ function tabbarUpd(){const n=$('#tabbar');if(!n)return;
   n.innerHTML=TB.filter(([k])=>k==='home'||!ADMIN_SECS.includes(k)||isAdmin).map(([k,t])=>`<button data-tb="${k}" class="${st.sec===k?'on':''}" aria-label="${esc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true">${k==='home'?'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>':TILE_ICONS[k]||''}</svg><span>${esc(t)}</span></button>`).join('')}
 $('#tabbar').addEventListener('click',e=>{const b=e.target.closest('[data-tb]');if(b&&b.dataset.tb!==st.sec)go(b.dataset.tb)});
 function render(){
+  try{ntfEnsure();if(isAdmin&&!window.__plt){window.__plt=1;setTimeout(plnTick,1500)}}catch(e){}
   if(ADMIN_SECS.includes(st.sec)&&!isAdmin)st.sec='home';
   if(restricted){st.sec=restricted;st.view='table'}
   const home=st.sec==='home',s=SEC[st.sec];
@@ -2038,6 +2043,7 @@ function render(){
   if(st.sec==='aud'){renderAud();return}
   if(st.sec==='it'){renderIT();return}
   if(st.sec==='qr'){renderQR();return}
+  if(st.sec==='ntf'){renderNtf();return}
   renderStats();renderFilter();renderAlerts();
   $('#vmode').value=st.mode;$('#vmode').style.display=st.view==='table'?'':'none';
   document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('on',b.dataset.view===st.view));
@@ -2387,7 +2393,7 @@ function vpwMark(){try{localStorage.setItem(VPW_KEY,String(Date.now()))}catch(e)
 function vpwRemind(){try{const v=+localStorage.getItem(VPW_KEY)||0;if(!v){vpwMark();return}
   const d=Math.floor((Date.now()-v)/864e5);if(d>=VPW_DAYS)setTimeout(()=>toast('🔑 باسورد الخزنة عدّى عليه '+d+' يوم — فكّر تغيّره (🔑 تغيير الباسورد)'),2600)}catch(e){}}
 let _idle=null;
-function rerender(){if(st.sec==='cam')renderCam();else if(st.sec==='dl')renderDL();else if(st.sec==='acc')renderAcct();else if(st.sec==='mon')renderMon();else if(st.sec==='mnt')renderMnt();else if(st.sec==='aud')renderAud();else if(st.sec==='it')renderIT();else if(st.sec==='qr')renderQR();else if(st.sec==='rt')renderRouter()}
+function rerender(){if(st.sec==='cam')renderCam();else if(st.sec==='dl')renderDL();else if(st.sec==='acc')renderAcct();else if(st.sec==='mon')renderMon();else if(st.sec==='mnt')renderMnt();else if(st.sec==='aud')renderAud();else if(st.sec==='it')renderIT();else if(st.sec==='qr')renderQR();else if(st.sec==='ntf')renderNtf();else if(st.sec==='rt')renderRouter()}
 function vaultLock(){VAULT.pw=null;VAULT.cache={};VAULT.sig={};_kc.clear();clearTimeout(_idle);try{QRS.o.pw=false;qrLClose()}catch(e){}rerender();toast('🔒 الخزنة اتقفلت')}
 function vtAct(a){if(a==='help')$('#mVH').classList.add('open');else if(a==='vlog')vlogOpen();else if(a==='lock')vaultLock();else if(a==='change'){reauth('اكتب باسورد الخزنة الحالي قبل تغييره').then(ok=>{if(ok)openVault('change')})}else if(a==='enc'){if(VAULT.pw===null)return;vaultEncryptAll().then(()=>{save();toast('🔐 اتشفّر الباقي ✔');rerender()}).catch(()=>toast('تعذر التشفير'))}else openVault(a)}
 const vBump=()=>{clearTimeout(_idle);if(VAULT.pw!==null)_idle=setTimeout(vaultLock,5*60*1000)};
@@ -2452,7 +2458,7 @@ $('#mQR').addEventListener('click',e=>{if(e.target.id==='mQR')closeQR()});
 function renderRouter(){
   const R=st.rt||(st.rt={m:'h168n',open:null,id:null});
   const M=RT_MODELS[R.m]||RT_MODELS.h168n;
-  let h=`<div class="card" style="padding:14px;margin-bottom:14px"><div class="rtr-h" data-rttabs="1" style="cursor:pointer"><h3 style="margin:0;flex:1">📚 تابات الراوتر</h3><button class="sm" data-rttabs="1">${R.tabs?'▲ طي':'▼ عرض'}</button></div>`;
+  let h=plnCard()+`<div class="card" style="padding:14px;margin-bottom:14px"><div class="rtr-h" data-rttabs="1" style="cursor:pointer"><h3 style="margin:0;flex:1">📚 تابات الراوتر</h3><button class="sm" data-rttabs="1">${R.tabs?'▲ طي':'▼ عرض'}</button></div>`;
   if(R.tabs){
     h+=`<select id="rtModel" style="width:100%;margin:10px 0 8px">${Object.keys(RT_MODELS).map(k=>`<option value="${k}"${k===R.m?' selected':''}>${esc(RT_MODELS[k].n)}</option>`).join('')}</select>
     <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">${esc(M.note)}</p>`;
@@ -2926,13 +2932,13 @@ async function who(v){
 async function whoLocal(v){const l=H(v),sh=await sha(v),today=new Date().toISOString().slice(0,10),m=a=>a.hl===l&&(!a.hs||sh===null||a.hs===sh);
   if(m(auth.adm))return{admin:1,n:'الأدمن'};
   const a=auth.acc.find(x=>m(x)&&(!x.x||x.x>=today));return a?{n:a.n,s:a.s==='print'?'dprint':a.s}:null}
-async function unlockApp(){const r=await who($('#gIn').value.trim());
-  if(!r){$('#gErr').textContent='الباسورد غلط';$('#gIn').value='';$('#gIn').focus();return}
+async function unlockApp(){const _v=$('#gIn').value.trim(),r=await who(_v);
+  if(!r){if(_v&&window.TEBA_ACCESS){NTF.fails=(NTF.fails||0)+1;ntfLog('fail','',NTF.fails>1?'المحاولة رقم '+NTF.fails:'')}$('#gErr').textContent='الباسورد غلط';$('#gIn').value='';$('#gIn').focus();return}
   document.body.classList.remove('locked');$('#gIn').value='';
   setTimeout(()=>{const c=window.TEBA_SYNC_CFG;let has='';try{has=pwGet()}catch(e){}
     if(c&&c.apiKey&&c.syncEmail&&!has&&!SYNC.on&&!SYNC.asked){SYNC.asked=1;const v=prompt(pwRem()?'باسورد المزامنة (مرة واحدة على الجهاز) — سيبه فاضي للتخطي':'باسورد المزامنة (للجلسة دي بس) — سيبه فاضي للتخطي');if(v&&v.trim()){try{pwSet(v.trim())}catch(e){}syncInit()}}},400);
   logs.unshift({t:Date.now(),a:'دخول',s:'_auth',n:r.n,note:'',u:r.n});logs=logs.slice(0,2000);try{localStorage.setItem(LOG_KEY,JSON.stringify(logs))}catch(e){}
-  me={n:r.n};
+  me={n:r.n};NTF.fails=0;ntfLog('ok',r.n);
   if(r.admin){isAdmin=true;adminOK=true;applyPerms();return}
   applyPerms();
   if(r.s!=='all'){restricted=r.s;document.body.classList.add('rs');go(r.s)}else render()}
@@ -3103,8 +3109,10 @@ async function syncRun(){if(!SYNC.on||viewOnly)return;if(SYNC.busy){SYNC.again=1
   try{await SYNC.db.runTransaction(async tx=>{const s=await tx.get(SYNC.ref),d=s.exists?s.data():{},
       m=syncMerge(items,SYNC.del,JSON.parse(d.items||'[]'),d.del||{});res=m;
       let pp=PERM;if((d.permT||0)>PERM.t){try{pp=Object.assign({t:d.permT,def:{},acc:{}},JSON.parse(d.perm))}catch(e){}}SYNC.pp=pp;
-      tx.set(SYNC.ref,{items:JSON.stringify(m.items),del:m.del,upd:Date.now(),by:SYNC.me,perm:JSON.stringify({def:pp.def,acc:pp.acc}),permT:pp.t})});
+      let pl=PLN;if((d.plnT||0)>PLN.t){try{pl={t:d.plnT,d:JSON.parse(d.pln)}}catch(e){}}SYNC.pl=pl;
+      tx.set(SYNC.ref,{items:JSON.stringify(m.items),del:m.del,upd:Date.now(),by:SYNC.me,perm:JSON.stringify({def:pp.def,acc:pp.acc}),permT:pp.t,pln:JSON.stringify(pl.d),plnT:pl.t})});
     if(SYNC.pp&&SYNC.pp!==PERM){PERM=SYNC.pp;permSave();applyPerms()}
+    if(SYNC.pl&&SYNC.pl!==PLN){PLN=SYNC.pl;plnSave();if(st.sec==='rt'&&!(document.activeElement&&document.activeElement.matches&&document.activeElement.matches('[data-pln]')))renderRouter();else if(st.sec==='ntf')renderNtf()}
     if(res&&sig(res.items)!==sig(items))syncApply(res);
     syncFlushConf();
     syncSt('✔ متزامن '+new Date().toLocaleTimeString('ar-EG'))}
@@ -3122,8 +3130,11 @@ async function syncInit(){const c=window.TEBA_SYNC_CFG;
     const app=firebase.apps.find(a=>a.name==='tebaip')||firebase.initializeApp(c,'tebaip');
     try{await app.auth().signInWithEmailAndPassword(c.syncEmail,pw)}
     catch(e){if(/invalid|wrong|user-not-found|credential/.test(e.code||'')){pwDel();syncSt('✖ باسورد المزامنة غلط — ادخله تاني');return}throw e}
-    SYNC.db=app.firestore();SYNC.ref=SYNC.db.doc('teba_ip/state');SYNC.on=true;syncSt('جاري المزامنة...');if(isAdmin)setTimeout(monSub,1500);
-    SYNC.ref.onSnapshot(s=>{if(SYNC.busy)return;const d=s.exists?s.data():{};if((d.permT||0)>PERM.t){try{PERM=Object.assign({t:d.permT,def:{},acc:{}},JSON.parse(d.perm));permSave();applyPerms()}catch(e){}}
+    SYNC.db=app.firestore();SYNC.ref=SYNC.db.doc('teba_ip/state');SYNC.on=true;syncSt('جاري المزامنة...');if(isAdmin)setTimeout(monSub,1500);setTimeout(()=>{try{ntfFlush();ntfEnsure()}catch(e){}},800);
+    SYNC.ref.onSnapshot(s=>{if(SYNC.busy)return;const d=s.exists?s.data():{};
+      if((d.plnT||0)>PLN.t){try{PLN={t:d.plnT,d:JSON.parse(d.pln)};plnSave();if(st.sec==='rt'&&!(document.activeElement&&document.activeElement.matches&&document.activeElement.matches('[data-pln]')))renderRouter();else if(st.sec==='ntf')renderNtf()}catch(e){}}
+      try{ntfEnsure();ntfFlush()}catch(e){}
+     if((d.permT||0)>PERM.t){try{PERM=Object.assign({t:d.permT,def:{},acc:{}},JSON.parse(d.perm));permSave();applyPerms()}catch(e){}}
       const r=JSON.parse(d.items||'[]'),m=syncMerge(items,SYNC.del,r,d.del||{});
       const chL=sig(m.items)!==sig(items),chR=sig(m.items)!==sig(r);
       if(chL)syncApply(m);syncFlushConf();
@@ -3418,7 +3429,7 @@ function renderMnt(){if(!isAdmin){$('#view').innerHTML='';return}
   L=L.filter(x=>!q||[x.i.name,x.i.ip,x.i.type].some(v=>String(v||'').toLowerCase().includes(q)));
   h+=L.length?L.slice(0,80).map(x=>`<button class="drow" data-open="${esc(x.i.id)}" style="display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);padding:9px 0;text-align:right;color:inherit;font-family:inherit;cursor:pointer"><span><b>${esc(x.i.name||'—')}</b> <small dir="ltr" style="color:var(--muted)">${esc(x.i.ip||'')}</small><br><small style="color:var(--muted)">${esc(x.i.type||'')}${x.last?' — آخر صيانة '+esc(fmtD(x.last)):' — مفيش صيانة'}</small></span><span>${x.due?`<span class="badge ${x.due<s0?'bad':'dup'}">${x.due<s0?'متأخرة '+esc(fmtD(x.due)):esc(fmtD(x.due))}</span>`:''}</span></button>`).join(''):'<div class="empty">'+(MNT.f==='due'?'✔ مفيش صيانة متأخرة ولا قريبة':'مفيش أجهزة مطابقة')+'</div>';
   const R=[];S.rows.forEach(x=>mtList(x.i).forEach(r=>R.push({i:x.i,r}))),R.sort((a,b)=>b.r.t-a.r.t);
-  h+=`<h3 style="margin:18px 0 6px">🕘 آخر أعمال الصيانة</h3>`+(R.length?R.slice(0,25).map(({i,r})=>`<div class="arow"><div><b>${esc(r.k||'صيانة')}</b> — ${esc(i.name||i.ip||'')}${r.n?'<br><small>'+esc(r.n)+'</small>':''}<br><small style="color:var(--muted)">${esc(fmtD(r.t))}${r.by?' — '+esc(r.by):''}</small></div></div>`).join(''):'<div class="empty">لسه مفيش أعمال صيانة مسجلة — افتح أي جهاز (اسمه في الجدول) واضغط ➕ تسجيل في قسم الصيانة</div>');
+  h+=plnMntBlock();h+=`<h3 style="margin:18px 0 6px">🕘 آخر أعمال الصيانة</h3>`+(R.length?R.slice(0,25).map(({i,r})=>`<div class="arow"><div><b>${esc(r.k||'صيانة')}</b> — ${esc(i.name||i.ip||'')}${r.n?'<br><small>'+esc(r.n)+'</small>':''}<br><small style="color:var(--muted)">${esc(fmtD(r.t))}${r.by?' — '+esc(r.by):''}</small></div></div>`).join(''):'<div class="empty">لسه مفيش أعمال صيانة مسجلة — افتح أي جهاز (اسمه في الجدول) واضغط ➕ تسجيل في قسم الصيانة</div>');
   $('#view').innerHTML=h+'</div>'}
 document.addEventListener('input',e=>{if(e.target.id==='mnQ'){MNT.q=e.target.value;const p=e.target.selectionStart;renderMnt();const n=$('#mnQ');if(n){n.focus();try{n.setSelectionRange(p,p)}catch(_){}}}});
 document.addEventListener('change',e=>{if(e.target.id==='mnF'){MNT.f=e.target.value;renderMnt()}});
@@ -3443,10 +3454,156 @@ document.addEventListener('input',e=>{if(e.target.id==='audQ'){AUD.q=e.target.va
 document.addEventListener('change',e=>{const m={audD:'d',audA:'a',audS:'s'}[e.target.id];if(m){AUD[m]=e.target.value;AUD.n=60;renderAud()}});
 document.addEventListener('click',e=>{if(st.sec!=='aud')return;if(e.target.closest('[data-audmore]')){AUD.n+=60;renderAud()}else if(e.target.closest('[data-audcsv]'))audCsv()});
 
+
+/* ---------- باقات WE + الإشعارات (متزامنة عبر Firestore) ---------- */
+const PLN_KEY='teba_ip_plans_v1',NQ_KEY='teba_ip_nq_v1',NSEEN_KEY='teba_ip_nseen_v1',DEV_KEY='teba_ip_devid_v1',NCOL='teba_ip_notif';
+let PLN={t:0,d:{ll:{v:'',due:''},net:{n:'',v:'',due:''},sip:{v:'',due:''},ex:[]}};
+try{const x=JSON.parse(localStorage.getItem(PLN_KEY)||'null');if(x&&x.d)PLN=Object.assign(PLN,x)}catch(e){}
+const plnSave=()=>{try{localStorage.setItem(PLN_KEY,JSON.stringify(PLN))}catch(e){}};
+const P=()=>{const d=PLN.d||(PLN.d={});d.ll=d.ll||{};d.net=d.net||{};d.sip=d.sip||{};d.ex=Array.isArray(d.ex)?d.ex:[];d.cfg=d.cfg||{};return d};
+function plnSet(fn){fn(P());PLN.t=Date.now();plnSave();try{syncPush()}catch(e){}}
+function plnNext(ds){const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(ds||'');if(!m)return null;
+  const day=+m[3],t0=sod0();let y=+m[1],mo=+m[2]-1;
+  for(let i=0;i<600;i++){const last=new Date(y,mo+1,0).getDate(),d=new Date(y,mo,Math.min(day,last));if(d.getTime()>=t0)return d.getTime();mo++;if(mo>11){mo=0;y++}}
+  return null}
+function plnPrev(ds){const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(ds||'');if(!m)return null;const day=+m[3],t0=sod0();let y=+m[1],mo=+m[2]-1,r=null;
+  for(let i=0;i<600;i++){const last=new Date(y,mo+1,0).getDate(),d=new Date(y,mo,Math.min(day,last)).getTime();if(d>t0)break;r=d;mo++;if(mo>11){mo=0;y++}}
+  return r}
+const plnCfg=()=>{const c=P().cfg||{};return{w:Math.max(1,parseInt(c.w)||7),wx:Math.max(1,parseInt(c.wx)||3)}};
+function plnAlerts(){const d=P(),out=[],t0=sod0();
+  [['ll','📞 الخط الأرضي','باقة شهرية',d.ll],['net','🌐 '+(d.net.n||'باقة الإنترنت'),'باقة الإنترنت',d.net],['sip','📍 Static IP','باقة Static IP',d.sip]].forEach(([k,t,sub,o])=>{
+    const due=plnNext(o.due),pd=+o.pd||0;let late=false;
+    if(o.pd){const pv=plnPrev(o.due);if(pv&&pd<pv&&(t0-pv)/dayMs<=20){late=true;out.push({k,t,sub:sub+' — لم يُسجَّل الدفع',v:o.v,due:pv,days:-Math.round((t0-pv)/dayMs),late:1,pay:k})}}
+    if(due)out.push({k,t,sub,v:o.v,due,days:Math.round((due-t0)/dayMs),pay:late?'':k,paid:pd&&pd===due?1:0})});
+  d.ex.forEach(x=>{if(!x.e)return;const e=new Date(x.e).getTime();if(isNaN(e)||Date.now()-e>14*dayMs)return;
+    out.push({k:'ex'+x.id,t:'➕ '+(x.n||'باقة إضافية'),sub:'باقة إضافية — انتهاء متوقع',v:x.v,due:e,days:Math.floor((new Date(e).setHours(0,0,0,0)-t0)/dayMs),ex:1,time:1})});
+  return out.sort((a,b)=>a.due-b.due)}
+function plnPay(k){const d=P(),o=d[k];if(!o)return;const t0=sod0(),pd=+o.pd||0,pv=plnPrev(o.due),nd=plnNext(o.due);
+  const tgt=(o.pd&&pv&&pd<pv&&(t0-pv)/dayMs<=20)?pv:nd;if(!tgt){toast('حدد موعد التجديد الأول');return}
+  plnSet(x=>{x[k].pd=String(tgt);x[k].pat=Date.now()});
+  sysLog('باقات','تسجيل دفع: '+({ll:'الخط الأرضي',net:'الإنترنت',sip:'Static IP'}[k]||k)+' — استحقاق '+fmtD(tgt));toast('✔ اتسجل الدفع');
+  if(st.sec==='rt')renderRouter();else if(st.sec==='ntf')renderNtf();else if(st.sec==='mnt')renderMnt()}
+function plnSt(a){if(a.late)return{c:'bad',t:'متأخرة '+(-a.days)+' يوم'};if(a.paid)return{c:'',t:'✔ مدفوعة'};if(a.ex&&a.due<Date.now())return{c:'bad',t:'انتهت'};if(a.days<=0)return{c:'bad',t:'النهارده'};if(a.days<=2)return{c:'bad',t:'باقي '+a.days+' يوم'};if(a.days<=(a.ex?plnCfg().wx:plnCfg().w))return{c:'warn',t:'باقي '+a.days+' يوم'};return{c:'',t:'باقي '+a.days+' يوم'}}
+const plnWarn=()=>plnAlerts().filter(a=>plnSt(a).c);
+const plnRow=a=>{const s=plnSt(a);return `<div class="arow" style="align-items:flex-start;cursor:pointer" data-ntgo="rt"><div style="min-width:0"><b>${esc(a.t)}</b>${a.v?' — '+esc(a.v)+' ج.م':''}<br><small style="color:var(--muted)">${esc(a.sub)} — ${a.time?esc(new Date(a.due).toLocaleString('ar-EG')):esc(fmtD(a.due))}</small>${a.pay?`<br><button class="sm" data-plpay="${esc(a.pay)}" style="margin-top:4px">✔ تم الدفع</button>`:''}</div><span class="badge ${s.c==='bad'?'bad':'dup'}">${esc(s.t)}</span></div>`};
+function plnMntBlock(){const a=plnAlerts();
+  return `<h3 style="margin:18px 0 6px">💳 مواعيد باقات WE</h3>`+(a.length?a.map(plnRow).join(''):'<div class="empty">لسه مفيش مواعيد — ضيفها من قسم الراوتر ← 💳 باقات WE</div>')}
+function plnTotal(){const d=P();return ['ll','net','sip'].reduce((t,k)=>t+(parseFloat((d[k]||{}).v)||0),0)}
+function plnRefresh(){const d=P(),e=document.getElementById('plTot');if(e)e.textContent='إجمالي الباقات الشهرية: '+plnTotal().toLocaleString('ar-EG')+' ج.م';
+  document.querySelectorAll('[data-plnext]').forEach(n=>{const o=d[n.dataset.plnext],x=plnNext(o&&o.due);n.textContent=x?'الموعد القادم: '+fmtD(x):''})}
+function plnCard(){const d=P(),R=st.rt||{},open=!R.plc;
+  const nx=k=>{const t=plnNext(d[k].due);return `<small data-plnext="${k}" style="color:var(--muted)">${t?'الموعد القادم: '+fmtD(t):''}</small>${d[k].pat?`<small style="color:var(--muted)"> — آخر دفع: ${fmtD(d[k].pat)}</small>`:''} <button class="sm" data-plpay="${k}">✔ تم الدفع</button>`};
+  const inp=(k,l,v,type)=>`<label>${l}<input data-pln="${k}" type="${type}" value="${esc(v||'')}"${type==='number'?' inputmode="decimal" min="0" step="any"':''}></label>`;
+  let h=`<div class="card" style="padding:14px;margin-bottom:14px"><div class="rtr-h" data-plc="1" style="cursor:pointer"><h3 style="margin:0;flex:1">💳 باقات WE والاشتراكات</h3><button class="sm" data-plc="1">${open?'▲ طي':'▼ عرض'}</button></div>`;
+  if(open){
+    h+=`<p style="margin:8px 0 0;font-size:12.5px;color:var(--muted)">بتتزامن مع كل الأجهزة، ومواعيدها بتظهر في 🔔 الإشعارات وفي 🛠️ الصيانة.</p>`;
+    h+=`<h4 style="margin:12px 0 0">📞 الخط الأرضي</h4><div class="plg">${inp('ll.v','قيمة الباقة الشهرية (ج.م)',d.ll.v,'number')}${inp('ll.due','موعد التجديد الشهري',d.ll.due,'date')}</div>${nx('ll')}`;
+    h+=`<h4 style="margin:12px 0 0">🌐 باقة الإنترنت</h4><div class="plg">${inp('net.n','اسم الباقة',d.net.n,'text')}${inp('net.v','القيمة (ج.م)',d.net.v,'number')}${inp('net.due','موعد التجديد',d.net.due,'date')}</div>${nx('net')}`;
+    h+=`<h4 style="margin:12px 0 6px">➕ الباقات الإضافية</h4>`+(d.ex.length?d.ex.map(x=>`<div class="plx"><div class="plg" style="margin:0">${inp('ex.'+x.id+'.n','اسم الباقة',x.n,'text')}${inp('ex.'+x.id+'.v','القيمة (ج.م)',x.v,'number')}${inp('ex.'+x.id+'.e','الوقت المتوقع للانتهاء',x.e,'datetime-local')}</div><div style="margin-top:6px"><button class="danger sm" data-pldel="${esc(x.id)}">🗑 حذف</button></div></div>`).join(''):'<div class="empty" style="padding:6px">مفيش باقات إضافية</div>')+`<button class="sm" data-pladd="1">➕ باقة إضافية</button>`;
+    h+=`<h4 style="margin:14px 0 0">📍 باقة Static IP</h4><div class="plg">${inp('sip.v','القيمة (ج.م)',d.sip.v,'number')}${inp('sip.due','موعد التجديد',d.sip.due,'date')}</div>${nx('sip')}`;
+    h+=`<h4 style="margin:14px 0 0">⏰ مهلة التنبيه</h4><div class="plg">${inp('cfg.w','قبل التجديد الشهري (أيام)',d.cfg.w||7,'number')}${inp('cfg.wx','قبل انتهاء الإضافية (أيام)',d.cfg.wx||3,'number')}</div>`;
+    h+=`<div id="plTot" style="margin-top:12px;font-weight:700">إجمالي الباقات الشهرية: ${plnTotal().toLocaleString('ar-EG')} ج.م</div>`;
+  }
+  return h+'</div>'}
+document.addEventListener('change',e=>{const el=e.target.closest&&e.target.closest('[data-pln]');if(!el||!isAdmin)return;
+  const k=el.dataset.pln,v=el.value;let m=/^(ll|net|sip)\.(v|due|n)$/.exec(k);
+  if(m){plnSet(d=>{d[m[1]][m[2]]=v});sysLog('باقات','تعديل باقات WE');plnRefresh();return}
+  m=/^cfg\.(w|wx|tp)$/.exec(k);if(m){plnSet(d=>{d.cfg[m[1]]=String(v).trim()});sysLog('باقات','تعديل إعدادات التنبيه');plnRefresh();if(st.sec==='ntf')renderNtf();else if(st.sec==='rt')renderRouter();return}
+  m=/^ex\.([^.]+)\.(n|v|e)$/.exec(k);if(m){plnSet(d=>{const o=d.ex.find(q=>q.id===m[1]);if(o)o[m[2]]=v});sysLog('باقات','تعديل باقة إضافية');plnRefresh()}});
+document.addEventListener('click',e=>{
+  const pp=e.target.closest&&e.target.closest('[data-plpay]');if(pp&&isAdmin){plnPay(pp.dataset.plpay);return}
+  const na=e.target.closest&&e.target.closest('[data-nal]');if(na&&isAdmin){const k=na.dataset.nal;
+    if(k==='snd'){nalSet({snd:nalCfg().snd?0:1});if(nalCfg().snd)ntfBeep(false)}
+    else if(k==='test'){ntfAlert('🚨 تجربة تنبيه','ده تنبيه تجريبي',true)}
+    else if(k==='sys'){if(!window.Notification){toast('المتصفح ده مش بيدعم إشعارات النظام')}
+      else if(nalCfg().sys){nalSet({sys:0})}
+      else{Notification.requestPermission().then(p=>{if(p==='granted'){nalSet({sys:1});try{new Notification('✅ تم تفعيل إشعارات منظم IP')}catch(_){}}else toast('الإذن مرفوض من المتصفح');renderNtf()});return}}
+    renderNtf();return}
+  if(e.target.closest&&e.target.closest('[data-pltp]')&&isAdmin){const a=new Uint8Array(10);crypto.getRandomValues(a);const t='teba-'+[...a].map(x=>x.toString(36).padStart(2,'0')).join('').slice(0,16);plnSet(d=>{d.cfg.tp=t});sysLog('باقات','توليد قناة إشعارات الموبايل');renderNtf();return}
+  const g=e.target.closest&&e.target.closest('[data-ntgo]');if(g&&isAdmin){go(g.dataset.ntgo);return}
+  if(!isAdmin)return;
+  if(e.target.closest('[data-plc]')){st.rt=st.rt||{};st.rt.plc=!st.rt.plc;renderRouter();return}
+  if(e.target.closest('[data-pladd]')){plnSet(d=>{d.ex.push({id:'x'+Date.now().toString(36),n:'',v:'',e:''})});renderRouter();return}
+  const dl_=e.target.closest('[data-pldel]');if(dl_){if(!confirm('حذف الباقة الإضافية دي؟'))return;const id=dl_.dataset.pldel;plnSet(d=>{d.ex=d.ex.filter(q=>q.id!==id)});sysLog('باقات','حذف باقة إضافية');renderRouter();return}
+  if(e.target.closest('[data-ntseen]')){NTF.seen=Date.now();try{localStorage.setItem(NSEEN_KEY,String(NTF.seen))}catch(_){}renderNtf()}
+  else if(e.target.closest('[data-ntmore]')){NTF.n+=60;renderNtf()}});
+document.addEventListener('change',e=>{if(e.target.id==='ntF'){NTF.f=e.target.value;NTF.n=60;renderNtf()}});
+
+/* --- أحداث الدخول (تتزامن من أي جهاز، حتى الفاشل) --- */
+const NTF={d:[],sub:null,err:'',f:'all',n:60,ready:0,fails:0,seen:(()=>{try{return +localStorage.getItem(NSEEN_KEY)||0}catch(e){return 0}})()};
+function devId(){let v='';try{v=localStorage.getItem(DEV_KEY)||'';if(!v){v='d'+Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-3);localStorage.setItem(DEV_KEY,v)}}catch(e){v='d'+Math.random().toString(36).slice(2,8)}return v}
+function devLabel(){const u=navigator.userAgent||'',os=/Android/i.test(u)?'Android':/iPhone|iPad|iPod/i.test(u)?'iPhone/iPad':/Windows/i.test(u)?'Windows':/Mac/i.test(u)?'Mac':/Linux/i.test(u)?'Linux':'جهاز',
+  br=/Edg\//.test(u)?'Edge':/OPR\//.test(u)?'Opera':/Chrome\//.test(u)?'Chrome':/Firefox\//.test(u)?'Firefox':/Safari\//.test(u)?'Safari':'';return os+(br?' · '+br:'')}
+function ntfQ(ev){try{const a=JSON.parse(localStorage.getItem(NQ_KEY)||'[]');a.push(ev);localStorage.setItem(NQ_KEY,JSON.stringify(a.slice(-60)))}catch(e){}}
+function ntfPush(ev){if(SYNC.on&&SYNC.db){SYNC.db.collection(NCOL).add(ev).catch(()=>ntfQ(ev))}else ntfQ(ev)}
+function ntfFlush(){if(!SYNC.on||!SYNC.db)return;let a=[];try{a=JSON.parse(localStorage.getItem(NQ_KEY)||'[]');localStorage.removeItem(NQ_KEY)}catch(e){}
+  a.forEach(ev=>SYNC.db.collection(NCOL).add(ev).catch(()=>ntfQ(ev)))}
+function ntfLog(k,name,note){const ev={t:Date.now(),k,n:name||'',dv:devId(),dl:devLabel(),x:note||''};
+  if(k==='fail'){try{logs.unshift({t:ev.t,a:'دخول فاشل',s:'_auth',n:'',note:note||'',u:''});logs=logs.slice(0,2000);localStorage.setItem(LOG_KEY,JSON.stringify(logs))}catch(e){}}
+  ntfPush(ev)}
+window.addEventListener('online',()=>{try{ntfFlush()}catch(e){}});
+function ntfEnsure(){if(!isAdmin||!SYNC.on||!SYNC.db||NTF.sub)return;
+  NTF.sub=SYNC.db.collection(NCOL).orderBy('t','desc').limit(200).onSnapshot(s=>{
+    const fresh=[];s.docChanges().forEach(c=>{if(c.type==='added'&&NTF.ready){const x=c.doc.data();if((x.t||0)>NTF.seen&&x.dv!==devId())fresh.push(x)}});
+    NTF.d=s.docs.map(d=>Object.assign({id:d.id},d.data()));NTF.err='';NTF.ready=1;
+    const bad=fresh.filter(x=>x.k==='fail');
+    if(bad.length&&ntfBursts().length)ntfAlert('🚨 محاولات دخول فاشلة متكررة','من '+(bad[0].dl||'جهاز'),true);
+    else if(bad.length)ntfAlert('⚠ محاولة دخول فاشلة','من '+(bad[0].dl||'جهاز')+(bad.length>1?' (+'+(bad.length-1)+')':''),true);
+    else if(fresh.length)ntfAlert('🔔 دخول جديد',(fresh[0].n||'')+' — '+(fresh[0].dl||''),false);
+    if(st.sec==='ntf')renderNtf();else if(st.sec==='home')renderHome()},
+    e=>{NTF.err=e.code==='permission-denied'?'مفيش صلاحية — ضيف قاعدة teba_ip_notif في Firestore Rules':(e.code||e.message);NTF.sub=null;if(st.sec==='ntf')renderNtf()});
+  setTimeout(ntfPrune,5000)}
+async function ntfPrune(){try{const q=await SYNC.db.collection(NCOL).where('t','<',Date.now()-60*dayMs).limit(100).get();if(q.empty)return;const b=SYNC.db.batch();q.docs.forEach(d=>b.delete(d.ref));await b.commit()}catch(e){}}
+const NAL_KEY='teba_ip_alertcfg_v1';
+function nalCfg(){try{return Object.assign({snd:1,sys:0},JSON.parse(localStorage.getItem(NAL_KEY)||'{}'))}catch(e){return{snd:1,sys:0}}}
+function nalSet(o){try{localStorage.setItem(NAL_KEY,JSON.stringify(Object.assign(nalCfg(),o)))}catch(e){}}
+function ntfBeep(bad){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain(),L=bad?.9:.4;o.type='sine';o.frequency.value=bad?880:660;g.gain.setValueAtTime(.0001,c.currentTime);g.gain.exponentialRampToValueAtTime(.25,c.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+L);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+L);setTimeout(()=>{try{c.close()}catch(e){}},1500)}catch(e){}}
+function ntfBanner(msg,bad){let b=document.getElementById('ntfBn');if(b)b.remove();b=document.createElement('div');b.id='ntfBn';
+  b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;padding:12px 14px;padding-top:calc(12px + env(safe-area-inset-top,0px));display:flex;gap:10px;align-items:center;font-weight:700;color:#fff;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.4);background:'+(bad?'#b91c1c':'#1d4ed8');
+  const t=document.createElement('span');t.style.flex='1';t.textContent=msg;const x=document.createElement('span');x.textContent='✕';x.style.padding='0 6px';b.append(t,x);
+  b.onclick=e=>{b.remove();if(e.target!==x)go('ntf')};document.body.appendChild(b);if(!bad)setTimeout(()=>{if(b.isConnected)b.remove()},12000)}
+function ntfAlert(title,body,bad){const c=nalCfg();ntfBanner(title+(body?' — '+body:''),bad);if(c.snd)ntfBeep(bad);
+  try{navigator.vibrate&&navigator.vibrate(bad?[250,120,250,120,250]:[150])}catch(e){}
+  if(c.sys&&window.Notification&&Notification.permission==='granted'){try{new Notification(title,{body:body||'',tag:'ipm-'+(bad?'bad':'info')})}catch(e){}}}
+function plnTick(){if(!isAdmin)return;const day=new Date().toDateString();let sh={};try{sh=JSON.parse(localStorage.getItem('teba_ip_pshown_v1')||'{}')}catch(e){}
+  if(sh.d!==day)sh={d:day,k:{}};let n=0;
+  plnWarn().forEach(a=>{const key=a.k+'|'+a.due+(a.late?'|l':'');if(sh.k[key])return;sh.k[key]=1;n++;if(n<=3){const q=plnSt(a);ntfAlert(q.t+' — '+a.t,a.v?a.v+' ج.م':'',q.c==='bad')}});
+  try{localStorage.setItem('teba_ip_pshown_v1',JSON.stringify(sh))}catch(e){}}
+setInterval(plnTick,15*60000);
+function ntfAlertCard(){const c=nalCfg(),np=window.Notification?Notification.permission:'unsupported';
+  return `<h3 style="margin:18px 0 6px">🔊 تنبيه والتطبيق مفتوح</h3><div class="plx"><p style="margin:0 0 8px;font-size:13px;line-height:1.8">لما حد يدخل (أو يفشل) من جهاز تاني، بيظهر شريط أحمر فوق مستني تقفله، ومعاه صوت واهتزاز. نفس الشيء لتنبيهات الباقات (مرة في اليوم). الإعداد ده خاص بالجهاز ده بس.</p><div class="rtbar"><button class="sm" data-nal="snd">${c.snd?'🔊 الصوت: شغال':'🔇 الصوت: مقفول'}</button><button class="sm" data-nal="sys">${np==='unsupported'?'🖥️ إشعار النظام: مش مدعوم':c.sys&&np==='granted'?'🖥️ إشعار النظام: شغال':np==='denied'?'🖥️ إشعار النظام: ممنوع من المتصفح':'🖥️ تفعيل إشعار النظام'}</button><button class="sm" data-nal="test">🧪 تجربة</button></div><small style="color:var(--muted);display:block;margin-top:6px">إشعار النظام بيشتغل على الكمبيوتر والتطبيق فاتح (حتى لو التاب في الخلفية). على الموبايل استخدم الشريط والصوت، أو ntfy للتطبيق المقفول.</small></div>`}
+function ntfBursts(){const now=Date.now(),W=30*60000,g={};NTF.d.forEach(x=>{if(x.k==='fail'&&now-(x.t||0)<=W){const k=x.dv||'?';(g[k]=g[k]||{n:0,dl:x.dl,t:0});g[k].n++;g[k].t=Math.max(g[k].t,x.t||0)}});return Object.values(g).filter(b=>b.n>=3).sort((a,b)=>b.t-a.t)}
+function ntfTile(){const un=NTF.d.filter(x=>(x.t||0)>NTF.seen),f=un.filter(x=>x.k==='fail').length,w=plnWarn().length;
+  if(ntfBursts().length)return'🚨 محاولات دخول فاشلة متكررة';return f?'⚠ '+f+' دخول فاشل جديد':un.length?un.length+' إشعار جديد':w?'⏰ '+w+' تنبيه باقات':'✔ مفيش جديد'}
+function ntfPushCard(){const tp=String(P().cfg.tp||'').trim();
+  return `<h3 style="margin:18px 0 6px">📲 إشعارات الموبايل (والتطبيق مقفول)</h3><div class="plx"><p style="margin:0 0 8px;font-size:13px;line-height:1.8">بتوصلك على الموبايل حتى لو التطبيق مقفول، عن طريق تطبيق <b>ntfy</b> المجاني + وكيل صغير شغال على كمبيوتر المركز (نفس كمبيوتر المراقبة).</p><div class="plg"><label>اسم القناة (سري — اعتبره باسورد)<input data-pln="cfg.tp" type="text" dir="ltr" value="${esc(tp)}" placeholder="teba-xxxxxxxx"></label></div><div class="rtbar"><button class="sm" data-pltp="1">🎲 توليد اسم قناة</button>${tp?`<button class="sm" onclick="navigator.clipboard&&navigator.clipboard.writeText('${esc(tp)}').then(()=>toast('اتنسخ'))">📋 نسخ الاسم</button>`:''}</div><ol style="margin:8px 0 0;padding-inline-start:22px;font-size:13px;line-height:1.9"><li>نزّل تطبيق <b>ntfy</b> على الموبايل واشترك في القناة اللي فوق.</li><li>شغّل <code dir="ltr">ip-notify-agent.js</code> على كمبيوتر المركز (الخطوات في أول الملف).</li><li>الوكيل بيبعت: الدخول الفاشل والناجح، و🚨 التكرار، وتنبيهات الباقات.</li></ol></div>`}
+function renderNtf(){if(!isAdmin){$('#view').innerHTML='';return}
+  const al=plnWarn(),S=mtStats(),now=Date.now();
+  let h='<div class="card rtdata" style="padding:14px">';
+  if(!SYNC.on){h+='<div class="empty" style="margin-bottom:10px">⚠ المزامنة مش شغالة — إشعارات الدخول من الأجهزة التانية مش هتظهر لحد ما تتوصل</div>'}
+  if(NTF.err)h+='<div class="empty" style="color:var(--bad);margin-bottom:10px">⚠ '+esc(NTF.err)+'</div>';
+  ntfBursts().forEach(b=>{h+=`<div class="arow" style="border:1px solid var(--bad);border-radius:10px;padding:8px;margin-bottom:10px"><div><b style="color:var(--bad)">🚨 ${b.n} محاولات دخول فاشلة متتالية</b><br><small style="color:var(--muted)">📱 ${esc(b.dl||'جهاز')} — آخر محاولة ${esc(monRel(b.t))} (خلال آخر 30 دقيقة)</small></div></div>`});
+  const fail24=NTF.d.filter(x=>x.k==='fail'&&now-(x.t||0)<dayMs).length,un=NTF.d.filter(x=>(x.t||0)>NTF.seen).length;
+  h+=`<div class="stats" style="margin-bottom:12px"><div class="stat ${fail24?'bad':''}"><b>${fail24}</b><span>دخول فاشل (24 س)</span></div><div class="stat ${un?'warn':''}"><b>${un}</b><span>غير مقروء</span></div><div class="stat ${al.length?'warn':''}"><b>${al.length}</b><span>تنبيهات باقات</span></div><div class="stat ${S.over.length?'bad':''}"><b>${S.over.length}</b><span>صيانة متأخرة</span></div></div>`;
+  h+='<h3 style="margin:4px 0 6px">⏰ تنبيهات المواعيد</h3>';
+  const rows=al.map(plnRow);
+  if(S.over.length)rows.push(`<div class="arow" style="cursor:pointer" data-ntgo="mnt"><div><b>🛠️ ${S.over.length} صيانة متأخرة</b><br><small style="color:var(--muted)">افتح قسم الصيانة</small></div><span class="badge bad">متأخرة</span></div>`);
+  if(S.soon.length)rows.push(`<div class="arow" style="cursor:pointer" data-ntgo="mnt"><div><b>🛠️ ${S.soon.length} صيانة خلال 30 يوم</b><br><small style="color:var(--muted)">افتح قسم الصيانة</small></div><span class="badge dup">قريبة</span></div>`);
+  h+=rows.length?rows.join(''):'<div class="empty">✔ مفيش مواعيد قريبة</div>';
+  h+=`<div class="rtbar" style="margin:18px 0 8px"><h3 style="margin:0;flex:1">🔐 دخول الأجهزة</h3><select id="ntF"><option value="all"${NTF.f==='all'?' selected':''}>الكل</option><option value="fail"${NTF.f==='fail'?' selected':''}>الفاشل فقط</option><option value="ok"${NTF.f==='ok'?' selected':''}>الناجح فقط</option></select><button class="sm" data-ntseen="1">✔ تحديد الكل كمقروء</button></div>`;
+  const ev=NTF.d.filter(x=>NTF.f==='all'||x.k===NTF.f);
+  h+=ev.length?ev.slice(0,NTF.n).map(x=>{const bad=x.k==='fail',nw=(x.t||0)>NTF.seen;
+    return `<div class="arow" style="align-items:flex-start"><div style="min-width:0"><b style="${bad?'color:var(--bad)':''}">${nw?'<span class="ntd"></span>':''}${bad?'✖ محاولة دخول فاشلة':'✔ دخول — '+esc(x.n||'')}</b>${x.x?'<br><small>'+esc(x.x)+'</small>':''}<br><small style="color:var(--muted)">📱 ${esc(x.dl||'جهاز')} <span dir="ltr">(${esc(String(x.dv||'').slice(0,6))})</span> — ${esc(new Date(x.t).toLocaleString('ar-EG'))} — ${esc(monRel(x.t))}</small></div></div>`}).join('')+(ev.length>NTF.n?`<div style="text-align:center;margin-top:8px"><button class="sm" data-ntmore="1">عرض المزيد (${ev.length-NTF.n})</button></div>`:''):'<div class="empty">'+(NTF.ready?'مفيش أحداث دخول مطابقة':SYNC.on?'جاري التحميل...':'—')+'</div>';
+  h+=ntfAlertCard();
+  h+=ntfPushCard();
+  h+='<p style="margin:12px 0 0;font-size:12px;color:var(--muted)">بيتسجل نوع الجهاز والوقت واسم الحساب فقط — الباسورد المكتوب عمره ما بيتسجل. الأحداث بتتحذف تلقائيًا بعد 60 يوم.</p>';
+  $('#view').innerHTML=h+'</div>'}
+
 /* نص البلاطة في الصفحة الرئيسية */
 function tileSub(k,n){
   if(k==='mon'){const m=monCount();return !m?'لسه مفيش بيانات':monStale()?'⚠ الخدمة واقفة':m.down?'🔴 '+m.down+' مش مستجيب من '+m.n:'🟢 كله شغال ('+m.n+')'}
   if(k==='mnt'){const S=mtStats();return S.over.length?'⚠ '+S.over.length+' صيانة متأخرة':S.soon.length?S.soon.length+' قريبة (30 يوم)':'✔ مفيش متأخر'}
+  if(k==='ntf')return ntfTile();
   if(k==='aud')return logs.length+' عملية مسجلة';
   if(k==='it')return n+' عنصر 🔒';
   if(k==='qr')return 'QR وطباعة اللينكات 🔒';
