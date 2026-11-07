@@ -196,6 +196,7 @@ body.fa .tg.edit,body.fa [data-adel]{display:none!important}
 body.locked header,body.locked main{display:none}
 #gate{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
 body.locked #gate{display:flex}
+body.locked #tabbar{display:none!important}
 #gate .gb{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px 22px;width:100%;max-width:340px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.45)}
 #gate .sig small{display:block;font:600 12px/1.4 Cairo,Tahoma,sans-serif;font-style:normal;letter-spacing:1px;-webkit-text-fill-color:#fdba74;color:#fdba74;opacity:.85;margin-top:2px}
 #gate .sig{position:absolute;top:max(16px,env(safe-area-inset-top));left:0;right:0;text-align:center;font-family:'Great Vibes','Brush Script MT','Segoe Script',cursive;font-style:italic;font-size:38px;line-height:1.5;background:linear-gradient(180deg,#ffb347 0%,#ff8a1f 45%,#d4a017 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#f5a623;filter:drop-shadow(0 2px 10px rgba(255,150,30,.45));padding:10px 4px 0;direction:ltr;pointer-events:none}
@@ -693,7 +694,7 @@ html[data-theme=ios] .tile.qr{--ic:#5ac8fa}
 <style>.plg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin:6px 0 4px}.plg label{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}.plg input{width:100%}.plx{border:1px solid var(--line);border-radius:10px;padding:8px;margin-bottom:8px}.ntd{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-inline-end:6px}</style>
 </head>
 <body class="locked">
-<div id="gate"><div class="sig">Saad Abdo<small>ver 26.11.6.3</small></div><div class="gb">
+<div id="gate"><div class="sig">Saad Abdo<small>ver 26.11.6.5</small></div><div class="gb">
   <div style="font-size:44px">🔐</div>
   <h2 style="margin:8px 0 14px">مركز طيبة للأشعة</h2>
   <input id="gIn" type="password" autocomplete="off" autocapitalize="off" dir="ltr" placeholder="الباسورد" style="text-align:center;font-size:18px;letter-spacing:1px">
@@ -803,7 +804,7 @@ html[data-theme=ios] .tile.qr{--ic:#5ac8fa}
   <div class="actions"><button id="tClose">إغلاق</button></div>
 </div></div>
 <div class="modal" id="mGuide"><div class="box" style="max-width:440px;max-height:90vh;overflow:auto"><h2>📖 دليل الاستخدام</h2>
-  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.11.6.3</span></p>
+  <p style="margin:0 0 10px;font-size:12.5px;color:var(--muted)">مركز طيبة للأشعة — منظم IP — الإصدار <span dir="ltr">26.11.6.5</span></p>
 <details class="rtg" open><summary>✨ مميزات البرنامج</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li>تنظيم عناوين الـ IP لأجهزة المركز في أقسام: طابعات الأجهزة، الأجهزة، الورك ستيشن، الشبكة والسيرفرات.</li><li>أقسام للأدمن بس: <b>📡 الراوتر</b> (والأكسس بوينت)، <b>📹 كاميرات Dahua</b>، <b>🔑 Device Login</b>، <b>📧 حسابات وإيميلات</b>، <b>📶 مراقبة الشبكة</b>، <b>🛠 الصيانة</b>، <b>🧾 سجل التدقيق</b>، <b>🗝️ Stacks</b>.</li><li>كشف تلقائي لمشاكل الـ IP (غير صالح أو مكرر) وعرض الشبكات (Subnets).</li><li>بحث شامل وفلاتر، وأكتر من طريقة عرض.</li><li>فحص الاتصال وDICOM وتسجيل الصيانة (حسب الصلاحية).</li><li>طباعة وتصدير Excel / CSV ومشاركة PDF على واتساب.</li><li>نسخ احتياطي واسترجاع، وسجل بالتغييرات.</li><li>مزامنة بين الأجهزة.</li><li>حسابات عرض فقط بصلاحيات إنت اللي بتحددها.</li><li>خزنة مشفّرة لليوزرات والباسوردات.</li><li><b>📊 لوحة معلومات</b> في الرئيسية (حالة المراقبة، الصيانة، مشاكل البيانات، الأجهزة حسب القسم، آخر التعديلات) وصفحة تفاصيل موحدة لكل جهاز.</li><li><b>📶 مراقبة الشبكة</b> من خدمة خلفية، و<b>🛠 إدارة الصيانة</b>، و<b>🧾 سجل تدقيق</b> شامل، و<b>🔗 روابط ومراجع</b> لكل جهاز.</li><li><b>📱 ثيم iOS</b> (فاتح وداكن تلقائي) بشريط تنقل سفلي وعناوين كبيرة.</li><li>علامة مائية وحماية من لقطات الشاشة للحسابات غير الأدمن، وتطبيق أندرويد بحماية FLAG_SECURE.</li></ul></div></details>
 <details class="rtg"><summary>🧭 الاستخدام اليومي</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ol style="margin:0;padding-inline-start:22px"><li>من الرئيسية اختار القسم.</li><li>دوس <b>➕ إضافة</b> لإضافة جهاز: الاسم، IP، النوع، المكان، Port، AE Title، Host، MAC وغيرها.</li><li>استخدم 🔍 البحث (بالاسم أو IP أو المكان أو MAC) والفلاتر.</li><li>التبويبات: <b>📋 الجدول</b> و<b>🧾 السجل</b> (مين عدّل إيه) و<b>🧭 الشبكات</b>.</li><li>أزرار كارت الجهاز (فحص الاتصال / DICOM / ملاحظة الصيانة / تعديل / حذف) بتظهر حسب صلاحياتك.</li><li><b>🎨</b> للمظهر وطريقة العرض (على الجهاز ده بس): <b>المظهر</b> (الافتراضي iOS، تركواز، كحلي وأورانج، أزرق، أخضر، بنفسجي، غروب، رمادي داكن)، و<b>عرض الأقسام</b> في الرئيسية (افتراضي / أيقونات كبيرة / صغيرة / قايمة)، و<b>عرض الأجهزة</b> (تفاصيل / Tiles / أيقونات كبيرة أو متوسطة أو صغيرة).</li><li><b>📲 تثبيت التطبيق</b>: زرار بيظهر في شاشة الدخول (لو المتصفح بيدعمه) عشان تثبّت الصفحة كتطبيق على الجهاز.</li><li><b>🖨️</b> للطباعة: جوه القسم بتطبع القسم، وفي الرئيسية بتطبع كل الأقسام.</li><li><b>⚙️ ضبط</b>: استيراد، Excel / CSV، مشاركة PDF، نسخ احتياطي واسترجاع، والحسابات.</li><li><b>📥 الاستيراد</b>: اختار ملف Excel / CSV، أو الصق البيانات من Excel وادوس <b>قراءة اللصق</b>، واختار الشيت (لو الملف فيه أكتر من شيت) وطابق الأعمدة قبل ما تدوس استيراد.</li></ol></div></details>
 <details class="rtg"><summary>📡 الراوتر والأكسس بوينت</summary><div style="padding:0 14px 12px;font-size:14px;line-height:1.85"><ul style="margin:0;padding-inline-start:20px"><li><b>📚 تابات الراوتر</b>: اختار الموديل وادوس <b>ℹ️ معلومات</b> على أي تاب تعرف وظيفته.</li><li>بيانات الراوتر في مجموعات تتطوي: عام، الشبكة، دخول الراوتر، PPPoE، الواي فاي، ملاحظات. <b>👁</b> إظهار / إخفاء، <b>📋</b> نسخ، <b>💾</b> حفظ.</li><li><b>📦 ملف Backup</b>: ملف واحد لكل راوتر (حد أقصى 450 KB) بيتشفّر ويتزامن.</li><li><b>📶 الأكسس بوينت</b>: ➕ جديد، وزرار <b>📱 QR الواي فاي</b> بيفتح كود تمسحه بالموبايل للاتصال (وفيه <b>⬇️ حفظ صورة</b> للكود)، و<b>⤵️ واي فاي الراوتر</b> بينسخ بيانات الشبكة.</li></ul></div></details>
@@ -2017,10 +2018,10 @@ function renderHome(){
     return `<button class="tile ${k}" data-sec="${k}"><span class="ti">${tileIcon(k)||s.ic}</span><b>${s.t}</b><span>${tileSub(k,n)}${w?' — ⚠ '+w:''}</span><em>${s.pw!=null?'🔒 محمي بباسورد':'مفتوح'}</em></button>`}).join('');
   homeStats();renderDash();
 }
-const TB=[['home','الرئيسية'],['rt','الراوتر'],['cam','الكاميرات'],['net','الشبكات'],['acc','الإيميلات']];
+const TB=[['home','الرئيسية'],['rt','الراوتر'],['cam','الكاميرات'],['net','الشبكات'],['acc','الإيميلات'],['ntf','الإشعارات']];
 function tabbarUpd(){const n=$('#tabbar');if(!n)return;
   n.hidden=!!restricted;
-  n.innerHTML=TB.filter(([k])=>k==='home'||!ADMIN_SECS.includes(k)||isAdmin).map(([k,t])=>`<button data-tb="${k}" class="${st.sec===k?'on':''}" aria-label="${esc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true">${k==='home'?'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>':TILE_ICONS[k]||''}</svg><span>${esc(t)}</span></button>`).join('')}
+  n.innerHTML=TB.filter(([k])=>k==='home'||!ADMIN_SECS.includes(k)||isAdmin).map(([k,t])=>`<button data-tb="${k}" class="${st.sec===k?'on':''}" aria-label="${esc(t)}"><svg viewBox="0 0 24 24" aria-hidden="true">${k==='home'?'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>':TILE_ICONS[k]||''}</svg><span>${esc(t)}${k==='ntf'&&ntfUnread()?' <b style="color:#ef4444">●</b>':''}</span></button>`).join('')}
 $('#tabbar').addEventListener('click',e=>{const b=e.target.closest('[data-tb]');if(b&&b.dataset.tb!==st.sec)go(b.dataset.tb)});
 function render(){
   try{ntfEnsure();if(isAdmin&&!window.__plt){window.__plt=1;setTimeout(plnTick,1500)}}catch(e){}
@@ -3525,7 +3526,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('[data-plc]')){st.rt=st.rt||{};st.rt.plc=!st.rt.plc;renderRouter();return}
   if(e.target.closest('[data-pladd]')){plnSet(d=>{d.ex.push({id:'x'+Date.now().toString(36),n:'',v:'',e:''})});renderRouter();return}
   const dl_=e.target.closest('[data-pldel]');if(dl_){if(!confirm('حذف الباقة الإضافية دي؟'))return;const id=dl_.dataset.pldel;plnSet(d=>{d.ex=d.ex.filter(q=>q.id!==id)});sysLog('باقات','حذف باقة إضافية');renderRouter();return}
-  if(e.target.closest('[data-ntseen]')){NTF.seen=Date.now();try{localStorage.setItem(NSEEN_KEY,String(NTF.seen))}catch(_){}renderNtf()}
+  if(e.target.closest('[data-ntseen]')){NTF.seen=Date.now();try{localStorage.setItem(NSEEN_KEY,String(NTF.seen))}catch(_){}try{tabbarUpd()}catch(_){}renderNtf()}
   else if(e.target.closest('[data-ntmore]')){NTF.n+=60;renderNtf()}});
 document.addEventListener('change',e=>{if(e.target.id==='ntF'){NTF.f=e.target.value;NTF.n=60;renderNtf()}});
 
@@ -3550,6 +3551,7 @@ function ntfEnsure(){if(!isAdmin||!SYNC.on||!SYNC.db||NTF.sub)return;
     if(bad.length&&ntfBursts().length)ntfAlert('🚨 محاولات دخول فاشلة متكررة','من '+(bad[0].dl||'جهاز'),true);
     else if(bad.length)ntfAlert('⚠ محاولة دخول فاشلة','من '+(bad[0].dl||'جهاز')+(bad.length>1?' (+'+(bad.length-1)+')':''),true);
     else if(fresh.length)ntfAlert('🔔 دخول جديد',(fresh[0].n||'')+' — '+(fresh[0].dl||''),false);
+    try{tabbarUpd()}catch(e){}
     if(st.sec==='ntf')renderNtf();else if(st.sec==='home')renderHome()},
     e=>{NTF.err=e.code==='permission-denied'?'مفيش صلاحية — ضيف قاعدة teba_ip_notif في Firestore Rules':(e.code||e.message);NTF.sub=null;if(st.sec==='ntf')renderNtf()});
   setTimeout(ntfPrune,5000)}
@@ -3572,6 +3574,7 @@ function plnTick(){if(!isAdmin)return;const day=new Date().toDateString();let sh
 setInterval(plnTick,15*60000);
 function ntfAlertCard(){const c=nalCfg(),np=window.Notification?Notification.permission:'unsupported';
   return `<h3 style="margin:18px 0 6px">🔊 تنبيه والتطبيق مفتوح</h3><div class="plx"><p style="margin:0 0 8px;font-size:13px;line-height:1.8">لما حد يدخل (أو يفشل) من جهاز تاني، بيظهر شريط أحمر فوق مستني تقفله، ومعاه صوت واهتزاز. نفس الشيء لتنبيهات الباقات (مرة في اليوم). الإعداد ده خاص بالجهاز ده بس.</p><div class="rtbar"><button class="sm" data-nal="snd">${c.snd?'🔊 الصوت: شغال':'🔇 الصوت: مقفول'}</button><button class="sm" data-nal="sys">${np==='unsupported'?'🖥️ إشعار النظام: مش مدعوم':c.sys&&np==='granted'?'🖥️ إشعار النظام: شغال':np==='denied'?'🖥️ إشعار النظام: ممنوع من المتصفح':'🖥️ تفعيل إشعار النظام'}</button><button class="sm" data-nal="test">🧪 تجربة</button></div><small style="color:var(--muted);display:block;margin-top:6px">إشعار النظام بيشتغل على الكمبيوتر والتطبيق فاتح (حتى لو التاب في الخلفية). على الموبايل استخدم الشريط والصوت، أو ntfy للتطبيق المقفول.</small></div>`}
+const ntfUnread=()=>NTF.d.filter(x=>(x.t||0)>NTF.seen).length;
 function ntfBursts(){const now=Date.now(),W=30*60000,g={};NTF.d.forEach(x=>{if(x.k==='fail'&&now-(x.t||0)<=W){const k=x.dv||'?';(g[k]=g[k]||{n:0,dl:x.dl,t:0});g[k].n++;g[k].t=Math.max(g[k].t,x.t||0)}});return Object.values(g).filter(b=>b.n>=3).sort((a,b)=>b.t-a.t)}
 function ntfTile(){const un=NTF.d.filter(x=>(x.t||0)>NTF.seen),f=un.filter(x=>x.k==='fail').length,w=plnWarn().length;
   if(ntfBursts().length)return'🚨 محاولات دخول فاشلة متكررة';return f?'⚠ '+f+' دخول فاشل جديد':un.length?un.length+' إشعار جديد':w?'⏰ '+w+' تنبيه باقات':'✔ مفيش جديد'}
